@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String     @id @default(uuid())
+  name           String
+  email          String     @unique
+  hashedPassword String
+  role           String     @default("ADMIN") // e.g. SUPERADMIN, ADMIN
+  auditLogs      AuditLog[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  slug      String    @unique
+  programs  Program[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Program {
+  id                 String        @id @default(uuid())
+  title              String
+  slug               String        @unique
+  description        String
+  syllabus           String        // Syllabus outline (markdown or structured text)
+  location           String        // e.g. "STC Lab, TPM Bukit Jalil"
+  price              String?       // e.g. "Free" or "RM 1,500"
+  duration           String?       // e.g. "3 Days", "5 Days"
+  dates              String?       // e.g. "2026-07-15 to 2026-07-18"
+  microsoftFormUrl   String        // Enrollment Form redirect URL
+  categoryId         String
+  category           Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  enrollments        Enrollment[]
+  certificates       Certificate[]
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+}
+
+model Enrollment {
+  id               String        @id @default(uuid())
+  name             String
+  email            String
+  company          String?
+  registrationDate DateTime      @default(now())
+  status           String        @default("REGISTERED") // REGISTERED, ATTENDED, CERTIFIED, CANCELLED
+  programId        String
+  program          Program       @relation(fields: [programId], references: [id], onDelete: Cascade)
+  certificates     Certificate[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@unique([email, programId])
+}
+
+model Certificate {
+  id                String     @id @default(uuid())
+  certificateNumber String     @unique // e.g. MA-2026-0001
+  studentName       String
+  studentEmail      String
+  issueDate         DateTime   @default(now())
+  programId         String
+  program           Program    @relation(fields: [programId], references: [id])
+  enrollmentId      String
+  enrollment        Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  verifyHash        String     @unique // Unique validation hash
+  createdAt         DateTime   @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String   // e.g. "CREATE_PROGRAM", "IMPORT_ENROLLMENTS"
+  details   String   // Details description
+  adminId   String?
+  admin     User?    @relation(fields: [adminId], references: [id], onDelete: SetNull)
+  ipAddress String?
+  createdAt DateTime @default(now())
+}
