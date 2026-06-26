@@ -31,7 +31,7 @@ export default function NewsPage() {
         
         {/* Header */}
         <div className="border-b border-slate-200 pb-8 space-y-3">
-          <span className="text-xs font-bold text-[#d7569f] tracking-wider uppercase">Bulletin Board</span>
+          <span className="text-xs font-bold text-teal tracking-wider uppercase">Bulletin Board</span>
           <h1 className="font-heading text-3xl font-extrabold text-slate-900 sm:text-4xl">
             News, Announcements & Batch Calendars
           </h1>
@@ -45,12 +45,12 @@ export default function NewsPage() {
           {/* Announcements list */}
           <div className="lg:col-span-2 space-y-8">
             {articles.map((art) => (
-              <article key={art.id} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4 hover:border-[#d7569f]/20 transition-all">
+              <article key={art.id} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4 hover:border-teal/20 transition-all">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-[#d7569f] uppercase tracking-wider">{art.category}</span>
+                  <span className="font-bold text-teal uppercase tracking-wider">{art.category}</span>
                   <span className="text-slate-400 font-semibold">{art.date}</span>
                 </div>
-                <h2 className="font-heading text-lg font-bold text-slate-900 hover:text-[#d7569f] cursor-pointer transition-colors leading-snug">
+                <h2 className="font-heading text-lg font-bold text-slate-900 hover:text-primary cursor-pointer transition-colors leading-snug">
                   {art.title}
                 </h2>
                 <p className="text-sm text-slate-500 leading-relaxed font-body">
@@ -64,7 +64,7 @@ export default function NewsPage() {
           <div className="space-y-6">
             
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
-              <div className="flex items-center gap-2 text-[#d7569f] font-bold text-sm tracking-wider uppercase border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase border-b border-slate-100 pb-3">
                 <Calendar className="h-4.5 w-4.5" />
                 <span>Next 30 Days Batches</span>
               </div>
@@ -74,7 +74,7 @@ export default function NewsPage() {
                 <div className="space-y-1">
                   <span className="font-bold text-slate-800 block">Advanced Wafer Fabrication & Lithography</span>
                   <span className="text-slate-400 block">15th - 19th July 2026</span>
-                  <span className="text-[#d7569f] font-bold block">Status: Open</span>
+                  <span className="text-teal font-bold block">Status: Open</span>
                 </div>
 
                 <div className="border-t border-slate-100 pt-4 space-y-1">
@@ -86,14 +86,14 @@ export default function NewsPage() {
                 <div className="border-t border-slate-100 pt-4 space-y-1">
                   <span className="font-bold text-slate-800 block">IC Design & Layout Verification</span>
                   <span className="text-slate-400 block">24th - 28th Aug 2026</span>
-                  <span className="text-[#d7569f] font-bold block">Status: Open</span>
+                  <span className="text-teal font-bold block">Status: Open</span>
                 </div>
 
               </div>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
-              <div className="flex items-center gap-2 text-[#d7569f] font-bold text-sm tracking-wider uppercase">
+              <div className="flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase">
                 <Bell className="h-4 w-4" />
                 <span>Corporate Notices</span>
               </div>

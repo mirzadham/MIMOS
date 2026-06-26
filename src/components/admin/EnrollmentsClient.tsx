@@ -164,8 +164,8 @@ export default function EnrollmentsClient({
 
       {/* CSV Drop Importer Card */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-          <FileSpreadsheet className="h-4.5 w-4.5 text-[#d7569f]" />
+        <div className="flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase border-b border-slate-100 pb-3">
+          <FileSpreadsheet className="h-4.5 w-4.5" />
           <h3 className="font-heading text-sm font-bold text-slate-900 uppercase tracking-wider">
             Microsoft Forms CSV Importer
           </h3>
@@ -183,7 +183,7 @@ export default function EnrollmentsClient({
                 setErrorMsg(null);
                 setSuccessMsg(null);
               }}
-              className="w-full rounded-md border border-slate-300 px-3 py-2.5 bg-white focus:border-[#d7569f] focus:outline-none"
+              className="w-full rounded-md border border-slate-300 px-3 py-2.5 bg-white focus:border-primary focus:outline-none"
             >
               <option value="">Select program to import registration list into</option>
               {programs.map((p) => (
@@ -206,7 +206,7 @@ export default function EnrollmentsClient({
               htmlFor="csv-file-selector"
               className={`w-full flex items-center justify-center gap-2 border border-dashed rounded-lg px-4 py-2.5 font-bold cursor-pointer transition-all ${
                 selectedProgramId 
-                  ? "border-[#d7569f]/40 bg-pink-50/20 text-[#d7569f] hover:bg-pink-50/50" 
+                  ? "border-teal/40 bg-mint-light/25 text-teal hover:bg-mint-light/50" 
                   : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
               }`}
             >
@@ -235,7 +235,7 @@ export default function EnrollmentsClient({
           <div className="border border-slate-100 rounded-xl overflow-hidden space-y-4">
             <div className="bg-slate-50 px-4 py-2.5 border-b border-slate-100 flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
               <span>CSV Importer Preview (First 5 Rows)</span>
-              <span className="text-[#d7569f]">{parsedData.length} valid rows mapped</span>
+              <span className="text-teal">{parsedData.length} valid rows mapped</span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse font-body">
@@ -261,7 +261,7 @@ export default function EnrollmentsClient({
               <button
                 onClick={handleImport}
                 disabled={isPending}
-                className="flex items-center gap-1.5 rounded-lg bg-[#d7569f] hover:bg-[#c0438a] text-white px-5 py-2.5 text-xs font-bold transition-all disabled:opacity-50"
+                className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-teal hover:from-primary-hover hover:to-teal-hover text-white px-5 py-2.5 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
               >
                 {isPending ? (
                   <>
@@ -284,7 +284,7 @@ export default function EnrollmentsClient({
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-4">
           <div className="flex items-center gap-2">
-            <UserCheck className="h-4.5 w-4.5 text-[#d7569f]" />
+            <UserCheck className="h-4.5 w-4.5 text-primary" />
             <h3 className="font-heading text-sm font-bold text-slate-900 uppercase tracking-wider">
               Student Attendance & Status
             </h3>
@@ -296,7 +296,7 @@ export default function EnrollmentsClient({
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="rounded-md border border-slate-300 px-3 py-1.5 bg-white focus:outline-none focus:border-[#d7569f]"
+              className="rounded-md border border-slate-300 px-3 py-1.5 bg-white focus:outline-none focus:border-primary"
             >
               <option value="ALL">All Statuses</option>
               <option value="REGISTERED">Registered</option>
@@ -311,7 +311,7 @@ export default function EnrollmentsClient({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search students..."
-                className="rounded-md border border-slate-300 pl-8 pr-3 py-1.5 focus:outline-none focus:border-[#d7569f]"
+                className="rounded-md border border-slate-300 pl-8 pr-3 py-1.5 focus:outline-none focus:border-primary"
               />
               <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
             </div>
@@ -362,7 +362,7 @@ export default function EnrollmentsClient({
                       {student.status === "REGISTERED" && (
                         <button
                           onClick={() => handleStatusChange(student.id, "ATTENDED")}
-                          className="inline-flex items-center gap-1 rounded bg-[#d7569f]/10 text-[#d7569f] px-2.5 py-1 hover:bg-[#d7569f] hover:text-white transition-all text-[10px] font-bold"
+                          className="inline-flex items-center gap-1 rounded bg-teal/10 text-teal px-2.5 py-1 hover:bg-teal hover:text-white transition-all text-[10px] font-bold cursor-pointer"
                         >
                           <Check className="h-3 w-3" />
                           <span>Mark Attended</span>
@@ -374,7 +374,7 @@ export default function EnrollmentsClient({
                         </span>
                       )}
                       {student.status === "CERTIFIED" && (
-                        <div className="flex justify-end gap-1 text-[#d7569f]">
+                        <div className="flex justify-end gap-1 text-teal">
                           <ShieldCheck className="h-4.5 w-4.5" />
                           <span className="text-[10px] font-bold uppercase">Certified</span>
                         </div>

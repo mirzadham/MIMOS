@@ -81,7 +81,7 @@ export default function Catalog({ categories, programs }: CatalogProps) {
             onClick={() => handleCategoryChange("all")}
             className={`rounded-full px-4 py-2 text-xs font-bold transition-all border ${
               activeCategory === "all"
-                ? "bg-[#d7569f] border-[#d7569f] text-white shadow-sm"
+                ? "bg-teal border-teal text-white shadow-sm"
                 : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
             }`}
           >
@@ -93,7 +93,7 @@ export default function Catalog({ categories, programs }: CatalogProps) {
               onClick={() => handleCategoryChange(cat.id)}
               className={`rounded-full px-4 py-2 text-xs font-bold transition-all border ${
                 activeCategory === cat.id
-                  ? "bg-[#d7569f] border-[#d7569f] text-white shadow-sm"
+                  ? "bg-teal border-teal text-white shadow-sm"
                   : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
               }`}
             >
@@ -109,7 +109,7 @@ export default function Catalog({ categories, programs }: CatalogProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search programs..."
-            className="w-full rounded-full border border-slate-300 bg-white py-2 pl-10 pr-4 text-xs focus:border-[#d7569f] focus:outline-none focus:ring-1 focus:ring-[#d7569f]"
+            className="w-full rounded-full border border-slate-300 bg-white py-2 pl-10 pr-4 text-xs focus:border-teal focus:outline-none focus:ring-1 focus:ring-teal"
           />
           <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
         </div>
@@ -136,7 +136,7 @@ export default function Catalog({ categories, programs }: CatalogProps) {
               setActiveCategory("all");
               setSearchQuery("");
             }}
-            className="mt-6 inline-flex items-center rounded-md bg-[#d7569f] px-4 py-2 text-xs font-bold text-white hover:bg-[#c0438a] transition-all"
+            className="mt-6 inline-flex items-center rounded-md bg-primary hover:bg-primary-hover px-4 py-2 text-xs font-bold text-white transition-all"
           >
             Reset Filters
           </button>

@@ -84,7 +84,7 @@ export default async function AdminDashboardOverview() {
             <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Active Programs</span>
             <span className="text-2xl font-extrabold text-slate-800 block">{stats.programs}</span>
           </div>
-          <div className="rounded-xl bg-pink-50 p-3 text-[#d7569f]">
+          <div className="rounded-xl bg-mint-light border border-mint/20 p-3 text-teal">
             <GraduationCap className="h-6 w-6" />
           </div>
         </div>
@@ -95,7 +95,7 @@ export default async function AdminDashboardOverview() {
             <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Enrollments</span>
             <span className="text-2xl font-extrabold text-slate-800 block">{stats.enrollments}</span>
           </div>
-          <div className="rounded-xl bg-pink-50 p-3 text-[#d7569f]">
+          <div className="rounded-xl bg-mint-light border border-mint/20 p-3 text-teal">
             <Users className="h-6 w-6" />
           </div>
         </div>
@@ -106,7 +106,7 @@ export default async function AdminDashboardOverview() {
             <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Issued Certificates</span>
             <span className="text-2xl font-extrabold text-slate-800 block">{stats.certificates}</span>
           </div>
-          <div className="rounded-xl bg-pink-50 p-3 text-[#d7569f]">
+          <div className="rounded-xl bg-mint-light border border-mint/20 p-3 text-teal">
             <Award className="h-6 w-6" />
           </div>
         </div>
@@ -119,7 +119,7 @@ export default async function AdminDashboardOverview() {
         {/* Left: Dynamic Course Enrollment Chart */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2 space-y-6">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <TrendingUp className="h-4.5 w-4.5 text-[#d7569f]" />
+            <TrendingUp className="h-4.5 w-4.5 text-teal" />
             <h3 className="font-heading text-sm font-bold text-slate-900 uppercase tracking-wider">
               Registrations by Program
             </h3>
@@ -132,11 +132,11 @@ export default async function AdminDashboardOverview() {
                 <div key={idx} className="space-y-1.5 text-xs font-semibold text-slate-700">
                   <div className="flex justify-between">
                     <span className="truncate pr-4 max-w-xs">{item.title}</span>
-                    <span className="text-[#d7569f] font-bold">{item.count} registered</span>
+                    <span className="text-teal font-bold">{item.count} registered</span>
                   </div>
                   <div className="h-2.5 w-full rounded-full bg-slate-100 overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-[#d7569f] to-[#e46cb2] rounded-full transition-all duration-500" 
+                      className="h-full bg-gradient-to-r from-primary to-teal rounded-full transition-all duration-500" 
                       style={{ width: `${pct}%` }} 
                     />
                   </div>
@@ -149,7 +149,7 @@ export default async function AdminDashboardOverview() {
         {/* Right: Security Audit Logs Timeline */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <Terminal className="h-4.5 w-4.5 text-[#d7569f]" />
+            <Terminal className="h-4.5 w-4.5 text-primary" />
             <h3 className="font-heading text-sm font-bold text-slate-900 uppercase tracking-wider">
               Security Action Logs
             </h3>
@@ -159,7 +159,7 @@ export default async function AdminDashboardOverview() {
             {recentLogs.map((log, idx) => (
               <div key={log.id || idx} className="flex gap-3 items-start border-l border-slate-200 pl-4 relative">
                 {/* Timeline node */}
-                <div className="absolute -left-1.5 top-0.5 h-3 w-3 rounded-full border-2 border-white bg-[#d7569f]" />
+                <div className="absolute -left-1.5 top-0.5 h-3 w-3 rounded-full border-2 border-white bg-primary" />
                 <div className="space-y-0.5">
                   <span className="font-bold text-slate-800 uppercase text-[9px] block">
                     {log.action}

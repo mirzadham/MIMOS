@@ -67,8 +67,8 @@ export default function LatticeNetwork() {
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Draw background grid lines (very subtle)
-      ctx.strokeStyle = "rgba(226, 232, 240, 0.4)";
+      // Draw background grid lines (very subtle mint/sage grid)
+      ctx.strokeStyle = "rgba(163, 226, 201, 0.09)";
       ctx.lineWidth = 0.5;
       const gridSize = 40;
       for (let x = 0; x < width; x += gridSize) {
@@ -104,16 +104,16 @@ export default function LatticeNetwork() {
           node.y -= (dy / dist) * force * 0.8;
         }
 
-        // Draw dot
+        // Draw dot (Teal for background, Magenta for highlighted core nodes)
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = node.label ? "#d7569f" : "#94a3b8";
+        ctx.fillStyle = node.label ? "#a72190" : "#1ea896";
         ctx.fill();
 
         // Draw labels for key technology nodes
         if (node.label && dist < 120) {
           ctx.font = "bold 9px sans-serif";
-          ctx.fillStyle = "rgba(15, 23, 42, 0.8)";
+          ctx.fillStyle = "rgba(18, 27, 24, 0.8)";
           ctx.fillText(node.label, node.x + 8, node.y + 3);
         }
       });
@@ -136,12 +136,12 @@ export default function LatticeNetwork() {
 
             const alpha = (110 - dist) / 110;
             if (mdist1 < mouse.radius) {
-              // Glowing pink connection if near mouse
-              ctx.strokeStyle = `rgba(215, 86, 159, ${alpha * 0.65})`;
+              // Glowing orchid magenta connection if near mouse
+              ctx.strokeStyle = `rgba(167, 33, 144, ${alpha * 0.65})`;
               ctx.lineWidth = 1.0;
             } else {
-              // Regular subtle gray connection
-              ctx.strokeStyle = `rgba(203, 213, 225, ${alpha * 0.4})`;
+              // Regular subtle mint/teal connection
+              ctx.strokeStyle = `rgba(30, 168, 150, ${alpha * 0.18})`;
               ctx.lineWidth = 0.6;
             }
 

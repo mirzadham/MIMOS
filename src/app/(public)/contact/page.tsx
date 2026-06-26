@@ -9,7 +9,7 @@ export default function ContactPage() {
         
         {/* Header */}
         <div className="text-center space-y-4">
-          <span className="text-xs font-bold text-[#d7569f] tracking-wider uppercase">Contact Channels</span>
+          <span className="text-xs font-bold text-teal tracking-wider uppercase">Contact Channels</span>
           <h1 className="font-heading text-3xl font-extrabold text-slate-900 sm:text-5xl">
             Reach Out to Our Administration
           </h1>
@@ -28,22 +28,22 @@ export default function ContactPage() {
               <div className="space-y-4 font-body">
                 <h3 className="font-heading text-sm font-bold text-slate-900 uppercase tracking-wider">MIMOS Headquarters</h3>
                 <div className="flex gap-2.5 items-start text-xs text-slate-500">
-                  <MapPin className="h-5 w-5 text-[#d7569f] shrink-0" />
+                  <MapPin className="h-5 w-5 text-teal shrink-0" />
                   <span>
                     MIMOS Berhad, Technology Park Malaysia, Bukit Jalil, 57000 Kuala Lumpur, Wilayah Persekutuan, Malaysia.
                   </span>
                 </div>
                 <div className="flex gap-2.5 items-center text-xs text-slate-500 border-t border-slate-100 pt-4">
-                  <Phone className="h-4 w-4 text-[#d7569f]" />
+                  <Phone className="h-4 w-4 text-teal" />
                   <span>Tel: +603-8995 5000</span>
                 </div>
                 <div className="flex gap-2.5 items-center text-xs text-slate-500">
-                  <Printer className="h-4 w-4 text-[#d7569f]" />
+                  <Printer className="h-4 w-4 text-teal" />
                   <span>Fax: +603-8996 2755</span>
                 </div>
                 <div className="flex gap-2.5 items-center text-xs text-slate-500">
-                  <Mail className="h-4 w-4 text-[#d7569f]" />
-                  <a href="mailto:info@mimos.my" className="hover:text-[#d7569f] hover:underline">
+                  <Mail className="h-4 w-4 text-teal" />
+                  <a href="mailto:info@mimos.my" className="hover:text-primary hover:underline">
                     info@mimos.my
                   </a>
                 </div>
@@ -52,11 +52,11 @@ export default function ContactPage() {
               {/* B2B Coordination notes */}
               <div className="rounded-xl bg-slate-50 p-6 border border-slate-100 space-y-4 font-body">
                 <div className="flex items-center gap-2 text-slate-950 font-bold text-xs uppercase tracking-wider">
-                  <Landmark className="h-4.5 w-4.5 text-[#d7569f]" />
+                  <Landmark className="h-4.5 w-4.5 text-teal" />
                   <span>Corporate Cohorts</span>
                 </div>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Companies interested in organizing dedicated physical training runs for their teams can contact our academic planning division directly at <a href="mailto:info@mimos.my" className="text-[#d7569f] hover:underline font-bold">info@mimos.my</a> to coordinate schedules, customized course modules, and HRD Corp claim arrangements.
+                  Companies interested in organizing dedicated physical training runs for their teams can contact our academic planning division directly at <a href="mailto:info@mimos.my" className="text-primary hover:underline font-bold">info@mimos.my</a> to coordinate schedules, customized course modules, and HRD Corp claim arrangements.
                 </p>
               </div>
             </div>
@@ -71,7 +71,7 @@ export default function ContactPage() {
                   href="https://www.google.com.my/maps/place/MIMOS+Berhad/@3.0459671,101.6937111,17z"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-[#d7569f] hover:underline font-bold mt-2 block"
+                  className="text-xs text-primary hover:underline font-bold mt-2 block"
                 >
                   View on Google Maps
                 </a>
@@ -96,7 +96,7 @@ export default function ContactPage() {
                 <input 
                   type="text" 
                   placeholder="e.g. Ahmad Kamal"
-                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none"
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none"
                 />
               </div>
 
@@ -105,7 +105,7 @@ export default function ContactPage() {
                 <input 
                   type="email" 
                   placeholder="e.g. kamal@company.my"
-                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none"
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none"
                 />
               </div>
 
@@ -114,7 +114,7 @@ export default function ContactPage() {
                 <input 
                   type="text" 
                   placeholder="e.g. Micro Tech Sdn Bhd"
-                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none"
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none"
                 />
               </div>
 
@@ -123,13 +123,13 @@ export default function ContactPage() {
                 <textarea 
                   rows={4}
                   placeholder="Describe your corporate training needs or general questions here..."
-                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none"
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-[#d7569f] hover:bg-[#c0438a] text-white py-3.5 text-xs font-bold transition-all"
+                className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-teal hover:from-primary-hover hover:to-teal-hover text-white py-3.5 text-xs font-bold transition-all cursor-pointer"
               >
                 <span>Submit Query</span>
                 <Send className="h-3.5 w-3.5" />

@@ -11,13 +11,13 @@ export default function Footer() {
           
           {/* Column 1: Brand Info */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <GraduationCap className="h-7 w-7 text-[#d7569f]" />
+            <div className="flex items-center gap-2 group">
+              <GraduationCap className="h-7 w-7 text-primary group-hover:text-teal transition-colors duration-300" />
               <div className="flex flex-col">
                 <span className="font-heading text-md font-bold tracking-tight text-slate-900 leading-none">
                   MIMOS
                 </span>
-                <span className="font-sans text-[10px] font-semibold tracking-widest text-[#d7569f] uppercase">
+                <span className="font-sans text-[10px] font-semibold tracking-widest text-primary group-hover:text-teal transition-colors duration-300 uppercase">
                   Academy
                 </span>
               </div>
@@ -34,16 +34,16 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/" className="hover:text-[#d7569f] transition-colors">Home</Link>
+                <Link href="/" className="hover:text-teal transition-colors">Home</Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-[#d7569f] transition-colors">About Us</Link>
+                <Link href="/about" className="hover:text-teal transition-colors">About Us</Link>
               </li>
               <li>
-                <Link href="/#programs-catalog" className="hover:text-[#d7569f] transition-colors">Training Catalog</Link>
+                <Link href="/#programs-catalog" className="hover:text-teal transition-colors">Training Catalog</Link>
               </li>
               <li>
-                <Link href="/facilities" className="hover:text-[#d7569f] transition-colors">R&D Lab Facilities</Link>
+                <Link href="/facilities" className="hover:text-teal transition-colors">R&D Lab Facilities</Link>
               </li>
             </ul>
           </div>
@@ -55,13 +55,13 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/news" className="hover:text-[#d7569f] transition-colors">Upcoming Training Schedules</Link>
+                <Link href="/news" className="hover:text-teal transition-colors">Upcoming Training Schedules</Link>
               </li>
               <li>
-                <Link href="/news" className="hover:text-[#d7569f] transition-colors">Past Cohort Galleries</Link>
+                <Link href="/news" className="hover:text-teal transition-colors">Past Cohort Galleries</Link>
               </li>
               <li>
-                <Link href="/news" className="hover:text-[#d7569f] transition-colors">Corporate Collaboration Notices</Link>
+                <Link href="/news" className="hover:text-teal transition-colors">Corporate Collaboration Notices</Link>
               </li>
             </ul>
           </div>
@@ -73,22 +73,22 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3 text-sm">
               <li className="flex gap-2 items-start">
-                <MapPin className="h-5 w-5 text-[#d7569f] shrink-0 mt-0.5" />
+                <MapPin className="h-5 w-5 text-teal shrink-0 mt-0.5" />
                 <span className="text-slate-500">
                   MIMOS Berhad, Technology Park Malaysia, Bukit Jalil, 57000 Kuala Lumpur, Wilayah Persekutuan, Malaysia.
                 </span>
               </li>
               <li className="flex gap-2 items-center">
-                <Phone className="h-4 w-4 text-[#d7569f]" />
+                <Phone className="h-4 w-4 text-teal" />
                 <span className="text-slate-500">Tel: +603-8995 5000</span>
               </li>
               <li className="flex gap-2 items-center">
-                <Printer className="h-4 w-4 text-[#d7569f]" />
+                <Printer className="h-4 w-4 text-teal" />
                 <span className="text-slate-500">Fax: +603-8996 2755</span>
               </li>
               <li className="flex gap-2 items-center">
-                <Mail className="h-4 w-4 text-[#d7569f]" />
-                <a href="mailto:info@mimos.my" className="text-slate-500 hover:text-[#d7569f]">
+                <Mail className="h-4 w-4 text-teal" />
+                <a href="mailto:info@mimos.my" className="text-slate-500 hover:text-teal transition-colors">
                   info@mimos.my
                 </a>
               </li>

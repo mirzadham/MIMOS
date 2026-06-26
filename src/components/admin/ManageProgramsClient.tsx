@@ -118,7 +118,7 @@ export default function ManageProgramsClient({
               setEditProgram(null);
               setModalOpen(true);
             }}
-            className="flex items-center gap-1 rounded-md bg-[#d7569f] hover:bg-[#c0438a] px-4 py-2.5 text-xs font-bold text-white transition-all hover:shadow-md"
+            className="flex items-center gap-1 rounded-md bg-gradient-to-r from-primary to-teal hover:from-primary-hover hover:to-teal-hover text-white px-4 py-2.5 text-xs font-bold transition-all hover:shadow-md cursor-pointer"
           >
             <Plus className="h-4 w-4" />
             <span>Create Program</span>
@@ -148,7 +148,7 @@ export default function ManageProgramsClient({
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="inline-flex items-center rounded-full bg-pink-50 px-2 py-0.5 text-[10px] font-bold text-[#d7569f]">
+                  <span className="inline-flex items-center rounded-full bg-mint-light border border-mint/25 px-2 py-0.5 text-[10px] font-bold text-teal font-sans">
                     {prog.category?.name || "Upskilling"}
                   </span>
                 </td>
@@ -167,7 +167,7 @@ export default function ManageProgramsClient({
                     href={prog.microsoftFormUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[#d7569f] hover:underline"
+                    className="inline-flex items-center gap-1 text-primary hover:text-teal hover:underline transition-colors"
                   >
                     <span>Form Link</span>
                     <ExternalLink className="h-3.5 w-3.5" />
@@ -231,7 +231,7 @@ export default function ManageProgramsClient({
                     name="title"
                     required
                     defaultValue={editProgram?.title || ""}
-                    className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none"
+                    className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none"
                     placeholder="e.g. Advanced Wafer Fabrication"
                   />
                 </div>
@@ -242,7 +242,7 @@ export default function ManageProgramsClient({
                     name="categoryId"
                     required
                     defaultValue={editProgram?.categoryId || ""}
-                    className="w-full rounded-md border border-slate-300 px-3 py-2 bg-white focus:border-[#d7569f] focus:outline-none"
+                    className="w-full rounded-md border border-slate-300 px-3 py-2 bg-white focus:border-primary focus:outline-none"
                   >
                     <option value="">Select Category</option>
                     {categories.map(cat => (
@@ -257,7 +257,7 @@ export default function ManageProgramsClient({
                     type="text"
                     name="duration"
                     defaultValue={editProgram?.duration || ""}
-                    className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none"
+                    className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none"
                     placeholder="e.g. 5 Days (Physical)"
                   />
                 </div>
@@ -270,7 +270,7 @@ export default function ManageProgramsClient({
                   required
                   rows={2}
                   defaultValue={editProgram?.description || ""}
-                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none"
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none"
                   placeholder="Provide a quick summary of targets and scope..."
                 />
               </div>
@@ -282,7 +282,7 @@ export default function ManageProgramsClient({
                   required
                   rows={4}
                   defaultValue={editProgram?.syllabus || ""}
-                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none font-mono"
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none font-mono"
                   placeholder="### Course Modules&#10;1. **Cleanroom Safety** (Day 1)&#10;- Clothes protocols"
                 />
               </div>
@@ -295,7 +295,7 @@ export default function ManageProgramsClient({
                     name="microsoftFormUrl"
                     required
                     defaultValue={editProgram?.microsoftFormUrl || ""}
-                    className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none"
+                    className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none"
                     placeholder="https://forms.office.com/r/..."
                   />
                 </div>
@@ -307,7 +307,7 @@ export default function ManageProgramsClient({
                     name="location"
                     required
                     defaultValue={editProgram?.location || ""}
-                    className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none"
+                    className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none"
                     placeholder="e.g. MIMOS STC Cleanroom, Bukit Jalil"
                   />
                 </div>
@@ -318,7 +318,7 @@ export default function ManageProgramsClient({
                     type="text"
                     name="price"
                     defaultValue={editProgram?.price || ""}
-                    className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none"
+                    className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none"
                     placeholder="e.g. RM 4,500 / pax (HRD Corp claimable)"
                   />
                 </div>
@@ -329,7 +329,7 @@ export default function ManageProgramsClient({
                     type="text"
                     name="dates"
                     defaultValue={editProgram?.dates || ""}
-                    className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none"
+                    className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none"
                     placeholder="e.g. 15th - 19th July 2026"
                   />
                 </div>
@@ -350,7 +350,7 @@ export default function ManageProgramsClient({
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-md bg-[#d7569f] hover:bg-[#c0438a] text-white px-4 py-2 text-xs font-bold transition-all disabled:opacity-50"
+                  className="rounded-md bg-gradient-to-r from-primary to-teal hover:from-primary-hover hover:to-teal-hover text-white px-4 py-2 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
                 >
                   {isPending ? "Processing..." : editProgram ? "Save Changes" : "Create Program"}
                 </button>
@@ -374,7 +374,7 @@ export default function ManageProgramsClient({
                   required
                   value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
-                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-[#d7569f] focus:outline-none"
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none"
                   placeholder="e.g. Artificial Intelligence"
                 />
               </div>
@@ -393,7 +393,7 @@ export default function ManageProgramsClient({
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-md bg-[#d7569f] hover:bg-[#c0438a] text-white px-3 py-1.5 text-xs font-bold transition-all"
+                  className="rounded-md bg-gradient-to-r from-primary to-teal hover:from-primary-hover hover:to-teal-hover text-white px-3 py-1.5 text-xs font-bold transition-all cursor-pointer"
                 >
                   {isPending ? "Creating..." : "Create"}
                 </button>

@@ -45,7 +45,7 @@ export default function FacilitiesPage() {
         
         {/* Header */}
         <div className="text-center space-y-4">
-          <span className="text-xs font-bold text-[#d7569f] tracking-wider uppercase">Facility Tour</span>
+          <span className="text-xs font-bold text-teal tracking-wider uppercase">Facility Tour</span>
           <h1 className="font-heading text-3xl font-extrabold text-slate-900 sm:text-5xl">
             National Technology Shared Facilities
           </h1>
@@ -71,7 +71,7 @@ export default function FacilitiesPage() {
 
                 <div className="space-y-6">
                   <div className="flex items-center gap-3">
-                    <div className="rounded-lg bg-pink-50 p-2.5 text-[#d7569f]">
+                    <div className="rounded-lg bg-mint-light border border-mint/20 p-2.5 text-teal">
                       <Icon className="h-6 w-6" />
                     </div>
                     <h2 className="font-heading text-xl font-bold text-slate-900">{lab.title}</h2>
@@ -86,7 +86,7 @@ export default function FacilitiesPage() {
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-medium text-slate-600 font-body">
                       {lab.specs.map((spec, sIdx) => (
                         <li key={sIdx} className="flex gap-2 items-start">
-                          <Layers className="h-3.5 w-3.5 text-[#d7569f] shrink-0 mt-0.5" />
+                          <Layers className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
                           <span>{spec}</span>
                         </li>
                       ))}

@@ -61,13 +61,13 @@ export default function Header() {
         
         {/* Logo - Top Left */}
         <div className="flex items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <GraduationCap className="h-8 w-8 text-[#d7569f]" />
+          <Link href="/" className="flex items-center gap-2 group">
+            <GraduationCap className="h-8 w-8 text-primary group-hover:text-teal transition-colors duration-300" />
             <div className="flex flex-col">
-              <span className="font-heading text-lg font-bold tracking-tight text-slate-900 leading-none">
+              <span className="font-heading text-lg font-bold tracking-tight text-dark-pine leading-none">
                 MIMOS
               </span>
-              <span className="font-sans text-xs font-semibold tracking-widest text-[#d7569f] uppercase">
+              <span className="font-sans text-xs font-semibold tracking-widest text-primary group-hover:text-teal transition-colors duration-300 uppercase">
                 Academy
               </span>
             </div>
@@ -82,9 +82,9 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`text-sm font-semibold transition-colors duration-200 hover:text-[#d7569f] ${
-                  isActive ? "text-[#d7569f]" : "text-slate-600"
-                }`}
+                className={`text-sm font-semibold transition-all duration-200 relative py-1 hover:text-primary ${
+                  isActive ? "text-primary after:scale-x-100" : "text-slate-600 after:scale-x-0"
+                } after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:origin-left after:transition-transform after:duration-200`}
               >
                 {link.name}
               </Link>
@@ -132,7 +132,7 @@ export default function Header() {
               href="https://www.linkedin.com/company/mimosmalaysia" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-slate-400 hover:text-[#d7569f] transition-colors"
+              className="text-slate-400 hover:text-teal transition-colors"
             >
               <LinkedinIcon className="h-4 w-4" />
             </a>
@@ -140,7 +140,7 @@ export default function Header() {
               href="https://www.facebook.com/mimosmalaysia" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-slate-400 hover:text-[#d7569f] transition-colors"
+              className="text-slate-400 hover:text-teal transition-colors"
             >
               <FacebookIcon className="h-4 w-4" />
             </a>
@@ -148,7 +148,7 @@ export default function Header() {
               href="https://twitter.com/mimosmalaysia" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-slate-400 hover:text-[#d7569f] transition-colors"
+              className="text-slate-400 hover:text-teal transition-colors"
             >
               <TwitterIcon className="h-4 w-4" />
             </a>
@@ -156,7 +156,7 @@ export default function Header() {
               href="https://www.youtube.com/@mimosmalaysia" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-slate-400 hover:text-[#d7569f] transition-colors"
+              className="text-slate-400 hover:text-teal transition-colors"
             >
               <YoutubeIcon className="h-4 w-4" />
             </a>
@@ -165,7 +165,7 @@ export default function Header() {
           {/* Quick Portal Access */}
           <Link
             href="/admin"
-            className="rounded-md bg-[#d7569f] px-4 py-2 text-xs font-bold text-white hover:bg-[#c0438a] transition-all hover:shadow-md"
+            className="rounded-md bg-gradient-to-r from-primary to-teal text-white hover:from-primary-hover hover:to-teal-hover hover:shadow-md px-4 py-2 text-xs font-bold transition-all"
           >
             Admin Panel
           </Link>
@@ -175,7 +175,7 @@ export default function Header() {
         <div className="flex md:hidden items-center gap-3">
           <Link
             href="/admin"
-            className="rounded-md bg-[#d7569f] px-3 py-1.5 text-xs font-bold text-white"
+            className="rounded-md bg-gradient-to-r from-primary to-teal text-white px-3 py-1.5 text-xs font-bold"
           >
             Portal
           </Link>
@@ -199,9 +199,9 @@ export default function Header() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search training programs, labs, news..."
-              className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-[#d7569f] focus:outline-none"
+              className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-primary focus:outline-none"
             />
-            <button className="rounded-md bg-[#d7569f] px-4 py-2 text-sm font-bold text-white hover:bg-[#c0438a]">
+            <button className="rounded-md bg-gradient-to-r from-primary to-teal hover:from-primary-hover hover:to-teal-hover px-4 py-2 text-sm font-bold text-white transition-all cursor-pointer">
               Search
             </button>
             <button 
@@ -223,7 +223,7 @@ export default function Header() {
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#d7569f]"
+                className="rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary"
               >
                 {link.name}
               </Link>
@@ -235,13 +235,13 @@ export default function Header() {
               <div className="flex gap-2">
                 <button 
                   onClick={() => setLang("EN")}
-                  className={`text-xs px-2.5 py-1 rounded border ${lang === 'EN' ? 'border-[#d7569f] bg-pink-50 text-[#d7569f]' : 'border-slate-200'}`}
+                  className={`text-xs px-2.5 py-1 rounded border ${lang === 'EN' ? 'border-primary bg-accent text-primary' : 'border-slate-200'}`}
                 >
                   EN
                 </button>
                 <button 
                   onClick={() => setLang("BM")}
-                  className={`text-xs px-2.5 py-1 rounded border ${lang === 'BM' ? 'border-[#d7569f] bg-pink-50 text-[#d7569f]' : 'border-slate-200'}`}
+                  className={`text-xs px-2.5 py-1 rounded border ${lang === 'BM' ? 'border-primary bg-accent text-primary' : 'border-slate-200'}`}
                 >
                   BM
                 </button>

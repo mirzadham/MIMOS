@@ -14,7 +14,7 @@ export default function AboutPage() {
         
         {/* Editorial Heading */}
         <div className="text-center space-y-4">
-          <span className="text-xs font-bold text-[#d7569f] tracking-wider uppercase">Our Background</span>
+          <span className="text-xs font-bold text-teal tracking-wider uppercase">Our Background</span>
           <h1 className="font-heading text-3xl font-extrabold text-slate-900 sm:text-5xl">
             upskilling Malaysia's Applied Engineering Workforce
           </h1>
@@ -28,7 +28,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4 text-center">
             {stats.map((stat, idx) => (
               <div key={idx} className="space-y-1">
-                <span className="text-3xl font-extrabold text-[#d7569f] block">{stat.value}</span>
+                <span className="text-3xl font-extrabold text-primary block">{stat.value}</span>
                 <span className="text-xs text-slate-500 font-semibold block">{stat.label}</span>
               </div>
             ))}
@@ -39,7 +39,7 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           
           <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
-            <div className="rounded-lg bg-pink-50 p-2.5 text-[#d7569f] inline-block">
+            <div className="rounded-lg bg-mint-light border border-mint/20 p-2.5 text-teal inline-block">
               <Award className="h-6 w-6" />
             </div>
             <h3 className="font-heading text-md font-bold text-slate-900">National Accreditation</h3>
@@ -49,7 +49,7 @@ export default function AboutPage() {
           </div>
 
           <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
-            <div className="rounded-lg bg-pink-50 p-2.5 text-[#d7569f] inline-block">
+            <div className="rounded-lg bg-mint-light border border-mint/20 p-2.5 text-teal inline-block">
               <ShieldCheck className="h-6 w-6" />
             </div>
             <h3 className="font-heading text-md font-bold text-slate-900">Applied Deep Tech</h3>
@@ -59,7 +59,7 @@ export default function AboutPage() {
           </div>
 
           <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
-            <div className="rounded-lg bg-pink-50 p-2.5 text-[#d7569f] inline-block">
+            <div className="rounded-lg bg-mint-light border border-mint/20 p-2.5 text-teal inline-block">
               <HeartHandshake className="h-6 w-6" />
             </div>
             <h3 className="font-heading text-md font-bold text-slate-900">B2B Co-Design</h3>
@@ -69,7 +69,7 @@ export default function AboutPage() {
           </div>
 
           <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
-            <div className="rounded-lg bg-pink-50 p-2.5 text-[#d7569f] inline-block">
+            <div className="rounded-lg bg-mint-light border border-mint/20 p-2.5 text-teal inline-block">
               <History className="h-6 w-6" />
             </div>
             <h3 className="font-heading text-md font-bold text-slate-900">R&D Legacy</h3>

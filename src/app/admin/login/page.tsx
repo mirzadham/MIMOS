@@ -33,7 +33,7 @@ export default function AdminLoginPage() {
         
         {/* Header Branding */}
         <div className="text-center space-y-2">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-pink-50 text-[#d7569f]">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-mint-light border border-mint/20 text-teal">
             <GraduationCap className="h-6 w-6" />
           </div>
           <h2 className="font-heading text-2xl font-extrabold text-slate-900 leading-none">
@@ -63,7 +63,7 @@ export default function AdminLoginPage() {
                 name="email"
                 required
                 defaultValue="admin@mimos.my"
-                className="w-full rounded-md border border-slate-300 bg-white py-2.5 pl-10 pr-4 focus:border-[#d7569f] focus:outline-none"
+                className="w-full rounded-md border border-slate-300 bg-white py-2.5 pl-10 pr-4 focus:border-primary focus:outline-none"
                 placeholder="admin@mimos.my"
               />
               <Mail className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400" />
@@ -78,7 +78,7 @@ export default function AdminLoginPage() {
                 name="password"
                 required
                 defaultValue="mimos2026"
-                className="w-full rounded-md border border-slate-300 bg-white py-2.5 pl-10 pr-4 focus:border-[#d7569f] focus:outline-none"
+                className="w-full rounded-md border border-slate-300 bg-white py-2.5 pl-10 pr-4 focus:border-primary focus:outline-none"
                 placeholder="••••••••"
               />
               <KeyRound className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400" />
@@ -88,7 +88,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-[#d7569f] hover:bg-[#c0438a] text-white py-3.5 text-xs font-bold transition-all disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-teal hover:from-primary-hover hover:to-teal-hover text-white py-3.5 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
           >
             <span>{loading ? "Verifying..." : "Access Control Center"}</span>
             {!loading && <ArrowRight className="h-4 w-4" />}
