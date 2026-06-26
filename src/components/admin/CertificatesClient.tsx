@@ -70,7 +70,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
     });
 
     // 1. Draw outer double frame
-    doc.setDrawColor(167, 33, 144); // MIMOS Orchid Magenta #a72190
+    doc.setDrawColor(215, 86, 159); // MIMOS Magenta #d7569f
     doc.setLineWidth(1.5);
     doc.rect(8, 8, 281, 194); // Outer border
     doc.setDrawColor(148, 163, 184); // Slate 400
@@ -168,7 +168,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="font-heading text-2xl font-extrabold text-slate-900">Certificate Vault</h1>
+          <h1 className="font-heading text-2xl font-extrabold text-foreground">Certificate Vault</h1>
           <p className="text-xs text-slate-500 mt-1">Issue digital, cryptographically verifiable certificates to attendees.</p>
         </div>
       </div>
@@ -180,7 +180,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
             onClick={() => setActiveTab("PENDING")}
             className={`rounded-full px-4 py-2 text-xs font-bold border transition-all ${
               activeTab === "PENDING"
-                ? "bg-teal border-teal text-white shadow-sm"
+                ? "bg-primary border-primary text-white shadow-sm"
                 : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
             }`}
           >
@@ -190,7 +190,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
             onClick={() => setActiveTab("ISSUED")}
             className={`rounded-full px-4 py-2 text-xs font-bold border transition-all ${
               activeTab === "ISSUED"
-                ? "bg-teal border-teal text-white shadow-sm"
+                ? "bg-primary border-primary text-white shadow-sm"
                 : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
             }`}
           >
@@ -265,7 +265,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
                         <button
                           onClick={() => handleIssueCertificate(student)}
                           disabled={isPending}
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-teal hover:from-primary-hover hover:to-teal-hover text-white px-3.5 py-2 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-primary hover:bg-primary-hover text-white px-3.5 py-2 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
                         >
                           {isPending ? (
                             <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -303,7 +303,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
       ) : (
         <div className="text-center py-16 border border-dashed border-slate-200 rounded-2xl bg-slate-50">
           <Award className="mx-auto h-10 w-10 text-slate-300 animate-pulse" />
-          <h3 className="mt-4 font-heading text-sm font-bold text-slate-900">
+          <h3 className="mt-4 font-heading text-sm font-bold text-foreground">
             {activeTab === "PENDING" ? "No pending issuances" : "No certificates issued yet"}
           </h3>
           <p className="mt-2 text-xs text-slate-500 font-body">

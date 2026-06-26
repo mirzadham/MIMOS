@@ -30,12 +30,12 @@ export default function BulletinSection() {
   ];
 
   return (
-    <section className="border-t border-slate-100 bg-slate-50 py-16 sm:py-24">
+    <section className="border-t border-border bg-muted/40 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
         <div className="text-center space-y-3">
-          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900">
+          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-foreground">
             MIMOS Academy Bulletin
           </h2>
           <p className="mx-auto max-w-2xl text-md text-slate-500">
@@ -57,7 +57,7 @@ export default function BulletinSection() {
                 {announcements.map((item) => (
                   <div key={item.id} className="group border-l-2 border-slate-100 pl-4 hover:border-primary transition-all">
                     <span className="text-xs text-slate-400 font-semibold">{item.date}</span>
-                    <h4 className="font-heading text-sm font-bold text-slate-800 mt-1 group-hover:text-primary transition-colors">
+                    <h4 className="font-heading text-sm font-bold text-foreground mt-1 group-hover:text-primary transition-colors">
                       {item.title}
                     </h4>
                     <p className="text-xs text-slate-500 mt-1 leading-relaxed">{item.desc}</p>
@@ -91,7 +91,7 @@ export default function BulletinSection() {
                 <tbody className="divide-y divide-slate-100 text-slate-600 font-medium">
                   {calendarSchedules.map((row) => (
                     <tr key={row.id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="py-3.5 font-bold text-slate-800 pr-2">{row.course}</td>
+                      <td className="py-3.5 font-bold text-foreground pr-2">{row.course}</td>
                       <td className="py-3.5">{row.date}</td>
                       <td className="py-3.5">{row.location}</td>
                       <td className="py-3.5 text-right">
@@ -119,19 +119,19 @@ export default function BulletinSection() {
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {placeholderCohorts.map((cohort, index) => (
-              <div key={index} className="group relative overflow-hidden rounded-xl border border-slate-100 bg-slate-50 hover:border-teal/25 transition-all duration-300">
+              <div key={index} className="group relative overflow-hidden rounded-xl border border-slate-100 bg-slate-50 hover:border-primary/20 transition-all duration-300">
                 {/* Visual placeholder box - no image generation */}
-                <div className="placeholder-image flex h-40 items-center justify-center text-slate-400 group-hover:bg-mint-light/50 transition-colors">
+                <div className="placeholder-image flex h-40 items-center justify-center text-slate-400 group-hover:bg-accent/50 transition-colors">
                   <div className="flex flex-col items-center gap-2">
-                    <ImageIcon className="h-8 w-8 text-slate-300 group-hover:text-teal/60 transition-colors" />
+                    <ImageIcon className="h-8 w-8 text-slate-300 group-hover:text-primary/60 transition-colors" />
                     <span className="text-[10px] font-semibold tracking-wider text-slate-400 uppercase">MIMOS Lab Archive</span>
                   </div>
                 </div>
                 {/* Label Overlay */}
                 <div className="border-t border-slate-100 p-4 bg-white">
                   <div className="flex justify-between items-center">
-                    <h4 className="font-heading text-xs font-bold text-slate-800">{cohort.title}</h4>
-                    <span className="text-[9px] font-semibold text-teal">{cohort.date}</span>
+                    <h4 className="font-heading text-xs font-bold text-foreground">{cohort.title}</h4>
+                    <span className="text-[9px] font-semibold text-primary">{cohort.date}</span>
                   </div>
                   <p className="text-[10px] text-slate-400 mt-0.5">{cohort.count} certified</p>
                 </div>

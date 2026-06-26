@@ -38,15 +38,14 @@ export default function FacilitiesPage() {
       icon: Shield
     }
   ];
-
   return (
-    <div className="bg-slate-50 min-h-screen py-16">
+    <div className="bg-background min-h-screen py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
         
         {/* Header */}
         <div className="text-center space-y-4">
-          <span className="text-xs font-bold text-teal tracking-wider uppercase">Facility Tour</span>
-          <h1 className="font-heading text-3xl font-extrabold text-slate-900 sm:text-5xl">
+          <span className="text-xs font-bold text-primary tracking-wider uppercase">Facility Tour</span>
+          <h1 className="font-heading text-3xl font-extrabold text-foreground sm:text-5xl">
             National Technology Shared Facilities
           </h1>
           <p className="mx-auto max-w-3xl text-sm sm:text-md text-slate-500 leading-relaxed font-body">
@@ -71,10 +70,10 @@ export default function FacilitiesPage() {
 
                 <div className="space-y-6">
                   <div className="flex items-center gap-3">
-                    <div className="rounded-lg bg-mint-light border border-mint/20 p-2.5 text-teal">
+                    <div className="rounded-lg bg-accent p-2.5 text-primary">
                       <Icon className="h-6 w-6" />
                     </div>
-                    <h2 className="font-heading text-xl font-bold text-slate-900">{lab.title}</h2>
+                    <h2 className="font-heading text-xl font-bold text-foreground">{lab.title}</h2>
                   </div>
 
                   <p className="text-sm text-slate-500 leading-relaxed font-body">
@@ -82,7 +81,7 @@ export default function FacilitiesPage() {
                   </p>
 
                   <div className="space-y-3">
-                    <span className="text-xs font-bold text-slate-800 uppercase tracking-wider block">Lab Specifications:</span>
+                    <span className="text-xs font-bold text-foreground uppercase tracking-wider block">Lab Specifications:</span>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-medium text-slate-600 font-body">
                       {lab.specs.map((spec, sIdx) => (
                         <li key={sIdx} className="flex gap-2 items-start">

@@ -81,7 +81,7 @@ export default function Catalog({ categories, programs }: CatalogProps) {
             onClick={() => handleCategoryChange("all")}
             className={`rounded-full px-4 py-2 text-xs font-bold transition-all border ${
               activeCategory === "all"
-                ? "bg-teal border-teal text-white shadow-sm"
+                ? "bg-primary border-primary text-white shadow-sm"
                 : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
             }`}
           >
@@ -93,7 +93,7 @@ export default function Catalog({ categories, programs }: CatalogProps) {
               onClick={() => handleCategoryChange(cat.id)}
               className={`rounded-full px-4 py-2 text-xs font-bold transition-all border ${
                 activeCategory === cat.id
-                  ? "bg-teal border-teal text-white shadow-sm"
+                  ? "bg-primary border-primary text-white shadow-sm"
                   : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
               }`}
             >
@@ -109,7 +109,7 @@ export default function Catalog({ categories, programs }: CatalogProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search programs..."
-            className="w-full rounded-full border border-slate-300 bg-white py-2 pl-10 pr-4 text-xs focus:border-teal focus:outline-none focus:ring-1 focus:ring-teal"
+            className="w-full rounded-full border border-slate-300 bg-white py-2 pl-10 pr-4 text-xs focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           />
           <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
         </div>
@@ -127,7 +127,7 @@ export default function Catalog({ categories, programs }: CatalogProps) {
         /* Empty State */
         <div className="mt-16 text-center border border-dashed border-slate-200 rounded-2xl p-12 bg-slate-50">
           <FolderSync className="mx-auto h-12 w-12 text-slate-300" />
-          <h3 className="mt-4 font-heading text-sm font-bold text-slate-900">No programs found</h3>
+          <h3 className="mt-4 font-heading text-sm font-bold text-foreground">No programs found</h3>
           <p className="mt-2 text-xs text-slate-500">
             We couldn't find any courses matching "{searchQuery}" under the selected category.
           </p>
@@ -136,7 +136,7 @@ export default function Catalog({ categories, programs }: CatalogProps) {
               setActiveCategory("all");
               setSearchQuery("");
             }}
-            className="mt-6 inline-flex items-center rounded-md bg-primary hover:bg-primary-hover px-4 py-2 text-xs font-bold text-white transition-all"
+            className="mt-6 inline-flex items-center rounded-md bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-primary-hover transition-all"
           >
             Reset Filters
           </button>

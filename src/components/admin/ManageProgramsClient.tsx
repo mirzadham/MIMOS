@@ -118,7 +118,7 @@ export default function ManageProgramsClient({
               setEditProgram(null);
               setModalOpen(true);
             }}
-            className="flex items-center gap-1 rounded-md bg-gradient-to-r from-primary to-teal hover:from-primary-hover hover:to-teal-hover text-white px-4 py-2.5 text-xs font-bold transition-all hover:shadow-md cursor-pointer"
+            className="flex items-center gap-1 rounded-md bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all hover:shadow-md cursor-pointer"
           >
             <Plus className="h-4 w-4" />
             <span>Create Program</span>
@@ -148,7 +148,7 @@ export default function ManageProgramsClient({
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="inline-flex items-center rounded-full bg-mint-light border border-mint/25 px-2 py-0.5 text-[10px] font-bold text-teal font-sans">
+                  <span className="inline-flex items-center rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-primary">
                     {prog.category?.name || "Upskilling"}
                   </span>
                 </td>
@@ -167,7 +167,7 @@ export default function ManageProgramsClient({
                     href={prog.microsoftFormUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary hover:text-teal hover:underline transition-colors"
+                    className="inline-flex items-center gap-1 text-primary hover:text-primary-hover hover:underline"
                   >
                     <span>Form Link</span>
                     <ExternalLink className="h-3.5 w-3.5" />
@@ -350,7 +350,7 @@ export default function ManageProgramsClient({
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-md bg-gradient-to-r from-primary to-teal hover:from-primary-hover hover:to-teal-hover text-white px-4 py-2 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
+                  className="rounded-md bg-primary hover:bg-primary-hover text-white px-4 py-2 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
                 >
                   {isPending ? "Processing..." : editProgram ? "Save Changes" : "Create Program"}
                 </button>
@@ -393,7 +393,7 @@ export default function ManageProgramsClient({
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-md bg-gradient-to-r from-primary to-teal hover:from-primary-hover hover:to-teal-hover text-white px-3 py-1.5 text-xs font-bold transition-all cursor-pointer"
+                  className="rounded-md bg-primary hover:bg-primary-hover text-white px-3 py-1.5 text-xs font-bold transition-all cursor-pointer"
                 >
                   {isPending ? "Creating..." : "Create"}
                 </button>

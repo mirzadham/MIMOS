@@ -32,7 +32,7 @@ export default async function AdminDashboardLayout({
   ];
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-background">
       
       {/* Sidebar Navigation */}
       <aside className="w-64 border-r border-slate-200 bg-white flex flex-col justify-between shrink-0">
@@ -41,7 +41,7 @@ export default async function AdminDashboardLayout({
           <div className="h-16 border-b border-slate-100 flex items-center px-6 gap-2">
             <GraduationCap className="h-7 w-7 text-primary" />
             <div className="flex flex-col">
-              <span className="font-heading text-sm font-bold tracking-tight text-slate-900 leading-none">
+              <span className="font-heading text-sm font-bold tracking-tight text-foreground leading-none">
                 MIMOS
               </span>
               <span className="font-sans text-[10px] font-semibold tracking-widest text-primary uppercase">
@@ -52,7 +52,7 @@ export default async function AdminDashboardLayout({
 
           {/* Quick Session user banner */}
           <div className="mx-4 my-4 p-3 bg-slate-50 border border-slate-150 rounded-xl flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-mint-light border border-mint/20 flex items-center justify-center text-teal">
+            <div className="h-8 w-8 rounded-full bg-accent flex items-center justify-center text-primary">
               <ShieldCheck className="h-4 w-4" />
             </div>
             <div className="overflow-hidden">
@@ -72,7 +72,7 @@ export default async function AdminDashboardLayout({
                   className="flex items-center justify-between rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-primary transition-all group"
                 >
                   <div className="flex items-center gap-2.5">
-                     <Icon className="h-4 w-4 text-slate-400 group-hover:text-primary transition-colors" />
+                    <Icon className="h-4 w-4 text-slate-400 group-hover:text-primary transition-colors" />
                     <span>{link.name}</span>
                   </div>
                   <ChevronRight className="h-3.5 w-3.5 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity" />
