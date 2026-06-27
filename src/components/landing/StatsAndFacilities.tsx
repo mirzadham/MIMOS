@@ -104,7 +104,7 @@ export default function StatsAndFacilities() {
               World-Class Learning Facilities
             </h3>
             <p className="text-sm text-slate-500 leading-relaxed font-body">
-              MIMOS Academy classes are conducted physically inside Malaysia's top applied research labs and modern classrooms, allowing students direct exposure to industrial systems.
+              MIMOS Academy classes are conducted physically inside Malaysia&apos;s top applied research labs and modern classrooms, allowing students direct exposure to industrial systems.
             </p>
             <div className="pt-2">
               <Link

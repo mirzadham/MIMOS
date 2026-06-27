@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Calendar, Bell, ArrowRight, Laptop, Award, Users } from "lucide-react";
+import { Calendar, Bell, ArrowRight, Laptop } from "lucide-react";
 import Link from "next/link";
 
 interface TrainingItem {

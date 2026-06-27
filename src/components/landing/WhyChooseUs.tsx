@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { BookOpen, Users, Award, Code, Database, Cpu, Lock } from "lucide-react";
+import { BookOpen, Users, Award } from "lucide-react";
 
 export default function WhyChooseUs() {
   const features = [
