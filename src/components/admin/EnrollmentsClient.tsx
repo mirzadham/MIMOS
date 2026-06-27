@@ -3,6 +3,7 @@
 import { useState, useTransition, useRef } from "react";
 import { importEnrollmentsAction, updateEnrollmentStatusAction } from "@/app/actions/adminActions";
 import Papa from "papaparse";
+import { formatDate } from "@/lib/utils";
 import { 
   FileSpreadsheet, 
   Upload, 
@@ -347,7 +348,7 @@ export default function EnrollmentsClient({
                       <span className="font-semibold text-slate-700">{student.program.title}</span>
                     </td>
                     <td className="px-4 py-3.5">
-                      <span>{new Date(student.registrationDate).toLocaleDateString()}</span>
+                      <span>{formatDate(student.registrationDate)}</span>
                     </td>
                     <td className="px-4 py-3.5">
                       <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[9px] font-bold ${
