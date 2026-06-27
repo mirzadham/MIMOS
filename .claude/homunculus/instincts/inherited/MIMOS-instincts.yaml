@@ -1,0 +1,298 @@
+# Instincts generated from https://github.com/mirzadham/MIMOS
+# Generated: 2026-06-27T06:07:16.242Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: mimos-instinct-commit-format
+trigger: "When making a git commit"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Commit Format
+
+## Action
+
+Use Conventional Commits format with prefixes: feat, fix, or chore
+
+## Evidence
+
+- Pattern in commits.prefixes
+- Examples: 'feat: implement Rank 2 Split-Complementary Mint & Teal palette', 'fix: resolve Next.js hydration mismatch on enrollment registration date'
+
+---
+id: mimos-instinct-commit-length
+trigger: "When writing a commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Commit Length
+
+## Action
+
+Keep commit message around 66 characters on average
+
+## Evidence
+
+- Pattern in commits.averageLength
+
+---
+id: mimos-instinct-file-naming
+trigger: "When creating or renaming a file in the codebase"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct File Naming
+
+## Action
+
+Use PascalCase for file names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.files
+
+---
+id: mimos-instinct-function-naming
+trigger: "When defining a new function"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Function Naming
+
+## Action
+
+Use camelCase for function names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.functions
+
+---
+id: mimos-instinct-class-naming
+trigger: "When defining a new class"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Class Naming
+
+## Action
+
+Use PascalCase for class names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.classes
+
+---
+id: mimos-instinct-constant-naming
+trigger: "When declaring a constant"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Constant Naming
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for constant names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.constants
+
+---
+id: mimos-instinct-import-style
+trigger: "When importing modules"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Import Style
+
+## Action
+
+Use alias-based imports (@/, ~/) instead of relative imports
+
+## Evidence
+
+- Pattern in codeStyle.importStyle
+- Example: import Header from '@/components/layout/Header';
+
+---
+id: mimos-instinct-export-style
+trigger: "When exporting modules or components"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Export Style
+
+## Action
+
+Use default exports
+
+## Evidence
+
+- Pattern in codeStyle.exportStyle
+
+---
+id: mimos-instinct-arch-type-based
+trigger: "when adding new code"
+confidence: 0.8
+domain: architecture
+source: repo-analysis
+source_repo: https://github.com/mirzadham/MIMOS
+---
+
+# Mimos Instinct Arch Type Based
+
+## Action
+
+Place code in the appropriate type folder (components/, services/, utils/, etc.)
+
+## Evidence
+
+- Type-based module organization detected
+- Folders: app, components, lib
+
+---
+id: mimos-instinct-test-location
+trigger: "When adding or updating tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Test Location
+
+## Action
+
+Place test files in a separate test directory, not alongside source files
+
+## Evidence
+
+- Pattern in architecture.folderStructure.testLocation
+
+---
+id: mimos-instinct-theme-update-workflow-step1
+trigger: "When updating the application's color theme or visual style"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Theme Update Workflow Step1
+
+## Action
+
+Update the global stylesheet (e.g., src/app/globals.css) with new color variables or theme rules
+
+## Evidence
+
+- Workflow: theme-update-across-public-and-admin-ui
+- Commit: 'Update global stylesheet (e.g., globals.css) with new color variables or theme rules.'
+
+---
+id: mimos-instinct-theme-update-workflow-step2
+trigger: "After updating the global stylesheet for a theme change"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Theme Update Workflow Step2
+
+## Action
+
+Modify public-facing page components (src/app/(public)/*/page.tsx) to use new theme styles
+
+## Evidence
+
+- Workflow: theme-update-across-public-and-admin-ui
+- Commit: 'Modify public-facing page components to use new theme styles.'
+
+---
+id: mimos-instinct-theme-update-workflow-step3
+trigger: "After updating public-facing components for a theme change"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Theme Update Workflow Step3
+
+## Action
+
+Modify admin dashboard page components (src/app/admin/(dashboard)/*.tsx) to use new theme styles
+
+## Evidence
+
+- Workflow: theme-update-across-public-and-admin-ui
+- Commit: 'Modify admin dashboard page components to use new theme styles.'
+
+---
+id: mimos-instinct-theme-update-workflow-step4
+trigger: "After updating admin dashboard components for a theme change"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Theme Update Workflow Step4
+
+## Action
+
+Update shared layout components (src/components/layout/Header.tsx, Footer.tsx) to match new theme
+
+## Evidence
+
+- Workflow: theme-update-across-public-and-admin-ui
+- Commit: 'Update shared layout components (Header, Footer) to match new theme.'
+
+---
+id: mimos-instinct-theme-update-workflow-step5
+trigger: "After updating shared layout components for a theme change"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: mirzadham/MIMOS
+---
+
+# Mimos Instinct Theme Update Workflow Step5
+
+## Action
+
+Update any landing or catalog components (src/components/landing/*.tsx) to reflect theme changes
+
+## Evidence
+
+- Workflow: theme-update-across-public-and-admin-ui
+- Commit: 'Update any landing or catalog components to reflect theme changes.'
