@@ -5,7 +5,7 @@ import LatticeNetwork from "@/components/landing/LatticeNetwork";
 import Catalog from "@/components/landing/Catalog";
 import BulletinSection from "@/components/landing/BulletinSection";
 import { getSafeCategories, getSafePrograms } from "@/lib/db";
-import { ShieldAlert, Cpu, ArrowUpRight, GraduationCap } from "lucide-react";
+import { ShieldAlert, Cpu, ArrowUpRight } from "lucide-react";
 
 export default async function Home() {
   const [categories, programs] = await Promise.all([
@@ -40,7 +40,7 @@ export default async function Home() {
           </div>
 
           <h1 className="mx-auto max-w-4xl font-heading text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl leading-tight">
-            Elevating Malaysia's Tech Capabilities via <span className="text-primary">Applied Upskilling</span>
+            Elevating Malaysia&apos;s Tech Capabilities via <span className="text-primary">Applied Upskilling</span>
           </h1>
 
           <p className="mx-auto max-w-2xl text-md sm:text-lg text-slate-500 leading-relaxed font-body">
@@ -79,7 +79,7 @@ export default async function Home() {
               World-Class National R&D Facilities
             </h3>
             <p className="text-sm text-slate-500 mt-4 leading-relaxed font-body">
-              MIMOS Academy training modules are conducted physically inside Malaysia's top applied research labs. Students get direct access to modern wafer fabrication machinery, testing tools, and high-performance computing clusters.
+              MIMOS Academy training modules are conducted physically inside Malaysia&apos;s top applied research labs. Students get direct access to modern wafer fabrication machinery, testing tools, and high-performance computing clusters.
             </p>
             <Link
               href="/facilities"
@@ -124,7 +124,7 @@ export default async function Home() {
               Upskill Your Corporate Workforce
             </h3>
             <p className="text-sm text-slate-300 leading-relaxed font-body">
-              Partner with MIMOS Academy to deliver specialized physical cohorts tailored for your company's engineers, technicians, and managers. Available with HRD Corp claim support.
+              Partner with MIMOS Academy to deliver specialized physical cohorts tailored for your company&apos;s engineers, technicians, and managers. Available with HRD Corp claim support.
             </p>
           </div>
           

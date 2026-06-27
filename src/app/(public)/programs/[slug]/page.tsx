@@ -203,7 +203,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
             <div className="rounded-2xl border border-slate-200 bg-slate-900 text-white p-6 space-y-4">
               <h4 className="font-heading text-sm font-bold">Request Private Cohort?</h4>
               <p className="text-xs text-slate-400 leading-relaxed font-body">
-                We can customize this course structure and run private physical labs for your company's employees.
+                We can customize this course structure and run private physical labs for your company&apos;s employees.
               </p>
               <Link
                 href="/contact"

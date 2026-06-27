@@ -1,4 +1,4 @@
-import { Calendar, Bell, ArrowRight } from "lucide-react";
+import { Calendar, Bell } from "lucide-react";
 
 export default function NewsPage() {
   const articles = [

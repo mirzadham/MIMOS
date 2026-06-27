@@ -40,6 +40,13 @@ interface EnrollmentsClientProps {
   initialEnrollments: Enrollment[];
 }
 
+interface MappedEnrollment {
+  name: string;
+  email: string;
+  company: string;
+  date?: string;
+}
+
 export default function EnrollmentsClient({
   programs,
   initialEnrollments,
@@ -49,8 +56,7 @@ export default function EnrollmentsClient({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // CSV parsing states
-  const [parsedData, setParsedData] = useState<any[]>([]);
-  const [headers, setHeaders] = useState<string[]>([]);
+  const [parsedData, setParsedData] = useState<MappedEnrollment[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
@@ -85,12 +91,9 @@ export default function EnrollmentsClient({
 
         // Auto map columns from Microsoft Forms exports
         // MS Forms usually names columns like: "Name", "Email", "Start time", "Organization", etc.
-        const firstRow = results.data[0] as any;
-        const keys = Object.keys(firstRow);
-        setHeaders(keys);
 
         // Map parsed columns to our expected schema
-        const mapped = results.data.map((row: any) => {
+        const mapped = (results.data as Array<Record<string, unknown>>).map((row) => {
           const name = row["Name"] || row["Full Name"] || row["Nama"] || Object.values(row)[1] || "";
           const email = row["Email"] || row["Email Address"] || row["E-mel"] || Object.values(row)[2] || "";
           const company = row["Company"] || row["Organization"] || row["Syarikat"] || row["Employer"] || "";
@@ -126,7 +129,6 @@ export default function EnrollmentsClient({
       if (res.success) {
         setSuccessMsg(`Success! Imported ${res.successCount} registrations. (Skipped/Existing: ${res.skippedCount})`);
         setParsedData([]);
-        setHeaders([]);
         if (fileInputRef.current) fileInputRef.current.value = "";
       } else {
         setErrorMsg("Failed to import enrollment rows to database.");

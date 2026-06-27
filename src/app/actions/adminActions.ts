@@ -41,7 +41,7 @@ export async function adminLogoutAction() {
           ipAddress: "127.0.0.1"
         }
       });
-    } catch (e) {}
+    } catch {}
   }
   await logoutAdmin();
 }
@@ -148,7 +148,7 @@ export async function updateProgramAction(
     revalidatePath("/");
     revalidatePath("/programs/" + slug);
     return { success: true, program: updated };
-  } catch (e) {
+  } catch {
     const idx = mockPrograms.findIndex(p => p.id === id);
     if (idx !== -1) {
       mockPrograms[idx] = { id, ...data, slug };
@@ -176,7 +176,7 @@ export async function deleteProgramAction(id: string) {
 
     revalidatePath("/");
     return { success: true };
-  } catch (e) {
+  } catch {
     const idx = mockPrograms.findIndex(p => p.id === id);
     if (idx !== -1) {
       mockPrograms.splice(idx, 1);
@@ -199,7 +199,7 @@ export async function createCategoryAction(name: string) {
     });
     revalidatePath("/");
     return { success: true, category };
-  } catch (e) {
+  } catch {
     const category = { id: "cat-" + Math.random().toString(), name, slug };
     mockCategories.push(category);
     revalidatePath("/");
@@ -258,7 +258,7 @@ export async function importEnrollmentsAction(programId: string, rows: Array<{
         details: `Imported ${successCount} registrations for program ID: ${programId} (Skipped/Errors: ${skippedCount}) by admin ${admin.email}`
       }
     });
-  } catch (e) {}
+  } catch {}
 
   return { success: true, successCount, skippedCount };
 }
@@ -274,7 +274,7 @@ export async function updateEnrollmentStatusAction(id: string, status: string) {
       data: { status }
     });
     return { success: true };
-  } catch (e) {
+  } catch {
     return { success: false, error: "Failed to update" };
   }
 }

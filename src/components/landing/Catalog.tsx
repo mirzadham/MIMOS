@@ -129,7 +129,7 @@ export default function Catalog({ categories, programs }: CatalogProps) {
           <FolderSync className="mx-auto h-12 w-12 text-slate-300" />
           <h3 className="mt-4 font-heading text-sm font-bold text-foreground">No programs found</h3>
           <p className="mt-2 text-xs text-slate-500">
-            We couldn't find any courses matching "{searchQuery}" under the selected category.
+            We couldn&apos;t find any courses matching &quot;{searchQuery}&quot; under the selected category.
           </p>
           <button
             onClick={() => {

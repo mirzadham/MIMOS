@@ -49,7 +49,7 @@ export default function FacilitiesPage() {
             National Technology Shared Facilities
           </h1>
           <p className="mx-auto max-w-3xl text-sm sm:text-md text-slate-500 leading-relaxed font-body">
-            MIMOS Academy is located inside the main MIMOS Berhad headquarters, featuring direct shared access to Malaysia's top applied research laboratories and testing environments.
+            MIMOS Academy is located inside the main MIMOS Berhad headquarters, featuring direct shared access to Malaysia&apos;s top applied research laboratories and testing environments.
           </p>
         </div>
 

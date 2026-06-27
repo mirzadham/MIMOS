@@ -16,7 +16,20 @@ export default async function AdminProgramsPage() {
     slug: cat.slug
   }));
 
-  const typedPrograms = (programs as any[]).map(prog => ({
+  const typedPrograms = (programs as Array<{
+    id: string;
+    title: string;
+    slug: string;
+    description: string;
+    syllabus: string;
+    location: string;
+    price: string | null;
+    duration: string | null;
+    dates: string | null;
+    microsoftFormUrl: string;
+    categoryId: string;
+    category?: { name: string } | null;
+  }>).map(prog => ({
     id: prog.id,
     title: prog.title,
     slug: prog.slug,

@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { issueCertificateAction } from "@/app/actions/adminActions";
 import { jsPDF } from "jspdf";
-import { Award, Download, ShieldCheck, Search, Users, Sparkles, Loader2 } from "lucide-react";
+import { Award, Download, Search, Users, Sparkles, Loader2 } from "lucide-react";
 
 interface Enrollment {
   id: string;

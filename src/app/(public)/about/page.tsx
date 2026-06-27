@@ -16,7 +16,7 @@ export default function AboutPage() {
         <div className="text-center space-y-4">
           <span className="text-xs font-bold text-primary tracking-wider uppercase">Our Background</span>
           <h1 className="font-heading text-3xl font-extrabold text-foreground sm:text-5xl">
-            upskilling Malaysia's Applied Engineering Workforce
+            upskilling Malaysia&apos;s Applied Engineering Workforce
           </h1>
           <p className="mx-auto max-w-3xl text-sm sm:text-md text-slate-500 leading-relaxed font-body">
             MIMOS Academy was established to bridge the gap between academic theory and practical applied research. As a subsidiary of MIMOS Berhad, we coordinate and conduct hands-on technology upskilling.
@@ -74,7 +74,7 @@ export default function AboutPage() {
             </div>
             <h3 className="font-heading text-md font-bold text-foreground">R&D Legacy</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Backed by MIMOS's 20+ year legacy in microelectronics patenting, material analyses, and national data registries.
+              Backed by MIMOS&apos;s 20+ year legacy in microelectronics patenting, material analyses, and national data registries.
             </p>
           </div>
 

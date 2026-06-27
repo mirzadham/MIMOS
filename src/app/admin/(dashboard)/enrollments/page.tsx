@@ -3,9 +3,21 @@ import EnrollmentsClient from "@/components/admin/EnrollmentsClient";
 
 export const dynamic = "force-dynamic";
 
+interface DashboardEnrollment {
+  id: string;
+  name: string;
+  email: string;
+  company: string | null;
+  registrationDate: Date;
+  status: string;
+  program: {
+    title: string;
+  };
+}
+
 export default async function AdminEnrollmentsPage() {
-  let programs: any[] = [];
-  let enrollments: any[] = [];
+  let programs: Array<{ id: string; title: string }> = [];
+  let enrollments: DashboardEnrollment[] = [];
 
   try {
     const [dbPrograms, dbEnrollments] = await Promise.all([
@@ -19,8 +31,8 @@ export default async function AdminEnrollmentsPage() {
       })
     ]);
     programs = dbPrograms;
-    enrollments = dbEnrollments;
-  } catch (e) {
+    enrollments = dbEnrollments as unknown as DashboardEnrollment[];
+  } catch {
     // DB offline fallback
     programs = [
       { id: "prog-1", title: "Advanced Wafer Fabrication & Lithography" },

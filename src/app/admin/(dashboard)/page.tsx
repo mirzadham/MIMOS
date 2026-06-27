@@ -4,19 +4,26 @@ import {
   Users, 
   Award, 
   TrendingUp, 
-  Terminal,
-  Calendar,
-  Building
+  Terminal
 } from "lucide-react";
 
+function getFallbackLogs() {
+  const now = Date.now();
+  return [
+    { id: "1", action: "IMPORT_ENROLLMENTS", details: "Imported 34 registrations for Wafer Fab", createdAt: new Date(now) },
+    { id: "2", action: "CREATE_PROGRAM", details: "Created Generative AI Course details", createdAt: new Date(now - 3600000) },
+    { id: "3", action: "ISSUE_CERTIFICATE", details: "Issued Cert MA-2026-8942 to Lim Wei Liang", createdAt: new Date(now - 7200000) }
+  ];
+}
+
 export default async function AdminDashboardOverview() {
-  let stats = {
+  const stats = {
     programs: 0,
     enrollments: 0,
     certificates: 0,
   };
 
-  let recentLogs: any[] = [];
+  let recentLogs: Array<{ id: string; action: string; details: string; createdAt: Date }> = [];
   let programStats: Array<{ title: string; count: number }> = [];
 
   try {
@@ -41,16 +48,12 @@ export default async function AdminDashboardOverview() {
       title: p.title,
       count: p._count.enrollments
     }));
-  } catch (e) {
+  } catch {
     // DB offline fallback
     stats.programs = mockPrograms.length;
     stats.enrollments = 124; // Mock values
     stats.certificates = 42;
-    recentLogs = [
-      { id: "1", action: "IMPORT_ENROLLMENTS", details: "Imported 34 registrations for Wafer Fab", createdAt: new Date() },
-      { id: "2", action: "CREATE_PROGRAM", details: "Created Generative AI Course details", createdAt: new Date(Date.now() - 3600000) },
-      { id: "3", action: "ISSUE_CERTIFICATE", details: "Issued Cert MA-2026-8942 to Lim Wei Liang", createdAt: new Date(Date.now() - 7200000) }
-    ];
+    recentLogs = getFallbackLogs();
     programStats = [
       { title: "Advanced Wafer Fabrication & Lithography", count: 48 },
       { title: "Generative AI LLM Enterprise Deployment", count: 36 },

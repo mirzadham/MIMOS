@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-import { prisma } from "./db";
 
 const ADMIN_COOKIE_NAME = "mimos_admin_session";
 
@@ -35,7 +34,7 @@ export async function getSessionAdmin() {
       email: sessionCookie.value,
       role: "ADMIN"
     };
-  } catch (e) {
+  } catch {
     return null;
   }
 }

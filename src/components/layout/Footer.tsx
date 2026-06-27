@@ -23,7 +23,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed">
-              MIMOS Academy is the professional talent development arm of MIMOS Berhad, Malaysia's National Applied Research and Development Centre. We deliver hands-on, physical upskilling programs in deep tech, semiconductors, and advanced software systems.
+              MIMOS Academy is the professional talent development arm of MIMOS Berhad, Malaysia&apos;s National Applied Research and Development Centre. We deliver hands-on, physical upskilling programs in deep tech, semiconductors, and advanced software systems.
             </p>
           </div>
 
