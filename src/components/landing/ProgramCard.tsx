@@ -18,11 +18,11 @@ interface ProgramCardProps {
 
 export default function ProgramCard({ program }: ProgramCardProps) {
   return (
-    <div className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#d7569f]/30 hover:shadow-md">
+    <div className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-md">
       
       {/* Category Tag & Badge */}
       <div className="flex items-center justify-between gap-2">
-        <span className="inline-flex items-center rounded-full bg-pink-50 px-2.5 py-0.5 text-xs font-semibold text-[#d7569f]">
+        <span className="inline-flex items-center rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-primary">
           {program.category?.name || "Upskilling Program"}
         </span>
         {program.price?.includes("HRD Corp") && (
@@ -35,7 +35,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
 
       {/* Title & Description */}
       <div className="mt-4 flex-1">
-        <h3 className="font-heading text-lg font-bold text-slate-900 group-hover:text-[#d7569f] transition-colors leading-snug">
+        <h3 className="font-heading text-lg font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
           {program.title}
         </h3>
         <p className="mt-2 text-sm text-slate-500 line-clamp-3 leading-relaxed">
@@ -61,7 +61,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
       <div className="mt-6">
         <Link
           href={`/programs/${program.slug}`}
-          className="inline-flex items-center justify-center gap-1.5 text-sm font-bold text-[#d7569f] transition-all hover:gap-2.5"
+          className="inline-flex items-center justify-center gap-1.5 text-sm font-bold text-primary hover:text-primary-hover transition-all hover:gap-2.5"
         >
           <span>View Syllabus & Apply</span>
           <ArrowRight className="h-4 w-4" />
@@ -69,7 +69,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
       </div>
 
       {/* Top Brand Accent Border */}
-      <div className="absolute top-0 left-0 h-1 w-0 bg-[#d7569f] transition-all duration-300 group-hover:w-full" />
+      <div className="absolute top-0 left-0 h-1 w-0 bg-gradient-to-r from-primary to-gold transition-all duration-300 group-hover:w-full" />
     </div>
   );
 }

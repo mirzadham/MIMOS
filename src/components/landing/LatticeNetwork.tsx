@@ -41,7 +41,7 @@ export default function LatticeNetwork() {
       });
     }
 
-    let mouse = { x: -1000, y: -1000, radius: 150 };
+    const mouse = { x: -1000, y: -1000, radius: 150 };
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
@@ -107,7 +107,7 @@ export default function LatticeNetwork() {
         // Draw dot
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = node.label ? "#d7569f" : "#94a3b8";
+        ctx.fillStyle = node.label ? "#a72190" : "#94a3b8";
         ctx.fill();
 
         // Draw labels for key technology nodes
@@ -137,7 +137,7 @@ export default function LatticeNetwork() {
             const alpha = (110 - dist) / 110;
             if (mdist1 < mouse.radius) {
               // Glowing pink connection if near mouse
-              ctx.strokeStyle = `rgba(215, 86, 159, ${alpha * 0.65})`;
+              ctx.strokeStyle = `rgba(167, 33, 144, ${alpha * 0.65})`;
               ctx.lineWidth = 1.0;
             } else {
               // Regular subtle gray connection

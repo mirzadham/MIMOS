@@ -3,8 +3,26 @@ import CertificatesClient from "@/components/admin/CertificatesClient";
 
 export const dynamic = "force-dynamic";
 
+interface CertificateEnrollment {
+  id: string;
+  name: string;
+  email: string;
+  company: string | null;
+  status: string;
+  programId: string;
+  program: {
+    id: string;
+    title: string;
+  };
+  certificates: Array<{
+    certificateNumber: string;
+    verifyHash: string;
+    issueDate: Date;
+  }>;
+}
+
 export default async function AdminCertificatesPage() {
-  let enrollments: any[] = [];
+  let enrollments: CertificateEnrollment[] = [];
 
   try {
     enrollments = await prisma.enrollment.findMany({
@@ -23,8 +41,8 @@ export default async function AdminCertificatesPage() {
         }
       },
       orderBy: { updatedAt: "desc" }
-    });
-  } catch (e) {
+    }) as unknown as CertificateEnrollment[];
+  } catch {
     // DB offline mock fallback
     enrollments = [
       {

@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { issueCertificateAction } from "@/app/actions/adminActions";
 import { jsPDF } from "jspdf";
-import { Award, Download, ShieldCheck, Search, Users, Sparkles, Loader2 } from "lucide-react";
+import { Award, Download, Search, Users, Sparkles, Loader2 } from "lucide-react";
 
 interface Enrollment {
   id: string;
@@ -89,7 +89,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
     doc.text("NATIONAL APPLIED R&D TALENT DEVELOPMENT CENTRE", 148, 36, { align: "center" });
 
     // Decorative line
-    doc.setDrawColor(215, 86, 159);
+    doc.setDrawColor(167, 33, 144);
     doc.setLineWidth(0.8);
     doc.line(118, 42, 178, 42);
 
@@ -120,7 +120,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
     // Program Title
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
-    doc.setTextColor(215, 86, 159); // Brand color #d7569f
+    doc.setTextColor(167, 33, 144); // Brand color #a72190
     doc.text(programTitle, 148, 120, { align: "center" });
 
     // 5. Signature metadata fields
@@ -168,7 +168,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="font-heading text-2xl font-extrabold text-slate-900">Certificate Vault</h1>
+          <h1 className="font-heading text-2xl font-extrabold text-foreground">Certificate Vault</h1>
           <p className="text-xs text-slate-500 mt-1">Issue digital, cryptographically verifiable certificates to attendees.</p>
         </div>
       </div>
@@ -180,7 +180,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
             onClick={() => setActiveTab("PENDING")}
             className={`rounded-full px-4 py-2 text-xs font-bold border transition-all ${
               activeTab === "PENDING"
-                ? "bg-[#d7569f] border-[#d7569f] text-white shadow-sm"
+                ? "bg-primary border-primary text-white shadow-sm"
                 : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
             }`}
           >
@@ -190,7 +190,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
             onClick={() => setActiveTab("ISSUED")}
             className={`rounded-full px-4 py-2 text-xs font-bold border transition-all ${
               activeTab === "ISSUED"
-                ? "bg-[#d7569f] border-[#d7569f] text-white shadow-sm"
+                ? "bg-primary border-primary text-white shadow-sm"
                 : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
             }`}
           >
@@ -204,7 +204,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search attendees..."
-            className="w-full rounded-md border border-slate-300 pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-[#d7569f]"
+            className="w-full rounded-md border border-slate-300 pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-primary"
           />
           <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
         </div>
@@ -265,7 +265,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
                         <button
                           onClick={() => handleIssueCertificate(student)}
                           disabled={isPending}
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-[#d7569f] hover:bg-[#c0438a] text-white px-3.5 py-2 text-xs font-bold transition-all disabled:opacity-50"
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-primary hover:bg-primary-hover text-white px-3.5 py-2 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
                         >
                           {isPending ? (
                             <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -303,7 +303,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
       ) : (
         <div className="text-center py-16 border border-dashed border-slate-200 rounded-2xl bg-slate-50">
           <Award className="mx-auto h-10 w-10 text-slate-300 animate-pulse" />
-          <h3 className="mt-4 font-heading text-sm font-bold text-slate-900">
+          <h3 className="mt-4 font-heading text-sm font-bold text-foreground">
             {activeTab === "PENDING" ? "No pending issuances" : "No certificates issued yet"}
           </h3>
           <p className="mt-2 text-xs text-slate-500 font-body">

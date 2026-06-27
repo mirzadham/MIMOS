@@ -3,7 +3,7 @@ import { GraduationCap, Mail, Phone, Printer, MapPin } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-200 bg-slate-50 text-slate-600">
+    <footer className="border-t border-border/20 bg-foreground text-slate-300">
       
       {/* Main Footer Links & Info */}
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
@@ -12,83 +12,83 @@ export default function Footer() {
           {/* Column 1: Brand Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <GraduationCap className="h-7 w-7 text-[#d7569f]" />
+              <GraduationCap className="h-7 w-7 text-primary" />
               <div className="flex flex-col">
-                <span className="font-heading text-md font-bold tracking-tight text-slate-900 leading-none">
+                <span className="font-heading text-md font-bold tracking-tight text-white leading-none">
                   MIMOS
                 </span>
-                <span className="font-sans text-[10px] font-semibold tracking-widest text-[#d7569f] uppercase">
+                <span className="font-sans text-[10px] font-semibold tracking-widest text-primary uppercase">
                   Academy
                 </span>
               </div>
             </div>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              MIMOS Academy is the professional talent development arm of MIMOS Berhad, Malaysia's National Applied Research and Development Centre. We deliver hands-on, physical upskilling programs in deep tech, semiconductors, and advanced software systems.
+            <p className="text-sm text-slate-400 leading-relaxed">
+              MIMOS Academy is the professional talent development arm of MIMOS Berhad, Malaysia&apos;s National Applied Research and Development Centre. We deliver hands-on, physical upskilling programs in deep tech, semiconductors, and advanced software systems.
             </p>
           </div>
 
           {/* Column 2: Quick Links */}
           <div className="space-y-4 md:ml-8">
-            <h3 className="font-heading text-sm font-bold tracking-wider text-slate-900 uppercase">
+            <h3 className="font-heading text-sm font-bold tracking-wider text-white uppercase">
               Quick Links
             </h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/" className="hover:text-[#d7569f] transition-colors">Home</Link>
+                <Link href="/" className="hover:text-gold transition-colors">Home</Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-[#d7569f] transition-colors">About Us</Link>
+                <Link href="/about" className="hover:text-gold transition-colors">About Us</Link>
               </li>
               <li>
-                <Link href="/#programs-catalog" className="hover:text-[#d7569f] transition-colors">Training Catalog</Link>
+                <Link href="/#programs-catalog" className="hover:text-gold transition-colors">Training Catalog</Link>
               </li>
               <li>
-                <Link href="/facilities" className="hover:text-[#d7569f] transition-colors">R&D Lab Facilities</Link>
+                <Link href="/facilities" className="hover:text-gold transition-colors">R&D Lab Facilities</Link>
               </li>
             </ul>
           </div>
 
           {/* Column 3: Bulletins */}
           <div className="space-y-4">
-            <h3 className="font-heading text-sm font-bold tracking-wider text-slate-900 uppercase">
+            <h3 className="font-heading text-sm font-bold tracking-wider text-white uppercase">
               Academy Bulletin
             </h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/news" className="hover:text-[#d7569f] transition-colors">Upcoming Training Schedules</Link>
+                <Link href="/news" className="hover:text-gold transition-colors">Upcoming Training Schedules</Link>
               </li>
               <li>
-                <Link href="/news" className="hover:text-[#d7569f] transition-colors">Past Cohort Galleries</Link>
+                <Link href="/news" className="hover:text-gold transition-colors">Past Cohort Galleries</Link>
               </li>
               <li>
-                <Link href="/news" className="hover:text-[#d7569f] transition-colors">Corporate Collaboration Notices</Link>
+                <Link href="/news" className="hover:text-gold transition-colors">Corporate Collaboration Notices</Link>
               </li>
             </ul>
           </div>
 
           {/* Column 4: Contact Details (Direct from mimos.my) */}
           <div className="space-y-4">
-            <h3 className="font-heading text-sm font-bold tracking-wider text-slate-900 uppercase">
+            <h3 className="font-heading text-sm font-bold tracking-wider text-white uppercase">
               Contact Us
             </h3>
             <ul className="space-y-3 text-sm">
               <li className="flex gap-2 items-start">
-                <MapPin className="h-5 w-5 text-[#d7569f] shrink-0 mt-0.5" />
-                <span className="text-slate-500">
+                <MapPin className="h-5 w-5 text-gold shrink-0 mt-0.5" />
+                <span className="text-slate-400">
                   MIMOS Berhad, Technology Park Malaysia, Bukit Jalil, 57000 Kuala Lumpur, Wilayah Persekutuan, Malaysia.
                 </span>
               </li>
               <li className="flex gap-2 items-center">
-                <Phone className="h-4 w-4 text-[#d7569f]" />
-                <span className="text-slate-500">Tel: +603-8995 5000</span>
+                <Phone className="h-4 w-4 text-gold" />
+                <span className="text-slate-400">Tel: +603-8995 5000</span>
               </li>
               <li className="flex gap-2 items-center">
-                <Printer className="h-4 w-4 text-[#d7569f]" />
-                <span className="text-slate-500">Fax: +603-8996 2755</span>
+                <Printer className="h-4 w-4 text-gold" />
+                <span className="text-slate-400">Fax: +603-8996 2755</span>
               </li>
               <li className="flex gap-2 items-center">
-                <Mail className="h-4 w-4 text-[#d7569f]" />
-                <a href="mailto:info@mimos.my" className="text-slate-500 hover:text-[#d7569f]">
+                <Mail className="h-4 w-4 text-gold" />
+                <a href="mailto:info@mimos.my" className="text-slate-400 hover:text-gold">
                   info@mimos.my
                 </a>
               </li>
@@ -98,11 +98,11 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="mt-8 border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-slate-400">
-            &copy; 2026 MIMOS Berhad. All Rights Reserved. | <a href="https://www.mimos.my/legal-notice/" target="_blank" rel="noopener noreferrer" className="hover:underline">Legal Notice</a>
+        <div className="mt-8 border-t border-border/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-slate-500">
+            &copy; 2026 MIMOS Berhad. All Rights Reserved. | <a href="https://www.mimos.my/legal-notice/" target="_blank" rel="noopener noreferrer" className="hover:text-white hover:underline">Legal Notice</a>
           </p>
-          <div className="text-xs text-slate-400">
+          <div className="text-xs text-slate-500">
             Powered by Next.js & Tailwind CSS
           </div>
         </div>
