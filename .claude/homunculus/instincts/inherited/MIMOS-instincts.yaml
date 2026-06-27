@@ -5,171 +5,43 @@
 # High-confidence manually curated instincts should be preserved alongside these.
 
 ---
-id: MIMOS-commit-conventional
-trigger: "when writing a commit message"
-confidence: 0.85
+id: mimos-instinct-commit-format
+trigger: "When making a git commit"
+confidence: 0.9
 domain: git
 source: repo-analysis
-source_repo: https://github.com/mirzadham/MIMOS
+source_repo: mirzadham/MIMOS
 ---
 
-# MIMOS Commit Conventional
+# Mimos Instinct Commit Format
 
 ## Action
 
-Use conventional commit format with prefixes: feat, fix, chore
+Use Conventional Commits format with prefixes: feat, fix, or chore
 
 ## Evidence
 
-- 4 commits analyzed
-- Detected conventional commit pattern
-- Examples: feat: implement Rank 2 Split-Complementary Mint & Teal palette, fix: resolve Next.js hydration mismatch on enrollment registration date
+- Pattern in commits.prefixes
+- Examples: 'feat: implement Rank 2 Split-Complementary Mint & Teal palette', 'fix: resolve Next.js hydration mismatch on enrollment registration date'
 
 ---
-id: MIMOS-commit-length
-trigger: "when writing a commit message"
-confidence: 0.6
-domain: git
-source: repo-analysis
-source_repo: https://github.com/mirzadham/MIMOS
----
-
-# MIMOS Commit Length
-
-## Action
-
-Write moderate-length commit messages (~66 characters)
-
-## Evidence
-
-- Average commit message length: 66 chars
-- Based on 4 commits
-
----
-id: MIMOS-naming-files
-trigger: "when creating a new file"
-confidence: 0.8
-domain: code-style
-source: repo-analysis
-source_repo: https://github.com/mirzadham/MIMOS
----
-
-# MIMOS Naming Files
-
-## Action
-
-Use PascalCase naming convention
-
-## Evidence
-
-- Analyzed file naming patterns in repository
-- Dominant pattern: PascalCase
-
----
-id: MIMOS-import-alias
-trigger: "when importing modules"
-confidence: 0.85
-domain: code-style
-source: repo-analysis
-source_repo: https://github.com/mirzadham/MIMOS
----
-
-# MIMOS Import Alias
-
-## Action
-
-Use path aliases (@/, ~/) instead of relative imports
-
-## Evidence
-
-- Import analysis shows alias pattern
-- Example: import { x } from '@/lib/x'
-
----
-id: MIMOS-export-style
-trigger: "when exporting from a module"
+id: mimos-instinct-commit-length
+trigger: "When writing a commit message"
 confidence: 0.7
-domain: code-style
+domain: git
 source: repo-analysis
-source_repo: https://github.com/mirzadham/MIMOS
+source_repo: mirzadham/MIMOS
 ---
 
-# MIMOS Export Style
+# Mimos Instinct Commit Length
 
 ## Action
 
-Prefer default exports
+Keep commit message around 66 characters on average
 
 ## Evidence
 
-- Export pattern analysis
-- Dominant style: default
-
----
-id: MIMOS-arch-type-based
-trigger: "when adding new code"
-confidence: 0.8
-domain: architecture
-source: repo-analysis
-source_repo: https://github.com/mirzadham/MIMOS
----
-
-# MIMOS Arch Type Based
-
-## Action
-
-Place code in the appropriate type folder (components/, services/, utils/, etc.)
-
-## Evidence
-
-- Type-based module organization detected
-- Folders: app, components, lib
-
----
-id: MIMOS-test-separate
-trigger: "when writing tests"
-confidence: 0.8
-domain: testing
-source: repo-analysis
-source_repo: https://github.com/mirzadham/MIMOS
----
-
-# MIMOS Test Separate
-
-## Action
-
-Place tests in the tests/ or __tests__/ directory, mirroring src structure
-
-## Evidence
-
-- Separate test directory pattern detected
-- Tests live in dedicated test folders
-
----
-id: MIMOS-workflow-theme-update-across-public-and-admin-ui
-trigger: "when doing theme update across public and admin ui"
-confidence: 0.6
-domain: workflow
-source: repo-analysis
-source_repo: https://github.com/mirzadham/MIMOS
----
-
-# MIMOS Workflow Theme Update Across Public And Admin Ui
-
-## Action
-
-Follow the theme-update-across-public-and-admin-ui workflow:
-1. Update global stylesheet (e.g., globals.css) with new color variables or theme rules.
-2. Modify public-facing page components to use new theme styles.
-3. Modify admin dashboard page components to use new theme styles.
-4. Update shared layout components (Header, Footer) to match new theme.
-5. Update any landing or catalog components to reflect theme changes.
-
-## Evidence
-
-- Workflow detected from commit patterns
-- Frequency: ~2x per month
-- Files: src/app/(public)/*/page.tsx, src/app/admin/(dashboard)/*.tsx, src/app/globals.css
+- Pattern in commits.averageLength
 
 ---
 id: mimos-instinct-file-naming
@@ -250,7 +122,7 @@ Use SCREAMING_SNAKE_CASE for constant names
 ---
 id: mimos-instinct-import-style
 trigger: "When importing modules"
-confidence: 0.8
+confidence: 0.85
 domain: code-style
 source: repo-analysis
 source_repo: mirzadham/MIMOS
@@ -260,11 +132,12 @@ source_repo: mirzadham/MIMOS
 
 ## Action
 
-Use alias-based imports
+Use alias-based imports (@/, ~/) instead of relative imports
 
 ## Evidence
 
 - Pattern in codeStyle.importStyle
+- Example: import Header from '@/components/layout/Header';
 
 ---
 id: mimos-instinct-export-style
@@ -286,6 +159,26 @@ Use default exports
 - Pattern in codeStyle.exportStyle
 
 ---
+id: mimos-instinct-arch-type-based
+trigger: "when adding new code"
+confidence: 0.8
+domain: architecture
+source: repo-analysis
+source_repo: https://github.com/mirzadham/MIMOS
+---
+
+# Mimos Instinct Arch Type Based
+
+## Action
+
+Place code in the appropriate type folder (components/, services/, utils/, etc.)
+
+## Evidence
+
+- Type-based module organization detected
+- Folders: app, components, lib
+
+---
 id: mimos-instinct-test-location
 trigger: "When adding or updating tests"
 confidence: 0.8
@@ -303,45 +196,6 @@ Place test files in a separate test directory, not alongside source files
 ## Evidence
 
 - Pattern in architecture.folderStructure.testLocation
-
----
-id: mimos-instinct-commit-format
-trigger: "When making a git commit"
-confidence: 0.9
-domain: git
-source: repo-analysis
-source_repo: mirzadham/MIMOS
----
-
-# Mimos Instinct Commit Format
-
-## Action
-
-Use Conventional Commits format with prefixes: feat, fix, or chore
-
-## Evidence
-
-- Pattern in commits.prefixes
-- Examples: 'feat: implement Rank 2 Split-Complementary Mint & Teal palette', 'fix: resolve Next.js hydration mismatch on enrollment registration date'
-
----
-id: mimos-instinct-commit-length
-trigger: "When writing a commit message"
-confidence: 0.7
-domain: git
-source: repo-analysis
-source_repo: mirzadham/MIMOS
----
-
-# Mimos Instinct Commit Length
-
-## Action
-
-Keep commit message around 66 characters on average
-
-## Evidence
-
-- Pattern in commits.averageLength
 
 ---
 id: mimos-instinct-theme-update-workflow-step1
@@ -442,4 +296,3 @@ Update any landing or catalog components (src/components/landing/*.tsx) to refle
 
 - Workflow: theme-update-across-public-and-admin-ui
 - Commit: 'Update any landing or catalog components to reflect theme changes.'
-
