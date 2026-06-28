@@ -164,23 +164,12 @@ export default function Header() {
             </a>
           </div>
 
-          {/* Quick Portal Access */}
-          <Link
-            href="/admin"
-            className="rounded-md bg-gradient-to-r from-primary to-slate-teal text-white hover:from-primary-hover hover:to-slate-teal-hover hover:shadow-md px-4 py-2 text-xs font-bold transition-all"
-          >
-            Admin Panel
-          </Link>
+
         </div>
 
         {/* Mobile Menu Button */}
         <div className="flex md:hidden items-center gap-3">
-          <Link
-            href="/admin"
-            className="rounded-md bg-gradient-to-r from-primary to-slate-teal text-white px-3 py-1.5 text-xs font-bold"
-          >
-            Portal
-          </Link>
+
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="rounded-md p-2 text-slate-500 hover:bg-slate-100 hover:text-foreground"
