@@ -8,14 +8,11 @@ import WhyChooseUs from "@/components/landing/WhyChooseUs";
 import Testimonials from "@/components/landing/Testimonials";
 import Partners from "@/components/landing/Partners";
 import StatsAndFacilities from "@/components/landing/StatsAndFacilities";
-import { getSafeCategories, getSafePrograms } from "@/lib/db";
+import { getSafePrograms } from "@/lib/db";
 import { Cpu } from "lucide-react";
 
 export default async function Home() {
-  const [categories, programs] = await Promise.all([
-    getSafeCategories(),
-    getSafePrograms()
-  ]);
+  const programs = await getSafePrograms();
 
   return (
     <div className="relative">
