@@ -27,16 +27,18 @@ const FacebookIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-const TwitterIcon = (props: React.SVGProps<SVGSVGElement>) => (
+const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
   </svg>
 );
 
-const YoutubeIcon = (props: React.SVGProps<SVGSVGElement>) => (
+const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
-    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+    <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
+    <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
   </svg>
 );
 
@@ -50,7 +52,7 @@ export default function Header() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about" },
-    { name: "Programs", href: "/#programs-catalog" },
+    { name: "Programs", href: "/programs" },
     { name: "Facilities", href: "/facilities" },
     { name: "News", href: "/news" },
     { name: "Contact", href: "/contact" },
@@ -131,7 +133,7 @@ export default function Header() {
           {/* Social Icons */}
           <div className="flex items-center gap-2 border-l border-slate-200 pl-4">
             <a 
-              href="https://www.linkedin.com/company/mimosmalaysia" 
+              href="https://www.linkedin.com/company/mimosacademy/" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="text-slate-400 hover:text-primary transition-colors"
@@ -139,7 +141,7 @@ export default function Header() {
               <LinkedinIcon className="h-4 w-4" />
             </a>
             <a 
-              href="https://www.facebook.com/mimosmalaysia" 
+              href="https://www.facebook.com/profile.php?id=61567561791997" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="text-slate-400 hover:text-primary transition-colors"
@@ -147,20 +149,20 @@ export default function Header() {
               <FacebookIcon className="h-4 w-4" />
             </a>
             <a 
-              href="https://twitter.com/mimosmalaysia" 
+              href="https://www.instagram.com/mimos.academy/" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="text-slate-400 hover:text-primary transition-colors"
             >
-              <TwitterIcon className="h-4 w-4" />
+              <InstagramIcon className="h-4 w-4" />
             </a>
             <a 
-              href="https://www.youtube.com/@mimosmalaysia" 
+              href="https://x.com/MIMOSACADEMY?s=20" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="text-slate-400 hover:text-primary transition-colors"
             >
-              <YoutubeIcon className="h-4 w-4" />
+              <XIcon className="h-4 w-4" />
             </a>
           </div>
 
@@ -239,10 +241,10 @@ export default function Header() {
               </div>
             </div>
             <div className="flex gap-3 justify-center text-slate-400 py-2">
-              <a href="https://www.linkedin.com/company/mimosmalaysia"><LinkedinIcon className="h-5 w-5 hover:text-primary transition-colors" /></a>
-              <a href="https://www.facebook.com/mimosmalaysia"><FacebookIcon className="h-5 w-5 hover:text-primary transition-colors" /></a>
-              <a href="https://twitter.com/mimosmalaysia"><TwitterIcon className="h-5 w-5 hover:text-primary transition-colors" /></a>
-              <a href="https://www.youtube.com/@mimosmalaysia"><YoutubeIcon className="h-5 w-5 hover:text-primary transition-colors" /></a>
+              <a href="https://www.linkedin.com/company/mimosacademy/" target="_blank" rel="noopener noreferrer"><LinkedinIcon className="h-5 w-5 hover:text-primary transition-colors" /></a>
+              <a href="https://www.facebook.com/profile.php?id=61567561791997" target="_blank" rel="noopener noreferrer"><FacebookIcon className="h-5 w-5 hover:text-primary transition-colors" /></a>
+              <a href="https://www.instagram.com/mimos.academy/" target="_blank" rel="noopener noreferrer"><InstagramIcon className="h-5 w-5 hover:text-primary transition-colors" /></a>
+              <a href="https://x.com/MIMOSACADEMY?s=20" target="_blank" rel="noopener noreferrer"><XIcon className="h-5 w-5 hover:text-primary transition-colors" /></a>
             </div>
           </div>
         </div>

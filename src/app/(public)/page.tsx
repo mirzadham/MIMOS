@@ -2,20 +2,17 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import LatticeNetwork from "@/components/landing/LatticeNetwork";
-import Catalog from "@/components/landing/Catalog";
+import FeaturedPrograms from "@/components/landing/FeaturedPrograms";
 import UpcomingSection from "@/components/landing/UpcomingSection";
 import WhyChooseUs from "@/components/landing/WhyChooseUs";
 import Testimonials from "@/components/landing/Testimonials";
 import Partners from "@/components/landing/Partners";
 import StatsAndFacilities from "@/components/landing/StatsAndFacilities";
-import { getSafeCategories, getSafePrograms } from "@/lib/db";
+import { getSafePrograms } from "@/lib/db";
 import { Cpu } from "lucide-react";
 
 export default async function Home() {
-  const [categories, programs] = await Promise.all([
-    getSafeCategories(),
-    getSafePrograms()
-  ]);
+  const programs = await getSafePrograms();
 
   return (
     <div className="relative">
@@ -40,7 +37,7 @@ export default async function Home() {
 
           <div className="pt-4 flex flex-wrap justify-center gap-4">
             <Link
-              href="#programs-catalog"
+              href="/programs"
               className="rounded-full bg-primary px-6 py-3.5 text-sm font-bold text-white hover:bg-primary/95 transition-all hover:shadow-md"
             >
               Explore Our Programmes
@@ -64,9 +61,9 @@ export default async function Home() {
       {/* 3. Why Choose Us? Section */}
       <WhyChooseUs />
 
-      {/* 4. Our Programmes (Dynamic Catalog) Section */}
-      <section id="programs-catalog">
-        <Catalog categories={categories} programs={programs} />
+      {/* 4. Our Programmes (Featured Programs) Section */}
+      <section id="featured-programs">
+        <FeaturedPrograms programs={programs} />
       </section>
 
       {/* 5. Testimonials (What People Said About Us) Section */}
