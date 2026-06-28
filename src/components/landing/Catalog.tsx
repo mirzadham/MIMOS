@@ -27,9 +27,10 @@ interface Program {
 interface CatalogProps {
   categories: Category[];
   programs: Program[];
+  hideHeader?: boolean;
 }
 
-export default function Catalog({ categories, programs }: CatalogProps) {
+export default function Catalog({ categories, programs, hideHeader = false }: CatalogProps) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [, startTransition] = useTransition();
@@ -63,14 +64,16 @@ export default function Catalog({ categories, programs }: CatalogProps) {
     <div id="programs-catalog" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       
       {/* Section Header */}
-      <div className="text-center space-y-3">
-        <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-          Upskilling & Industrial Training Catalog
-        </h2>
-        <p className="mx-auto max-w-2xl text-md text-slate-500">
-          Explore specialized physical classroom modules led by industry experts. Select a category below to filter programs.
-        </p>
-      </div>
+      {!hideHeader && (
+        <div className="text-center space-y-3">
+          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+            Upskilling & Industrial Training Catalog
+          </h2>
+          <p className="mx-auto max-w-2xl text-md text-slate-500">
+            Explore specialized physical classroom modules led by industry experts. Select a category below to filter programs.
+          </p>
+        </div>
+      )}
 
       {/* Controls: Search + Categories */}
       <div className="mt-12 flex flex-col md:flex-row gap-4 items-center justify-between border-b border-slate-200 pb-6">
