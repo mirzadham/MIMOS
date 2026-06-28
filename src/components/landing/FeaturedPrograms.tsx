@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import ProgramCard from "./ProgramCard";
 import { ArrowRight, Sparkles } from "lucide-react";

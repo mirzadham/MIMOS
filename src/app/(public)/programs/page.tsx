@@ -1,9 +1,15 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import Catalog from "@/components/landing/Catalog";
 import { getSafeCategories, getSafePrograms } from "@/lib/db";
 import { ChevronRight, GraduationCap } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Applied Engineering Programmes | MIMOS Academy",
+  description: "Bridge the gap between theoretical knowledge and real-world applied technology. Filter by category or search our complete syllabus list to find matching courses.",
+};
 
 export default async function ProgramsPage() {
   const [categories, programs] = await Promise.all([
@@ -18,7 +24,7 @@ export default async function ProgramsPage() {
         {/* Breadcrumbs & Header Banner */}
         <div className="space-y-6">
           {/* Breadcrumbs */}
-          <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-semibold text-slate-500">
             <Link href="/" className="hover:text-primary transition-colors">
               Home
             </Link>
