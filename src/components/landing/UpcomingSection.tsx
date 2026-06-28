@@ -26,27 +26,27 @@ export default function UpcomingSection() {
   const upcomingTrainings: TrainingItem[] = [
     {
       id: "prog-1",
-      title: "Advanced Wafer Fabrication & Lithography",
-      dates: "15th - 19th July 2026",
-      location: "STC Cleanroom Lab, Bukit Jalil",
-      price: "RM 4,500 / pax (HRD Corp claimable)",
-      slug: "advanced-wafer-fab"
+      title: "Semiconductor Wafer Fabrication",
+      dates: "Scheduled Soon",
+      location: "MIMOS Berhad, Bukit Jalil",
+      price: "HRD Corp Claimable",
+      slug: "semiconductor-wafer-fabrication"
     },
     {
-      id: "prog-3",
-      title: "Generative AI & LLM Deployment in Enterprise",
-      dates: "10th - 14th August 2026",
-      location: "5G & AI Innovation Hub, TPM Bukit Jalil",
-      price: "RM 3,500 / pax (HRD Corp claimable)",
-      slug: "generative-ai-llm"
+      id: "prog-6",
+      title: "Certified Data Science Practitioner",
+      dates: "July 2026",
+      location: "MIMOS Berhad, Bukit Jalil",
+      price: "RM 2,800 / pax (HRD Corp Claimable)",
+      slug: "certified-data-science-practitioner"
     },
     {
-      id: "prog-2",
-      title: "IC Design & Layout Verification",
-      dates: "24th - 28th August 2026",
-      location: "MIMOS STC Lab, Bukit Jalil",
-      price: "RM 4,800 / pax (HRD Corp claimable)",
-      slug: "ic-design-layout"
+      id: "prog-10",
+      title: "Cybersecurity Awareness",
+      dates: "Scheduled Soon",
+      location: "MIMOS Berhad, Bukit Jalil",
+      price: "RM 1,000 / pax (HRD Corp Claimable)",
+      slug: "cybersecurity-awareness"
     }
   ];
 

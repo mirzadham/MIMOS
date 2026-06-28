@@ -1,28 +1,19 @@
+import "dotenv/config";
 import { PrismaClient } from '@prisma/client';
 
-let prismaInstance: PrismaClient | null = null;
-
-// Lazy-loaded Prisma Client proxy to bypass Next.js build-time collection instantiation checks
-export const prisma = new Proxy({} as PrismaClient, {
-  get(target, prop) {
-    if (!prismaInstance) {
-      prismaInstance = new PrismaClient({
-        log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-      });
-    }
-    return Reflect.get(prismaInstance, prop);
-  }
+const prisma = new PrismaClient({
+  datasourceUrl: process.env.DATABASE_URL!,
+  log: ['error']
 });
 
-// Rich default mock database for fallback and local development
-export const mockCategories = [
+const categoriesData = [
   { id: 'cat-1', name: 'Semiconductor Technology', slug: 'semiconductor' },
   { id: 'cat-2', name: 'Artificial Intelligence & Data Science', slug: 'ai-data-science' },
   { id: 'cat-3', name: 'Information Security & 5G', slug: 'security-5g' },
   { id: 'cat-4', name: 'Professional Management & PMP', slug: 'management-pmp' }
 ];
 
-export const mockPrograms = [
+const programsData = [
   {
     id: 'prog-1',
     title: 'Semiconductor Wafer Fabrication',
@@ -80,7 +71,7 @@ export const mockPrograms = [
     title: 'Electrical Engineering for Non-Electrical Engineers',
     slug: 'electrical-engineering-non-engineers',
     description: 'Understand basic electrical concepts, components, safety, and troubleshooting. Designed for mechanical, civil, chemical, and process engineers.',
-    syllabus: '### Course Modules\n\n1. **Core Concepts & Circuits** (Day 1)\n   - Voltage, current, resistance, power, AC vs DC\n   - Ohm\'s Law and calculations\n   - Single-phase vs three-phase power\n   - Circuit breakers, fuses, relays, contactors, capacitors\n   - Industrial power systems overview (LV, MV, HV, VFD)\n   - Power system case scenarios (load calculations, SLD)\n2. **Electrical Hazards & Industrial Automation** (Day 2)\n   - Electrical hazards, risks, and arc-flash awareness\n   - Lock-out Tag-Out (LOTO) & earthing systems\n   - Protection devices (MCB, MCCB, RCD) & safety standards\n   - Motor types, starters (DOL, Star-Delta, Soft Starter), VFD basics\n   - Sensors, transmitters, PLC, SCADA, HMI fundamentals\n   - Troubleshooting simulation & multimeter usage basics\n   - SLD interpretation & fault analysis mini project',
+    syllabus: '### Course Modules\n\n1. **Core Concepts & Circuits** (Day 1)\n   - Voltage, current, resistance, power, AC vs DC\n   - Ohm\'s Law and calculations\n   - Single-phase vs three-phase power\n   - Circuit breakers, fuses, relays, contactors, capacitors\n   - Industrial power systems overview (LV, MV, HV, VFD)\n   - Power system case scenarios (load calculations, SLD)\n2. **Electrical Hazards & Industrial Automation** (Day 2)\n   - Electrical hazards, risks, and arc-flash awareness\n   - Lock-out Tag-Out (LOTO) & earthing systems\n   - Protection devices (MCB, MCCB, RCD) & safety standards\n   - Motor types, starters (DOL, Star-Delta, Soft Starter), VFD\n   - Sensors, transmitters, PLC, SCADA, HMI fundamentals\n   - Troubleshooting simulation & multimeter usage basics\n   - SLD interpretation & fault analysis mini project',
     location: 'MIMOS Berhad, Bukit Jalil',
     price: 'RM 1,990 / pax (HRD Corp Claimable)',
     duration: '2 Days',
@@ -168,70 +159,58 @@ export const mockPrograms = [
   }
 ];
 
-export async function getSafeCategories() {
-  try {
-    const categories = await prisma.category.findMany({
-      orderBy: { name: 'asc' }
+async function main() {
+  console.log('Seeding categories...');
+  for (const cat of categoriesData) {
+    await prisma.category.upsert({
+      where: { id: cat.id },
+      update: {
+        name: cat.name,
+        slug: cat.slug,
+      },
+      create: cat,
     });
-    return categories.length > 0 ? categories : mockCategories;
-  } catch (e) {
-    console.warn("Prisma Category Fetch failed, falling back to mock details: ", e);
-    return mockCategories;
   }
+
+  console.log('Seeding programs...');
+  for (const prog of programsData) {
+    await prisma.program.upsert({
+      where: { slug: prog.slug },
+      update: {
+        title: prog.title,
+        description: prog.description,
+        syllabus: prog.syllabus,
+        location: prog.location,
+        price: prog.price,
+        duration: prog.duration,
+        dates: prog.dates,
+        microsoftFormUrl: prog.microsoftFormUrl,
+        categoryId: prog.categoryId,
+      },
+      create: {
+        id: prog.id,
+        title: prog.title,
+        slug: prog.slug,
+        description: prog.description,
+        syllabus: prog.syllabus,
+        location: prog.location,
+        price: prog.price,
+        duration: prog.duration,
+        dates: prog.dates,
+        microsoftFormUrl: prog.microsoftFormUrl,
+        categoryId: prog.categoryId,
+      },
+    });
+  }
+
+  console.log('Seeding completed successfully.');
 }
 
-export async function getSafePrograms(categoryId?: string) {
-  try {
-    const programs = await prisma.program.findMany({
-      where: categoryId ? { categoryId } : undefined,
-      include: { category: true },
-      orderBy: { title: 'asc' }
-    });
-    return programs.length > 0 ? programs : (
-      categoryId 
-        ? mockPrograms.filter(p => p.categoryId === categoryId) 
-        : mockPrograms.map(p => ({
-            ...p,
-            category: mockCategories.find(c => c.id === p.categoryId)
-          }))
-    );
-  } catch (e) {
-    console.warn("Prisma Program Fetch failed, falling back to mock details: ", e);
-    const fallback = categoryId 
-      ? mockPrograms.filter(p => p.categoryId === categoryId) 
-      : mockPrograms;
-    return fallback.map(p => ({
-      ...p,
-      category: mockCategories.find(c => c.id === p.categoryId)
-    }));
-  }
-}
-
-export async function getSafeProgramBySlug(slug: string) {
-  try {
-    const program = await prisma.program.findUnique({
-      where: { slug },
-      include: { category: true }
-    });
-    if (program) return program;
-    
-    const mock = mockPrograms.find(p => p.slug === slug);
-    if (mock) {
-      return {
-        ...mock,
-        category: mockCategories.find(c => c.id === mock.categoryId)
-      };
-    }
-    return null;
-  } catch (e) {
-    console.warn(`Prisma Program Fetch for slug ${slug} failed, falling back to mock: `, e);
-    const mock = mockPrograms.find(p => p.slug === slug);
-    if (mock) {
-      return {
-        ...mock,
-        category: mockCategories.find(c => c.id === mock.categoryId)
-      };
-    }
-    return null;
-  }
-}
+main()
+  .catch((e) => {
+    console.error('Error seeding database:', e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
