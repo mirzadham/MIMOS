@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Search, 
   Globe, 
@@ -52,25 +53,28 @@ export default function Header() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about" },
-    { name: "Programs", href: "/programs" },
+    { name: "Programmes", href: "/programs" },
     { name: "Facilities", href: "/facilities" },
     { name: "News", href: "/news" },
     { name: "Contact", href: "/contact" },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200/60 bg-white/70 backdrop-blur-xl transition-all duration-300">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
         
         {/* Logo - Top Left */}
         <div className="flex items-center">
-          <Link href="/" className="flex items-center gap-2 group">
-            <GraduationCap className="h-8 w-8 text-primary transition-colors duration-300" />
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-primary/5 transition-all duration-300 group-hover:bg-primary group-hover:shadow-neon-hover">
+              <GraduationCap className="h-6 w-6 text-primary transition-colors duration-300 group-hover:text-white" />
+              <div className="absolute -inset-0.5 rounded-xl bg-primary/20 opacity-0 blur group-hover:opacity-100 transition-opacity duration-300" />
+            </div>
             <div className="flex flex-col">
-              <span className="font-heading text-lg font-bold tracking-tight text-foreground leading-none">
+              <span className="font-heading text-xl font-black tracking-tight text-slate-900 leading-none">
                 MIMOS
               </span>
-              <span className="font-sans text-xs font-semibold tracking-widest text-primary transition-colors duration-300 uppercase">
+              <span className="font-sans text-[10px] font-bold tracking-widest text-primary uppercase mt-0.5">
                 Academy
               </span>
             </div>
@@ -78,18 +82,25 @@ export default function Header() {
         </div>
 
         {/* Desktop Navigation - Center */}
-        <nav className="hidden md:flex space-x-8">
+        <nav className="hidden md:flex space-x-1">
           {navLinks.map((link) => {
             const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
             return (
               <Link
                 key={link.name}
                 href={link.href}
-                className={`text-sm font-semibold transition-all duration-200 relative py-1 hover:text-primary ${
-                  isActive ? "text-primary after:scale-x-100" : "text-slate-600 after:scale-x-0"
-                } after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:origin-left after:transition-transform after:duration-200`}
+                className={`relative px-4 py-2 text-sm font-bold tracking-wide transition-colors duration-200 rounded-lg hover:text-primary ${
+                  isActive ? "text-primary" : "text-slate-600"
+                }`}
               >
-                {link.name}
+                <span className="relative z-10">{link.name}</span>
+                {isActive && (
+                  <motion.div
+                    layoutId="activeNavUnderline"
+                    className="absolute inset-0 bg-primary/5 rounded-lg border border-primary/10"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}
               </Link>
             );
           })}
@@ -98,32 +109,54 @@ export default function Header() {
         {/* Controls - Top Right */}
         <div className="hidden md:flex items-center gap-4">
           
-          {/* Search Trigger */}
-          <button 
-            onClick={() => setSearchOpen(!searchOpen)}
-            className="rounded-md p-2 text-slate-400 hover:bg-slate-50 hover:text-primary transition-all"
-            aria-label="Search"
-          >
-            <Search className="h-5 w-5" />
-          </button>
+          {/* Animated Search Input Wrapper */}
+          <div className="relative flex items-center">
+            <AnimatePresence initial={false}>
+              {searchOpen && (
+                <motion.div 
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: 220, opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                  className="overflow-hidden mr-2"
+                >
+                  <input 
+                    type="text" 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search courses..."
+                    className="w-full rounded-full border border-slate-200 bg-slate-50/50 px-4 py-1.5 text-xs focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20 text-slate-800 placeholder-slate-400 font-medium"
+                    autoFocus
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <button 
+              onClick={() => setSearchOpen(!searchOpen)}
+              className="rounded-full p-2 text-slate-400 hover:bg-slate-50 hover:text-primary transition-all cursor-pointer"
+              aria-label="Search"
+            >
+              {searchOpen ? <X className="h-4.5 w-4.5" /> : <Search className="h-4.5 w-4.5" />}
+            </button>
+          </div>
 
           {/* Language Selector */}
           <div className="relative group/lang">
-            <button className="flex items-center gap-1 rounded-md border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
-              <Globe className="h-3.5 w-3.5" />
+            <button className="flex items-center gap-1 rounded-lg border border-slate-200/80 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all">
+              <Globe className="h-3.5 w-3.5 text-slate-400" />
               <span>{lang}</span>
-              <ChevronDown className="h-3 w-3" />
+              <ChevronDown className="h-3 w-3 text-slate-400 group-hover/lang:rotate-180 transition-transform duration-200" />
             </button>
-            <div className="absolute right-0 mt-1 w-28 origin-top-right rounded-md border border-slate-100 bg-white shadow-lg ring-1 ring-black/5 opacity-0 invisible group-hover/lang:opacity-100 group-hover/lang:visible transition-all duration-200 z-50">
+            <div className="absolute right-0 mt-1.5 w-28 origin-top-right rounded-xl border border-slate-100 bg-white p-1 shadow-neon-light opacity-0 invisible group-hover/lang:opacity-100 group-hover/lang:visible transition-all duration-200 z-50">
               <button 
                 onClick={() => setLang("EN")}
-                className="w-full px-3 py-2 text-left text-xs font-semibold hover:bg-slate-50 text-slate-700"
+                className="w-full rounded-lg px-3 py-2 text-left text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors"
               >
                 English
               </button>
               <button 
                 onClick={() => setLang("BM")}
-                className="w-full px-3 py-2 text-left text-xs font-semibold hover:bg-slate-50 text-slate-700 border-t border-slate-100"
+                className="w-full rounded-lg px-3 py-2 text-left text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors"
               >
                 B. Melayu
               </button>
@@ -131,12 +164,12 @@ export default function Header() {
           </div>
 
           {/* Social Icons */}
-          <div className="flex items-center gap-2 border-l border-slate-200 pl-4">
+          <div className="flex items-center gap-2 border-l border-slate-200/80 pl-4">
             <a 
               href="https://www.linkedin.com/company/mimosacademy/" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-slate-400 hover:text-primary transition-colors"
+              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
             >
               <LinkedinIcon className="h-4 w-4" />
             </a>
@@ -144,7 +177,7 @@ export default function Header() {
               href="https://www.facebook.com/profile.php?id=61567561791997" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-slate-400 hover:text-primary transition-colors"
+              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
             >
               <FacebookIcon className="h-4 w-4" />
             </a>
@@ -152,7 +185,7 @@ export default function Header() {
               href="https://www.instagram.com/mimos.academy/" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-slate-400 hover:text-primary transition-colors"
+              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
             >
               <InstagramIcon className="h-4 w-4" />
             </a>
@@ -160,21 +193,19 @@ export default function Header() {
               href="https://x.com/MIMOSACADEMY?s=20" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-slate-400 hover:text-primary transition-colors"
+              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
             >
               <XIcon className="h-4 w-4" />
             </a>
           </div>
 
-
         </div>
 
         {/* Mobile Menu Button */}
         <div className="flex md:hidden items-center gap-3">
-
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="rounded-md p-2 text-slate-500 hover:bg-slate-100 hover:text-foreground"
+            className="rounded-xl p-2 text-slate-600 hover:bg-slate-100 transition-colors"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -183,72 +214,59 @@ export default function Header() {
 
       </div>
 
-      {/* Search Dropdown Overlay */}
-      {searchOpen && (
-        <div className="absolute top-16 left-0 w-full border-b border-slate-200 bg-white p-4 shadow-md z-40">
-          <div className="mx-auto max-w-3xl flex gap-2">
-            <input 
-              type="text" 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search training programs, labs, news..."
-              className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-primary focus:outline-none"
-            />
-            <button className="rounded-md bg-primary hover:bg-primary-hover px-4 py-2 text-sm font-bold text-white transition-all cursor-pointer">
-              Search
-            </button>
-            <button 
-              onClick={() => setSearchOpen(false)}
-              className="rounded-md border border-slate-300 px-3 py-2 text-sm font-medium hover:bg-slate-50"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-3 shadow-inner">
-          <nav className="flex flex-col space-y-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
-          <div className="border-t border-slate-100 pt-3 flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500">Language:</span>
-              <div className="flex gap-2">
-                <button 
-                  onClick={() => setLang("EN")}
-                  className={`text-xs px-2.5 py-1 rounded border ${lang === 'EN' ? 'border-primary bg-accent text-primary' : 'border-slate-200'}`}
-                >
-                  EN
-                </button>
-                <button 
-                  onClick={() => setLang("BM")}
-                  className={`text-xs px-2.5 py-1 rounded border ${lang === 'BM' ? 'border-primary bg-accent text-primary' : 'border-slate-200'}`}
-                >
-                  BM
-                </button>
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-xl overflow-hidden shadow-inner"
+          >
+            <div className="px-6 py-5 space-y-4">
+              <nav className="flex flex-col space-y-1">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-lg px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </nav>
+              
+              <div className="border-t border-slate-100 pt-4 flex flex-col gap-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-500">Language:</span>
+                  <div className="flex gap-1 bg-slate-50 p-0.5 rounded-lg border border-slate-200/60">
+                    <button 
+                      onClick={() => setLang("EN")}
+                      className={`text-xs font-bold px-3 py-1 rounded-md transition-colors ${lang === 'EN' ? 'bg-white text-primary shadow-sm' : 'text-slate-600'}`}
+                    >
+                      EN
+                    </button>
+                    <button 
+                      onClick={() => setLang("BM")}
+                      className={`text-xs font-bold px-3 py-1 rounded-md transition-colors ${lang === 'BM' ? 'bg-white text-primary shadow-sm' : 'text-slate-600'}`}
+                    >
+                      BM
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 justify-center text-slate-400 py-2 border-t border-slate-100">
+                  <a href="https://www.linkedin.com/company/mimosacademy/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><LinkedinIcon className="h-5 w-5" /></a>
+                  <a href="https://www.facebook.com/profile.php?id=61567561791997" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><FacebookIcon className="h-5 w-5" /></a>
+                  <a href="https://www.instagram.com/mimos.academy/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><InstagramIcon className="h-5 w-5" /></a>
+                  <a href="https://x.com/MIMOSACADEMY?s=20" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><XIcon className="h-5 w-5" /></a>
+                </div>
               </div>
             </div>
-            <div className="flex gap-3 justify-center text-slate-400 py-2">
-              <a href="https://www.linkedin.com/company/mimosacademy/" target="_blank" rel="noopener noreferrer"><LinkedinIcon className="h-5 w-5 hover:text-primary transition-colors" /></a>
-              <a href="https://www.facebook.com/profile.php?id=61567561791997" target="_blank" rel="noopener noreferrer"><FacebookIcon className="h-5 w-5 hover:text-primary transition-colors" /></a>
-              <a href="https://www.instagram.com/mimos.academy/" target="_blank" rel="noopener noreferrer"><InstagramIcon className="h-5 w-5 hover:text-primary transition-colors" /></a>
-              <a href="https://x.com/MIMOSACADEMY?s=20" target="_blank" rel="noopener noreferrer"><XIcon className="h-5 w-5 hover:text-primary transition-colors" /></a>
-            </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
