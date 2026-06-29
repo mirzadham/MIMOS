@@ -42,6 +42,7 @@ model Program {
   dates              String?       // e.g. "2026-07-15 to 2026-07-18"
   microsoftFormUrl   String        // Enrollment Form redirect URL
   imageUrl           String?       // Cloudflare R2 public URL
+  imageUrls          String[]      @default([]) // Cloudflare R2 public URLs
   categoryId         String
   category           Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   enrollments        Enrollment[]

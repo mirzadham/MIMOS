@@ -8,6 +8,23 @@ import {
   createCategoryAction
 } from "@/app/actions/adminActions";
 import { Plus, Edit2, Trash2, X, PlusCircle, ExternalLink, Calendar, MapPin } from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface Category {
   id: string;
@@ -31,6 +48,7 @@ interface Program {
     name: string;
   };
   imageUrl?: string | null;
+  imageUrls?: string[] | null;
 }
 
 interface ManageProgramsClientProps {
@@ -47,9 +65,30 @@ export default function ManageProgramsClient({
   const [editProgram, setEditProgram] = useState<Program | null>(null);
 
   // File Upload states
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [posters, setPosters] = useState<PosterItem[]>([]);
   const [uploading, setUploading] = useState(false);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      setPosters((prev) => {
+        const oldIndex = prev.findIndex((p) => p.id === active.id);
+        const newIndex = prev.findIndex((p) => p.id === over.id);
+        return arrayMove(prev, oldIndex, newIndex);
+      });
+    }
+  };
 
   // Category modal states
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -58,8 +97,7 @@ export default function ManageProgramsClient({
   const closeModal = () => {
     setModalOpen(false);
     setEditProgram(null);
-    setPreviewUrl(null);
-    setSelectedFile(null);
+    setPosters([]);
   };
 
   const uploadToR2 = async (file: File): Promise<string> => {
@@ -91,12 +129,14 @@ export default function ManageProgramsClient({
     
     setUploading(true);
     try {
-      let uploadedUrl = "";
-      if (selectedFile) {
-        uploadedUrl = await uploadToR2(selectedFile);
-      } else if (previewUrl) {
-        uploadedUrl = previewUrl; // keep the existing image
-      }
+      const uploadedUrls = await Promise.all(
+        posters.map(async (poster) => {
+          if (poster.file) {
+            return await uploadToR2(poster.file);
+          }
+          return poster.url;
+        })
+      );
 
       const programData = {
         title: formData.get("title") as string,
@@ -108,7 +148,8 @@ export default function ManageProgramsClient({
         dates: formData.get("dates") as string,
         microsoftFormUrl: formData.get("microsoftFormUrl") as string,
         categoryId: formData.get("categoryId") as string,
-        imageUrl: uploadedUrl || undefined,
+        imageUrl: uploadedUrls[0] || undefined,
+        imageUrls: uploadedUrls,
       };
 
       startTransition(async () => {
@@ -166,8 +207,7 @@ export default function ManageProgramsClient({
           <button
             onClick={() => {
               setEditProgram(null);
-              setPreviewUrl(null);
-              setSelectedFile(null);
+              setPosters([]);
               setModalOpen(true);
             }}
             className="flex items-center gap-1 rounded-md bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all hover:shadow-md cursor-pointer"
@@ -195,8 +235,12 @@ export default function ManageProgramsClient({
               <tr key={prog.id} className="hover:bg-slate-50/50 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    {prog.imageUrl && (
-                      <img src={prog.imageUrl} alt={prog.title} className="w-10 h-10 rounded object-cover border border-slate-100 shrink-0" />
+                    {((prog.imageUrls && prog.imageUrls.length > 0) ? prog.imageUrls[0] : prog.imageUrl) && (
+                      <img
+                        src={(prog.imageUrls && prog.imageUrls.length > 0) ? prog.imageUrls[0]! : prog.imageUrl!}
+                        alt={prog.title}
+                        className="w-10 h-10 rounded object-cover border border-slate-100 shrink-0"
+                      />
                     )}
                     <div>
                       <span className="font-bold text-slate-800 block text-sm">{prog.title}</span>
@@ -237,8 +281,12 @@ export default function ManageProgramsClient({
                     <button
                       onClick={() => {
                         setEditProgram(prog);
-                        setPreviewUrl(prog.imageUrl || null);
-                        setSelectedFile(null);
+                        const initialPosters = prog.imageUrls && prog.imageUrls.length > 0
+                          ? prog.imageUrls.map((url, idx) => ({ id: `existing-${idx}-${url}`, url }))
+                          : prog.imageUrl
+                            ? [{ id: `existing-0-${prog.imageUrl}`, url: prog.imageUrl }]
+                            : [];
+                        setPosters(initialPosters);
                         setModalOpen(true);
                       }}
                       className="rounded p-1.5 border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors"
@@ -393,36 +441,76 @@ export default function ManageProgramsClient({
                 </div>
 
                 <div className="space-y-1 col-span-2">
-                  <label className="font-bold text-slate-700 uppercase block font-medium">Program Image / Poster (Cloudflare R2)</label>
-                  <div className="flex items-center gap-4 border border-slate-200 rounded-md p-3 bg-slate-50/50">
+                  <div className="flex justify-between items-center">
+                    <label className="font-bold text-slate-700 uppercase block font-medium">
+                      Program Image / Poster Pages (Cloudflare R2)
+                    </label>
+                    <span className="text-[10px] text-slate-400 font-bold uppercase">
+                      {posters.length} / 5 Pages
+                    </span>
+                  </div>
+
+                  <div className="border-2 border-dashed border-slate-200 hover:border-primary rounded-xl p-4 bg-slate-50/50 transition-colors flex flex-col items-center justify-center relative min-h-[100px] group/drop">
                     <input
                       type="file"
                       accept="image/*"
+                      multiple
+                      disabled={posters.length >= 5}
                       onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          setSelectedFile(file);
-                          setPreviewUrl(URL.createObjectURL(file));
+                        const files = Array.from(e.target.files || []);
+                        if (posters.length + files.length > 5) {
+                          alert("You can only upload up to 5 poster pages in total.");
+                          return;
                         }
+                        const newPosters = files.map((file) => {
+                          const id = `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                          const url = URL.createObjectURL(file);
+                          return { id, url, file };
+                        });
+                        setPosters((prev) => [...prev, ...newPosters]);
                       }}
-                      className="text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer"
+                      className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed z-10"
                     />
-                    {previewUrl && (
-                      <div className="relative shrink-0 w-12 h-12 rounded border border-slate-200 overflow-hidden">
-                        <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSelectedFile(null);
-                            setPreviewUrl(null);
-                          }}
-                          className="absolute top-0.5 right-0.5 bg-black/60 text-white rounded-full p-0.5 hover:bg-black transition-colors"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </div>
-                    )}
+                    <div className="text-center space-y-1 flex flex-col items-center">
+                      <PlusCircle className="h-6 w-6 text-slate-400 group-hover/drop:text-primary transition-colors" />
+                      <span className="text-[11px] font-bold text-slate-700">Click or Drag & Drop to Upload Poster Pages</span>
+                      <span className="text-[9px] text-slate-400">PNG, JPG, or WEBP up to 5 pages. Drag to sort pages.</span>
+                    </div>
                   </div>
+
+                  {posters.length > 0 && (
+                    <div className="mt-4 border border-slate-100 bg-white rounded-xl p-3 shadow-inner">
+                      <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragEnd={handleDragEnd}
+                      >
+                        <SortableContext
+                          items={posters.map(p => p.id)}
+                          strategy={rectSortingStrategy}
+                        >
+                          <div className="grid grid-cols-3 gap-3">
+                            {posters.map((poster, index) => (
+                              <SortablePosterCard
+                                key={poster.id}
+                                poster={poster}
+                                index={index}
+                                onRemove={(id) => {
+                                  setPosters((prev) => {
+                                    const item = prev.find(p => p.id === id);
+                                    if (item?.file) {
+                                      URL.revokeObjectURL(item.url);
+                                    }
+                                    return prev.filter(p => p.id !== id);
+                                  });
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </SortableContext>
+                      </DndContext>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -491,6 +579,76 @@ export default function ManageProgramsClient({
         </div>
       )}
 
+    </div>
+  );
+}
+
+interface PosterItem {
+  id: string;
+  url: string;
+  file?: File;
+}
+
+interface SortablePosterCardProps {
+  poster: PosterItem;
+  index: number;
+  onRemove: (id: string) => void;
+}
+
+function SortablePosterCard({ poster, index, onRemove }: SortablePosterCardProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: poster.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : 'auto',
+    opacity: isDragging ? 0.6 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`relative group flex flex-col bg-slate-50 border rounded-lg overflow-hidden transition-all select-none ${
+        isDragging ? "border-primary shadow-lg scale-102 cursor-grabbing animate-pulse" : "border-slate-200 cursor-grab hover:border-slate-350"
+      }`}
+    >
+      <div 
+        {...attributes} 
+        {...listeners} 
+        className="w-full aspect-[4/3] bg-slate-100 relative overflow-hidden"
+      >
+        <img 
+          src={poster.url} 
+          alt={`Poster Page ${index + 1}`} 
+          className="w-full h-full object-cover pointer-events-none" 
+        />
+        <div className="absolute top-2 left-2 bg-slate-900/75 backdrop-blur-md text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase font-mono">
+          Page {index + 1} {index === 0 && "(Cover)"}
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={() => onRemove(poster.id)}
+        className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity focus:opacity-100 z-10 cursor-pointer shadow-sm"
+        title="Delete Page"
+      >
+        <X className="h-3 w-3" />
+      </button>
+      <div 
+        {...attributes}
+        {...listeners}
+        className="p-2 text-[10px] text-slate-500 font-semibold truncate bg-white border-t border-slate-100"
+      >
+        {poster.file ? poster.file.name : "Uploaded Poster"}
+      </div>
     </div>
   );
 }
