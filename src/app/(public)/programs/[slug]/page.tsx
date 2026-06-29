@@ -86,7 +86,12 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
           <div className="lg:col-span-2 space-y-8">
             
             {/* Header Block */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-4">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-4 overflow-hidden">
+              {program.imageUrl && (
+                <div className="w-full aspect-[21/9] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 mb-6">
+                  <img src={program.imageUrl} alt={program.title} className="w-full h-full object-cover" />
+                </div>
+              )}
               <span className="inline-flex items-center rounded-full bg-accent px-3 py-0.5 text-xs font-bold text-primary">
                 {program.category?.name || "Physical Training"}
               </span>
