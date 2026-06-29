@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 
 let prismaInstance: PrismaClient | null = null;
 
@@ -6,7 +8,11 @@ let prismaInstance: PrismaClient | null = null;
 export const prisma = new Proxy({} as PrismaClient, {
   get(target, prop) {
     if (!prismaInstance) {
+      const connectionString = process.env.DATABASE_URL;
+      const pool = new Pool({ connectionString });
+      const adapter = new PrismaPg(pool);
       prismaInstance = new PrismaClient({
+        adapter,
         log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
       });
     }
@@ -189,9 +195,10 @@ export async function getSafePrograms(categoryId?: string) {
     });
     return programs.length > 0 ? programs : (
       categoryId 
-        ? mockPrograms.filter(p => p.categoryId === categoryId) 
+        ? mockPrograms.filter(p => p.categoryId === categoryId).map(p => ({ ...p, imageUrl: null as string | null })) 
         : mockPrograms.map(p => ({
             ...p,
+            imageUrl: null as string | null,
             category: mockCategories.find(c => c.id === p.categoryId)
           }))
     );
@@ -202,6 +209,7 @@ export async function getSafePrograms(categoryId?: string) {
       : mockPrograms;
     return fallback.map(p => ({
       ...p,
+      imageUrl: null as string | null,
       category: mockCategories.find(c => c.id === p.categoryId)
     }));
   }
@@ -219,6 +227,7 @@ export async function getSafeProgramBySlug(slug: string) {
     if (mock) {
       return {
         ...mock,
+        imageUrl: null as string | null,
         category: mockCategories.find(c => c.id === mock.categoryId)
       };
     }
@@ -229,6 +238,7 @@ export async function getSafeProgramBySlug(slug: string) {
     if (mock) {
       return {
         ...mock,
+        imageUrl: null as string | null,
         category: mockCategories.find(c => c.id === mock.categoryId)
       };
     }

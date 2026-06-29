@@ -30,6 +30,7 @@ interface Program {
   category?: {
     name: string;
   };
+  imageUrl?: string | null;
 }
 
 interface ManageProgramsClientProps {
@@ -45,36 +46,85 @@ export default function ManageProgramsClient({
   const [modalOpen, setModalOpen] = useState(false);
   const [editProgram, setEditProgram] = useState<Program | null>(null);
 
+  // File Upload states
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+
   // Category modal states
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setEditProgram(null);
+    setPreviewUrl(null);
+    setSelectedFile(null);
+  };
+
+  const uploadToR2 = async (file: File): Promise<string> => {
+    const res = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}&contentType=${encodeURIComponent(file.type)}`);
+    if (!res.ok) {
+      throw new Error("Failed to get upload signature");
+    }
+    const { uploadUrl, publicUrl } = await res.json();
+    
+    const uploadRes = await fetch(uploadUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": file.type,
+      },
+      body: file,
+    });
+    
+    if (!uploadRes.ok) {
+      throw new Error("Failed to upload image to storage");
+    }
+    
+    return publicUrl;
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    const programData = {
-      title: formData.get("title") as string,
-      description: formData.get("description") as string,
-      syllabus: formData.get("syllabus") as string,
-      location: formData.get("location") as string,
-      price: formData.get("price") as string,
-      duration: formData.get("duration") as string,
-      dates: formData.get("dates") as string,
-      microsoftFormUrl: formData.get("microsoftFormUrl") as string,
-      categoryId: formData.get("categoryId") as string,
-    };
-
-    startTransition(async () => {
-      if (editProgram) {
-        await updateProgramAction(editProgram.id, programData);
-      } else {
-        await createProgramAction(programData);
+    setUploading(true);
+    try {
+      let uploadedUrl = "";
+      if (selectedFile) {
+        uploadedUrl = await uploadToR2(selectedFile);
+      } else if (previewUrl) {
+        uploadedUrl = previewUrl; // keep the existing image
       }
-      setModalOpen(false);
-      setEditProgram(null);
-    });
+
+      const programData = {
+        title: formData.get("title") as string,
+        description: formData.get("description") as string,
+        syllabus: formData.get("syllabus") as string,
+        location: formData.get("location") as string,
+        price: formData.get("price") as string,
+        duration: formData.get("duration") as string,
+        dates: formData.get("dates") as string,
+        microsoftFormUrl: formData.get("microsoftFormUrl") as string,
+        categoryId: formData.get("categoryId") as string,
+        imageUrl: uploadedUrl || undefined,
+      };
+
+      startTransition(async () => {
+        if (editProgram) {
+          await updateProgramAction(editProgram.id, programData);
+        } else {
+          await createProgramAction(programData);
+        }
+        closeModal();
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "An error occurred during upload.";
+      alert(message);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleDelete = async (id: string) => {
@@ -116,6 +166,8 @@ export default function ManageProgramsClient({
           <button
             onClick={() => {
               setEditProgram(null);
+              setPreviewUrl(null);
+              setSelectedFile(null);
               setModalOpen(true);
             }}
             className="flex items-center gap-1 rounded-md bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all hover:shadow-md cursor-pointer"
@@ -142,10 +194,17 @@ export default function ManageProgramsClient({
             {programs.map((prog) => (
               <tr key={prog.id} className="hover:bg-slate-50/50 transition-colors">
                 <td className="px-6 py-4">
-                  <span className="font-bold text-slate-800 block text-sm">{prog.title}</span>
-                  <span className="text-[10px] text-slate-400 font-medium block truncate max-w-xs mt-0.5">
-                    {prog.description}
-                  </span>
+                  <div className="flex items-center gap-3">
+                    {prog.imageUrl && (
+                      <img src={prog.imageUrl} alt={prog.title} className="w-10 h-10 rounded object-cover border border-slate-100 shrink-0" />
+                    )}
+                    <div>
+                      <span className="font-bold text-slate-800 block text-sm">{prog.title}</span>
+                      <span className="text-[10px] text-slate-400 font-medium block truncate max-w-xs mt-0.5">
+                        {prog.description}
+                      </span>
+                    </div>
+                  </div>
                 </td>
                 <td className="px-6 py-4">
                   <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600">
@@ -178,6 +237,8 @@ export default function ManageProgramsClient({
                     <button
                       onClick={() => {
                         setEditProgram(prog);
+                        setPreviewUrl(prog.imageUrl || null);
+                        setSelectedFile(null);
                         setModalOpen(true);
                       }}
                       className="rounded p-1.5 border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors"
@@ -210,10 +271,7 @@ export default function ManageProgramsClient({
                 {editProgram ? "Edit Program Details" : "Create New Program"}
               </h3>
               <button 
-                onClick={() => {
-                  setModalOpen(false);
-                  setEditProgram(null);
-                }}
+                onClick={closeModal}
                 className="rounded p-1 hover:bg-slate-100 text-slate-400 hover:text-slate-900"
               >
                 <X className="h-5 w-5" />
@@ -333,26 +391,56 @@ export default function ManageProgramsClient({
                     placeholder="e.g. 15th - 19th July 2026"
                   />
                 </div>
+
+                <div className="space-y-1 col-span-2">
+                  <label className="font-bold text-slate-700 uppercase block font-medium">Program Image / Poster (Cloudflare R2)</label>
+                  <div className="flex items-center gap-4 border border-slate-200 rounded-md p-3 bg-slate-50/50">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setSelectedFile(file);
+                          setPreviewUrl(URL.createObjectURL(file));
+                        }
+                      }}
+                      className="text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer"
+                    />
+                    {previewUrl && (
+                      <div className="relative shrink-0 w-12 h-12 rounded border border-slate-200 overflow-hidden">
+                        <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedFile(null);
+                            setPreviewUrl(null);
+                          }}
+                          className="absolute top-0.5 right-0.5 bg-black/60 text-white rounded-full p-0.5 hover:bg-black transition-colors"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
 
               {/* Submit panel */}
               <div className="border-t border-slate-100 pt-4 flex justify-end gap-2 shrink-0">
                 <button
                   type="button"
-                  onClick={() => {
-                    setModalOpen(false);
-                    setEditProgram(null);
-                  }}
+                  onClick={closeModal}
                   className="rounded-md border border-slate-200 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  disabled={isPending}
+                  disabled={isPending || uploading}
                   className="rounded-md bg-primary hover:bg-primary-hover text-white px-4 py-2 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
                 >
-                  {isPending ? "Processing..." : editProgram ? "Save Changes" : "Create Program"}
+                  {uploading ? "Uploading Image..." : isPending ? "Processing..." : editProgram ? "Save Changes" : "Create Program"}
                 </button>
               </div>
 
