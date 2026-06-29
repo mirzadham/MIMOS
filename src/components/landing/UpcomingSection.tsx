@@ -77,8 +77,8 @@ export default function UpcomingSection() {
           {/* Left Column: Upcoming Trainings */}
           <div className="lg:col-span-7 space-y-6">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Laptop className="h-5 w-5" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50 border border-slate-200/80 text-slate-600">
+                <Laptop className="h-4.5 w-4.5" />
               </div>
               <h2 className="font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
                 Upcoming Trainings
@@ -93,11 +93,11 @@ export default function UpcomingSection() {
               {upcomingTrainings.map((training) => (
                 <div 
                   key={training.id}
-                  className="group relative rounded-xl border border-slate-200 p-5 bg-slate-50 hover:bg-white hover:border-primary/20 hover:shadow-md transition-all duration-300"
+                  className="group relative rounded-xl border border-slate-200 p-5 bg-slate-50 hover:bg-white hover:border-slate-300 hover:shadow-sm transition-all duration-300"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="space-y-1.5">
-                      <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold text-primary">
+                      <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-600">
                         Physical Course
                       </span>
                       <h3 className="font-heading text-base font-bold text-foreground group-hover:text-primary transition-colors">
@@ -105,7 +105,7 @@ export default function UpcomingSection() {
                       </h3>
                       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
                         <span className="flex items-center gap-1">
-                          <Calendar className="h-3.5 w-3.5 text-primary" />
+                          <Calendar className="h-3.5 w-3.5 text-slate-400" />
                           {training.dates}
                         </span>
                         <span>•</span>
@@ -119,7 +119,7 @@ export default function UpcomingSection() {
                     <div className="shrink-0">
                       <Link
                         href={`/programs/${training.slug}`}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-white border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-white border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm"
                       >
                         <span>Learn More</span>
                         <ArrowRight className="h-3.5 w-3.5" />
@@ -134,8 +134,8 @@ export default function UpcomingSection() {
           {/* Right Column: Upcoming Events */}
           <div className="lg:col-span-5 space-y-6 lg:border-l lg:border-slate-100 lg:pl-12">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Bell className="h-5 w-5" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50 border border-slate-200/80 text-slate-600">
+                <Bell className="h-4.5 w-4.5" />
               </div>
               <h2 className="font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
                 Upcoming Events
@@ -150,11 +150,11 @@ export default function UpcomingSection() {
               {upcomingEvents.map((event) => (
                 <div 
                   key={event.id}
-                  className="rounded-xl border border-slate-200 p-5 bg-white hover:border-primary/20 hover:shadow-sm transition-all duration-300"
+                  className="rounded-xl border border-slate-200 p-5 bg-white hover:border-slate-300 hover:shadow-sm transition-all duration-300"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center rounded-full bg-gold/10 px-2.5 py-0.5 text-[10px] font-bold text-gold">
+                      <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-600">
                         {event.type}
                       </span>
                       <span className="text-[10px] font-semibold text-slate-400">
@@ -179,7 +179,7 @@ export default function UpcomingSection() {
             </div>
 
             {/* General CTA Box */}
-            <div className="rounded-xl bg-gradient-to-br from-primary/10 to-transparent p-5 border border-primary/10 mt-6 text-center space-y-3">
+            <div className="rounded-xl bg-slate-50 p-5 border border-slate-200/60 mt-6 text-center space-y-3">
               <h4 className="font-heading text-xs font-bold text-foreground uppercase tracking-wider">
                 Looking for customized training?
               </h4>
@@ -188,7 +188,7 @@ export default function UpcomingSection() {
               </p>
               <Link
                 href="/contact"
-                className="inline-block text-xs font-bold text-primary hover:underline"
+                className="inline-block text-xs font-bold text-slate-900 hover:text-primary transition-colors hover:underline"
               >
                 Inquire now →
               </Link>

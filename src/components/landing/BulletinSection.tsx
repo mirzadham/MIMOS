@@ -49,15 +49,15 @@ export default function BulletinSection() {
           {/* Column 1: Announcements */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col justify-between">
             <div>
-              <div className="flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase">
+              <div className="flex items-center gap-2 text-slate-500 font-bold text-sm tracking-wider uppercase">
                 <Bell className="h-4 w-4" />
                 <span>Notice Board</span>
               </div>
               <div className="mt-6 space-y-6">
                 {announcements.map((item) => (
-                  <div key={item.id} className="group border-l-2 border-slate-100 pl-4 hover:border-primary transition-all">
+                  <div key={item.id} className="group border-l-2 border-slate-100 pl-4 hover:border-slate-400 transition-all">
                     <span className="text-xs text-slate-400 font-semibold">{item.date}</span>
-                    <h4 className="font-heading text-sm font-bold text-foreground mt-1 group-hover:text-primary transition-colors">
+                    <h4 className="font-heading text-sm font-bold text-foreground mt-1 group-hover:text-slate-900 transition-colors">
                       {item.title}
                     </h4>
                     <p className="text-xs text-slate-500 mt-1 leading-relaxed">{item.desc}</p>
@@ -73,7 +73,7 @@ export default function BulletinSection() {
 
           {/* Column 2: Upcoming Calendar Table */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2">
-            <div className="flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase">
+            <div className="flex items-center gap-2 text-slate-500 font-bold text-sm tracking-wider uppercase">
               <Calendar className="h-4 w-4" />
               <span>Training Calendar (2026 batches)</span>
             </div>
@@ -112,18 +112,18 @@ export default function BulletinSection() {
 
         {/* Cohort Image Gallery Placeholders */}
         <div className="mt-12 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase mb-6">
+          <div className="flex items-center gap-2 text-slate-500 font-bold text-sm tracking-wider uppercase mb-6">
             <Users className="h-4 w-4" />
             <span>MIMOS Academy Alumni & Cohorts</span>
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {placeholderCohorts.map((cohort, index) => (
-              <div key={index} className="group relative overflow-hidden rounded-xl border border-slate-100 bg-slate-50 hover:border-primary/20 transition-all duration-300">
+              <div key={index} className="group relative overflow-hidden rounded-xl border border-slate-100 bg-slate-50 hover:border-slate-350 transition-all duration-300">
                 {/* Visual placeholder box - no image generation */}
-                <div className="placeholder-image flex h-40 items-center justify-center text-slate-400 group-hover:bg-accent/50 transition-colors">
+                <div className="placeholder-image flex h-40 items-center justify-center text-slate-400 group-hover:bg-slate-100/50 transition-colors">
                   <div className="flex flex-col items-center gap-2">
-                    <ImageIcon className="h-8 w-8 text-slate-300 group-hover:text-primary/60 transition-colors" />
+                    <ImageIcon className="h-8 w-8 text-slate-300 group-hover:text-slate-600 transition-colors" />
                     <span className="text-[10px] font-semibold tracking-wider text-slate-400 uppercase">MIMOS Lab Archive</span>
                   </div>
                 </div>
@@ -131,7 +131,7 @@ export default function BulletinSection() {
                 <div className="border-t border-slate-100 p-4 bg-white">
                   <div className="flex justify-between items-center">
                     <h4 className="font-heading text-xs font-bold text-foreground">{cohort.title}</h4>
-                    <span className="text-[9px] font-semibold text-primary">{cohort.date}</span>
+                    <span className="text-[9px] font-semibold text-slate-500">{cohort.date}</span>
                   </div>
                   <p className="text-[10px] text-slate-400 mt-0.5">{cohort.count} certified</p>
                 </div>

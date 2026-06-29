@@ -58,13 +58,13 @@ export default function Testimonials() {
     <section className="border-b border-slate-100 bg-slate-900 text-white py-16 sm:py-24 overflow-hidden relative">
       {/* Background shapes */}
       <div className="absolute top-0 right-0 -translate-y-12 translate-x-12 w-96 h-96 bg-primary opacity-10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 translate-y-12 -translate-x-12 w-96 h-96 bg-gold opacity-5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 translate-y-12 -translate-x-12 w-96 h-96 bg-slate-700 opacity-10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <span className="text-xs font-bold text-gold uppercase tracking-widest">
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
             Alumni Reviews
           </span>
           <h2 className="font-heading text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -84,7 +84,7 @@ export default function Testimonials() {
               <div className="flex justify-between items-center">
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-gold text-gold" />
+                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
                 <Quote className="h-10 w-10 text-primary opacity-30" />
@@ -103,7 +103,7 @@ export default function Testimonials() {
                   {testimonials[activeIndex].name}
                 </h4>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  {testimonials[activeIndex].role} at <span className="text-gold font-medium">{testimonials[activeIndex].company}</span>
+                  {testimonials[activeIndex].role} at <span className="text-slate-300 font-medium">{testimonials[activeIndex].company}</span>
                 </p>
               </div>
 

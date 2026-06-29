@@ -34,16 +34,16 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/" className="hover:text-gold transition-colors">Home</Link>
+                <Link href="/" className="hover:text-white transition-colors">Home</Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-gold transition-colors">About Us</Link>
+                <Link href="/about" className="hover:text-white transition-colors">About Us</Link>
               </li>
               <li>
-                <Link href="/#programs-catalog" className="hover:text-gold transition-colors">Training Catalog</Link>
+                <Link href="/#programs-catalog" className="hover:text-white transition-colors">Training Catalog</Link>
               </li>
               <li>
-                <Link href="/facilities" className="hover:text-gold transition-colors">R&D Lab Facilities</Link>
+                <Link href="/facilities" className="hover:text-white transition-colors">R&D Lab Facilities</Link>
               </li>
             </ul>
           </div>
@@ -55,13 +55,13 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/news" className="hover:text-gold transition-colors">Upcoming Training Schedules</Link>
+                <Link href="/news" className="hover:text-white transition-colors">Upcoming Training Schedules</Link>
               </li>
               <li>
-                <Link href="/news" className="hover:text-gold transition-colors">Past Cohort Galleries</Link>
+                <Link href="/news" className="hover:text-white transition-colors">Past Cohort Galleries</Link>
               </li>
               <li>
-                <Link href="/news" className="hover:text-gold transition-colors">Corporate Collaboration Notices</Link>
+                <Link href="/news" className="hover:text-white transition-colors">Corporate Collaboration Notices</Link>
               </li>
             </ul>
           </div>
@@ -73,23 +73,23 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3 text-sm">
               <li className="flex gap-2 items-start">
-                <MapPin className="h-5 w-5 text-gold shrink-0 mt-0.5" />
+                <MapPin className="h-5 w-5 text-slate-400 shrink-0 mt-0.5" />
                 <span className="text-slate-400">
                   MIMOS Academy, Kulim Hi-Tech Park, 09000 Kulim, Kedah Darul Aman, Malaysia.
                 </span>
               </li>
               <li className="flex gap-2 items-center">
-                <Phone className="h-4 w-4 text-gold" />
+                <Phone className="h-4 w-4 text-slate-400" />
                 <span className="text-slate-400">Tel: +604-405 2540</span>
               </li>
               <li className="flex gap-2 items-center">
-                <Mail className="h-4 w-4 text-gold" />
-                <a href="mailto:academy@mimos.my" className="text-slate-400 hover:text-gold">
+                <Mail className="h-4 w-4 text-slate-400" />
+                <a href="mailto:academy@mimos.my" className="text-slate-400 hover:text-white">
                   academy@mimos.my
                 </a>
               </li>
               <li className="flex gap-2 items-start">
-                <MapPin className="h-5 w-5 text-gold shrink-0 mt-0.5" />
+                <MapPin className="h-5 w-5 text-slate-400 shrink-0 mt-0.5" />
                 <span className="text-slate-400 text-xs italic">
                   HQ: Technology Park Malaysia, Bukit Jalil, 57000 Kuala Lumpur.
                 </span>

@@ -168,7 +168,7 @@ export default function EnrollmentsClient({
       {/* CSV Drop Importer Card */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-          <FileSpreadsheet className="h-4.5 w-4.5 text-primary" />
+          <FileSpreadsheet className="h-4.5 w-4.5 text-slate-500" />
           <h3 className="font-heading text-sm font-bold text-foreground uppercase tracking-wider">
             Microsoft Forms CSV Importer
           </h3>
@@ -238,7 +238,7 @@ export default function EnrollmentsClient({
           <div className="border border-slate-100 rounded-xl overflow-hidden space-y-4">
             <div className="bg-slate-50 px-4 py-2.5 border-b border-slate-100 flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
               <span>CSV Importer Preview (First 5 Rows)</span>
-              <span className="text-primary">{parsedData.length} valid rows mapped</span>
+              <span className="text-slate-800 font-bold">{parsedData.length} valid rows mapped</span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse font-body">
@@ -287,7 +287,7 @@ export default function EnrollmentsClient({
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-4">
           <div className="flex items-center gap-2">
-            <UserCheck className="h-4.5 w-4.5 text-primary" />
+            <UserCheck className="h-4.5 w-4.5 text-slate-500" />
             <h3 className="font-heading text-sm font-bold text-foreground uppercase tracking-wider">
               Student Attendance & Status
             </h3>
@@ -365,7 +365,7 @@ export default function EnrollmentsClient({
                       {student.status === "REGISTERED" && (
                         <button
                           onClick={() => handleStatusChange(student.id, "ATTENDED")}
-                          className="inline-flex items-center gap-1 rounded bg-primary/10 text-primary px-2.5 py-1 hover:bg-primary hover:text-white transition-all text-[10px] font-bold cursor-pointer"
+                          className="inline-flex items-center gap-1 rounded bg-slate-100 text-slate-700 px-2.5 py-1 hover:bg-slate-900 hover:text-white transition-all text-[10px] font-bold cursor-pointer"
                         >
                           <Check className="h-3 w-3" />
                           <span>Mark Attended</span>
@@ -377,7 +377,7 @@ export default function EnrollmentsClient({
                         </span>
                       )}
                       {student.status === "CERTIFIED" && (
-                        <div className="flex justify-end gap-1 text-primary">
+                        <div className="flex justify-end gap-1 text-emerald-600">
                           <ShieldCheck className="h-4.5 w-4.5" />
                           <span className="text-[10px] font-bold uppercase">Certified</span>
                         </div>

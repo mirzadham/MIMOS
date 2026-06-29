@@ -6,19 +6,19 @@ import { BookOpen, Users, Award } from "lucide-react";
 export default function WhyChooseUs() {
   const features = [
     {
-      icon: <BookOpen className="h-6 w-6 text-primary" />,
+      icon: <BookOpen className="h-5 w-5 text-slate-600" />,
       title: "Interactive Learning Approach",
       desc: "Engage in hands-on, immersive learning experiences designed to enhance understanding and retention. Our interactive methods ensure students develop practical, real-world skills.",
       badges: ["C Programming", "Python", "Advanced Programming", "Algebra"]
     },
     {
-      icon: <Users className="h-6 w-6 text-primary" />,
+      icon: <Users className="h-5 w-5 text-slate-600" />,
       title: "Experienced Instructors",
       desc: "Learn directly from MIMOS research engineers and industry experts with years of practical experience in wafer fabrication, IC design, and enterprise-grade software development.",
       badges: ["Mentorship", "Industry Labs", "R&D Specialists", "Advisory Support"]
     },
     {
-      icon: <Award className="h-6 w-6 text-primary" />,
+      icon: <Award className="h-5 w-5 text-slate-600" />,
       title: "Certifications",
       desc: "Earn industry-recognized, accredited credentials upon course completion. Boost your technical authority and career prospects with certifications backed by Malaysia's R&D Center.",
       badges: ["HRD Corp Claimable", "National R&D Badge", "Accredited Programs"]
@@ -31,7 +31,7 @@ export default function WhyChooseUs() {
         
         {/* Header */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <span className="text-xs font-bold text-primary uppercase tracking-widest">
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">
             Why Choose Us?
           </span>
           <h2 className="font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
@@ -47,14 +47,14 @@ export default function WhyChooseUs() {
           {features.map((feature, idx) => (
             <div 
               key={idx}
-              className="group relative rounded-2xl border border-slate-200 bg-white p-8 hover:border-primary/20 hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+              className="group relative rounded-2xl border border-slate-200 bg-white p-8 hover:border-slate-300 hover:shadow-md transition-all duration-300 flex flex-col justify-between"
             >
               <div className="space-y-4">
-                <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+                <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 border border-slate-200/80">
                   {feature.icon}
                 </div>
                 
-                <h3 className="font-heading text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="font-heading text-lg font-bold text-foreground transition-colors">
                   {feature.title}
                 </h3>
                 
@@ -68,7 +68,7 @@ export default function WhyChooseUs() {
                 {feature.badges.map((badge, bIdx) => (
                   <span 
                     key={bIdx}
-                    className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 group-hover:bg-primary/5 group-hover:text-primary transition-colors"
+                    className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 group-hover:bg-slate-200/60 group-hover:text-slate-800 transition-colors"
                   >
                     {badge}
                   </span>

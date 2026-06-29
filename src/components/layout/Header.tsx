@@ -65,12 +65,12 @@ export default function Header() {
         {/* Logo - Top Left */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2 group">
-            <GraduationCap className="h-8 w-8 text-primary group-hover:text-gold transition-colors duration-300" />
+            <GraduationCap className="h-8 w-8 text-primary transition-colors duration-300" />
             <div className="flex flex-col">
               <span className="font-heading text-lg font-bold tracking-tight text-foreground leading-none">
                 MIMOS
               </span>
-              <span className="font-sans text-xs font-semibold tracking-widest text-primary group-hover:text-gold transition-colors duration-300 uppercase">
+              <span className="font-sans text-xs font-semibold tracking-widest text-primary transition-colors duration-300 uppercase">
                 Academy
               </span>
             </div>
@@ -194,7 +194,7 @@ export default function Header() {
               placeholder="Search training programs, labs, news..."
               className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-primary focus:outline-none"
             />
-            <button className="rounded-md bg-gradient-to-r from-primary to-slate-teal hover:from-primary-hover hover:to-slate-teal-hover px-4 py-2 text-sm font-bold text-white transition-all cursor-pointer">
+            <button className="rounded-md bg-primary hover:bg-primary-hover px-4 py-2 text-sm font-bold text-white transition-all cursor-pointer">
               Search
             </button>
             <button 

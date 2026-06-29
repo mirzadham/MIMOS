@@ -18,11 +18,11 @@ interface ProgramCardProps {
 
 export default function ProgramCard({ program }: ProgramCardProps) {
   return (
-    <div className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-md">
+    <div className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-md">
       
       {/* Category Tag & Badge */}
       <div className="flex items-center justify-between gap-2">
-        <span className="inline-flex items-center rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-primary">
+        <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-bold text-slate-700">
           {program.category?.name || "Upskilling Program"}
         </span>
         {program.price?.includes("HRD Corp") && (
@@ -35,7 +35,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
 
       {/* Title & Description */}
       <div className="mt-4 flex-1">
-        <h3 className="font-heading text-lg font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
+        <h3 className="font-heading text-lg font-bold text-foreground transition-colors leading-snug">
           {program.title}
         </h3>
         <p className="mt-2 text-sm text-slate-500 line-clamp-3 leading-relaxed">
@@ -69,7 +69,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
       </div>
 
       {/* Top Brand Accent Border */}
-      <div className="absolute top-0 left-0 h-1 w-0 bg-gradient-to-r from-primary to-gold transition-all duration-300 group-hover:w-full" />
+      <div className="absolute top-0 left-0 h-[3px] w-0 bg-primary transition-all duration-300 group-hover:w-full" />
     </div>
   );
 }
