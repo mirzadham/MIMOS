@@ -54,43 +54,43 @@
 
 :root {
     --background: #ffffff;
-    --foreground: #121b18; /* Dark Forest Pine */
+    --foreground: #0f172a; /* Premium Dark Slate */
     --card: #ffffff;
-    --card-foreground: #121b18;
+    --card-foreground: #0f172a;
     --popover: #ffffff;
-    --popover-foreground: #121b18;
+    --popover-foreground: #0f172a;
     
     --primary: #a72190; /* MIMOS Orchid Magenta */
     --primary-hover: #8f177a;
     --primary-foreground: #ffffff;
     
-    --secondary: #f0faf6; /* Light Mint Tint */
-    --secondary-foreground: #121b18;
+    --secondary: #f1f5f9; /* Neutral Slate 100 */
+    --secondary-foreground: #0f172a;
     
-    --gold: #a3e2c9; /* Soft Sage / Mint Green */
-    --gold-hover: #8bc4ae;
-    --slate-teal: #1ea896; /* Persian Teal */
-    --slate-teal-hover: #168c7c;
+    --gold: #64748b; /* Replaced Gold with Slate 500 */
+    --gold-hover: #475569;
+    --slate-teal: #475569; /* Replaced Teal with Slate 600 */
+    --slate-teal-hover: #334155;
     
-    --muted: #f0faf6; /* Light Mint Tint */
-    --muted-foreground: #5c7069; /* Muted pine text */
-    --accent: #fbf2fa; /* Light Orchid Tint */
+    --muted: #f8fafc; /* Neutral Slate 50 */
+    --muted-foreground: #64748b; /* Muted Slate Text */
+    --accent: #faf4fa; /* Very subtle Orchid Tint */
     --accent-foreground: #a72190;
     
     --destructive: #ef4444;
     --destructive-foreground: #ffffff;
-    --border: #d4efe4; /* Soft mint border */
-    --input: #d4efe4;
+    --border: #e2e8f0; /* Soft Slate 200 Border */
+    --input: #e2e8f0;
     --ring: #a72190;
     --radius: 0.5rem;
     
     --sidebar: #ffffff;
-    --sidebar-foreground: #121b18;
+    --sidebar-foreground: #0f172a;
     --sidebar-primary: #a72190;
     --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #f0faf6;
-    --sidebar-accent-foreground: #1ea896;
-    --sidebar-border: #d4efe4;
+    --sidebar-accent: #f8fafc;
+    --sidebar-accent-foreground: #a72190;
+    --sidebar-border: #e2e8f0;
     --sidebar-ring: #a72190;
 }
 

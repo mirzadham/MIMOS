@@ -11,14 +11,14 @@ interface Partner {
 
 export default function Partners() {
   const partners: Partner[] = [
-    { name: "MSIA", category: "Industry Association", icon: <Cpu className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "TalentCorp", category: "Government Body", icon: <Briefcase className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "CREST", category: "Collaborative R&D", icon: <Workflow className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "Dassault Systèmes", category: "Enterprise Technology", icon: <Landmark className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "Inari Amertron", category: "Semiconductors", icon: <Cpu className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "Keysight Technologies", category: "Electronic Test & Measurement", icon: <Shield className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "USM", category: "Research University", icon: <GraduationCap className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "UTM", category: "Technical University", icon: <GraduationCap className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> }
+    { name: "MSIA", category: "Industry Association", icon: <Cpu className="h-5 w-5 text-slate-400 group-hover:text-slate-700 transition-colors" /> },
+    { name: "TalentCorp", category: "Government Body", icon: <Briefcase className="h-5 w-5 text-slate-400 group-hover:text-slate-700 transition-colors" /> },
+    { name: "CREST", category: "Collaborative R&D", icon: <Workflow className="h-5 w-5 text-slate-400 group-hover:text-slate-700 transition-colors" /> },
+    { name: "Dassault Systèmes", category: "Enterprise Technology", icon: <Landmark className="h-5 w-5 text-slate-400 group-hover:text-slate-700 transition-colors" /> },
+    { name: "Inari Amertron", category: "Semiconductors", icon: <Cpu className="h-5 w-5 text-slate-400 group-hover:text-slate-700 transition-colors" /> },
+    { name: "Keysight Technologies", category: "Electronic Test & Measurement", icon: <Shield className="h-5 w-5 text-slate-400 group-hover:text-slate-700 transition-colors" /> },
+    { name: "USM", category: "Research University", icon: <GraduationCap className="h-5 w-5 text-slate-400 group-hover:text-slate-700 transition-colors" /> },
+    { name: "UTM", category: "Technical University", icon: <GraduationCap className="h-5 w-5 text-slate-400 group-hover:text-slate-700 transition-colors" /> }
   ];
 
   return (
@@ -40,13 +40,13 @@ export default function Partners() {
           {partners.map((partner, idx) => (
             <div 
               key={idx}
-              className="group relative rounded-xl border border-slate-200 p-5 bg-slate-50 hover:bg-white hover:border-primary/20 hover:shadow-md transition-all duration-300 flex items-center gap-3.5"
+              className="group relative rounded-xl border border-slate-200 p-5 bg-slate-50 hover:bg-white hover:border-slate-300 hover:shadow-md transition-all duration-300 flex items-center gap-3.5"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white border border-slate-200 group-hover:bg-primary/5 group-hover:border-primary/10 transition-all shrink-0 shadow-sm">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white border border-slate-200 group-hover:bg-slate-50 group-hover:border-slate-300 transition-all shrink-0 shadow-sm">
                 {partner.icon}
               </div>
               <div className="space-y-0.5">
-                <h3 className="font-heading text-xs font-extrabold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="font-heading text-xs font-extrabold text-foreground group-hover:text-slate-900 transition-colors">
                   {partner.name}
                 </h3>
                 <p className="text-[10px] text-slate-400 font-medium">

@@ -87,8 +87,8 @@ export default async function AdminDashboardOverview() {
             <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Active Programs</span>
             <span className="text-2xl font-extrabold text-foreground block">{stats.programs}</span>
           </div>
-          <div className="rounded-xl bg-accent p-3 text-primary">
-            <GraduationCap className="h-6 w-6" />
+          <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-slate-600">
+            <GraduationCap className="h-5 w-5" />
           </div>
         </div>
 
@@ -98,8 +98,8 @@ export default async function AdminDashboardOverview() {
             <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Enrollments</span>
             <span className="text-2xl font-extrabold text-foreground block">{stats.enrollments}</span>
           </div>
-          <div className="rounded-xl bg-accent p-3 text-primary">
-            <Users className="h-6 w-6" />
+          <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-slate-600">
+            <Users className="h-5 w-5" />
           </div>
         </div>
 
@@ -109,8 +109,8 @@ export default async function AdminDashboardOverview() {
             <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Issued Certificates</span>
             <span className="text-2xl font-extrabold text-foreground block">{stats.certificates}</span>
           </div>
-          <div className="rounded-xl bg-accent p-3 text-primary">
-            <Award className="h-6 w-6" />
+          <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-slate-600">
+            <Award className="h-5 w-5" />
           </div>
         </div>
 
@@ -122,7 +122,7 @@ export default async function AdminDashboardOverview() {
         {/* Left: Dynamic Course Enrollment Chart */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2 space-y-6">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <TrendingUp className="h-4.5 w-4.5 text-primary" />
+            <TrendingUp className="h-4.5 w-4.5 text-slate-500" />
             <h3 className="font-heading text-sm font-bold text-foreground uppercase tracking-wider">
               Registrations by Program
             </h3>
@@ -135,11 +135,11 @@ export default async function AdminDashboardOverview() {
                 <div key={idx} className="space-y-1.5 text-xs font-semibold text-slate-700">
                   <div className="flex justify-between">
                     <span className="truncate pr-4 max-w-xs">{item.title}</span>
-                    <span className="text-primary font-bold">{item.count} registered</span>
+                    <span className="text-slate-500 font-medium">{item.count} registered</span>
                   </div>
-                  <div className="h-2.5 w-full rounded-full bg-slate-100 overflow-hidden">
+                  <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-primary to-gold rounded-full transition-all duration-500" 
+                      className="h-full bg-primary rounded-full transition-all duration-500" 
                       style={{ width: `${pct}%` }} 
                       title={`${pct.toFixed(0)}%`}
                     />
@@ -153,7 +153,7 @@ export default async function AdminDashboardOverview() {
         {/* Right: Security Audit Logs Timeline */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <Terminal className="h-4.5 w-4.5 text-primary" />
+            <Terminal className="h-4.5 w-4.5 text-slate-500" />
             <h3 className="font-heading text-sm font-bold text-foreground uppercase tracking-wider">
               Security Action Logs
             </h3>
@@ -163,7 +163,7 @@ export default async function AdminDashboardOverview() {
             {recentLogs.map((log, idx) => (
               <div key={log.id || idx} className="flex gap-3 items-start border-l border-slate-200 pl-4 relative">
                 {/* Timeline node */}
-                <div className="absolute -left-1.5 top-0.5 h-3 w-3 rounded-full border-2 border-white bg-primary" />
+                <div className="absolute -left-1 top-1.5 h-2 w-2 rounded-full border-2 border-white bg-primary" />
                 <div className="space-y-0.5">
                   <span className="font-bold text-foreground uppercase text-[9px] block">
                     {log.action}

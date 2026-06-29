@@ -9,7 +9,7 @@ export default function ContactPage() {
         
         {/* Header */}
         <div className="text-center space-y-4">
-          <span className="text-xs font-bold text-primary tracking-wider uppercase">Contact Channels</span>
+          <span className="text-xs font-bold text-slate-500 tracking-wider uppercase">Contact Channels</span>
           <h1 className="font-heading text-3xl font-extrabold text-foreground sm:text-5xl">
             Reach Out to Our Administration
           </h1>
@@ -28,21 +28,21 @@ export default function ContactPage() {
               <div className="space-y-4 font-body">
                 <h3 className="font-heading text-sm font-bold text-foreground uppercase tracking-wider">MIMOS Headquarters</h3>
                 <div className="flex gap-2.5 items-start text-xs text-slate-500">
-                  <MapPin className="h-5 w-5 text-primary shrink-0" />
+                  <MapPin className="h-5 w-5 text-slate-400 shrink-0" />
                   <span>
                     MIMOS Berhad, Technology Park Malaysia, Bukit Jalil, 57000 Kuala Lumpur, Wilayah Persekutuan, Malaysia.
                   </span>
                 </div>
                 <div className="flex gap-2.5 items-center text-xs text-slate-500 border-t border-slate-100 pt-4">
-                  <Phone className="h-4 w-4 text-primary" />
+                  <Phone className="h-4 w-4 text-slate-400" />
                   <span>Tel: +603-8995 5000</span>
                 </div>
                 <div className="flex gap-2.5 items-center text-xs text-slate-500">
-                  <Printer className="h-4 w-4 text-primary" />
+                  <Printer className="h-4 w-4 text-slate-400" />
                   <span>Fax: +603-8996 2755</span>
                 </div>
                 <div className="flex gap-2.5 items-center text-xs text-slate-500">
-                  <Mail className="h-4 w-4 text-primary" />
+                  <Mail className="h-4 w-4 text-slate-400" />
                   <a href="mailto:info@mimos.my" className="hover:text-primary hover:underline">
                     info@mimos.my
                   </a>
@@ -52,7 +52,7 @@ export default function ContactPage() {
               {/* B2B Coordination notes */}
               <div className="rounded-xl bg-slate-50 p-6 border border-slate-100 space-y-4 font-body">
                 <div className="flex items-center gap-2 text-slate-950 font-bold text-xs uppercase tracking-wider">
-                  <Landmark className="h-4.5 w-4.5 text-primary" />
+                  <Landmark className="h-4.5 w-4.5 text-slate-500" />
                   <span>Corporate Cohorts</span>
                 </div>
                 <p className="text-xs text-slate-500 leading-relaxed">
@@ -129,7 +129,7 @@ export default function ContactPage() {
 
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-slate-teal hover:from-primary-hover hover:to-slate-teal-hover text-white py-3.5 text-xs font-bold transition-all cursor-pointer"
+                className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-primary hover:bg-primary-hover text-white py-3.5 text-xs font-bold transition-all cursor-pointer"
               >
                 <span>Submit Query</span>
                 <Send className="h-3.5 w-3.5" />

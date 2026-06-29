@@ -148,7 +148,7 @@ export default function ManageProgramsClient({
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="inline-flex items-center rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-primary">
+                  <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600">
                     {prog.category?.name || "Upskilling"}
                   </span>
                 </td>
@@ -167,7 +167,7 @@ export default function ManageProgramsClient({
                     href={prog.microsoftFormUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary hover:text-primary-hover hover:underline"
+                    className="inline-flex items-center gap-1 text-slate-500 hover:text-primary transition-colors hover:underline"
                   >
                     <span>Form Link</span>
                     <ExternalLink className="h-3.5 w-3.5" />
