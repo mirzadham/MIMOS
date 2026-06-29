@@ -195,10 +195,11 @@ export async function getSafePrograms(categoryId?: string) {
     });
     return programs.length > 0 ? programs : (
       categoryId 
-        ? mockPrograms.filter(p => p.categoryId === categoryId).map(p => ({ ...p, imageUrl: null as string | null })) 
+        ? mockPrograms.filter(p => p.categoryId === categoryId).map(p => ({ ...p, imageUrl: null as string | null, imageUrls: [] as string[] })) 
         : mockPrograms.map(p => ({
             ...p,
             imageUrl: null as string | null,
+            imageUrls: [] as string[],
             category: mockCategories.find(c => c.id === p.categoryId)
           }))
     );
@@ -210,6 +211,7 @@ export async function getSafePrograms(categoryId?: string) {
     return fallback.map(p => ({
       ...p,
       imageUrl: null as string | null,
+      imageUrls: [] as string[],
       category: mockCategories.find(c => c.id === p.categoryId)
     }));
   }
@@ -228,6 +230,7 @@ export async function getSafeProgramBySlug(slug: string) {
       return {
         ...mock,
         imageUrl: null as string | null,
+        imageUrls: [] as string[],
         category: mockCategories.find(c => c.id === mock.categoryId)
       };
     }
@@ -239,6 +242,7 @@ export async function getSafeProgramBySlug(slug: string) {
       return {
         ...mock,
         imageUrl: null as string | null,
+        imageUrls: [] as string[],
         category: mockCategories.find(c => c.id === mock.categoryId)
       };
     }

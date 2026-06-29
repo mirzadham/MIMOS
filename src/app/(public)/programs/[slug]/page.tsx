@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getSafeProgramBySlug } from "@/lib/db";
 import { Clock, MapPin, BadgeDollarSign, ArrowLeft, Send, Sparkles, Building } from "lucide-react";
+import ProgramPosterGallery from "@/components/landing/ProgramPosterGallery";
 
 interface ProgramPageProps {
   params: Promise<{
@@ -87,11 +88,13 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
             
             {/* Header Block */}
             <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-4 overflow-hidden">
-              {program.imageUrl && (
-                <div className="w-full aspect-[21/9] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 mb-6">
-                  <img src={program.imageUrl} alt={program.title} className="w-full h-full object-cover" />
-                </div>
-              )}
+              <div className="mb-6">
+                <ProgramPosterGallery
+                  imageUrls={program.imageUrls}
+                  fallbackUrl={program.imageUrl}
+                  title={program.title}
+                />
+              </div>
               <span className="inline-flex items-center rounded-full bg-accent px-3 py-0.5 text-xs font-bold text-primary">
                 {program.category?.name || "Physical Training"}
               </span>

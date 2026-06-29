@@ -14,18 +14,23 @@ interface ProgramCardProps {
       name: string;
     };
     imageUrl?: string | null;
+    imageUrls?: string[] | null;
   };
 }
 
 export default function ProgramCard({ program }: ProgramCardProps) {
+  const displayImageUrl = (program.imageUrls && program.imageUrls.length > 0)
+    ? program.imageUrls[0]
+    : program.imageUrl;
+
   return (
     <div className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-md">
       
       {/* Top Banner Image */}
-      {program.imageUrl ? (
+      {displayImageUrl ? (
         <div className="relative aspect-video w-full overflow-hidden bg-slate-100 border-b border-slate-100">
           <img
-            src={program.imageUrl}
+            src={displayImageUrl}
             alt={program.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
           />

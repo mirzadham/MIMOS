@@ -29,6 +29,8 @@ export default async function AdminProgramsPage() {
     microsoftFormUrl: string;
     categoryId: string;
     category?: { name: string } | null;
+    imageUrl?: string | null;
+    imageUrls?: string[] | null;
   }>).map(prog => ({
     id: prog.id,
     title: prog.title,
@@ -41,7 +43,9 @@ export default async function AdminProgramsPage() {
     dates: prog.dates,
     microsoftFormUrl: prog.microsoftFormUrl,
     categoryId: prog.categoryId,
-    category: prog.category ? { name: prog.category.name } : undefined
+    category: prog.category ? { name: prog.category.name } : undefined,
+    imageUrl: prog.imageUrl,
+    imageUrls: prog.imageUrls
   }));
 
   return (

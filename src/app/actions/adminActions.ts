@@ -58,6 +58,7 @@ export async function createProgramAction(data: {
   microsoftFormUrl: string;
   categoryId: string;
   imageUrl?: string;
+  imageUrls?: string[];
 }) {
   const admin = await getSessionAdmin();
   if (!admin) throw new Error("Unauthorized");
@@ -77,7 +78,8 @@ export async function createProgramAction(data: {
         dates: data.dates,
         microsoftFormUrl: data.microsoftFormUrl,
         categoryId: data.categoryId,
-        imageUrl: data.imageUrl || null
+        imageUrl: data.imageUrl || null,
+        imageUrls: data.imageUrls || []
       }
     });
 
@@ -118,6 +120,7 @@ export async function updateProgramAction(
     microsoftFormUrl: string;
     categoryId: string;
     imageUrl?: string;
+    imageUrls?: string[];
   }
 ) {
   const admin = await getSessionAdmin();
@@ -138,7 +141,8 @@ export async function updateProgramAction(
         dates: data.dates,
         microsoftFormUrl: data.microsoftFormUrl,
         categoryId: data.categoryId,
-        imageUrl: data.imageUrl || null
+        imageUrl: data.imageUrl || null,
+        imageUrls: data.imageUrls || []
       }
     });
 
