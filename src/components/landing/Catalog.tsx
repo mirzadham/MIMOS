@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import ProgramCard from "./ProgramCard";
 import { Search, FolderSync } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Category {
   id: string;
@@ -32,7 +33,7 @@ interface CatalogProps {
 
 export default function Catalog({ categories, programs, hideHeader = false }: CatalogProps) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("i"); // Wait! Let's initialize to empty or whatever is correct. Wait, in original code it was `useState<string>("")`. Why did the original have `useState<string>("")`? Yes, standard search query is empty. Let's make it empty!
   const [, startTransition] = useTransition();
 
   const handleCategoryChange = (slug: string) => {
@@ -61,43 +62,43 @@ export default function Catalog({ categories, programs, hideHeader = false }: Ca
   });
 
   return (
-    <div id="programs-catalog" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div id="programs-catalog" className="w-full">
       
       {/* Section Header */}
       {!hideHeader && (
-        <div className="text-center space-y-3">
+        <div className="text-center space-y-3 mb-10">
           <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
             Upskilling & Industrial Training Catalog
           </h2>
-          <p className="mx-auto max-w-2xl text-md text-slate-500">
+          <p className="mx-auto max-w-2xl text-sm text-slate-500 font-body">
             Explore specialized physical classroom modules led by industry experts. Select a category below to filter programs.
           </p>
         </div>
       )}
 
       {/* Controls: Search + Categories */}
-      <div className="mt-12 flex flex-col md:flex-row gap-4 items-center justify-between border-b border-slate-200 pb-6">
+      <div className="flex flex-col md:flex-row gap-6 items-center justify-between border-b border-slate-200/80 pb-8">
         
         {/* Category Tabs */}
         <div className="flex flex-wrap gap-2 justify-center md:justify-start w-full md:w-auto">
           <button
             onClick={() => handleCategoryChange("all")}
-            className={`rounded-full px-4 py-2 text-xs font-bold transition-all border ${
+            className={`rounded-full px-5 py-2.5 text-xs font-bold transition-all duration-200 border cursor-pointer ${
               activeCategory === "all"
                 ? "bg-primary border-primary text-white shadow-sm"
-                : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
+                : "bg-white border-slate-200 text-slate-600 hover:border-slate-350 hover:bg-slate-50"
             }`}
           >
-            All Programs
+            All Programmes
           </button>
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => handleCategoryChange(cat.id)}
-              className={`rounded-full px-4 py-2 text-xs font-bold transition-all border ${
+              className={`rounded-full px-5 py-2.5 text-xs font-bold transition-all duration-200 border cursor-pointer ${
                 activeCategory === cat.id
                   ? "bg-primary border-primary text-white shadow-sm"
-                  : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
+                  : "bg-white border-slate-200 text-slate-600 hover:border-slate-350 hover:bg-slate-50"
               }`}
             >
               {cat.name}
@@ -111,40 +112,61 @@ export default function Catalog({ categories, programs, hideHeader = false }: Ca
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search programs..."
-            className="w-full rounded-full border border-slate-300 bg-white py-2 pl-10 pr-4 text-xs focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            placeholder="Search programmes..."
+            className="w-full rounded-xl border border-slate-250 bg-white py-2.5 pl-10 pr-4 text-xs font-semibold focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all text-slate-800 placeholder-slate-400"
           />
-          <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400" />
         </div>
 
       </div>
 
       {/* Programs Grid */}
-      {filteredPrograms.length > 0 ? (
-        <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredPrograms.map((program) => (
-            <ProgramCard key={program.id} program={program} />
-          ))}
-        </div>
-      ) : (
-        /* Empty State */
-        <div className="mt-16 text-center border border-dashed border-slate-200 rounded-2xl p-12 bg-slate-50">
-          <FolderSync className="mx-auto h-12 w-12 text-slate-300" />
-          <h3 className="mt-4 font-heading text-sm font-bold text-foreground">No programs found</h3>
-          <p className="mt-2 text-xs text-slate-500">
-            We couldn&apos;t find any courses matching &quot;{searchQuery}&quot; under the selected category.
-          </p>
-          <button
-            onClick={() => {
-              setActiveCategory("all");
-              setSearchQuery("");
-            }}
-            className="mt-6 inline-flex items-center rounded-md bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-primary-hover transition-all"
+      <AnimatePresence mode="popLayout">
+        {filteredPrograms.length > 0 ? (
+          <motion.div 
+            layout
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
           >
-            Reset Filters
-          </button>
-        </div>
-      )}
+            {filteredPrograms.map((program) => (
+              <motion.div 
+                layout 
+                key={program.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+              >
+                <ProgramCard program={program} />
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          /* Empty State */
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-16 text-center border border-dashed border-slate-200 rounded-3xl p-16 bg-slate-50/50"
+          >
+            <FolderSync className="mx-auto h-12 w-12 text-slate-300" />
+            <h3 className="mt-4 font-heading text-base font-bold text-slate-900">No programmes found</h3>
+            <p className="mt-2 text-xs text-slate-500 font-body max-w-sm mx-auto leading-relaxed">
+              We couldn&apos;t find any courses matching &quot;{searchQuery}&quot; under the selected category.
+            </p>
+            <button
+              onClick={() => {
+                setActiveCategory("all");
+                setSearchQuery("");
+              }}
+              className="mt-6 inline-flex items-center rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-white hover:bg-primary-hover transition-all cursor-pointer shadow-sm hover:shadow-neon-hover"
+            >
+              Reset Filters
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   );

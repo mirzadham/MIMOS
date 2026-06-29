@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Calendar, Bell, ArrowRight, Laptop } from "lucide-react";
+import { Calendar, Bell, ArrowRight, Clock, MapPin, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 interface TrainingItem {
   id: string;
@@ -11,6 +12,7 @@ interface TrainingItem {
   location: string;
   price: string;
   slug: string;
+  category: string;
 }
 
 interface EventItem {
@@ -30,7 +32,8 @@ export default function UpcomingSection() {
       dates: "Scheduled Soon",
       location: "MIMOS Berhad, Bukit Jalil",
       price: "HRD Corp Claimable",
-      slug: "semiconductor-wafer-fabrication"
+      slug: "semiconductor-wafer-fabrication",
+      category: "Semiconductors"
     },
     {
       id: "prog-6",
@@ -38,7 +41,8 @@ export default function UpcomingSection() {
       dates: "July 2026",
       location: "MIMOS Berhad, Bukit Jalil",
       price: "RM 2,800 / pax (HRD Corp Claimable)",
-      slug: "certified-data-science-practitioner"
+      slug: "certified-data-science-practitioner",
+      category: "Artificial Intelligence"
     },
     {
       id: "prog-10",
@@ -46,7 +50,8 @@ export default function UpcomingSection() {
       dates: "Scheduled Soon",
       location: "MIMOS Berhad, Bukit Jalil",
       price: "RM 1,000 / pax (HRD Corp Claimable)",
-      slug: "cybersecurity-awareness"
+      slug: "cybersecurity-awareness",
+      category: "Cybersecurity"
     }
   ];
 
@@ -69,131 +74,178 @@ export default function UpcomingSection() {
     }
   ];
 
+  const listContainerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+  };
+
   return (
-    <section className="border-b border-slate-100 bg-white py-16 sm:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+    <section className="border-b border-slate-200/60 bg-white py-20 sm:py-28 relative overflow-hidden">
+      {/* Background visual accents */}
+      <div className="absolute right-1/4 top-1/4 -z-10 h-72 w-72 rounded-full bg-primary/5 blur-3xl" />
+      
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 items-start">
           
           {/* Left Column: Upcoming Trainings */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50 border border-slate-200/80 text-slate-600">
-                <Laptop className="h-4.5 w-4.5" />
+          <div className="lg:col-span-7 space-y-8">
+            <div className="space-y-3">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/5 border border-primary/10 px-3 py-1 text-xs font-bold text-primary">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>Next Intake Schedules</span>
               </div>
-              <h2 className="font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+              <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
                 Upcoming Trainings
               </h2>
+              <p className="text-sm sm:text-md text-slate-500 leading-relaxed max-w-2xl font-body">
+                Enroll in our upcoming deep-tech professional programs led by research engineers inside national applied R&D laboratories.
+              </p>
             </div>
-            
-            <p className="text-sm text-slate-500 max-w-xl font-body">
-              Enroll in our upcoming deep-tech professional programs led by research engineers inside national applied research laboratories.
-            </p>
 
-            <div className="mt-8 space-y-4">
+            <motion.div 
+              variants={listContainerVariants}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-100px" }}
+              className="space-y-6"
+            >
               {upcomingTrainings.map((training) => (
-                <div 
+                <motion.div 
                   key={training.id}
-                  className="group relative rounded-xl border border-slate-200 p-5 bg-slate-50 hover:bg-white hover:border-slate-300 hover:shadow-sm transition-all duration-300"
+                  variants={itemVariants}
+                  className="group relative rounded-xl border border-slate-200/80 p-6 bg-white hover:border-primary/20 hover:shadow-neon-hover transition-all duration-300"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="space-y-1.5">
-                      <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-600">
-                        Physical Course
-                      </span>
-                      <h3 className="font-heading text-base font-bold text-foreground group-hover:text-primary transition-colors">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="inline-flex items-center rounded-md bg-primary/5 border border-primary/10 px-2.5 py-0.5 text-[9px] font-bold text-primary tracking-wide uppercase">
+                          {training.category}
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-400">
+                          <MapPin className="h-3 w-3" />
+                          {training.location}
+                        </span>
+                      </div>
+                      
+                      <h3 className="font-heading text-lg font-bold text-slate-900 group-hover:text-primary transition-colors duration-200">
                         {training.title}
                       </h3>
-                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
-                        <span className="flex items-center gap-1">
+                      
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold text-slate-500">
+                        <span className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/60 rounded-md px-2.5 py-1">
                           <Calendar className="h-3.5 w-3.5 text-slate-400" />
-                          {training.dates}
+                          <span>Intake: {training.dates}</span>
                         </span>
-                        <span>•</span>
-                        <span>{training.location}</span>
+                        <span className="text-slate-400 font-mono text-[10px]">
+                          {training.price}
+                        </span>
                       </div>
-                      <p className="text-[11px] font-semibold text-slate-400">
-                        {training.price}
-                      </p>
                     </div>
                     
-                    <div className="shrink-0">
+                    <div className="shrink-0 flex items-center">
                       <Link
                         href={`/programs/${training.slug}`}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-white border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm"
+                        className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-slate-50 border border-slate-200/80 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 shadow-sm"
                       >
-                        <span>Learn More</span>
+                        <span>View Syllabus</span>
                         <ArrowRight className="h-3.5 w-3.5" />
                       </Link>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
 
           {/* Right Column: Upcoming Events */}
-          <div className="lg:col-span-5 space-y-6 lg:border-l lg:border-slate-100 lg:pl-12">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50 border border-slate-200/80 text-slate-600">
-                <Bell className="h-4.5 w-4.5" />
+          <div className="lg:col-span-5 space-y-8 lg:border-l lg:border-slate-200/80 lg:pl-10">
+            <div className="space-y-3">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 border border-slate-200/80 px-3 py-1 text-xs font-bold text-slate-600">
+                <Bell className="h-3.5 w-3.5 text-slate-400" />
+                <span>Ecosystem Connect</span>
               </div>
-              <h2 className="font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-                Upcoming Events
+              <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                Academy Events
               </h2>
+              <p className="text-sm text-slate-500 leading-relaxed font-body">
+                Join our interactive technology briefings, webinar series, and open lab tours designed for industrial partners.
+              </p>
             </div>
 
-            <p className="text-sm text-slate-500 font-body">
-              Join our interactive technology briefings, webinar series, and open lab tours designed for industrial partners.
-            </p>
-
-            <div className="mt-8 space-y-4">
+            <motion.div 
+              variants={listContainerVariants}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-100px" }}
+              className="space-y-6"
+            >
               {upcomingEvents.map((event) => (
-                <div 
+                <motion.div 
                   key={event.id}
-                  className="rounded-xl border border-slate-200 p-5 bg-white hover:border-slate-300 hover:shadow-sm transition-all duration-300"
+                  variants={itemVariants}
+                  className="group relative rounded-xl border border-slate-200/85 p-6 bg-slate-50/40 hover:bg-white hover:border-primary/20 hover:shadow-neon-hover transition-all duration-300"
                 >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-600">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                      <span className="inline-flex items-center rounded-md bg-white border border-slate-200 px-2 py-0.5 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
                         {event.type}
                       </span>
-                      <span className="text-[10px] font-semibold text-slate-400">
+                      <span className="text-[10px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded-md">
                         {event.date}
                       </span>
                     </div>
                     
-                    <h3 className="font-heading text-sm font-bold text-foreground">
+                    <h3 className="font-heading text-md font-bold text-slate-900 group-hover:text-primary transition-colors">
                       {event.title}
                     </h3>
                     
-                    <p className="text-xs text-slate-500 leading-relaxed">
+                    <p className="text-xs text-slate-500 leading-relaxed font-body">
                       {event.desc}
                     </p>
 
-                    <div className="pt-2 text-xs text-slate-400">
-                      Time: <span className="font-semibold text-slate-600">{event.time}</span>
+                    <div className="flex items-center gap-3 pt-2 text-[11px] font-semibold text-slate-400 border-t border-slate-200/40">
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3 text-slate-400" />
+                        <span>{event.time}</span>
+                      </span>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
 
-            {/* General CTA Box */}
-            <div className="rounded-xl bg-slate-50 p-5 border border-slate-200/60 mt-6 text-center space-y-3">
-              <h4 className="font-heading text-xs font-bold text-foreground uppercase tracking-wider">
-                Looking for customized training?
-              </h4>
-              <p className="text-xs text-slate-500">
-                Contact our advisory team to build a custom deep-tech syllabus claimable under HRD Corp.
-              </p>
-              <Link
-                href="/contact"
-                className="inline-block text-xs font-bold text-slate-900 hover:text-primary transition-colors hover:underline"
+              {/* General CTA Box */}
+              <motion.div 
+                variants={itemVariants}
+                className="rounded-xl bg-primary/5 p-6 border border-primary/10 space-y-4 text-center"
               >
-                Inquire now →
-              </Link>
-            </div>
+                <h4 className="font-heading text-xs font-bold text-primary uppercase tracking-widest">
+                  Looking for Customized Training?
+                </h4>
+                <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
+                  We build custom corporate upskilling curricula tailored for your engineering teams, claimable under HRD Corp.
+                </p>
+                <div className="pt-1">
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-white border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
+                  >
+                    <span>Inquire Advisory Team</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                </div>
+              </motion.div>
 
+            </motion.div>
           </div>
 
         </div>

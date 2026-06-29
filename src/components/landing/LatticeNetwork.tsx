@@ -169,8 +169,8 @@ export default function LatticeNetwork() {
   }, []);
 
   return (
-    <div className="absolute inset-0 z-0 h-full w-full opacity-60">
-      <canvas ref={canvasRef} className="h-full w-full bg-slate-50" />
+    <div className="absolute inset-0 z-0 h-full w-full opacity-70">
+      <canvas ref={canvasRef} className="h-full w-full bg-transparent" />
     </div>
   );
 }
