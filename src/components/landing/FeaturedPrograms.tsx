@@ -96,6 +96,13 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const [isReady, setIsReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  /* Track previous activeIndex so we know which card is "exiting".
+   * The ref holds the OLD value during render; useEffect updates it after paint. */
+  const prevActiveRef = useRef(activeIndex);
+  useEffect(() => {
+    prevActiveRef.current = activeIndex;
+  });
+
   /* ── Measure the actual carousel container width ── */
   useEffect(() => {
     const el = containerRef.current;
@@ -144,25 +151,43 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
    * container clips/reveals the image as it squeezes. */
   const imageFixedWidth = Math.max(activeW, 300);
 
+  /* Which card is exiting? (the one that was active before this render) */
+  const exitingIndex =
+    prevActiveRef.current !== activeIndex ? prevActiveRef.current : -1;
+
   /* ── Compute inline styles for each card ──
    *
-   * FIXED DOM ORDER: programs render [0, 1, …, N-1].
-   * Same DOM elements always, so CSS transitions work.
+   * FIXED DOM ORDER + CSS `order`:
+   * DOM order is always [0, 1, …, N-1] so CSS transitions work.
+   * CSS `order` controls VISUAL order so the active card is always
+   * leftmost, preview strips follow to the right, and hidden cards
+   * are last. This creates a proper circular loop.
    *
    * Display position = (i - activeIndex + total) % total
    *   0  → active (wide)
-   *   1–maxVisible → visible preview strips
-   *   >maxVisible → hidden (width 0, shrunk out)
+   *   1–maxVisible → visible preview strips (right of active)
+   *   >maxVisible → hidden (width 0, at the end)
+   *
+   * The exiting card (old active) gets order: -1 so it stays
+   * leftmost and shrinks to 0 from the left edge.
    */
   const getCardStyle = (programIndex: number): React.CSSProperties => {
     const pos = (programIndex - activeIndex + total) % total;
+
+    /* Is this the card that just stopped being active? */
+    const isExiting = programIndex === exitingIndex;
 
     let width = 0;
     let mr = 0;
     let opacity = 0;
     let blur = 0;
 
-    if (pos === 0) {
+    if (isExiting) {
+      /* Exiting card: shrink to 0 at the left edge */
+      width = 0;
+      mr = 0;
+      opacity = 0;
+    } else if (pos === 0) {
       width = activeW;
       mr = cfg ? cfg.activeMargin : 0;
       opacity = 1;
@@ -181,6 +206,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       width,
       marginRight: mr,
       opacity,
+      order: isExiting ? -1 : pos,
       flexShrink: 0,
       overflow: "hidden",
       // Remove border + padding on hidden cards so nothing is visible
