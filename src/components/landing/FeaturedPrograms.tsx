@@ -122,10 +122,10 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
   return (
     <section className="border-b border-slate-200/60 bg-white">
-      <div className="mx-auto max-w-7xl px-6 py-20 sm:px-8 sm:py-28 relative">
+      <div className="mx-auto max-w-5xl px-6 py-12 sm:px-8 sm:py-16 relative">
         
         {/* Section Header */}
-        <div className="flex items-end justify-between border-b border-slate-200/85 pb-8">
+        <div className="flex items-end justify-between pb-6">
           <div className="space-y-2 max-w-3xl">
             <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               Training Programmes
@@ -157,7 +157,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         </div>
 
         {/* Interactive Slider Block */}
-        <div className="mt-12 flex flex-row gap-3 h-[280px] sm:h-[380px] md:h-[450px] w-full items-stretch">
+        <div className="mt-6 flex flex-row gap-3 h-[180px] sm:h-[240px] md:h-[300px] w-full items-stretch">
           
           {/* Left Area: Main Large Active Image (Not Clickable) */}
           <div className="flex-1 relative overflow-hidden border border-slate-200 bg-slate-50 rounded-[8px]">
