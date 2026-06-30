@@ -175,17 +175,23 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       if (pos >= 4) blur = 2;
     }
 
+    const isHidden = width === 0;
+
     return {
       width,
       marginRight: mr,
       opacity,
       flexShrink: 0,
       overflow: "hidden",
+      // Remove border + padding on hidden cards so nothing is visible
+      borderWidth: isHidden ? 0 : 1,
+      padding: isHidden ? 0 : undefined,
       filter: blur > 0 ? `blur(${blur}px)` : "none",
       transition: isReady
         ? [
             `width ${DURATION_MS}ms ${EASING}`,
             `margin-right ${DURATION_MS}ms ${EASING}`,
+            `border-width ${DURATION_MS}ms ${EASING}`,
             `opacity 500ms ease`,
             `filter 400ms ease`,
           ].join(", ")
