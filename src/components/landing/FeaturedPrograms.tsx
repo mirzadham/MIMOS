@@ -103,7 +103,6 @@ function isCircularBetween(index: number, start: number, end: number, total: num
 export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -114,15 +113,6 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   useEffect(() => {
     prevActiveRef.current = activeIndex;
   });
-
-  /* ── Track Transition Window ── */
-  useEffect(() => {
-    setIsTransitioning(true);
-    const timer = setTimeout(() => {
-      setIsTransitioning(false);
-    }, DURATION_MS);
-    return () => clearTimeout(timer);
-  }, [activeIndex]);
 
   /* ── Measure the actual carousel container width ── */
   useEffect(() => {
@@ -184,48 +174,44 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
    * container clips/reveals the image as it squeezes. */
   const imageFixedWidth = Math.max(activeW, 300);
 
-  /* ── Compute inline styles for each card ── */
+  /* ── Compute inline styles for each card ──
+   *
+   * FIXED DOM ORDER + CSS `order`:
+   * DOM order is always [0, 1, …, N-1] so CSS transitions work.
+   * CSS `order` controls VISUAL order so the active card is always
+   * leftmost, preview strips follow to the right, and hidden cards
+   * are last. This creates a proper circular loop.
+   *
+   * When moving forward:
+   * Any card in the circular range [prevActiveIndex, activeIndex)
+   * is shrinking to 0px. We place them to the left of the new active
+   * card (using negative order values) so they pull the new active
+   * card leftward.
+   */
   const getCardStyle = (programIndex: number): React.CSSProperties => {
     const pos = (programIndex - activeIndex + total) % total;
 
-    // A card is shrinking if we went forward and it lies between the old and new active cards
+    // A card is shrinking to 0 if we went forward and it lies between the old and new active cards
     const isShrinking =
       direction === "forward" &&
       isCircularBetween(programIndex, prevActiveIndex, activeIndex, total);
 
     let width = 0;
     let mr = 0;
-    let ml = 0;
 
     if (isShrinking) {
-      // During active transition, shrink to a thin 8px strip (pushed off-screen left).
-      // Once transition completes, clean up to 0px width.
-      width = isTransitioning ? 8 : 0;
-      // Animate margin-left to push it off-screen completely (width 8px + gap 12px = 20px)
-      ml = isTransitioning ? -(8 + 12) : 0;
+      width = 0;
+      mr = 0;
     } else if (pos === 0) {
       width = activeW;
+      mr = cfg ? cfg.activeMargin : 0;
     } else if (cfg && pos >= 1 && pos <= maxVisible) {
       const pi = pos - 1;
       width = cfg.widths[pi];
+      mr = cfg.margins[pi];
     }
 
     const isHidden = width === 0;
-
-    // Calculate margins:
-    if (isTransitioning) {
-      if (!isHidden) {
-        mr = pos === maxVisible ? 0 : 12;
-      }
-    } else {
-      // Idle margins:
-      if (pos === 0) {
-        mr = cfg ? cfg.activeMargin : 0;
-      } else if (cfg && pos >= 1 && pos <= maxVisible) {
-        const pi = pos - 1;
-        mr = cfg.margins[pi];
-      }
-    }
 
     // Calculate CSS flex order
     let order = pos;
@@ -238,7 +224,6 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     return {
       width,
       marginRight: mr,
-      marginLeft: ml,
       order,
       flexShrink: 0,
       overflow: "hidden",
@@ -249,7 +234,6 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         ? [
             `width ${DURATION_MS}ms ${EASING}`,
             `margin-right ${DURATION_MS}ms ${EASING}`,
-            `margin-left ${DURATION_MS}ms ${EASING}`,
             `border-width ${DURATION_MS}ms ${EASING}`,
           ].join(", ")
         : "none",
@@ -268,7 +252,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               Training Programmes
             </h2>
-            <p className="text-sm sm:text-md text-slate-650 font-body leading-relaxed">
+            <p className="text-sm sm:text-md text-slate-600 font-body leading-relaxed">
               Accelerate your engineering credentials. Explore our flagship
               upskilling courses.
             </p>
@@ -321,10 +305,10 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
             if (direction === "forward") {
               if (isShrinking) {
-                // Anchor to the right, so as the card shrinks and slides left, the image slides left
+                // Anchor to the right, so as the card shrinks to 0, the image slides left out of view
                 imgStyle.right = 0;
               } else {
-                // Anchor to the left, so as the card expands and moves left, the image slides left
+                // Anchor to the left, so the expanding card pulls the image leftward into view
                 imgStyle.left = 0;
               }
             } else {
