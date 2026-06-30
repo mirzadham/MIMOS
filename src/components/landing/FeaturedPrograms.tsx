@@ -102,21 +102,25 @@ function isCircularBetween(index: number, start: number, end: number, total: num
  * ═══════════════════════════════════════════════════ */
 export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [prevActiveIndex, setPrevActiveIndex] = useState(0);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  /* ── Track Transition Window ──
-   * We hold the active transitioning state for 800ms, then let the margins
-   * and final width drop settle during the remaining 400ms. */
+  /* Track previous activeIndex so we know which cards are "exiting/shrinking".
+   * The ref holds the OLD value during render; useEffect updates it after paint. */
+  const prevActiveRef = useRef(activeIndex);
+  useEffect(() => {
+    prevActiveRef.current = activeIndex;
+  });
+
+  /* ── Track Transition Window ── */
   useEffect(() => {
     setIsTransitioning(true);
     const timer = setTimeout(() => {
       setIsTransitioning(false);
-    }, 800);
+    }, DURATION_MS);
     return () => clearTimeout(timer);
   }, [activeIndex]);
 
@@ -146,22 +150,20 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
   const total = programs.length;
   const activeProgram = programs[activeIndex];
+  const prevActiveIndex = prevActiveRef.current;
 
   const handlePrev = () => {
     setDirection("backward");
-    setPrevActiveIndex(activeIndex);
     setActiveIndex((p) => (p - 1 + total) % total);
   };
 
   const handleNext = () => {
     setDirection("forward");
-    setPrevActiveIndex(activeIndex);
     setActiveIndex((p) => (p + 1) % total);
   };
 
   const handleSelect = (idx: number) => {
     setDirection("forward");
-    setPrevActiveIndex(activeIndex);
     setActiveIndex(idx);
   };
 
@@ -177,7 +179,9 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         : containerWidth
       : 0;
 
-  /* The fixed pixel width every image is rendered at. */
+  /* The fixed pixel width every image is rendered at.
+   * This never changes during transitions — the card
+   * container clips/reveals the image as it squeezes. */
   const imageFixedWidth = Math.max(activeW, 300);
 
   /* ── Compute inline styles for each card ── */
@@ -191,10 +195,14 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
     let width = 0;
     let mr = 0;
+    let ml = 0;
 
     if (isShrinking) {
-      // Shrink to 8px strip during the active transition phase, then drop to 0px.
+      // During active transition, shrink to a thin 8px strip (pushed off-screen left).
+      // Once transition completes, clean up to 0px width.
       width = isTransitioning ? 8 : 0;
+      // Animate margin-left to push it off-screen completely (width 8px + gap 12px = 20px)
+      ml = isTransitioning ? -(8 + 12) : 0;
     } else if (pos === 0) {
       width = activeW;
     } else if (cfg && pos >= 1 && pos <= maxVisible) {
@@ -205,7 +213,6 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     const isHidden = width === 0;
 
     // Calculate margins:
-    // When transitioning, force all visible gaps to be constant 12px (except the last visible strip).
     if (isTransitioning) {
       if (!isHidden) {
         mr = pos === maxVisible ? 0 : 12;
@@ -228,15 +235,10 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       order = -distance + offset;
     }
 
-    // Two-stage transition:
-    // Shrinking phase takes 1200ms. If we're dropping from 8px -> 0px, speed it up to 200ms.
-    // Margin adjustments settle in 400ms.
-    const widthDuration = isTransitioning ? DURATION_MS : 200;
-    const marginDuration = 400;
-
     return {
       width,
       marginRight: mr,
+      marginLeft: ml,
       order,
       flexShrink: 0,
       overflow: "hidden",
@@ -245,9 +247,10 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       padding: isHidden ? 0 : undefined,
       transition: isReady
         ? [
-            `width ${widthDuration}ms ${EASING}`,
-            `margin-right ${marginDuration}ms ease`,
-            `border-width ${widthDuration}ms ${EASING}`,
+            `width ${DURATION_MS}ms ${EASING}`,
+            `margin-right ${DURATION_MS}ms ${EASING}`,
+            `margin-left ${DURATION_MS}ms ${EASING}`,
+            `border-width ${DURATION_MS}ms ${EASING}`,
           ].join(", ")
         : "none",
     };
@@ -265,7 +268,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               Training Programmes
             </h2>
-            <p className="text-sm sm:text-md text-slate-600 font-body leading-relaxed">
+            <p className="text-sm sm:text-md text-slate-650 font-body leading-relaxed">
               Accelerate your engineering credentials. Explore our flagship
               upskilling courses.
             </p>
@@ -318,10 +321,10 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
             if (direction === "forward") {
               if (isShrinking) {
-                // Anchor to the right, so as the card shrinks to 8px, the image slides left out of view
+                // Anchor to the right, so as the card shrinks and slides left, the image slides left
                 imgStyle.right = 0;
               } else {
-                // Anchor to the left, so the expanding card pulls the image leftward into view
+                // Anchor to the left, so as the card expands and moves left, the image slides left
                 imgStyle.left = 0;
               }
             } else {
@@ -418,7 +421,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
           <div className="shrink-0 pt-1">
             <Link
               href="/programs"
-              className="inline-flex items-center justify-center gap-1.5 rounded-none bg-primary px-6 py-3.5 text-xs font-bold text-white hover:bg-primary-hover transition-all duration-205 group"
+              className="inline-flex items-center justify-center gap-1.5 rounded-none bg-primary px-6 py-3.5 text-xs font-bold text-white hover:bg-primary-hover transition-all duration-200 group"
             >
               <span>Explore All Programmes</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
