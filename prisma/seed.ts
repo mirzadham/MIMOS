@@ -207,9 +207,10 @@ async function main() {
     });
   }
 
-  console.log('Cleaning up existing stats & partners...');
+  console.log('Cleaning up existing stats, partners & why choose us cards...');
   await prisma.stat.deleteMany({});
   await prisma.partner.deleteMany({});
+  await prisma.whyChooseUsCard.deleteMany({});
 
   console.log('Seeding stats...');
   const statsData = [
@@ -234,6 +235,41 @@ async function main() {
   ];
   for (const partner of partnersData) {
     await prisma.partner.create({ data: partner });
+  }
+
+  console.log('Seeding why choose us cards...');
+  const whyChooseUsData = [
+    {
+      title: "Applied Learning & Lab Research",
+      description: "Engage in hands-on, immersive learning experiences designed to enhance technical capabilities. Our coursework takes place in real R&D environments, ensuring students develop practical, industrial-ready expertise that matches standard developer workflows.",
+      imageUrl: null,
+      colspan: 2,
+      order: 0
+    },
+    {
+      title: "Research Mentorship",
+      description: "Learn directly from MIMOS senior research scientists and engineers with decades of practical expertise in wafer fabrication, microelectronics, IC design, and enterprise-grade software development.",
+      imageUrl: null,
+      colspan: 1,
+      order: 1
+    },
+    {
+      title: "Accredited Credentials",
+      description: "Earn industry-recognized, accredited certifications backed by Malaysia's National Applied R&D Centre. Boost your career authority and credentials with HRD Corp claimable modules.",
+      imageUrl: null,
+      colspan: 1,
+      order: 2
+    },
+    {
+      title: "National Technology Infrastructure",
+      description: "Our facilities provide access to real industrial environments. Walk through our Semiconductor Cleanrooms, explore our 5G Demonstration Labs, and run machine learning algorithms on supercomputing systems. This level of physical training environment cannot be replicated in a standard academic classroom.",
+      imageUrl: null,
+      colspan: 2,
+      order: 3
+    }
+  ];
+  for (const item of whyChooseUsData) {
+    await prisma.whyChooseUsCard.create({ data: item });
   }
 
   console.log('Seeding completed successfully.');

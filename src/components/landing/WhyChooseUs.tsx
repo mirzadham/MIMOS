@@ -1,10 +1,58 @@
 "use client";
 
 import React from "react";
-import { BookOpen, Users, Award, Globe } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
-export default function WhyChooseUs() {
+interface WhyChooseUsCard {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string | null;
+  colspan: number;
+  order: number;
+}
+
+interface WhyChooseUsProps {
+  cards: WhyChooseUsCard[];
+}
+
+const getAlignmentClasses = (order: number) => {
+  const mod = order % 4;
+  switch (mod) {
+    case 0:
+      // Top Left
+      return {
+        container: "justify-start items-start",
+        text: "text-left items-start"
+      };
+    case 1:
+      // Bottom Left
+      return {
+        container: "justify-end items-start",
+        text: "text-left items-start"
+      };
+    case 2:
+      // Top Right
+      return {
+        container: "justify-start items-end",
+        text: "text-right items-end"
+      };
+    case 3:
+      // Bottom Right
+      return {
+        container: "justify-end items-end",
+        text: "text-right items-end"
+      };
+    default:
+      return {
+        container: "justify-start items-start",
+        text: "text-left items-start"
+      };
+  }
+};
+
+export default function WhyChooseUs({ cards }: WhyChooseUsProps) {
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -20,6 +68,9 @@ export default function WhyChooseUs() {
     show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const } }
   };
 
+  // Sort cards by order to guarantee layout alignment
+  const sortedCards = [...cards].sort((a, b) => a.order - b.order);
+
   return (
     <section className="border-b border-slate-200/60 bg-background py-20 sm:py-28 relative overflow-hidden">
       {/* Background ambient blurs */}
@@ -27,11 +78,8 @@ export default function WhyChooseUs() {
       
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         
-        {/* Header */}
-        <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <span className="text-xs font-bold text-primary uppercase tracking-widest bg-primary/5 px-3 py-1 rounded-none border border-primary/10">
-            Academy Advantages
-          </span>
+        {/* Header - Aligned to Left */}
+        <div className="text-left space-y-4 max-w-3xl">
           <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
             Bridging Education and Industry Excellence
           </h2>
@@ -48,136 +96,53 @@ export default function WhyChooseUs() {
           viewport={{ once: true, margin: "-100px" }}
           className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3"
         >
-          {/* Card 1: Interactive Learning Approach (Colspan 2) */}
-          <motion.div 
-            variants={itemVariants}
-            className="group md:col-span-2 relative rounded-none border border-slate-200/80 bg-white p-8 sm:p-10 hover:border-primary/20 transition-all duration-300 flex flex-col justify-between overflow-hidden"
-          >
-            <div className="absolute right-0 top-0 -mt-4 -mr-4 h-32 w-32 rounded-none bg-slate-50 group-hover:bg-primary/5 transition-colors duration-300 pointer-events-none" />
-            <div className="space-y-5 max-w-2xl">
-              <div className="inline-flex h-11 w-11 items-center justify-center rounded-none bg-primary/5 border border-primary/10 text-primary">
-                <BookOpen className="h-5.5 w-5.5" />
-              </div>
-              
-              <h3 className="font-heading text-xl sm:text-2xl font-black text-slate-900">
-                Applied Learning & Lab Research
-              </h3>
-              
-              <p className="text-sm text-slate-600 leading-relaxed font-body">
-                Engage in hands-on, immersive learning experiences designed to enhance technical capabilities. Our coursework takes place in real R&D environments, ensuring students develop practical, industrial-ready expertise that matches standard developer workflows.
-              </p>
-            </div>
+          {sortedCards.map((card) => {
+            const align = getAlignmentClasses(card.order);
+            return (
+              <motion.div 
+                key={card.id}
+                variants={itemVariants}
+                className={`group relative rounded-none border border-slate-200/80 bg-slate-950 p-8 sm:p-10 hover:border-primary/60 hover:shadow-[0_0_30px_rgba(167,33,144,0.15)] transition-all duration-500 flex flex-col overflow-hidden min-h-[380px] ${
+                  card.colspan === 2 ? "md:col-span-2" : "md:col-span-1"
+                } ${align.container}`}
+              >
+                {/* Background Image / Placeholder spanning the whole card */}
+                <div className="absolute inset-0 z-0 overflow-hidden">
+                  {card.imageUrl ? (
+                    <Image 
+                      src={card.imageUrl} 
+                      alt={card.title} 
+                      fill 
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      sizes="(max-w-768px) 100vw, 50vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[#2a0a25] via-[#100318] to-slate-950 flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
+                      <span className="text-[10px] font-bold text-slate-650 tracking-widest uppercase font-sans">[Placeholder Image]</span>
+                    </div>
+                  )}
+                  
+                  {/* Deep premium purplish gradient overlay to blend image and ensure readable text */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-[#3a0b33]/25 to-[#10000e]/95 group-hover:via-[#470f3f]/35 transition-all duration-700 z-10" />
+                </div>
 
-            {/* Badges */}
-            <div className="mt-8 pt-6 border-t border-slate-100 flex flex-wrap gap-2">
-              {["C Programming", "Python", "Semiconductor Cleanroom Labs", "Advanced Math", "5G Edge Architecture"].map((badge, idx) => (
-                <span 
-                  key={idx}
-                  className="inline-flex items-center rounded-none bg-slate-50 border border-slate-200/60 px-3 py-1 text-xs font-bold text-slate-600 group-hover:border-primary/10 group-hover:bg-primary/5 group-hover:text-primary transition-all duration-300"
-                >
-                  {badge}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Card 2: Experienced Instructors */}
-          <motion.div 
-            variants={itemVariants}
-            className="group relative rounded-none border border-slate-200/80 bg-white p-8 hover:border-primary/20 transition-all duration-300 flex flex-col justify-between"
-          >
-            <div className="space-y-5">
-              <div className="inline-flex h-11 w-11 items-center justify-center rounded-none bg-primary/5 border border-primary/10 text-primary">
-                <Users className="h-5.5 w-5.5" />
-              </div>
-              
-              <h3 className="font-heading text-xl font-bold text-slate-900">
-                Research Mentorship
-              </h3>
-              
-              <p className="text-sm text-slate-600 leading-relaxed font-body">
-                Learn directly from MIMOS senior research scientists and engineers with decades of practical expertise in wafer fabrication, microelectronics, IC design, and enterprise-grade software development.
-              </p>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-slate-100 flex flex-wrap gap-2">
-              {["Wafer Fab Specialists", "R&D Mentors", "IC Designers"].map((badge, idx) => (
-                <span 
-                  key={idx}
-                  className="inline-flex items-center rounded-none bg-slate-50 border border-slate-200/60 px-3 py-1 text-xs font-bold text-slate-600 group-hover:border-primary/10 group-hover:bg-primary/5 group-hover:text-primary transition-all duration-300"
-                >
-                  {badge}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Card 3: Industry Accreditation */}
-          <motion.div 
-            variants={itemVariants}
-            className="group relative rounded-none border border-slate-200/80 bg-white p-8 hover:border-primary/20 transition-all duration-300 flex flex-col justify-between"
-          >
-            <div className="space-y-5">
-              <div className="inline-flex h-11 w-11 items-center justify-center rounded-none bg-primary/5 border border-primary/10 text-primary">
-                <Award className="h-5.5 w-5.5" />
-              </div>
-              
-              <h3 className="font-heading text-xl font-bold text-slate-900">
-                Accredited Credentials
-              </h3>
-              
-              <p className="text-sm text-slate-600 leading-relaxed font-body">
-                Earn industry-recognized, accredited certifications backed by Malaysia&apos;s National Applied R&D Centre. Boost your career authority and credentials with HRD Corp claimable modules.
-              </p>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-slate-100 flex flex-wrap gap-2">
-              {["HRD Corp Claimable", "National R&D Badge", "Accredited"].map((badge, idx) => (
-                <span 
-                  key={idx}
-                  className="inline-flex items-center rounded-none bg-slate-50 border border-slate-200/60 px-3 py-1 text-xs font-bold text-slate-600 group-hover:border-primary/10 group-hover:bg-primary/5 group-hover:text-primary transition-all duration-300"
-                >
-                  {badge}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Card 4: Global Standards & Tech Impact (Colspan 2) */}
-          <motion.div 
-            variants={itemVariants}
-            className="group md:col-span-2 relative rounded-none border border-slate-200/80 bg-white p-8 sm:p-10 hover:border-primary/20 transition-all duration-300 flex flex-col justify-between overflow-hidden"
-          >
-            <div className="space-y-5 max-w-2xl">
-              <div className="inline-flex h-11 w-11 items-center justify-center rounded-none bg-primary/5 border border-primary/10 text-primary">
-                <Globe className="h-5.5 w-5.5" />
-              </div>
-              
-              <h3 className="font-heading text-xl sm:text-2xl font-black text-slate-900">
-                National Technology Infrastructure
-              </h3>
-              
-              <p className="text-sm text-slate-600 leading-relaxed font-body">
-                Our facilities provide access to real industrial environments. Walk through our Semiconductor Cleanrooms, explore our 5G Demonstration Labs, and run machine learning algorithms on supercomputing systems. This level of physical training environment cannot be replicated in a standard academic classroom.
-              </p>
-            </div>
-
-            {/* Badges */}
-            <div className="mt-8 pt-6 border-t border-slate-100 flex flex-wrap gap-2">
-              {["Semiconductor Lab", "5G Innovation Centre", "Supercomputer Access", "National R&D Infrastructure"].map((badge, idx) => (
-                <span 
-                  key={idx}
-                  className="inline-flex items-center rounded-none bg-slate-50 border border-slate-200/60 px-3 py-1 text-xs font-bold text-slate-600 group-hover:border-primary/10 group-hover:bg-primary/5 group-hover:text-primary transition-all duration-300"
-                >
-                  {badge}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
+                {/* Text content placed at the top/bottom left/right (floating on top of background) */}
+                <div className={`relative z-20 space-y-4 max-w-xl flex flex-col ${align.text}`}>
+                  <h3 className="font-heading text-xl sm:text-2xl font-black text-white leading-tight drop-shadow-sm">
+                    {card.title}
+                  </h3>
+                  <p className="text-sm text-slate-200 leading-relaxed font-body drop-shadow-sm">
+                    {card.description}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
         </motion.div>
 
       </div>
     </section>
   );
 }
+
+

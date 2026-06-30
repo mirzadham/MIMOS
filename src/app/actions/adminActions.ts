@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockPrograms, mockCategories, mockStats, mockPartners } from "@/lib/db";
+import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards } from "@/lib/db";
 import crypto from "crypto";
 
 // 1. Authentication Server Actions
@@ -537,4 +537,124 @@ export async function deletePartnerAction(id: string) {
     return { success: true };
   }
 }
+
+// 8. Why Choose Us Card CRUD Actions
+export async function createWhyChooseUsCardAction(data: {
+  title: string;
+  description: string;
+  imageUrl: string | null;
+  colspan: number;
+  order: number;
+}) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const newCard = await prisma.whyChooseUsCard.create({
+      data: {
+        title: data.title,
+        description: data.description,
+        imageUrl: data.imageUrl,
+        colspan: data.colspan,
+        order: data.order,
+      }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "CREATE_WHY_CHOOSE_US_CARD",
+        details: `Created WhyChooseUs card: ${data.title} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    return { success: true, card: newCard };
+  } catch (e) {
+    console.error("Prisma write error, saving to mock whychooseus cards: ", e);
+    const mockNew = {
+      id: "mock-" + Math.random().toString(36).substr(2, 9),
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    mockWhyChooseUsCards.push(mockNew);
+    revalidatePath("/");
+    return { success: true, card: mockNew };
+  }
+}
+
+export async function updateWhyChooseUsCardAction(
+  id: string,
+  data: {
+    title: string;
+    description: string;
+    imageUrl: string | null;
+    colspan: number;
+    order: number;
+  }
+) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const updated = await prisma.whyChooseUsCard.update({
+      where: { id },
+      data: {
+        title: data.title,
+        description: data.description,
+        imageUrl: data.imageUrl,
+        colspan: data.colspan,
+        order: data.order,
+      }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "UPDATE_WHY_CHOOSE_US_CARD",
+        details: `Updated WhyChooseUs card: ${data.title} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    return { success: true, card: updated };
+  } catch (e) {
+    console.error("Prisma update error: ", e);
+    const idx = mockWhyChooseUsCards.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      mockWhyChooseUsCards[idx] = { id, ...data };
+    }
+    revalidatePath("/");
+    return { success: true };
+  }
+}
+
+export async function deleteWhyChooseUsCardAction(id: string) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const deleted = await prisma.whyChooseUsCard.delete({
+      where: { id }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "DELETE_WHY_CHOOSE_US_CARD",
+        details: `Deleted WhyChooseUs card: ${deleted.title} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    return { success: true };
+  } catch (e) {
+    console.error("Prisma delete error: ", e);
+    const idx = mockWhyChooseUsCards.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      mockWhyChooseUsCards.splice(idx, 1);
+    }
+    revalidatePath("/");
+    return { success: true };
+  }
+}
+
 
