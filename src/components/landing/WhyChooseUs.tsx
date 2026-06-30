@@ -118,7 +118,7 @@ export default function WhyChooseUs({ cards }: WhyChooseUsProps) {
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-[#2a0a25] via-[#100318] to-slate-950 flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
-                      <span className="text-[10px] font-bold text-slate-650 tracking-widest uppercase font-sans">[Placeholder Image]</span>
+                      <span className="text-[10px] font-bold text-slate-500 tracking-widest uppercase font-sans">[Placeholder Image]</span>
                     </div>
                   )}
                   
