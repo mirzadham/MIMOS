@@ -43,7 +43,7 @@ export default function StatsAndFacilities() {
           {/* Left Pane - Lab */}
           <Link
             href="/facilities#lab"
-            className="group/pane relative w-full h-[280px] lg:h-full lg:w-1/2 lg:group-hover:w-[30%] lg:hover:!w-[70%] transition-all duration-500 ease-in-out overflow-hidden border-b lg:border-b-0 border-slate-200"
+            className="group/pane relative w-full h-[280px] lg:h-full lg:w-1/2 lg:group-hover:w-[30%] lg:group-focus-within:w-[30%] lg:hover:!w-[70%] lg:focus-within:!w-[70%] transition-all duration-500 ease-in-out overflow-hidden border-b lg:border-b-0 border-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:z-10"
           >
             {/* Background Image */}
             <img
@@ -55,7 +55,7 @@ export default function StatsAndFacilities() {
             <div className="absolute inset-0 bg-slate-950/40 lg:bg-slate-950/45 transition-colors duration-500 lg:group-hover/pane:bg-slate-950/70" />
             
             {/* Centered Content */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-100 lg:opacity-0 lg:group-hover/pane:opacity-100 transition-opacity duration-500">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-100 lg:opacity-0 lg:group-hover/pane:opacity-100 lg:group-focus-within/pane:opacity-100 transition-opacity duration-500">
               <h4 className="font-heading text-2xl sm:text-3xl font-black text-white tracking-tight drop-shadow-sm mb-3">
                 Lab
               </h4>
@@ -69,7 +69,7 @@ export default function StatsAndFacilities() {
           {/* Right Pane - Training Room */}
           <Link
             href="/facilities#training-room"
-            className="group/pane relative w-full h-[280px] lg:h-full lg:w-1/2 lg:group-hover:w-[30%] lg:hover:!w-[70%] transition-all duration-500 ease-in-out overflow-hidden"
+            className="group/pane relative w-full h-[280px] lg:h-full lg:w-1/2 lg:group-hover:w-[30%] lg:group-focus-within:w-[30%] lg:hover:!w-[70%] lg:focus-within:!w-[70%] transition-all duration-500 ease-in-out overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:z-10"
           >
             {/* Background Image */}
             <img
@@ -81,7 +81,7 @@ export default function StatsAndFacilities() {
             <div className="absolute inset-0 bg-slate-950/40 lg:bg-slate-950/45 transition-colors duration-500 lg:group-hover/pane:bg-slate-950/70" />
             
             {/* Centered Content */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-100 lg:opacity-0 lg:group-hover/pane:opacity-100 transition-opacity duration-500">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-100 lg:opacity-0 lg:group-hover/pane:opacity-100 lg:group-focus-within/pane:opacity-100 transition-opacity duration-500">
               <h4 className="font-heading text-2xl sm:text-3xl font-black text-white tracking-tight drop-shadow-sm mb-3">
                 Training Room
               </h4>
