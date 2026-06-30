@@ -254,10 +254,10 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       padding: isHidden ? 0 : undefined,
       transition: isReady
         ? [
-            `width ${DURATION_MS}ms ${EASING}`,
-            `margin-right ${DURATION_MS}ms ${EASING}`,
-            `border-width ${DURATION_MS}ms ${EASING}`,
-          ].join(", ")
+          `width ${DURATION_MS}ms ${EASING}`,
+          `margin-right ${DURATION_MS}ms ${EASING}`,
+          `border-width ${DURATION_MS}ms ${EASING}`,
+        ].join(", ")
         : "none",
     };
   };
@@ -349,11 +349,10 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
               <div
                 key={program.id}
                 style={getCardStyle(i)}
-                className={`relative h-full rounded-[4px] border border-slate-200/80 bg-slate-50 ${
-                  isClickable
+                className={`relative h-full rounded-[4px] border border-slate-200/80 bg-slate-50 ${isClickable
                     ? "hover:border-primary cursor-pointer group"
                     : ""
-                }`}
+                  }`}
                 onClick={isClickable ? () => handleSelect(i) : undefined}
               >
                 {/* IMAGE: Fixed width, dynamically anchored for realistic sliding physics */}
@@ -389,7 +388,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
                 {/* Category tag — active card only */}
                 {isActive && (
-                  <span className="absolute left-4 top-4 inline-flex items-center rounded-[4px] bg-white/75 backdrop-blur-md px-3 py-1.5 text-[10px] font-bold text-slate-900 border border-white/20 shadow-sm z-10 select-none uppercase tracking-wider">
+                  <span className="absolute left-4 top-4 inline-flex items-center rounded-[4px] bg-white/50 backdrop-blur-md px-3 py-1.5 text-[10px] font-bold text-slate-900 border border-white/20 shadow-sm z-10 select-none uppercase tracking-wider">
                     {program.category?.name || "Upskilling"}
                   </span>
                 )}
