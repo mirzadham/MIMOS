@@ -33,7 +33,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
       }
       if (trimmed.startsWith("-") || trimmed.startsWith("*")) {
         return (
-          <li key={idx} className="text-sm text-slate-600 ml-4 list-disc pl-1 leading-relaxed mt-1">
+          <li key={idx} className="text-sm text-slate-650 ml-4 list-disc pl-1 leading-relaxed mt-1">
             {trimmed.substring(1).trim()}
           </li>
         );
@@ -54,13 +54,13 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
           );
         }
         return (
-          <p key={idx} className="text-sm text-slate-600 mt-2 font-medium">
+          <p key={idx} className="text-sm text-slate-650 mt-2 font-medium">
             {trimmed}
           </p>
         );
       }
       return trimmed ? (
-        <p key={idx} className="text-sm text-slate-600 mt-2 leading-relaxed">
+        <p key={idx} className="text-sm text-slate-650 mt-2 leading-relaxed">
           {trimmed}
         </p>
       ) : null;
@@ -87,7 +87,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
           <div className="lg:col-span-2 space-y-8">
             
             {/* Header Block */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-4 overflow-hidden">
+            <div className="rounded-none border border-slate-200 bg-white p-6 sm:p-8 space-y-4 overflow-hidden">
               <div className="mb-6">
                 <ProgramPosterGallery
                   imageUrls={program.imageUrls}
@@ -95,20 +95,20 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
                   title={program.title}
                 />
               </div>
-              <span className="inline-flex items-center rounded-full bg-accent px-3 py-0.5 text-xs font-bold text-primary">
+              <span className="inline-flex items-center rounded-none bg-accent px-3 py-0.5 text-xs font-bold text-primary border border-primary/20">
                 {program.category?.name || "Physical Training"}
               </span>
               <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-foreground">
                 {program.title}
               </h1>
-              <p className="text-sm sm:text-md text-slate-500 leading-relaxed font-body">
+              <p className="text-sm sm:text-md text-slate-605 leading-relaxed font-body text-slate-600">
                 {program.description}
               </p>
             </div>
 
             {/* Syllabus breakdown */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
-              <div className="flex items-center gap-2 border-b border-slate-100 pb-4 mb-4">
+            <div className="rounded-none border border-slate-200 bg-white p-6 sm:p-8">
+              <div className="flex items-center gap-2 border-b border-slate-200 pb-4 mb-4">
                 <Sparkles className="h-5 w-5 text-slate-500" />
                 <h2 className="font-heading text-lg font-bold text-foreground">Course Syllabus</h2>
               </div>
@@ -118,8 +118,8 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
             </div>
 
             {/* Laboratory Location specs */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
-              <div className="flex items-center gap-2 border-b border-slate-100 pb-4 mb-4">
+            <div className="rounded-none border border-slate-200 bg-white p-6 sm:p-8">
+              <div className="flex items-center gap-2 border-b border-slate-200 pb-4 mb-4">
                 <Building className="h-5 w-5 text-slate-500" />
                 <h2 className="font-heading text-lg font-bold text-foreground">Training Venue Details</h2>
               </div>
@@ -127,11 +127,11 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
                 <p className="text-sm text-slate-600 leading-relaxed">
                   This course is conducted physically inside our state-of-the-art research laboratories. Attendees will gain direct hands-on access to advanced machinery, monitoring environments, and dedicated testing frameworks under professional supervision.
                 </p>
-                <div className="rounded-xl bg-slate-50 p-4 border border-slate-100 flex items-start gap-3">
+                <div className="rounded-none bg-slate-50 p-4 border border-slate-200 flex items-start gap-3">
                   <MapPin className="h-5 w-5 text-slate-500 shrink-0 mt-0.5" />
                   <div>
                     <span className="text-xs font-bold text-foreground block">Lab Location:</span>
-                    <span className="text-xs text-slate-500 block mt-0.5">{program.location}</span>
+                    <span className="text-xs text-slate-550 block mt-0.5 text-slate-500">{program.location}</span>
                   </div>
                 </div>
               </div>
@@ -142,15 +142,15 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
           {/* Right Column: Sticky actions block */}
           <div className="space-y-6 lg:sticky lg:top-24">
             
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
+            <div className="rounded-none border border-slate-200 bg-white p-6 space-y-6">
               
-              <h3 className="font-heading text-sm font-bold tracking-wider text-foreground uppercase border-b border-slate-100 pb-3">
+              <h3 className="font-heading text-sm font-bold tracking-wider text-foreground uppercase border-b border-slate-200 pb-3">
                 Course Specifications
               </h3>
 
               {/* Price */}
               <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-slate-100 p-2.5 text-slate-600">
+                <div className="rounded-none bg-slate-100 p-2.5 text-slate-600 border border-slate-200">
                   <BadgeDollarSign className="h-5 w-5" />
                 </div>
                 <div>
@@ -161,7 +161,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
 
               {/* Duration */}
               <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-slate-100 p-2.5 text-slate-600">
+                <div className="rounded-none bg-slate-100 p-2.5 text-slate-600 border border-slate-200">
                   <Clock className="h-5 w-5" />
                 </div>
                 <div>
@@ -172,7 +172,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
 
               {/* Venue Icon Row */}
               <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-slate-100 p-2.5 text-slate-600">
+                <div className="rounded-none bg-slate-100 p-2.5 text-slate-600 border border-slate-200">
                   <MapPin className="h-5 w-5" />
                 </div>
                 <div>
@@ -182,7 +182,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
               </div>
 
               {/* Upcoming Batch Schedule */}
-              <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+              <div className="rounded-none border border-slate-200 bg-slate-50 p-4">
                 <span className="text-[10px] font-bold text-slate-400 block uppercase tracking-wider">Next Active Batch</span>
                 <span className="text-sm font-extrabold text-slate-800 block mt-1">{program.dates || "Scheduled Soon"}</span>
                 <span className="text-[10px] text-slate-400 block mt-1 leading-normal">Registration closing 7 days prior to start date.</span>
@@ -193,7 +193,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
                 href={program.microsoftFormUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-hover text-white py-3.5 text-sm font-bold transition-all hover:shadow-md cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 rounded-none bg-primary hover:bg-primary-hover text-white py-3.5 text-sm font-bold transition-all cursor-pointer"
               >
                 <span>Register Interest</span>
                 <Send className="h-4 w-4" />
@@ -208,14 +208,14 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
             </div>
 
             {/* B2B request notice inside sticky column */}
-            <div className="rounded-2xl border border-slate-200 bg-slate-900 text-white p-6 space-y-4">
+            <div className="rounded-none border border-slate-800 bg-slate-900 text-white p-6 space-y-4">
               <h4 className="font-heading text-sm font-bold">Request Private Cohort?</h4>
               <p className="text-xs text-slate-400 leading-relaxed font-body">
                 We can customize this course structure and run private physical labs for your company&apos;s employees.
               </p>
               <Link
                 href="/contact"
-                className="text-xs font-bold text-primary hover:text-primary-hover transition-colors inline-block"
+                className="text-xs font-bold text-primary hover:text-primary-hover transition-colors inline-block font-sans"
               >
                 Contact B2B Coordination →
               </Link>

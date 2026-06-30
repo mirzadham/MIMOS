@@ -56,7 +56,7 @@
 }
 
 :root {
-    --background: #ffffff;
+    --background: #f8fafc; /* Professional Slate 50 backdrop */
     --foreground: #0f172a; /* Premium Dark Slate */
     --card: #ffffff;
     --card-foreground: #0f172a;
@@ -75,7 +75,7 @@
     --slate-teal: #475569; /* Replaced Teal with Slate 600 */
     --slate-teal-hover: #334155;
     
-    --muted: #f8fafc; /* Neutral Slate 50 */
+    --muted: #f1f5f9; /* Neutral Slate 100 */
     --muted-foreground: #64748b; /* Muted Slate Text */
     --accent: #faf4fa; /* Very subtle Orchid Tint */
     --accent-foreground: #a72190;
@@ -85,7 +85,7 @@
     --border: #e2e8f0; /* Soft Slate 200 Border */
     --input: #e2e8f0;
     --ring: #a72190;
-    --radius: 0.8rem; /* Make it slightly more rounded for premium look */
+    --radius: 0rem; /* Flat, square modern design */
     
     --sidebar: #ffffff;
     --sidebar-foreground: #0f172a;
@@ -96,8 +96,8 @@
     --sidebar-border: #e2e8f0;
     --sidebar-ring: #a72190;
     
-    --shadow-neon-light: 0 10px 30px -10px rgba(167, 33, 144, 0.08), 0 1px 3px rgba(167, 33, 144, 0.02);
-    --shadow-neon-hover: 0 20px 40px -10px rgba(167, 33, 144, 0.16), 0 1px 10px rgba(167, 33, 144, 0.06);
+    --shadow-neon-light: none;
+    --shadow-neon-hover: none;
 }
 
 @layer base {
@@ -133,3 +133,23 @@
   background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
   background-size: 16px 16px;
 }
+
+/* Infinite Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-scroll {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
+
+.animate-marquee-scroll:hover {
+  animation-play-state: paused;
+}

@@ -37,7 +37,7 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
       {/* Outer Container */}
       <div 
         onClick={() => setLightboxOpen(true)}
-        className="group relative cursor-zoom-in w-full aspect-[21/9] rounded-xl overflow-hidden bg-slate-100 border border-slate-200"
+        className="group relative cursor-zoom-in w-full aspect-[21/9] rounded-none overflow-hidden bg-slate-100 border border-slate-200"
       >
         {/* Animated Slide */}
         <div className="w-full h-full relative">
@@ -56,7 +56,7 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
         </div>
 
         {/* Hover zoom icon badge */}
-        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white rounded-none p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
           <Maximize2 className="h-4 w-4" />
         </div>
 
@@ -65,14 +65,14 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
           <>
             <button
               onClick={handlePrev}
-              className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 rounded-full p-2 border border-slate-200 hover:scale-105 shadow-sm active:scale-95 transition-all"
+              className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 rounded-none p-2 border border-slate-200 hover:scale-105 active:scale-95 transition-all"
               title="Previous Page"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
               onClick={handleNext}
-              className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 rounded-full p-2 border border-slate-200 hover:scale-105 shadow-sm active:scale-95 transition-all"
+              className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-800 rounded-none p-2 border border-slate-200 hover:scale-105 active:scale-95 transition-all"
               title="Next Page"
             >
               <ChevronRight className="h-4 w-4" />
@@ -89,9 +89,10 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  currentIndex === idx ? "w-6 bg-primary" : "w-2 bg-slate-200 hover:bg-slate-300"
+                className={`h-2 transition-all duration-300 ${
+                  currentIndex === idx ? "w-6 bg-primary" : "w-2 bg-slate-200 hover:bg-slate-350"
                 }`}
+                style={{ borderRadius: "0px" }}
               />
             ))}
           </div>
@@ -119,7 +120,7 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
                   e.stopPropagation();
                   setLightboxOpen(false);
                 }}
-                className="bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-colors cursor-pointer"
+                className="bg-white/10 hover:bg-white/20 text-white rounded-none p-2 transition-colors cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -136,7 +137,7 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
                 exit={{ scale: 0.95, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 onClick={(e) => e.stopPropagation()}
-                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl border border-white/5 cursor-default select-none"
+                className="max-w-full max-h-full object-contain rounded-none border border-white/5 cursor-default select-none"
               />
 
               {/* Lightbox Controls */}
@@ -147,7 +148,7 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
                       e.stopPropagation();
                       handlePrev();
                     }}
-                    className="absolute left-2 lg:left-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 border border-white/10 text-white rounded-full p-3 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                    className="absolute left-2 lg:left-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 border border-white/10 text-white rounded-none p-3 transition-all hover:scale-105 active:scale-95 cursor-pointer"
                   >
                     <ChevronLeft className="h-6 w-6" />
                   </button>
@@ -156,7 +157,7 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
                       e.stopPropagation();
                       handleNext();
                     }}
-                    className="absolute right-2 lg:right-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 border border-white/10 text-white rounded-full p-3 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                    className="absolute right-2 lg:right-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 border border-white/10 text-white rounded-none p-3 transition-all hover:scale-105 active:scale-95 cursor-pointer"
                   >
                     <ChevronRight className="h-6 w-6" />
                   </button>

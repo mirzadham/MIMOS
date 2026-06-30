@@ -23,12 +23,12 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden border-b border-slate-200/80 py-24 sm:py-36 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-white to-white">
+    <section className="relative overflow-hidden border-b border-slate-200/60 py-24 sm:py-36 bg-gradient-to-br from-primary/5 via-slate-50 to-slate-50">
       {/* Background Interactive Lattice */}
       <LatticeNetwork />
       
       {/* Decorative gradient blur in background */}
-      <div className="absolute right-0 top-0 -z-10 h-[500px] w-[500px] rounded-full bg-primary/[0.02] blur-[150px]" />
+      <div className="absolute right-0 top-0 -z-10 h-[500px] w-[500px] rounded-none bg-primary/[0.02] blur-[150px]" />
       
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8 text-center">
         <motion.div 
@@ -40,7 +40,7 @@ export default function HeroSection() {
           {/* Badge Accent */}
           <motion.div 
             variants={itemVariants}
-            className="inline-flex items-center gap-2 rounded-full bg-primary/5 px-4 py-1.5 text-xs font-bold text-primary border border-primary/10 shadow-sm"
+            className="inline-flex items-center gap-2 rounded-none bg-primary/5 px-4 py-1.5 text-xs font-bold text-primary border border-primary/10"
           >
             <Cpu className="h-3.5 w-3.5" />
             <span>Trusted by 150K+ Talents Across Malaysia</span>
@@ -73,7 +73,7 @@ export default function HeroSection() {
           >
             <Link
               href="/programs"
-              className="rounded-xl bg-primary px-8 py-4 text-xs font-bold text-white hover:bg-primary-hover transition-all shadow-sm hover:shadow-neon-hover flex items-center gap-2 group cursor-pointer"
+              className="rounded-none bg-primary px-8 py-4 text-xs font-bold text-white hover:bg-primary-hover transition-all flex items-center gap-2 group cursor-pointer"
             >
               <span>Explore Our Programmes</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -81,7 +81,7 @@ export default function HeroSection() {
             
             <Link
               href="/contact"
-              className="rounded-xl border border-slate-250 bg-white px-8 py-4 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm cursor-pointer"
+              className="rounded-none border border-slate-250 bg-white px-8 py-4 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all cursor-pointer"
             >
               Contact Advisory Team
             </Link>

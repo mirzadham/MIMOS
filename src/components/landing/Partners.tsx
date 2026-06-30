@@ -1,71 +1,75 @@
 "use client";
 
 import React from "react";
-import { Landmark, Briefcase, Cpu, GraduationCap, Workflow, Shield } from "lucide-react";
-import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface Partner {
+  id?: string;
   name: string;
-  category: string;
-  icon: React.ReactNode;
+  logoUrl: string;
 }
 
-export default function Partners() {
-  const partners: Partner[] = [
-    { name: "MSIA", category: "Semiconductors", icon: <Cpu className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "TalentCorp", category: "Government Body", icon: <Briefcase className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "CREST", category: "Collaborative R&D", icon: <Workflow className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "Dassault Systèmes", category: "Enterprise Tech", icon: <Landmark className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "Inari Amertron", category: "Semiconductors", icon: <Cpu className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "Keysight Technologies", category: "Electronic Test", icon: <Shield className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "USM", category: "Research University", icon: <GraduationCap className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> },
-    { name: "UTM", category: "Technical University", icon: <GraduationCap className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" /> }
-  ];
+interface PartnersProps {
+  partners?: Partner[];
+}
+
+export default function Partners({ partners = [] }: PartnersProps) {
+  if (!partners || partners.length === 0) return null;
 
   return (
-    <section className="border-b border-slate-200/60 bg-slate-50/20 py-16 sm:py-24">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        
-        {/* Header */}
-        <div className="text-center space-y-3 mb-14">
-          <span className="text-xs font-bold text-primary uppercase tracking-widest bg-primary/5 px-3 py-1 rounded-full">
-            Collaborative Ecosystem
-          </span>
-          <h2 className="font-heading text-2xl font-extrabold text-slate-900 tracking-tight sm:text-3xl">
-            Trusted by Industry & Academia Leaders
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 font-body max-w-xl mx-auto">
-            Working hand-in-hand with leading national agencies and global corporations to shape a ready workforce.
-          </p>
-        </div>
-
-        {/* Partners Grid */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 mt-8">
-          {partners.map((partner, idx) => (
-            <motion.div 
-              key={idx}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.05 }}
-              className="group relative rounded-xl border border-slate-200/80 p-5 bg-white hover:border-primary/20 hover:shadow-neon-hover transition-all duration-300 flex items-center gap-4 cursor-pointer"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 border border-slate-200/60 group-hover:bg-primary/5 group-hover:border-primary/10 transition-all shrink-0">
-                {partner.icon}
+    <section className="bg-white py-8 border-b border-slate-200/60 relative overflow-hidden select-none">
+      {/* Premium fade borders on sides */}
+      <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10" />
+      <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10" />
+      
+      <div className="w-full overflow-hidden">
+        <div className="animate-marquee-scroll flex gap-12 sm:gap-20 items-center">
+          
+          {/* List 1 */}
+          <div className="flex gap-12 sm:gap-20 items-center shrink-0">
+            {partners.map((partner, idx) => (
+              <div 
+                key={`p1-${partner.id || idx}`} 
+                className="h-10 w-28 sm:w-36 flex items-center justify-center grayscale hover:grayscale-0 opacity-40 hover:opacity-100 transition-all duration-300"
+                title={partner.name}
+              >
+                <div className="relative w-full h-full">
+                  <Image
+                    src={partner.logoUrl}
+                    alt={`${partner.name} logo`}
+                    fill
+                    sizes="(max-width: 640px) 120px, 160px"
+                    className="object-contain"
+                    priority={idx < 4}
+                  />
+                </div>
               </div>
-              <div className="space-y-0.5">
-                <h3 className="font-heading text-xs font-bold text-slate-900 transition-colors">
-                  {partner.name}
-                </h3>
-                <p className="text-[10px] text-slate-400 font-bold tracking-wide uppercase font-mono">
-                  {partner.category}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+            ))}
+          </div>
 
+          {/* List 2 (Duplicate for loop) */}
+          <div className="flex gap-12 sm:gap-20 items-center shrink-0" aria-hidden="true">
+            {partners.map((partner, idx) => (
+              <div 
+                key={`p2-${partner.id || idx}`} 
+                className="h-10 w-28 sm:w-36 flex items-center justify-center grayscale hover:grayscale-0 opacity-40 hover:opacity-100 transition-all duration-300"
+              >
+                <div className="relative w-full h-full">
+                  <Image
+                    src={partner.logoUrl}
+                    alt={`${partner.name} logo`}
+                    fill
+                    sizes="(max-width: 640px) 120px, 160px"
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
       </div>
     </section>
   );
 }
+

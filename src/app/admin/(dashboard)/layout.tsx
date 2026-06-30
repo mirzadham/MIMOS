@@ -10,7 +10,9 @@ import {
   Award, 
   LogOut,
   ChevronRight,
-  ShieldCheck
+  ShieldCheck,
+  BarChart3,
+  Handshake
 } from "lucide-react";
 
 export default async function AdminDashboardLayout({
@@ -27,6 +29,8 @@ export default async function AdminDashboardLayout({
   const sidebarLinks = [
     { name: "Overview Dashboard", href: "/admin", icon: LayoutDashboard },
     { name: "Manage Programs", href: "/admin/programs", icon: BookOpen },
+    { name: "Manage Stats", href: "/admin/stats", icon: BarChart3 },
+    { name: "Manage Partners", href: "/admin/partners", icon: Handshake },
     { name: "MS Forms Importer", href: "/admin/enrollments", icon: FileSpreadsheet },
     { name: "Certificate Vault", href: "/admin/certificates", icon: Award },
   ];

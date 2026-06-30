@@ -13,12 +13,13 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const filename = searchParams.get("filename");
   const contentType = searchParams.get("contentType");
+  const prefix = searchParams.get("prefix") || "programs";
 
   if (!filename || !contentType) {
     return NextResponse.json({ error: "Missing filename or contentType" }, { status: 400 });
   }
 
-  const uniqueKey = `programs/${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+  const uniqueKey = `${prefix}/${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
   const bucketName = process.env.CLOUDFLARE_R2_BUCKET_NAME!;
 
   try {
