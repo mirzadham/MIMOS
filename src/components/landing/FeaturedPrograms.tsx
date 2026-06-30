@@ -60,7 +60,7 @@ function calcActiveWidth(containerW: number, cfg: SizingConfig): number {
  * per-frame lerp deceleration.
  * ───────────────────────────────────────────────── */
 const EASING = "cubic-bezier(0.16, 1, 0.3, 1)";
-const DURATION_MS = 800;
+const DURATION_MS = 1200;
 
 const getProgramImage = (program: Program): string => {
   if (program.imageUrls && program.imageUrls.length > 0) {
