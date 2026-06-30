@@ -67,6 +67,7 @@ const slideVariants = {
 export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [transitionMode, setTransitionMode] = useState<"A" | "B" | "C">("A");
 
   if (!programs || programs.length === 0) {
     return null;
@@ -98,9 +99,9 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     nextIndices.push((activeIndex + i) % total);
   }
 
-  // Sizing details matching Stripe design inspiration:
+  // Previews sizing details:
   // - 1 to 3 size from big to small
-  // - 4 to 6 are really thin
+  // - 4 to 6 are thin and uniform
   const getStripWidthClass = (index: number) => {
     switch (index) {
       case 0:
@@ -118,6 +119,9 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     }
   };
 
+  // Previews spacing:
+  // - Wider gap between first 3
+  // - Narrower gap between 3-6
   const getStripMarginClass = (index: number) => {
     if (index < 2) {
       return "mr-3";
@@ -133,146 +137,369 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       <div className="mx-auto max-w-4xl px-6 py-12 sm:px-8 sm:py-16 relative">
         
         {/* Section Header */}
-        <div className="flex items-end justify-between pb-6">
-          <div className="space-y-2 max-w-3xl">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-100 pb-6 mb-6">
+          <div className="space-y-2 max-w-2xl">
             <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               Training Programmes
             </h2>
-            <p className="text-sm sm:text-md text-slate-650 font-body leading-relaxed">
-              Accelerate your engineering credentials. Explore our flagship upskilling courses in Semiconductor fabrication, advanced Artificial Intelligence, and Professional Project Management.
+            <p className="text-sm sm:text-md text-slate-600 font-body leading-relaxed">
+              Accelerate your engineering credentials. Explore our flagship upskilling courses.
             </p>
           </div>
-          
-          {/* Navigation Arrows */}
-          {total > 1 && (
-            <div className="flex gap-2 shrink-0">
+
+          {/* Interactive Demo Mode Toggle Selector & Nav Arrows */}
+          <div className="flex flex-wrap items-center gap-4 shrink-0 bg-slate-50 p-2 border border-slate-200 rounded-[6px]">
+            <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-550 uppercase tracking-wide">
+              <span>Transition Demo:</span>
               <button
-                onClick={handlePrev}
-                className="inline-flex h-10 w-10 items-center justify-center border border-primary/20 bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all duration-200 cursor-pointer rounded-none"
-                aria-label="Previous Program"
+                onClick={() => setTransitionMode("A")}
+                className={`px-2 py-1 text-[10px] border cursor-pointer rounded-[4px] font-semibold transition-all ${
+                  transitionMode === "A"
+                    ? "border-primary bg-primary text-white"
+                    : "border-slate-200 bg-white text-slate-700 hover:border-primary"
+                }`}
               >
-                <ChevronLeft className="h-5 w-5" />
+                A: Card Slide
               </button>
               <button
-                onClick={handleNext}
-                className="inline-flex h-10 w-10 items-center justify-center border border-primary/20 bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all duration-200 cursor-pointer rounded-none"
-                aria-label="Next Program"
+                onClick={() => setTransitionMode("B")}
+                className={`px-2 py-1 text-[10px] border cursor-pointer rounded-[4px] font-semibold transition-all ${
+                  transitionMode === "B"
+                    ? "border-primary bg-primary text-white"
+                    : "border-slate-200 bg-white text-slate-700 hover:border-primary"
+                }`}
               >
-                <ChevronRight className="h-5 w-5" />
+                B: Morph
+              </button>
+              <button
+                onClick={() => setTransitionMode("C")}
+                className={`px-2 py-1 text-[10px] border cursor-pointer rounded-[4px] font-semibold transition-all ${
+                  transitionMode === "C"
+                    ? "border-primary bg-primary text-white"
+                    : "border-slate-200 bg-white text-slate-700 hover:border-primary"
+                }`}
+              >
+                C: Slide Track
               </button>
             </div>
-          )}
-        </div>
 
-        {/* Interactive Slider Block */}
-        <div className="mt-6 flex flex-row gap-3 h-[200px] sm:h-[280px] md:h-[340px] w-full items-stretch">
-          
-          {/* Left Area: Main Large Active Image (Not Clickable) */}
-          <div className="flex-1 relative overflow-hidden border border-slate-200 bg-slate-50 rounded-[4px]">
-            <AnimatePresence initial={false} custom={direction}>
-              {activeProgramImage ? (
-                <motion.img
-                  key={activeIndex}
-                  src={activeProgramImage}
-                  alt={activeProgram.title}
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              ) : (
-                <motion.div
-                  key={`placeholder-${activeIndex}`}
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
-                  className="absolute inset-0 flex items-center justify-center bg-slate-50"
+            {/* Navigation Arrows */}
+            {total > 1 && (
+              <div className="flex gap-1.5">
+                <button
+                  onClick={handlePrev}
+                  className="inline-flex h-8 w-8 items-center justify-center border border-primary/20 bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all duration-205 cursor-pointer rounded-[4px]"
+                  aria-label="Previous Program"
                 >
-                  <GraduationCap className="h-16 w-16 text-slate-300" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-            
-            {/* Ambient Shadow Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent pointer-events-none" />
-            
-            {/* Category Tag */}
-            <span className="absolute left-4 top-4 inline-flex items-center rounded-none bg-white px-2.5 py-1 text-[10px] font-bold text-slate-800 border border-slate-200 shadow-sm z-10 select-none">
-              {activeProgram.category?.name || "Upskilling"}
-            </span>
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="inline-flex h-8 w-8 items-center justify-center border border-primary/20 bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all duration-205 cursor-pointer rounded-[4px]"
+                  aria-label="Next Program"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            )}
           </div>
+        </div>
 
-          {/* Right Area: Preview Strips (flat flex row with layout animation) */}
-          {total > 1 && (
-            <div className="hidden md:flex shrink-0 h-full items-stretch">
-              {nextIndices.map((idx, index) => {
-                const prog = programs[idx];
-                const progImage = getProgramImage(prog);
-                return (
-                  <motion.button
-                    layout
-                    key={prog.id}
-                    onClick={() => handleSelect(idx)}
-                    transition={{
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 30
-                    }}
-                    className={`relative h-full shrink-0 overflow-hidden border border-slate-200/80 hover:border-primary transition-colors duration-300 group cursor-pointer rounded-[4px] ${getStripWidthClass(
-                      index
-                    )} ${getStripMarginClass(index)}`}
-                    aria-label={`Show program: ${prog.title}`}
+        {/* -------------------- DEMO MODE A: UNIFIED CARD SLIDE -------------------- */}
+        {transitionMode === "A" && (
+          <div className="w-full flex flex-col">
+            <div className="flex flex-row gap-3 h-[200px] sm:h-[280px] md:h-[340px] w-full items-stretch">
+              
+              {/* Left Area: Main sliding content card (Image + Text sliding together) */}
+              <div className="flex-1 relative overflow-hidden rounded-[4px]">
+                <AnimatePresence initial={false} custom={direction}>
+                  <motion.div
+                    key={activeIndex}
+                    custom={direction}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
+                    className="absolute inset-0 w-full h-full flex flex-col"
                   >
-                    {progImage ? (
-                      <img
-                        src={progImage}
-                        alt={prog.title}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center bg-slate-50">
-                        <GraduationCap className="h-6 w-6 text-slate-355" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-300" />
-                  </motion.button>
-                );
-              })}
+                    {/* Image Block */}
+                    <div className="flex-1 w-full relative overflow-hidden border border-slate-200 bg-slate-50 rounded-[4px]">
+                      {activeProgramImage ? (
+                        <img
+                          src={activeProgramImage}
+                          alt={activeProgram.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-slate-50">
+                          <GraduationCap className="h-16 w-16 text-slate-300" />
+                        </div>
+                      )}
+                      
+                      {/* Ambient Overlays */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent pointer-events-none" />
+                      <span className="absolute left-4 top-4 inline-flex items-center rounded-none bg-white px-2.5 py-1 text-[10px] font-bold text-slate-800 border border-slate-200 shadow-sm z-10 select-none">
+                        {activeProgram.category?.name || "Upskilling"}
+                      </span>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Right Area: Preview Strips sliding using Framer Motion layout */}
+              {total > 1 && (
+                <div className="hidden md:flex shrink-0 h-full items-stretch">
+                  {nextIndices.map((idx, index) => {
+                    const prog = programs[idx];
+                    const progImage = getProgramImage(prog);
+                    return (
+                      <motion.button
+                        layout
+                        key={`mode-a-${prog.id}`}
+                        onClick={() => handleSelect(idx)}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        className={`relative h-full shrink-0 overflow-hidden border border-slate-200/80 hover:border-primary transition-colors duration-300 group cursor-pointer rounded-[4px] ${getStripWidthClass(
+                          index
+                        )} ${getStripMarginClass(index)}`}
+                        aria-label={`Show program: ${prog.title}`}
+                      >
+                        {progImage ? (
+                          <img
+                            src={progImage}
+                            alt={prog.title}
+                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center bg-slate-50">
+                            <GraduationCap className="h-6 w-6 text-slate-355" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-300" />
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        {/* Text Section Below Image Block */}
-        <div className="mt-8 flex flex-col md:flex-row md:items-start justify-between gap-6">
-          {/* Active Program Info */}
-          <div className="max-w-3xl space-y-2">
-            <Link href={`/programs/${activeProgram.slug}`} className="group/title inline-block">
-              <h3 className="font-heading text-2xl font-extrabold text-slate-900 group-hover/title:text-primary transition-colors leading-snug">
-                {activeProgram.title}
-              </h3>
-            </Link>
-            <p className="text-sm sm:text-md text-slate-655 font-body leading-relaxed">
-              {activeProgram.description}
-            </p>
-          </div>
+            {/* Sliding text information below the image, synced with activeIndex */}
+            <div className="mt-8 flex flex-col md:flex-row md:items-start justify-between gap-6">
+              <div className="max-w-3xl relative overflow-hidden h-[90px] md:h-[110px]">
+                <AnimatePresence initial={false} custom={direction}>
+                  <motion.div
+                    key={activeIndex}
+                    custom={direction}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
+                    className="absolute inset-0 w-full h-full space-y-2"
+                  >
+                    <Link href={`/programs/${activeProgram.slug}`} className="group/title inline-block">
+                      <h3 className="font-heading text-2xl font-extrabold text-slate-900 group-hover/title:text-primary transition-colors leading-snug">
+                        {activeProgram.title}
+                      </h3>
+                    </Link>
+                    <p className="text-sm sm:text-md text-slate-650 font-body leading-relaxed line-clamp-3">
+                      {activeProgram.description}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
 
-          {/* Button: Explore All Programmes */}
-          <div className="shrink-0 pt-1">
-            <Link
-              href="/programs"
-              className="inline-flex items-center justify-center gap-1.5 rounded-none bg-primary px-6 py-3.5 text-xs font-bold text-white hover:bg-primary-hover transition-all duration-200 group"
-            >
-              <span>Explore All Programmes</span>
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+              {/* Static CTA Button (stays fixed in place) */}
+              <div className="shrink-0 pt-1">
+                <Link
+                  href="/programs"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-none bg-primary px-6 py-3.5 text-xs font-bold text-white hover:bg-primary-hover transition-all duration-200 group"
+                >
+                  <span>Explore All Programmes</span>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* -------------------- DEMO MODE B: MORPHING PREVIEWS -------------------- */}
+        {transitionMode === "B" && (
+          <div className="w-full flex flex-col">
+            <div className="flex flex-row gap-3 h-[200px] sm:h-[280px] md:h-[340px] w-full items-stretch">
+              
+              {/* Left Area: Main Large Active Image (Framer Motion layoutId morphing) */}
+              <motion.div
+                layoutId={`morph-container-${activeProgram.id}`}
+                transition={{ type: "spring", stiffness: 220, damping: 26 }}
+                className="flex-1 relative overflow-hidden border border-slate-200 bg-slate-50 rounded-[4px]"
+              >
+                {activeProgramImage ? (
+                  <motion.img
+                    layoutId={`morph-image-${activeProgram.id}`}
+                    src={activeProgramImage}
+                    alt={activeProgram.title}
+                    transition={{ type: "spring", stiffness: 220, damping: 26 }}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <motion.div
+                    layoutId={`morph-placeholder-${activeProgram.id}`}
+                    className="absolute inset-0 flex items-center justify-center bg-slate-50"
+                  >
+                    <GraduationCap className="h-16 w-16 text-slate-300" />
+                  </motion.div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute left-4 top-4 inline-flex items-center rounded-none bg-white px-2.5 py-1 text-[10px] font-bold text-slate-800 border border-slate-200 shadow-sm z-10 select-none">
+                  {activeProgram.category?.name || "Upskilling"}
+                </span>
+              </motion.div>
+
+              {/* Right Area: Preview Strips morphing into active container */}
+              {total > 1 && (
+                <div className="hidden md:flex shrink-0 h-full items-stretch">
+                  {nextIndices.map((idx, index) => {
+                    const prog = programs[idx];
+                    const progImage = getProgramImage(prog);
+                    return (
+                      <motion.button
+                        layoutId={`morph-container-${prog.id}`}
+                        key={`mode-b-${prog.id}`}
+                        onClick={() => handleSelect(idx)}
+                        transition={{ type: "spring", stiffness: 220, damping: 26 }}
+                        className={`relative h-full shrink-0 overflow-hidden border border-slate-200/80 hover:border-primary transition-colors duration-300 group cursor-pointer rounded-[4px] ${getStripWidthClass(
+                          index
+                        )} ${getStripMarginClass(index)}`}
+                        aria-label={`Show program: ${prog.title}`}
+                      >
+                        {progImage ? (
+                          <motion.img
+                            layoutId={`morph-image-${prog.id}`}
+                            src={progImage}
+                            alt={prog.title}
+                            transition={{ type: "spring", stiffness: 220, damping: 26 }}
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                        ) : (
+                          <motion.div
+                            layoutId={`morph-placeholder-${prog.id}`}
+                            className="absolute inset-0 flex items-center justify-center bg-slate-50"
+                          >
+                            <GraduationCap className="h-6 w-6 text-slate-355" />
+                          </motion.div>
+                        )}
+                        <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-300" />
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Mode B static description text */}
+            <div className="mt-8 flex flex-col md:flex-row md:items-start justify-between gap-6">
+              <div className="max-w-3xl space-y-2">
+                <Link href={`/programs/${activeProgram.slug}`} className="group/title inline-block">
+                  <h3 className="font-heading text-2xl font-extrabold text-slate-900 group-hover/title:text-primary transition-colors leading-snug">
+                    {activeProgram.title}
+                  </h3>
+                </Link>
+                <p className="text-sm sm:text-md text-slate-655 font-body leading-relaxed">
+                  {activeProgram.description}
+                </p>
+              </div>
+              <div className="shrink-0 pt-1">
+                <Link
+                  href="/programs"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-none bg-primary px-6 py-3.5 text-xs font-bold text-white hover:bg-primary-hover transition-all duration-200 group"
+                >
+                  <span>Explore All Programmes</span>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* -------------------- DEMO MODE C: SLIDING TRACK -------------------- */}
+        {transitionMode === "C" && (
+          <div className="w-full flex flex-col overflow-hidden">
+            <div className="mt-6 w-full h-[200px] sm:h-[280px] md:h-[340px] relative overflow-hidden">
+              <motion.div
+                animate={{ x: -activeIndex * 32 }}
+                transition={{ type: "spring", stiffness: 200, damping: 25 }}
+                className="flex flex-row h-full items-stretch"
+              >
+                {programs.map((prog, idx) => {
+                  const isActive = idx === activeIndex;
+                  const progImage = getProgramImage(prog);
+                  
+                  // Width rules: active grew large, others are strips
+                  let widthClass = "w-[6px] lg:w-[8px] block";
+                  if (isActive) {
+                    widthClass = "w-[200px] sm:w-[400px] md:w-[500px] block"; 
+                  } else {
+                    const distance = (idx - activeIndex + total) % total;
+                    if (distance === 1) widthClass = "w-[60px] md:w-[80px] lg:w-[96px] block";
+                    else if (distance === 2) widthClass = "w-[36px] md:w-[44px] lg:w-[52px] block";
+                    else if (distance === 3) widthClass = "w-[20px] md:w-[24px] lg:w-[28px] block";
+                    else if (distance <= 6) widthClass = "w-[6px] lg:w-[8px] hidden md:block";
+                    else widthClass = "hidden";
+                  }
+
+                  return (
+                    <motion.button
+                      layout
+                      key={`mode-c-${prog.id}`}
+                      onClick={() => handleSelect(idx)}
+                      transition={{ type: "spring", stiffness: 200, damping: 25 }}
+                      className={`relative h-full shrink-0 overflow-hidden border border-slate-200/80 hover:border-primary transition-colors duration-300 rounded-[4px] mr-3 ${widthClass}`}
+                    >
+                      {progImage ? (
+                        <img
+                          src={progImage}
+                          alt={prog.title}
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-slate-50">
+                          <GraduationCap className="h-6 w-6 text-slate-355" />
+                        </div>
+                      )}
+                      {!isActive && (
+                        <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-300" />
+                      )}
+                    </motion.button>
+                  );
+                })}
+              </motion.div>
+            </div>
+
+            {/* Mode C description text */}
+            <div className="mt-8 flex flex-col md:flex-row md:items-start justify-between gap-6">
+              <div className="max-w-3xl space-y-2">
+                <Link href={`/programs/${activeProgram.slug}`} className="group/title inline-block">
+                  <h3 className="font-heading text-2xl font-extrabold text-slate-900 group-hover/title:text-primary transition-colors leading-snug">
+                    {activeProgram.title}
+                  </h3>
+                </Link>
+                <p className="text-sm sm:text-md text-slate-655 font-body leading-relaxed">
+                  {activeProgram.description}
+                </p>
+              </div>
+              <div className="shrink-0 pt-1">
+                <Link
+                  href="/programs"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-none bg-primary px-6 py-3.5 text-xs font-bold text-white hover:bg-primary-hover transition-all duration-200 group"
+                >
+                  <span>Explore All Programmes</span>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     </section>
