@@ -118,6 +118,16 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     }
   };
 
+  const getStripMarginClass = (index: number) => {
+    if (index < 2) {
+      return "mr-3";
+    }
+    if (index < 5) {
+      return "mr-[4px] lg:mr-[6px]";
+    }
+    return "mr-0";
+  };
+
   return (
     <section className="border-b border-slate-200/60 bg-white">
       <div className="mx-auto max-w-4xl px-6 py-12 sm:px-8 sm:py-16 relative">
@@ -198,20 +208,25 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             </span>
           </div>
 
-          {/* Right Area: Preview Strips */}
+          {/* Right Area: Preview Strips (flat flex row with layout animation) */}
           {total > 1 && (
-            <div className="hidden md:flex gap-3 shrink-0 h-full items-stretch">
-              {/* Strips 1 and 2 */}
-              {nextIndices.slice(0, 2).map((idx, index) => {
+            <div className="hidden md:flex shrink-0 h-full items-stretch">
+              {nextIndices.map((idx, index) => {
                 const prog = programs[idx];
                 const progImage = getProgramImage(prog);
                 return (
-                  <button
+                  <motion.button
+                    layout
                     key={prog.id}
                     onClick={() => handleSelect(idx)}
-                    className={`relative h-full shrink-0 overflow-hidden border border-slate-200/80 hover:border-primary transition-all duration-300 group cursor-pointer rounded-[4px] ${getStripWidthClass(
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 30
+                    }}
+                    className={`relative h-full shrink-0 overflow-hidden border border-slate-200/80 hover:border-primary transition-colors duration-300 group cursor-pointer rounded-[4px] ${getStripWidthClass(
                       index
-                    )}`}
+                    )} ${getStripMarginClass(index)}`}
                     aria-label={`Show program: ${prog.title}`}
                   >
                     {progImage ? (
@@ -222,45 +237,13 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center bg-slate-50">
-                        <GraduationCap className="h-6 w-6 text-slate-350" />
+                        <GraduationCap className="h-6 w-6 text-slate-355" />
                       </div>
                     )}
                     <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-300" />
-                  </button>
+                  </motion.button>
                 );
               })}
-
-              {/* Strips 3, 4, 5, 6 with narrower gap */}
-              <div className="flex flex-row gap-[4px] lg:gap-[6px] h-full items-stretch">
-                {nextIndices.slice(2).map((idx, index) => {
-                  const originalIndex = index + 2;
-                  const prog = programs[idx];
-                  const progImage = getProgramImage(prog);
-                  return (
-                    <button
-                      key={prog.id}
-                      onClick={() => handleSelect(idx)}
-                      className={`relative h-full shrink-0 overflow-hidden border border-slate-200/80 hover:border-primary transition-all duration-300 group cursor-pointer rounded-[4px] ${getStripWidthClass(
-                        originalIndex
-                      )}`}
-                      aria-label={`Show program: ${prog.title}`}
-                    >
-                      {progImage ? (
-                        <img
-                          src={progImage}
-                          alt={prog.title}
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center bg-slate-50">
-                          <GraduationCap className="h-6 w-6 text-slate-350" />
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-300" />
-                    </button>
-                  );
-                })}
-              </div>
             </div>
           )}
         </div>
