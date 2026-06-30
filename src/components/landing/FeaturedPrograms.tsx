@@ -53,10 +53,11 @@ function calcActiveWidth(containerW: number, cfg: SizingConfig): number {
 }
 
 /* ─────────────────────────────────────────────────
- * CSS transition: smooth deceleration mimicking lerp
+ * CSS transition easing
+ *
  * cubic-bezier(0.16, 1, 0.3, 1) = "expo ease-out"
- * Fast start → gentle stop, very close to how lerp
- * behaves when called per-frame.
+ * Fast start → gentle stop, close to Stripe's
+ * per-frame lerp deceleration.
  * ───────────────────────────────────────────────── */
 const EASING = "cubic-bezier(0.16, 1, 0.3, 1)";
 const DURATION_MS = 800;
@@ -99,7 +100,6 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    // Immediate synchronous measure so first paint is correct
     setContainerWidth(el.offsetWidth);
     const ro = new ResizeObserver((entries) => {
       for (const entry of entries) {
@@ -110,8 +110,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     return () => ro.disconnect();
   }, []);
 
-  /* ── Enable CSS transitions only after the first paint ──
-   * This prevents the initial layout from animating. */
+  /* ── Enable CSS transitions only after the first paint ── */
   useEffect(() => {
     const id = requestAnimationFrame(() => {
       requestAnimationFrame(() => setIsReady(true));
@@ -124,12 +123,11 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const total = programs.length;
   const activeProgram = programs[activeIndex];
 
-  /* ── Navigation handlers ── */
   const handlePrev = () => setActiveIndex((p) => (p - 1 + total) % total);
   const handleNext = () => setActiveIndex((p) => (p + 1) % total);
   const handleSelect = (idx: number) => setActiveIndex(idx);
 
-  /* ── Responsive breakpoints based on container, not window ── */
+  /* ── Responsive breakpoints based on container width ── */
   const isMobile = containerWidth > 0 && containerWidth < 600;
   const isTablet = containerWidth >= 600 && containerWidth < 800;
   const cfg: SizingConfig | null = isMobile ? null : isTablet ? TABLET : DESKTOP;
@@ -141,21 +139,20 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         : containerWidth
       : 0;
 
-  /* ── Compute inline styles for each card by its program index ──
+  /* The fixed pixel width every image is rendered at.
+   * This never changes during transitions — the card
+   * container clips/reveals the image as it squeezes. */
+  const imageFixedWidth = Math.max(activeW, 300);
+
+  /* ── Compute inline styles for each card ──
    *
-   * CRITICAL DESIGN DECISION: We render programs in FIXED DOM order
-   * (programs[0], programs[1], …, programs[N-1]) and never reorder.
-   * This means CSS transitions work correctly because the same DOM
-   * element smoothly transitions between style values.
+   * FIXED DOM ORDER: programs render [0, 1, …, N-1].
+   * Same DOM elements always, so CSS transitions work.
    *
-   * Display position = (programIndex - activeIndex + total) % total
-   *   0  → active card (wide)
-   *   1–maxVisible → visible preview strips (descending widths)
-   *   >maxVisible → hidden (width: 0, margin: 0, opacity: 0)
-   *
-   * Cards "before" the active one in the circular queue get high
-   * display positions (e.g. total-1), so they have width 0 and
-   * smoothly shrink out to the left when they lose active status.
+   * Display position = (i - activeIndex + total) % total
+   *   0  → active (wide)
+   *   1–maxVisible → visible preview strips
+   *   >maxVisible → hidden (width 0, shrunk out)
    */
   const getCardStyle = (programIndex: number): React.CSSProperties => {
     const pos = (programIndex - activeIndex + total) % total;
@@ -163,20 +160,20 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     let width = 0;
     let mr = 0;
     let opacity = 0;
+    let blur = 0;
 
     if (pos === 0) {
-      // Active card — fills remaining space
       width = activeW;
       mr = cfg ? cfg.activeMargin : 0;
       opacity = 1;
     } else if (cfg && pos >= 1 && pos <= maxVisible) {
-      // Visible preview strip
       const pi = pos - 1;
       width = cfg.widths[pi];
       mr = cfg.margins[pi];
       opacity = 1;
+      // Subtle blur on the thinnest strips (like Stripe)
+      if (pos >= 4) blur = 2;
     }
-    // else: width=0, mr=0, opacity=0 (hidden / exited)
 
     return {
       width,
@@ -184,23 +181,20 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       opacity,
       flexShrink: 0,
       overflow: "hidden",
+      filter: blur > 0 ? `blur(${blur}px)` : "none",
       transition: isReady
-        ? `width ${DURATION_MS}ms ${EASING}, margin-right ${DURATION_MS}ms ${EASING}, opacity 500ms ease`
+        ? [
+            `width ${DURATION_MS}ms ${EASING}`,
+            `margin-right ${DURATION_MS}ms ${EASING}`,
+            `opacity 500ms ease`,
+            `filter 400ms ease`,
+          ].join(", ")
         : "none",
     };
   };
 
-  /** Is a card at this display position clickable? */
-  const isCardClickable = (programIndex: number): boolean => {
-    const pos = (programIndex - activeIndex + total) % total;
-    return pos >= 1 && pos <= maxVisible;
-  };
-
-  /** Is a card at this display position the active card? */
-  const isCardActive = (programIndex: number): boolean => {
-    const pos = (programIndex - activeIndex + total) % total;
-    return pos === 0;
-  };
+  const getDisplayPos = (i: number) =>
+    (i - activeIndex + total) % total;
 
   return (
     <section className="border-b border-slate-200/60 bg-white">
@@ -238,58 +232,97 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         </div>
 
         {/* ── Squeezy Accordion Carousel ──
-         * Fixed DOM order. Each card's width/margin/opacity is set via
-         * inline styles and animated purely through CSS transitions.
-         * No Framer Motion springs. No DOM reordering. */}
+         *
+         * HOW THE IMAGE REVEAL WORKS:
+         * Each <img> is rendered at a FIXED width (= active card width),
+         * centered inside its card container via left:50% + translateX(-50%).
+         * The card has overflow:hidden and its width is animated via CSS.
+         *
+         * When the card is narrow (e.g. 8px), only 8px of the center of
+         * the full-size image is visible. As the card widens, more of the
+         * image is progressively REVEALED — like a curtain opening.
+         * The image itself NEVER scales.
+         *
+         * HOW THE SLIDING MOTION WORKS:
+         * All cards are in a flex row. When activeIndex changes, every
+         * card's width transitions simultaneously. Cards before the active
+         * one shrink to 0px, releasing space. The active card expands to
+         * fill that space. This causes all cards to physically shift left
+         * or right together — like someone pushing the entire row of cards.
+         */}
         <div
           ref={containerRef}
           className="flex flex-row h-[200px] sm:h-[280px] md:h-[340px] w-full items-stretch overflow-hidden select-none"
         >
           {programs.map((program, i) => {
+            const pos = getDisplayPos(i);
+            const isActive = pos === 0;
+            const isClickable = pos >= 1 && pos <= maxVisible;
             const progImage = getProgramImage(program);
-            const active = isCardActive(i);
-            const clickable = isCardClickable(i);
 
             return (
               <div
                 key={program.id}
                 style={getCardStyle(i)}
                 className={`relative h-full rounded-[4px] border border-slate-200/80 bg-slate-50 ${
-                  clickable
+                  isClickable
                     ? "hover:border-primary cursor-pointer group"
                     : ""
                 }`}
-                onClick={clickable ? () => handleSelect(i) : undefined}
+                onClick={isClickable ? () => handleSelect(i) : undefined}
               >
-                {/* Image — absolutely positioned, object-cover crops it as the card squeezes */}
+                {/* IMAGE: Fixed width, centered, clipped by card.
+                 * The image NEVER scales — only more/less of it is visible
+                 * as the card container widens or narrows. */}
                 {progImage ? (
                   <img
                     src={progImage}
                     alt={program.title}
-                    className={`absolute inset-0 w-full h-full object-cover ${
-                      clickable
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: imageFixedWidth,
+                      minWidth: imageFixedWidth,
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                    className={
+                      isClickable
                         ? "transition-transform duration-700 ease-out group-hover:scale-105"
                         : ""
-                    }`}
+                    }
                   />
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center bg-slate-50">
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: imageFixedWidth,
+                      minWidth: imageFixedWidth,
+                      height: "100%",
+                    }}
+                    className="flex items-center justify-center bg-slate-50"
+                  >
                     <GraduationCap className="h-16 w-16 text-slate-300" />
                   </div>
                 )}
 
                 {/* Subtle dark overlay on preview strips */}
-                {clickable && (
+                {isClickable && (
                   <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-300" />
                 )}
 
                 {/* Ambient gradient on the active card */}
-                {active && (
+                {isActive && (
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent pointer-events-none" />
                 )}
 
                 {/* Category tag — active card only */}
-                {active && (
+                {isActive && (
                   <span className="absolute left-4 top-4 inline-flex items-center rounded-none bg-white px-2.5 py-1 text-[10px] font-bold text-slate-800 border border-slate-200 shadow-sm z-10 select-none">
                     {program.category?.name || "Upskilling"}
                   </span>
