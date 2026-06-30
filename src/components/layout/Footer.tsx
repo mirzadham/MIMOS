@@ -12,7 +12,7 @@ export default function Footer() {
           {/* Column 1: Brand Info */}
           <div className="space-y-5">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/5 border border-primary/10">
+              <div className="flex h-9 w-9 items-center justify-center rounded-none bg-primary/5 border border-primary/10">
                 <GraduationCap className="h-5 w-5 text-primary" />
               </div>
               <div className="flex flex-col">

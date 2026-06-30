@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockPrograms, mockCategories } from "@/lib/db";
+import { prisma, mockPrograms, mockCategories, mockStats, mockPartners } from "@/lib/db";
 import crypto from "crypto";
 
 // 1. Authentication Server Actions
@@ -341,3 +341,200 @@ export async function issueCertificateAction(enrollmentId: string, studentName: 
     };
   }
 }
+
+// 6. Stats CRUD Actions
+export async function createStatAction(data: { number: string; label: string }) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const newStat = await prisma.stat.create({
+      data: {
+        number: data.number,
+        label: data.label,
+      }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "CREATE_STAT",
+        details: `Created stat: ${data.number} - ${data.label} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    return { success: true, stat: newStat };
+  } catch (e) {
+    console.error("Prisma write error, saving to mock stats: ", e);
+    const mockNew = {
+      id: "mock-" + Math.random().toString(36).substr(2, 9),
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    mockStats.push(mockNew);
+    revalidatePath("/");
+    return { success: true, stat: mockNew };
+  }
+}
+
+export async function updateStatAction(id: string, data: { number: string; label: string }) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const updated = await prisma.stat.update({
+      where: { id },
+      data: {
+        number: data.number,
+        label: data.label,
+      }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "UPDATE_STAT",
+        details: `Updated stat: ${data.number} - ${data.label} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    return { success: true, stat: updated };
+  } catch (e) {
+    console.error("Prisma update error: ", e);
+    const idx = mockStats.findIndex(s => s.id === id);
+    if (idx !== -1) {
+      mockStats[idx] = { id, ...data };
+    }
+    revalidatePath("/");
+    return { success: true };
+  }
+}
+
+export async function deleteStatAction(id: string) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const deleted = await prisma.stat.delete({
+      where: { id }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "DELETE_STAT",
+        details: `Deleted stat: ${deleted.number} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    return { success: true };
+  } catch (e) {
+    console.error("Prisma delete error: ", e);
+    const idx = mockStats.findIndex(s => s.id === id);
+    if (idx !== -1) {
+      mockStats.splice(idx, 1);
+    }
+    revalidatePath("/");
+    return { success: true };
+  }
+}
+
+// 7. Partners CRUD Actions
+export async function createPartnerAction(data: { name: string; logoUrl: string }) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const newPartner = await prisma.partner.create({
+      data: {
+        name: data.name,
+        logoUrl: data.logoUrl,
+      }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "CREATE_PARTNER",
+        details: `Created partner: ${data.name} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    return { success: true, partner: newPartner };
+  } catch (e) {
+    console.error("Prisma write error, saving to mock partners: ", e);
+    const mockNew = {
+      id: "mock-" + Math.random().toString(36).substr(2, 9),
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    mockPartners.push(mockNew);
+    revalidatePath("/");
+    return { success: true, partner: mockNew };
+  }
+}
+
+export async function updatePartnerAction(id: string, data: { name: string; logoUrl: string }) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const updated = await prisma.partner.update({
+      where: { id },
+      data: {
+        name: data.name,
+        logoUrl: data.logoUrl,
+      }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "UPDATE_PARTNER",
+        details: `Updated partner: ${data.name} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    return { success: true, partner: updated };
+  } catch (e) {
+    console.error("Prisma update error: ", e);
+    const idx = mockPartners.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      mockPartners[idx] = { id, ...data };
+    }
+    revalidatePath("/");
+    return { success: true };
+  }
+}
+
+export async function deletePartnerAction(id: string) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const deleted = await prisma.partner.delete({
+      where: { id }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "DELETE_PARTNER",
+        details: `Deleted partner: ${deleted.name} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    return { success: true };
+  } catch (e) {
+    console.error("Prisma delete error: ", e);
+    const idx = mockPartners.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      mockPartners.splice(idx, 1);
+    }
+    revalidatePath("/");
+    return { success: true };
+  }
+}
+

@@ -90,3 +90,20 @@ model AuditLog {
   ipAddress String?
   createdAt DateTime @default(now())
 }
+
+model Stat {
+  id        String   @id @default(uuid())
+  number    String   // e.g. "150,000+"
+  label     String   // e.g. "Students & Professionals"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Partner {
+  id        String   @id @default(uuid())
+  name      String
+  logoUrl   String   // Cloudflare R2 public URL
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+

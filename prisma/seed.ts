@@ -207,6 +207,35 @@ async function main() {
     });
   }
 
+  console.log('Cleaning up existing stats & partners...');
+  await prisma.stat.deleteMany({});
+  await prisma.partner.deleteMany({});
+
+  console.log('Seeding stats...');
+  const statsData = [
+    { number: "150,000+", label: "Students & Professionals" },
+    { number: "20+", label: "Experienced Trainers" },
+    { number: "10+", label: "Core Programmes" }
+  ];
+  for (const stat of statsData) {
+    await prisma.stat.create({ data: stat });
+  }
+
+  console.log('Seeding partners...');
+  const partnersData = [
+    { name: "MSIA", logoUrl: "/images/partners/msia.svg" },
+    { name: "TalentCorp", logoUrl: "/images/partners/talentcorp.svg" },
+    { name: "CREST", logoUrl: "/images/partners/crest.svg" },
+    { name: "Dassault Systèmes", logoUrl: "/images/partners/dassault.svg" },
+    { name: "Inari Amertron", logoUrl: "/images/partners/inari.svg" },
+    { name: "Keysight Technologies", logoUrl: "/images/partners/keysight.svg" },
+    { name: "USM", logoUrl: "/images/partners/usm.svg" },
+    { name: "UTM", logoUrl: "/images/partners/utm.svg" }
+  ];
+  for (const partner of partnersData) {
+    await prisma.partner.create({ data: partner });
+  }
+
   console.log('Seeding completed successfully.');
 }
 
@@ -218,3 +247,4 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+

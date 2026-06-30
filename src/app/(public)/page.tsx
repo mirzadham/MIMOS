@@ -6,38 +6,47 @@ import WhyChooseUs from "@/components/landing/WhyChooseUs";
 import FeaturedPrograms from "@/components/landing/FeaturedPrograms";
 import Testimonials from "@/components/landing/Testimonials";
 import Partners from "@/components/landing/Partners";
+import StatsSection from "@/components/landing/StatsSection";
 import StatsAndFacilities from "@/components/landing/StatsAndFacilities";
-import { getSafePrograms } from "@/lib/db";
+import { getSafePrograms, getSafeStats, getSafePartners } from "@/lib/db";
 
 export default async function Home() {
-  const programs = await getSafePrograms();
+  const [programs, stats, partners] = await Promise.all([
+    getSafePrograms(),
+    getSafeStats(),
+    getSafePartners()
+  ]);
 
   return (
-    <div className="relative bg-white min-h-screen">
+    <div className="relative bg-background min-h-screen">
       
       {/* 1. Hero Section (Client component with canvas background) */}
       <HeroSection />
 
-      {/* 2. Upcoming Trainings & Events Section */}
+      {/* 2. Stats Row (Horizontal, animated count-up) */}
+      <StatsSection stats={stats} />
+
+      {/* 3. Partners Marquee (Right-to-left infinite scroll) */}
+      <Partners partners={partners} />
+
+      {/* 4. Upcoming Trainings & Events Section */}
       <UpcomingSection />
 
-      {/* 3. Why Choose Us? Section (Bento Grid Advantage) */}
+      {/* 5. Why Choose Us? Section (Bento Grid Advantage) */}
       <WhyChooseUs />
 
-      {/* 4. Featured Programmes Section */}
+      {/* 6. Featured Programmes Section */}
       <section id="featured-programs">
         <FeaturedPrograms programs={programs} />
       </section>
 
-      {/* 5. Testimonials (Alumni Reviews) Section */}
+      {/* 7. Testimonials (Alumni Reviews) Section */}
       <Testimonials />
 
-      {/* 6. Our Partners Section */}
-      <Partners />
-
-      {/* 7. Our Facilities & Statistics Section */}
+      {/* 8. Our Facilities Section */}
       <StatsAndFacilities />
 
     </div>
   );
 }
+

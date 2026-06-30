@@ -249,3 +249,45 @@ export async function getSafeProgramBySlug(slug: string) {
     return null;
   }
 }
+
+export const mockStats = [
+  { id: 'stat-1', number: '150,000+', label: 'Students & Professionals' },
+  { id: 'stat-2', number: '20+', label: 'Experienced Trainers' },
+  { id: 'stat-3', number: '10+', label: 'Core Programmes' }
+];
+
+export const mockPartners = [
+  { id: 'partner-1', name: 'MSIA', logoUrl: '/images/partners/msia.svg' },
+  { id: 'partner-2', name: 'TalentCorp', logoUrl: '/images/partners/talentcorp.svg' },
+  { id: 'partner-3', name: 'CREST', logoUrl: '/images/partners/crest.svg' },
+  { id: 'partner-4', name: 'Dassault Systèmes', logoUrl: '/images/partners/dassault.svg' },
+  { id: 'partner-5', name: 'Inari Amertron', logoUrl: '/images/partners/inari.svg' },
+  { id: 'partner-6', name: 'Keysight Technologies', logoUrl: '/images/partners/keysight.svg' },
+  { id: 'partner-7', name: 'USM', logoUrl: '/images/partners/usm.svg' },
+  { id: 'partner-8', name: 'UTM', logoUrl: '/images/partners/utm.svg' }
+];
+
+export async function getSafeStats() {
+  try {
+    const stats = await prisma.stat.findMany({
+      orderBy: { createdAt: 'asc' }
+    });
+    return stats.length > 0 ? stats : mockStats;
+  } catch (e) {
+    console.warn("Prisma Stat Fetch failed, falling back to mock details: ", e);
+    return mockStats;
+  }
+}
+
+export async function getSafePartners() {
+  try {
+    const partners = await prisma.partner.findMany({
+      orderBy: { createdAt: 'asc' }
+    });
+    return partners.length > 0 ? partners : mockPartners;
+  } catch (e) {
+    console.warn("Prisma Partner Fetch failed, falling back to mock details: ", e);
+    return mockPartners;
+  }
+}
+
