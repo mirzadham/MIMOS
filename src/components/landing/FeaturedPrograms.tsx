@@ -30,14 +30,14 @@ interface FeaturedProgramsProps {
  * Matching Stripe "What's happening" proportions
  * ───────────────────────────────────────────────── */
 const DESKTOP = {
-  widths: [96, 52, 28, 8, 8, 8],
+  widths: [128, 80, 48, 8, 8, 8],
   margins: [12, 12, 12, 6, 6, 0],
   activeMargin: 12,
   count: 6,
 };
 
 const TABLET = {
-  widths: [80, 44, 24],
+  widths: [104, 64, 36],
   margins: [12, 12, 0],
   activeMargin: 12,
   count: 3,
