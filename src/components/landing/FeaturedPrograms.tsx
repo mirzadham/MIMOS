@@ -87,16 +87,27 @@ const getProgramImage = (program: Program): string => {
   return fallbackImages[program.slug] || "/images/programs/wafer-fabrication.webp";
 };
 
+/** Helper to check if an index lies in a circular range [start, end) */
+function isCircularBetween(index: number, start: number, end: number, total: number): boolean {
+  if (start === end) return false;
+  if (start < end) {
+    return index >= start && index < end;
+  } else {
+    return index >= start || index < end;
+  }
+}
+
 /* ═══════════════════════════════════════════════════
  * Component
  * ═══════════════════════════════════════════════════ */
 export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const [containerWidth, setContainerWidth] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  /* Track previous activeIndex so we know which card is "exiting".
+  /* Track previous activeIndex so we know which cards are "exiting/shrinking".
    * The ref holds the OLD value during render; useEffect updates it after paint. */
   const prevActiveRef = useRef(activeIndex);
   useEffect(() => {
@@ -129,10 +140,22 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
   const total = programs.length;
   const activeProgram = programs[activeIndex];
+  const prevActiveIndex = prevActiveRef.current;
 
-  const handlePrev = () => setActiveIndex((p) => (p - 1 + total) % total);
-  const handleNext = () => setActiveIndex((p) => (p + 1) % total);
-  const handleSelect = (idx: number) => setActiveIndex(idx);
+  const handlePrev = () => {
+    setDirection("backward");
+    setActiveIndex((p) => (p - 1 + total) % total);
+  };
+
+  const handleNext = () => {
+    setDirection("forward");
+    setActiveIndex((p) => (p + 1) % total);
+  };
+
+  const handleSelect = (idx: number) => {
+    setDirection("forward");
+    setActiveIndex(idx);
+  };
 
   /* ── Responsive breakpoints based on container width ── */
   const isMobile = containerWidth > 0 && containerWidth < 600;
@@ -151,10 +174,6 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
    * container clips/reveals the image as it squeezes. */
   const imageFixedWidth = Math.max(activeW, 300);
 
-  /* Which card is exiting? (the one that was active before this render) */
-  const exitingIndex =
-    prevActiveRef.current !== activeIndex ? prevActiveRef.current : -1;
-
   /* ── Compute inline styles for each card ──
    *
    * FIXED DOM ORDER + CSS `order`:
@@ -163,53 +182,55 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
    * leftmost, preview strips follow to the right, and hidden cards
    * are last. This creates a proper circular loop.
    *
-   * Display position = (i - activeIndex + total) % total
-   *   0  → active (wide)
-   *   1–maxVisible → visible preview strips (right of active)
-   *   >maxVisible → hidden (width 0, at the end)
-   *
-   * The exiting card (old active) gets order: -1 so it stays
-   * leftmost and shrinks to 0 from the left edge.
+   * When moving forward:
+   * Any card in the circular range [prevActiveIndex, activeIndex)
+   * is shrinking to 0px. We place them to the left of the new active
+   * card (using negative order values) so they pull the new active
+   * card leftward.
    */
   const getCardStyle = (programIndex: number): React.CSSProperties => {
     const pos = (programIndex - activeIndex + total) % total;
 
-    /* Is this the card that just stopped being active? */
-    const isExiting = programIndex === exitingIndex;
+    // A card is shrinking to 0 if we went forward and it lies between the old and new active cards
+    const isShrinking =
+      direction === "forward" &&
+      isCircularBetween(programIndex, prevActiveIndex, activeIndex, total);
 
     let width = 0;
     let mr = 0;
-    let opacity = 0;
     let blur = 0;
 
-    if (isExiting) {
-      /* Exiting card: shrink to 0 at the left edge */
+    if (isShrinking) {
       width = 0;
       mr = 0;
-      opacity = 0;
     } else if (pos === 0) {
       width = activeW;
       mr = cfg ? cfg.activeMargin : 0;
-      opacity = 1;
     } else if (cfg && pos >= 1 && pos <= maxVisible) {
       const pi = pos - 1;
       width = cfg.widths[pi];
       mr = cfg.margins[pi];
-      opacity = 1;
       // Subtle blur on the thinnest strips (like Stripe)
       if (pos >= 4) blur = 2;
     }
 
     const isHidden = width === 0;
 
+    // Calculate CSS flex order
+    let order = pos;
+    if (direction === "forward" && isShrinking) {
+      const distance = (activeIndex - prevActiveIndex + total) % total;
+      const offset = (programIndex - prevActiveIndex + total) % total;
+      order = -distance + offset;
+    }
+
     return {
       width,
       marginRight: mr,
-      opacity,
-      order: isExiting ? -1 : pos,
+      order,
       flexShrink: 0,
       overflow: "hidden",
-      // Remove border + padding on hidden cards so nothing is visible
+      // Remove border + padding on hidden cards so they disappear cleanly
       borderWidth: isHidden ? 0 : 1,
       padding: isHidden ? 0 : undefined,
       filter: blur > 0 ? `blur(${blur}px)` : "none",
@@ -218,7 +239,6 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             `width ${DURATION_MS}ms ${EASING}`,
             `margin-right ${DURATION_MS}ms ${EASING}`,
             `border-width ${DURATION_MS}ms ${EASING}`,
-            `opacity 500ms ease`,
             `filter 400ms ease`,
           ].join(", ")
         : "none",
@@ -263,25 +283,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
           )}
         </div>
 
-        {/* ── Squeezy Accordion Carousel ──
-         *
-         * HOW THE IMAGE REVEAL WORKS:
-         * Each <img> is rendered at a FIXED width (= active card width),
-         * centered inside its card container via left:50% + translateX(-50%).
-         * The card has overflow:hidden and its width is animated via CSS.
-         *
-         * When the card is narrow (e.g. 8px), only 8px of the center of
-         * the full-size image is visible. As the card widens, more of the
-         * image is progressively REVEALED — like a curtain opening.
-         * The image itself NEVER scales.
-         *
-         * HOW THE SLIDING MOTION WORKS:
-         * All cards are in a flex row. When activeIndex changes, every
-         * card's width transitions simultaneously. Cards before the active
-         * one shrink to 0px, releasing space. The active card expands to
-         * fill that space. This causes all cards to physically shift left
-         * or right together — like someone pushing the entire row of cards.
-         */}
+        {/* ── Squeezy Accordion Carousel ── */}
         <div
           ref={containerRef}
           className="flex flex-row h-[200px] sm:h-[280px] md:h-[340px] w-full items-stretch overflow-hidden select-none"
@@ -290,7 +292,40 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             const pos = getDisplayPos(i);
             const isActive = pos === 0;
             const isClickable = pos >= 1 && pos <= maxVisible;
+            const isShrinking =
+              direction === "forward" &&
+              isCircularBetween(i, prevActiveIndex, activeIndex, total);
+
             const progImage = getProgramImage(program);
+
+            // Determine image anchoring style for directional sliding reveal
+            const imgStyle: React.CSSProperties = {
+              position: "absolute",
+              top: 0,
+              width: imageFixedWidth,
+              minWidth: imageFixedWidth,
+              height: "100%",
+              objectFit: "cover",
+            };
+
+            if (direction === "forward") {
+              if (isShrinking) {
+                // Anchor to the right, so as the card shrinks to 0, the image slides left out of view
+                imgStyle.right = 0;
+              } else {
+                // Anchor to the left, so the expanding card pulls the image leftward into view
+                imgStyle.left = 0;
+              }
+            } else {
+              // Backward transition
+              if (i === activeIndex) {
+                // New active expanding from left: anchor right, so image slides in from the left
+                imgStyle.right = 0;
+              } else {
+                // Previews shifting right: anchor left, so image slides right
+                imgStyle.left = 0;
+              }
+            }
 
             return (
               <div
@@ -303,23 +338,12 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                 }`}
                 onClick={isClickable ? () => handleSelect(i) : undefined}
               >
-                {/* IMAGE: Fixed width, centered, clipped by card.
-                 * The image NEVER scales — only more/less of it is visible
-                 * as the card container widens or narrows. */}
+                {/* IMAGE: Fixed width, dynamically anchored for realistic sliding physics */}
                 {progImage ? (
                   <img
                     src={progImage}
                     alt={program.title}
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      width: imageFixedWidth,
-                      minWidth: imageFixedWidth,
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
+                    style={imgStyle}
                     className={
                       isClickable
                         ? "transition-transform duration-700 ease-out group-hover:scale-105"
@@ -328,15 +352,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                   />
                 ) : (
                   <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      width: imageFixedWidth,
-                      minWidth: imageFixedWidth,
-                      height: "100%",
-                    }}
+                    style={imgStyle}
                     className="flex items-center justify-center bg-slate-50"
                   >
                     <GraduationCap className="h-16 w-16 text-slate-300" />
