@@ -267,7 +267,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
   return (
     <section className="border-b border-slate-200/60 bg-white">
-      <div className="mx-auto max-w-4xl px-6 py-12 sm:px-8 sm:py-16 relative">
+      <div className="mx-auto max-w-5xl px-6 py-12 sm:px-8 sm:py-16 relative">
         {/* ── Section Header ── */}
         <div className="flex flex-row items-end justify-between pb-4 mb-6">
           <div className="space-y-2 max-w-2xl">
@@ -303,7 +303,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         {/* ── Squeezy Accordion Carousel ── */}
         <div
           ref={containerRef}
-          className="flex flex-row h-[200px] sm:h-[280px] md:h-[340px] w-full items-stretch overflow-hidden select-none"
+          className="flex flex-row h-[220px] sm:h-[300px] md:h-[370px] w-full items-stretch overflow-hidden select-none"
         >
           {programs.map((program, i) => {
             const pos = getDisplayPos(i);
@@ -400,29 +400,18 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
         {/* ── Text Details — fades in place (no sliding) ── */}
         <div className="mt-8 flex flex-col md:flex-row md:items-start justify-between gap-6">
-          <div className="max-w-3xl h-[90px] md:h-[110px] relative overflow-hidden flex-1">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="absolute inset-0 w-full h-full space-y-2"
-              >
-                <Link
-                  href={`/programs/${activeProgram.slug}`}
-                  className="group/title inline-block"
-                >
-                  <h3 className="font-heading text-2xl font-extrabold text-slate-900 group-hover/title:text-primary transition-colors leading-snug">
-                    {activeProgram.title}
-                  </h3>
-                </Link>
-                <p className="text-sm sm:text-md text-slate-650 font-body leading-relaxed line-clamp-3">
-                  {activeProgram.description}
-                </p>
-              </motion.div>
-            </AnimatePresence>
+          <div className="max-w-3xl flex-1 space-y-2">
+            <Link
+              href={`/programs/${activeProgram.slug}`}
+              className="group/title inline-block"
+            >
+              <h3 className="font-heading text-2xl font-extrabold text-slate-900 group-hover/title:text-primary transition-colors leading-snug">
+                {activeProgram.title}
+              </h3>
+            </Link>
+            <p className="text-sm sm:text-md text-slate-650 font-body leading-relaxed line-clamp-3">
+              {activeProgram.description}
+            </p>
           </div>
 
           <div className="shrink-0 pt-1">
