@@ -191,15 +191,17 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const getCardStyle = (programIndex: number): React.CSSProperties => {
     const pos = (programIndex - activeIndex + total) % total;
 
-    // A card is shrinking to 0 if we went forward and it lies between the old and new active cards
-    const isShrinking =
+    // A card is exiting to the left if we went forward, it is skipped, and it is NOT visible in the new state
+    const isVisibleInNewState = pos === 0 || (cfg && pos >= 1 && pos <= maxVisible);
+    const isExitingLeft =
       direction === "forward" &&
-      isCircularBetween(programIndex, prevActiveIndex, activeIndex, total);
+      isCircularBetween(programIndex, prevActiveIndex, activeIndex, total) &&
+      !isVisibleInNewState;
 
     let width = 0;
     let mr = 0;
 
-    if (isShrinking) {
+    if (isExitingLeft) {
       width = 0;
       mr = 0;
     } else if (pos === 0) {
@@ -215,7 +217,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
     // Calculate CSS flex order
     let order = pos;
-    if (direction === "forward" && isShrinking) {
+    if (direction === "forward" && isExitingLeft) {
       const distance = (activeIndex - prevActiveIndex + total) % total;
       const offset = (programIndex - prevActiveIndex + total) % total;
       order = -distance + offset;
@@ -287,9 +289,11 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             const pos = getDisplayPos(i);
             const isActive = pos === 0;
             const isClickable = pos >= 1 && pos <= maxVisible;
-            const isShrinking =
+            const isVisibleInNewState = pos === 0 || (cfg && pos >= 1 && pos <= maxVisible);
+            const isExitingLeft =
               direction === "forward" &&
-              isCircularBetween(i, prevActiveIndex, activeIndex, total);
+              isCircularBetween(i, prevActiveIndex, activeIndex, total) &&
+              !isVisibleInNewState;
 
             const progImage = getProgramImage(program);
 
@@ -304,7 +308,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             };
 
             if (direction === "forward") {
-              if (isShrinking) {
+              if (isExitingLeft) {
                 // Anchor to the right, so as the card shrinks to 0, the image slides left out of view
                 imgStyle.right = 0;
               } else {
