@@ -103,6 +103,7 @@ function isCircularBetween(index: number, start: number, end: number, total: num
 export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -113,6 +114,15 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   useEffect(() => {
     prevActiveRef.current = activeIndex;
   });
+
+  /* ── Track Transition Window ── */
+  useEffect(() => {
+    setIsTransitioning(true);
+    const timer = setTimeout(() => {
+      setIsTransitioning(false);
+    }, DURATION_MS);
+    return () => clearTimeout(timer);
+  }, [activeIndex]);
 
   /* ── Measure the actual carousel container width ── */
   useEffect(() => {
@@ -174,47 +184,46 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
    * container clips/reveals the image as it squeezes. */
   const imageFixedWidth = Math.max(activeW, 300);
 
-  /* ── Compute inline styles for each card ──
-   *
-   * FIXED DOM ORDER + CSS `order`:
-   * DOM order is always [0, 1, …, N-1] so CSS transitions work.
-   * CSS `order` controls VISUAL order so the active card is always
-   * leftmost, preview strips follow to the right, and hidden cards
-   * are last. This creates a proper circular loop.
-   *
-   * When moving forward:
-   * Any card in the circular range [prevActiveIndex, activeIndex)
-   * is shrinking to 0px. We place them to the left of the new active
-   * card (using negative order values) so they pull the new active
-   * card leftward.
-   */
+  /* ── Compute inline styles for each card ── */
   const getCardStyle = (programIndex: number): React.CSSProperties => {
     const pos = (programIndex - activeIndex + total) % total;
 
-    // A card is shrinking to 0 if we went forward and it lies between the old and new active cards
+    // A card is shrinking if we went forward and it lies between the old and new active cards
     const isShrinking =
       direction === "forward" &&
       isCircularBetween(programIndex, prevActiveIndex, activeIndex, total);
 
     let width = 0;
     let mr = 0;
-    let blur = 0;
 
     if (isShrinking) {
-      width = 0;
-      mr = 0;
+      // During active transition, shrink to a thin 8px strip (pushed off-screen left).
+      // Once transition completes, clean up to 0px width.
+      width = isTransitioning ? 8 : 0;
     } else if (pos === 0) {
       width = activeW;
-      mr = cfg ? cfg.activeMargin : 0;
     } else if (cfg && pos >= 1 && pos <= maxVisible) {
       const pi = pos - 1;
       width = cfg.widths[pi];
-      mr = cfg.margins[pi];
-      // Subtle blur on the thinnest strips (like Stripe)
-      if (pos >= 4) blur = 2;
     }
 
     const isHidden = width === 0;
+
+    // Calculate margins:
+    // When transitioning, force all visible gaps to be constant 12px (except the last visible strip).
+    if (isTransitioning) {
+      if (!isHidden) {
+        mr = pos === maxVisible ? 0 : 12;
+      }
+    } else {
+      // Idle margins:
+      if (pos === 0) {
+        mr = cfg ? cfg.activeMargin : 0;
+      } else if (cfg && pos >= 1 && pos <= maxVisible) {
+        const pi = pos - 1;
+        mr = cfg.margins[pi];
+      }
+    }
 
     // Calculate CSS flex order
     let order = pos;
@@ -233,13 +242,11 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       // Remove border + padding on hidden cards so they disappear cleanly
       borderWidth: isHidden ? 0 : 1,
       padding: isHidden ? 0 : undefined,
-      filter: blur > 0 ? `blur(${blur}px)` : "none",
       transition: isReady
         ? [
             `width ${DURATION_MS}ms ${EASING}`,
             `margin-right ${DURATION_MS}ms ${EASING}`,
             `border-width ${DURATION_MS}ms ${EASING}`,
-            `filter 400ms ease`,
           ].join(", ")
         : "none",
     };
@@ -310,7 +317,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
             if (direction === "forward") {
               if (isShrinking) {
-                // Anchor to the right, so as the card shrinks to 0, the image slides left out of view
+                // Anchor to the right, so as the card shrinks to 8px, the image slides left out of view
                 imgStyle.right = 0;
               } else {
                 // Anchor to the left, so the expanding card pulls the image leftward into view
