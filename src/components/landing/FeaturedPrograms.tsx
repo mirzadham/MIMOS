@@ -389,7 +389,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
                 {/* Category tag — active card only */}
                 {isActive && (
-                  <span className="absolute left-4 top-4 inline-flex items-center rounded-[4px] bg-primary px-3 py-1.5 text-[10px] font-bold text-white shadow-md z-10 select-none uppercase tracking-wider">
+                  <span className="absolute left-4 top-4 inline-flex items-center rounded-[4px] bg-white/75 backdrop-blur-md px-3 py-1.5 text-[10px] font-bold text-slate-900 border border-white/20 shadow-sm z-10 select-none uppercase tracking-wider">
                     {program.category?.name || "Upskilling"}
                   </span>
                 )}
