@@ -23,14 +23,14 @@ export default function Partners({ partners = [] }: PartnersProps) {
       <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10" />
       
       <div className="w-full overflow-hidden">
-        <div className="animate-marquee-scroll flex gap-12 sm:gap-20 items-center">
+        <div className="animate-marquee-scroll flex gap-12 sm:gap-20 items-center group/marquee">
           
           {/* List 1 */}
           <div className="flex gap-12 sm:gap-20 items-center shrink-0">
             {partners.map((partner, idx) => (
               <div 
                 key={`p1-${partner.id || idx}`} 
-                className="h-10 w-28 sm:w-36 flex items-center justify-center grayscale hover:grayscale-0 opacity-40 hover:opacity-100 transition-all duration-300"
+                className="h-10 w-28 sm:w-36 flex items-center justify-center grayscale-0 opacity-80 group-hover/marquee:grayscale group-hover/marquee:opacity-35 hover:!grayscale-0 hover:!opacity-100 transition-all duration-300 cursor-pointer"
                 title={partner.name}
               >
                 <div className="relative w-full h-full">
@@ -52,7 +52,7 @@ export default function Partners({ partners = [] }: PartnersProps) {
             {partners.map((partner, idx) => (
               <div 
                 key={`p2-${partner.id || idx}`} 
-                className="h-10 w-28 sm:w-36 flex items-center justify-center grayscale hover:grayscale-0 opacity-40 hover:opacity-100 transition-all duration-300"
+                className="h-10 w-28 sm:w-36 flex items-center justify-center grayscale-0 opacity-80 group-hover/marquee:grayscale group-hover/marquee:opacity-35 hover:!grayscale-0 hover:!opacity-100 transition-all duration-300 cursor-pointer"
               >
                 <div className="relative w-full h-full">
                   <Image
