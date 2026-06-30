@@ -51,8 +51,22 @@ const getProgramImage = (program: Program) => {
   return fallbackImages[program.slug] || "/images/programs/wafer-fabrication.webp";
 };
 
+// Pure sliding transition variants (no fade)
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? "100%" : "-100%"
+  }),
+  center: {
+    x: 0
+  },
+  exit: (direction: number) => ({
+    x: direction > 0 ? "-100%" : "100%"
+  })
+};
+
 export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
 
   if (!programs || programs.length === 0) {
     return null;
@@ -63,19 +77,48 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const activeProgramImage = getProgramImage(activeProgram);
 
   const handlePrev = () => {
+    setDirection(-1);
     setActiveIndex((prev) => (prev - 1 + total) % total);
   };
 
   const handleNext = () => {
+    setDirection(1);
     setActiveIndex((prev) => (prev + 1) % total);
   };
 
-  // Get next 4 programs as preview strips on the right (responsive logic handles visibility)
-  const previewCount = Math.min(4, total - 1);
+  const handleSelect = (idx: number) => {
+    setDirection(idx > activeIndex ? 1 : -1);
+    setActiveIndex(idx);
+  };
+
+  // Get next 6 programs as preview strips on the right
+  const previewCount = Math.min(6, total - 1);
   const nextIndices: number[] = [];
   for (let i = 1; i <= previewCount; i++) {
     nextIndices.push((activeIndex + i) % total);
   }
+
+  // Sizing details matching Stripe design inspiration:
+  // - 1 to 3 size from big to small
+  // - 4 to 6 are really thin
+  const getStripWidthClass = (index: number) => {
+    switch (index) {
+      case 0:
+        return "w-[60px] md:w-[80px] lg:w-[96px] block";
+      case 1:
+        return "w-[36px] md:w-[44px] lg:w-[52px] block";
+      case 2:
+        return "w-[20px] md:w-[24px] lg:w-[28px] block";
+      case 3:
+        return "w-[12px] lg:w-[14px] hidden lg:block";
+      case 4:
+        return "w-[6px] lg:w-[8px] hidden lg:block";
+      case 5:
+        return "w-[4px] hidden lg:block";
+      default:
+        return "w-10 block";
+    }
+  };
 
   return (
     <section className="border-b border-slate-200/60 bg-white">
@@ -87,7 +130,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               Training Programmes
             </h2>
-            <p className="text-sm sm:text-md text-slate-600 font-body leading-relaxed">
+            <p className="text-sm sm:text-md text-slate-650 font-body leading-relaxed">
               Accelerate your engineering credentials. Explore our flagship upskilling courses in Semiconductor fabrication, advanced Artificial Intelligence, and Professional Project Management.
             </p>
           </div>
@@ -114,29 +157,34 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         </div>
 
         {/* Interactive Slider Block */}
-        <div className="mt-12 flex flex-row gap-4 h-[280px] sm:h-[380px] md:h-[450px] w-full items-stretch">
+        <div className="mt-12 flex flex-row gap-3 h-[280px] sm:h-[380px] md:h-[450px] w-full items-stretch">
           
           {/* Left Area: Main Large Active Image (Not Clickable) */}
-          <div className="flex-1 relative overflow-hidden border border-slate-200 bg-slate-50">
-            <AnimatePresence mode="wait">
+          <div className="flex-1 relative overflow-hidden border border-slate-200 bg-slate-50 rounded-[8px]">
+            <AnimatePresence initial={false} custom={direction}>
               {activeProgramImage ? (
                 <motion.img
                   key={activeIndex}
                   src={activeProgramImage}
                   alt={activeProgram.title}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.35 }}
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               ) : (
                 <motion.div
                   key={`placeholder-${activeIndex}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="absolute inset-0 flex items-center justify-center bg-slate-55"
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
+                  className="absolute inset-0 flex items-center justify-center bg-slate-50"
                 >
                   <GraduationCap className="h-16 w-16 text-slate-300" />
                 </motion.div>
@@ -154,19 +202,17 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
           {/* Right Area: Preview Strips */}
           {total > 1 && (
-            <div className="hidden md:flex gap-4 shrink-0 h-full">
+            <div className="hidden md:flex gap-3 shrink-0 h-full">
               {nextIndices.map((idx, index) => {
                 const prog = programs[idx];
                 const progImage = getProgramImage(prog);
-                // First 2 strips visible on md, all 4 visible on lg
-                const isExtra = index >= 2;
                 return (
                   <button
                     key={prog.id}
-                    onClick={() => setActiveIndex(idx)}
-                    className={`relative h-full w-16 sm:w-20 lg:w-24 shrink-0 overflow-hidden border border-slate-200/80 hover:border-primary transition-all duration-300 group cursor-pointer rounded-none ${
-                      isExtra ? "hidden lg:block" : "block"
-                    }`}
+                    onClick={() => handleSelect(idx)}
+                    className={`relative h-full shrink-0 overflow-hidden border border-slate-200/80 hover:border-primary transition-all duration-300 group cursor-pointer rounded-[8px] ${getStripWidthClass(
+                      index
+                    )}`}
                     aria-label={`Show program: ${prog.title}`}
                   >
                     {progImage ? (
@@ -176,7 +222,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center bg-slate-50">
+                      <div className="absolute inset-0 flex items-center justify-center bg-slate-55">
                         <GraduationCap className="h-6 w-6 text-slate-350" />
                       </div>
                     )}
@@ -198,7 +244,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                 {activeProgram.title}
               </h3>
             </Link>
-            <p className="text-sm sm:text-md text-slate-650 font-body leading-relaxed">
+            <p className="text-sm sm:text-md text-slate-655 font-body leading-relaxed">
               {activeProgram.description}
             </p>
           </div>
