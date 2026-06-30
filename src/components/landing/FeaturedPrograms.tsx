@@ -102,25 +102,21 @@ function isCircularBetween(index: number, start: number, end: number, total: num
  * ═══════════════════════════════════════════════════ */
 export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [prevActiveIndex, setPrevActiveIndex] = useState(0);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  /* Track previous activeIndex so we know which cards are "exiting/shrinking".
-   * The ref holds the OLD value during render; useEffect updates it after paint. */
-  const prevActiveRef = useRef(activeIndex);
-  useEffect(() => {
-    prevActiveRef.current = activeIndex;
-  });
-
-  /* ── Track Transition Window ── */
+  /* ── Track Transition Window ──
+   * We hold the active transitioning state for 800ms, then let the margins
+   * and final width drop settle during the remaining 400ms. */
   useEffect(() => {
     setIsTransitioning(true);
     const timer = setTimeout(() => {
       setIsTransitioning(false);
-    }, DURATION_MS);
+    }, 800);
     return () => clearTimeout(timer);
   }, [activeIndex]);
 
@@ -150,20 +146,22 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
   const total = programs.length;
   const activeProgram = programs[activeIndex];
-  const prevActiveIndex = prevActiveRef.current;
 
   const handlePrev = () => {
     setDirection("backward");
+    setPrevActiveIndex(activeIndex);
     setActiveIndex((p) => (p - 1 + total) % total);
   };
 
   const handleNext = () => {
     setDirection("forward");
+    setPrevActiveIndex(activeIndex);
     setActiveIndex((p) => (p + 1) % total);
   };
 
   const handleSelect = (idx: number) => {
     setDirection("forward");
+    setPrevActiveIndex(activeIndex);
     setActiveIndex(idx);
   };
 
@@ -179,9 +177,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         : containerWidth
       : 0;
 
-  /* The fixed pixel width every image is rendered at.
-   * This never changes during transitions — the card
-   * container clips/reveals the image as it squeezes. */
+  /* The fixed pixel width every image is rendered at. */
   const imageFixedWidth = Math.max(activeW, 300);
 
   /* ── Compute inline styles for each card ── */
@@ -197,8 +193,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     let mr = 0;
 
     if (isShrinking) {
-      // During active transition, shrink to a thin 8px strip (pushed off-screen left).
-      // Once transition completes, clean up to 0px width.
+      // Shrink to 8px strip during the active transition phase, then drop to 0px.
       width = isTransitioning ? 8 : 0;
     } else if (pos === 0) {
       width = activeW;
@@ -233,6 +228,12 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       order = -distance + offset;
     }
 
+    // Two-stage transition:
+    // Shrinking phase takes 1200ms. If we're dropping from 8px -> 0px, speed it up to 200ms.
+    // Margin adjustments settle in 400ms.
+    const widthDuration = isTransitioning ? DURATION_MS : 200;
+    const marginDuration = 400;
+
     return {
       width,
       marginRight: mr,
@@ -244,9 +245,9 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       padding: isHidden ? 0 : undefined,
       transition: isReady
         ? [
-            `width ${DURATION_MS}ms ${EASING}`,
-            `margin-right ${DURATION_MS}ms ${EASING}`,
-            `border-width ${DURATION_MS}ms ${EASING}`,
+            `width ${widthDuration}ms ${EASING}`,
+            `margin-right ${marginDuration}ms ease`,
+            `border-width ${widthDuration}ms ${EASING}`,
           ].join(", ")
         : "none",
     };
@@ -417,7 +418,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
           <div className="shrink-0 pt-1">
             <Link
               href="/programs"
-              className="inline-flex items-center justify-center gap-1.5 rounded-none bg-primary px-6 py-3.5 text-xs font-bold text-white hover:bg-primary-hover transition-all duration-200 group"
+              className="inline-flex items-center justify-center gap-1.5 rounded-none bg-primary px-6 py-3.5 text-xs font-bold text-white hover:bg-primary-hover transition-all duration-205 group"
             >
               <span>Explore All Programmes</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
