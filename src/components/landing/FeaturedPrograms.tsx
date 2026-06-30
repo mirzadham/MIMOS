@@ -269,7 +269,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     <section className="border-b border-slate-200/60 bg-white">
       <div className="mx-auto max-w-4xl px-6 py-12 sm:px-8 sm:py-16 relative">
         {/* ── Section Header ── */}
-        <div className="flex flex-row items-end justify-between pb-6 border-b border-slate-100 mb-6">
+        <div className="flex flex-row items-end justify-between pb-4 mb-6">
           <div className="space-y-2 max-w-2xl">
             <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               Training Programmes
