@@ -107,3 +107,15 @@ model Partner {
   updatedAt DateTime @updatedAt
 }
 
+model WhyChooseUsCard {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  imageUrl    String?  // Cloudflare R2 public URL or placeholder
+  colspan     Int      @default(1) // 1 or 2 for Bento Grid
+  order       Int      @default(0) // Sorting order
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+

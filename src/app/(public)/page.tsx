@@ -8,13 +8,14 @@ import Testimonials from "@/components/landing/Testimonials";
 import Partners from "@/components/landing/Partners";
 import StatsSection from "@/components/landing/StatsSection";
 import StatsAndFacilities from "@/components/landing/StatsAndFacilities";
-import { getSafePrograms, getSafeStats, getSafePartners } from "@/lib/db";
+import { getSafePrograms, getSafeStats, getSafePartners, getSafeWhyChooseUsCards } from "@/lib/db";
 
 export default async function Home() {
-  const [programs, stats, partners] = await Promise.all([
+  const [programs, stats, partners, whyChooseUsCards] = await Promise.all([
     getSafePrograms(),
     getSafeStats(),
-    getSafePartners()
+    getSafePartners(),
+    getSafeWhyChooseUsCards()
   ]);
 
   return (
@@ -29,11 +30,11 @@ export default async function Home() {
       {/* 3. Partners Marquee (Right-to-left infinite scroll) */}
       <Partners partners={partners} />
 
-      {/* 4. Upcoming Trainings & Events Section */}
-      <UpcomingSection />
+      {/* 4. Why Choose Us? Section (Bento Grid Advantage) */}
+      <WhyChooseUs cards={whyChooseUsCards} />
 
-      {/* 5. Why Choose Us? Section (Bento Grid Advantage) */}
-      <WhyChooseUs />
+      {/* 5. Upcoming Trainings & Events Section */}
+      <UpcomingSection />
 
       {/* 6. Featured Programmes Section */}
       <section id="featured-programs">
@@ -49,4 +50,5 @@ export default async function Home() {
     </div>
   );
 }
+
 
