@@ -103,9 +103,11 @@ function isCircularBetween(index: number, start: number, end: number, total: num
 export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   /* Track previous activeIndex so we know which cards are "exiting/shrinking".
    * The ref holds the OLD value during render; useEffect updates it after paint. */
@@ -113,6 +115,15 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   useEffect(() => {
     prevActiveRef.current = activeIndex;
   });
+
+  /* Clean up transition timeouts on unmount */
+  useEffect(() => {
+    return () => {
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, []);
 
   /* ── Measure the actual carousel container width ── */
   useEffect(() => {
@@ -142,19 +153,29 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const activeProgram = programs[activeIndex];
   const prevActiveIndex = prevActiveRef.current;
 
+  const startTransition = (newIndex: number, dir: "forward" | "backward") => {
+    if (transitionTimeoutRef.current) {
+      clearTimeout(transitionTimeoutRef.current);
+    }
+    setDirection(dir);
+    setIsTransitioning(true);
+    setActiveIndex(newIndex);
+
+    transitionTimeoutRef.current = setTimeout(() => {
+      setIsTransitioning(false);
+    }, DURATION_MS);
+  };
+
   const handlePrev = () => {
-    setDirection("backward");
-    setActiveIndex((p) => (p - 1 + total) % total);
+    startTransition((activeIndex - 1 + total) % total, "backward");
   };
 
   const handleNext = () => {
-    setDirection("forward");
-    setActiveIndex((p) => (p + 1) % total);
+    startTransition((activeIndex + 1) % total, "forward");
   };
 
   const handleSelect = (idx: number) => {
-    setDirection("forward");
-    setActiveIndex(idx);
+    startTransition(idx, "forward");
   };
 
   /* ── Responsive breakpoints based on container width ── */
@@ -191,12 +212,11 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const getCardStyle = (programIndex: number): React.CSSProperties => {
     const pos = (programIndex - activeIndex + total) % total;
 
-    // A card is exiting to the left if we went forward, it is skipped, and it is NOT visible in the new state
-    const isVisibleInNewState = pos === 0 || (cfg && pos >= 1 && pos <= maxVisible);
+    // During transition, skipped cards shrink to 0 on the left and do not wrap to the right
     const isExitingLeft =
       direction === "forward" &&
       isCircularBetween(programIndex, prevActiveIndex, activeIndex, total) &&
-      !isVisibleInNewState;
+      (isTransitioning || !(pos === 0 || (cfg && pos >= 1 && pos <= maxVisible)));
 
     let width = 0;
     let mr = 0;
@@ -289,11 +309,10 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             const pos = getDisplayPos(i);
             const isActive = pos === 0;
             const isClickable = pos >= 1 && pos <= maxVisible;
-            const isVisibleInNewState = pos === 0 || (cfg && pos >= 1 && pos <= maxVisible);
             const isExitingLeft =
               direction === "forward" &&
               isCircularBetween(i, prevActiveIndex, activeIndex, total) &&
-              !isVisibleInNewState;
+              (isTransitioning || !(pos === 0 || (cfg && pos >= 1 && pos <= maxVisible)));
 
             const progImage = getProgramImage(program);
 
