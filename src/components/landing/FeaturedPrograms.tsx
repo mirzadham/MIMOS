@@ -110,11 +110,9 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       case 2:
         return "w-[20px] md:w-[24px] lg:w-[28px] block";
       case 3:
-        return "w-[12px] lg:w-[14px] hidden lg:block";
       case 4:
-        return "w-[6px] lg:w-[8px] hidden lg:block";
       case 5:
-        return "w-[4px] hidden lg:block";
+        return "w-[6px] lg:w-[8px] hidden lg:block";
       default:
         return "w-10 block";
     }
@@ -160,7 +158,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         <div className="mt-6 flex flex-row gap-3 h-[180px] sm:h-[240px] md:h-[300px] w-full items-stretch">
           
           {/* Left Area: Main Large Active Image (Not Clickable) */}
-          <div className="flex-1 relative overflow-hidden border border-slate-200 bg-slate-50 rounded-[8px]">
+          <div className="flex-1 relative overflow-hidden border border-slate-200 bg-slate-50 rounded-[4px]">
             <AnimatePresence initial={false} custom={direction}>
               {activeProgramImage ? (
                 <motion.img
@@ -210,7 +208,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                   <button
                     key={prog.id}
                     onClick={() => handleSelect(idx)}
-                    className={`relative h-full shrink-0 overflow-hidden border border-slate-200/80 hover:border-primary transition-all duration-300 group cursor-pointer rounded-[8px] ${getStripWidthClass(
+                    className={`relative h-full shrink-0 overflow-hidden border border-slate-200/80 hover:border-primary transition-all duration-300 group cursor-pointer rounded-[4px] ${getStripWidthClass(
                       index
                     )}`}
                     aria-label={`Show program: ${prog.title}`}
