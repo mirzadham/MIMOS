@@ -1,4 +1,4 @@
-import { Cpu, Server, Shield, Layers, ChevronRight } from "lucide-react";
+import { Cpu, Server, Shield, Layers, ChevronRight, Presentation } from "lucide-react";
 import Link from "next/link";
 
 export default function FacilitiesPage() {
@@ -78,7 +78,7 @@ export default function FacilitiesPage() {
         </div>
 
         {/* Labs Showcase */}
-        <div className="space-y-12">
+        <div id="lab" className="space-y-12 scroll-mt-24">
           {labs.map((lab, index) => {
             const Icon = lab.icon;
             return (
@@ -105,7 +105,7 @@ export default function FacilitiesPage() {
                     <h2 className="font-heading text-xl sm:text-2xl font-black text-slate-900 leading-tight">{lab.title}</h2>
                   </div>
 
-                  <p className="text-sm text-slate-600 leading-relaxed font-body">
+                  <p className="text-sm text-slate-605 leading-relaxed font-body">
                     {lab.desc}
                   </p>
 
@@ -125,6 +125,56 @@ export default function FacilitiesPage() {
               </div>
             );
           })}
+
+          {/* Training & Seminar Rooms */}
+          <div 
+            id="training-room"
+            className="grid grid-cols-1 gap-10 lg:grid-cols-2 items-center bg-white rounded-none border border-slate-200 p-6 sm:p-10 transition-all duration-300 scroll-mt-24"
+          >
+            
+            {/* Visual Image container */}
+            <div className="relative h-64 sm:h-80 overflow-hidden rounded-none border border-slate-200 bg-slate-50 group lg:order-last">
+              <img
+                src="/training_seminar_room.png"
+                alt="Training & Seminar Rooms"
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-102"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/10 via-transparent to-transparent pointer-events-none" />
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex items-center gap-3.5">
+                <div className="rounded-none bg-primary/5 border border-primary/10 p-3 text-primary">
+                  <Presentation className="h-6 w-6" />
+                </div>
+                <h2 className="font-heading text-xl sm:text-2xl font-black text-slate-900 leading-tight">Training & Seminar Rooms</h2>
+              </div>
+
+              <p className="text-sm text-slate-605 leading-relaxed font-body">
+                Premium multi-functional spaces tailored for technical training cohorts and executive presentations. Featuring state-of-the-art visual presentation hardware and pre-configured student computing terminals, these facilities support comprehensive knowledge transfer and professional seminars.
+              </p>
+
+              <div className="space-y-3.5 pt-2 border-t border-slate-200">
+                <span className="text-xs font-bold text-slate-900 uppercase tracking-widest block">Room Specifications:</span>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 text-xs font-semibold text-slate-650 font-body">
+                  {[
+                    "Interactive smart displays & dual-projectors",
+                    "Pre-configured student dev workstations",
+                    "High-definition AV conferencing gear",
+                    "Flexible seating plans up to 60 pax",
+                    "Localized UPS power backup arrays",
+                    "Integrated acoustics & presentation controls"
+                  ].map((spec, sIdx) => (
+                    <li key={sIdx} className="flex gap-2 items-start">
+                      <Layers className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                      <span>{spec}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+          </div>
         </div>
 
       </div>

@@ -41,11 +41,11 @@ export default async function Home() {
         <FeaturedPrograms programs={programs} />
       </section>
 
-      {/* 7. Testimonials (Alumni Reviews) Section */}
-      <Testimonials />
-
-      {/* 8. Our Facilities Section */}
+      {/* 7. Our Facilities Section */}
       <StatsAndFacilities />
+
+      {/* 8. Testimonials (Alumni Reviews) Section */}
+      <Testimonials />
 
     </div>
   );
