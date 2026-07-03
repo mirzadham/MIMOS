@@ -8,14 +8,15 @@ import Testimonials from "@/components/landing/Testimonials";
 import Partners from "@/components/landing/Partners";
 import StatsSection from "@/components/landing/StatsSection";
 import StatsAndFacilities from "@/components/landing/StatsAndFacilities";
-import { getSafePrograms, getSafeStats, getSafePartners, getSafeWhyChooseUsCards } from "@/lib/db";
+import { getSafePrograms, getSafeStats, getSafePartners, getSafeWhyChooseUsCards, getSafeTestimonials } from "@/lib/db";
 
 export default async function Home() {
-  const [programs, stats, partners, whyChooseUsCards] = await Promise.all([
+  const [programs, stats, partners, whyChooseUsCards, testimonials] = await Promise.all([
     getSafePrograms(),
     getSafeStats(),
     getSafePartners(),
-    getSafeWhyChooseUsCards()
+    getSafeWhyChooseUsCards(),
+    getSafeTestimonials()
   ]);
 
   return (
@@ -45,7 +46,7 @@ export default async function Home() {
       <StatsAndFacilities />
 
       {/* 8. Testimonials (Alumni Reviews) Section */}
-      <Testimonials />
+      <Testimonials testimonials={testimonials} />
 
     </div>
   );

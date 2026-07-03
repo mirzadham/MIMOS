@@ -291,7 +291,7 @@ export async function getSafePartners() {
   }
 }
 
-export const mockWhyChooseUsCards = [
+export let mockWhyChooseUsCards = [
   {
     id: "mock-wcu-1",
     title: "Applied Learning & Lab Research",
@@ -337,5 +337,69 @@ export async function getSafeWhyChooseUsCards() {
     return mockWhyChooseUsCards;
   }
 }
+
+export function setMockWhyChooseUsCards(newCards: typeof mockWhyChooseUsCards) {
+  mockWhyChooseUsCards = newCards;
+}
+
+export let mockTestimonials = [
+  {
+    id: "mock-t-1",
+    quote: "MIMOS Academy transformed my career with practical, hands-on training that gave me the confidence to succeed.",
+    name: "Sarah Lim",
+    role: "Software Engineer",
+    company: "TechNova Solutions",
+    order: 0
+  },
+  {
+    id: "mock-t-2",
+    quote: "The expert instructors at MIMOS made complex topics easy to understand, and the mentorship was invaluable.",
+    name: "James Wong",
+    role: "Data Analyst",
+    company: "Insight Analytics",
+    order: 1
+  },
+  {
+    id: "mock-t-3",
+    quote: "I landed my dream job thanks to the skills and certifications I gained through MIMOS Academy’s top-notch programmes.",
+    name: "Aisha Rahman",
+    role: "Cybersecurity Specialist",
+    company: "SecureNet Global",
+    order: 2
+  },
+  {
+    id: "mock-t-4",
+    quote: "MIMOS doesn’t just teach theory—they focus on real-world applications that make a real difference in the job market.",
+    name: "Daniel Tan",
+    role: "AI Developer",
+    company: "FutureTech Innovations",
+    order: 3
+  },
+  {
+    id: "mock-t-5",
+    quote: "Enrolling in MIMOS Academy was the best decision I made for my career—highly recommended for technical professionals.",
+    name: "Priya Kumar",
+    role: "Systems Architect",
+    company: "GrowthWave Digital",
+    order: 4
+  }
+];
+
+export async function getSafeTestimonials() {
+  try {
+    const testimonials = await prisma.testimonial.findMany({
+      orderBy: { order: 'asc' }
+    });
+    return testimonials.length > 0 ? testimonials : mockTestimonials;
+  } catch (e) {
+    console.warn("Prisma Testimonial Fetch failed, falling back to mock details: ", e);
+    return mockTestimonials;
+  }
+}
+
+export function setMockTestimonials(newTestimonials: typeof mockTestimonials) {
+  mockTestimonials = newTestimonials;
+}
+
 
 

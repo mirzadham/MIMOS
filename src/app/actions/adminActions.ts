@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards } from "@/lib/db";
+import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials } from "@/lib/db";
 import crypto from "crypto";
 
 // 1. Authentication Server Actions
@@ -577,7 +577,7 @@ export async function createWhyChooseUsCardAction(data: {
       createdAt: new Date(),
       updatedAt: new Date()
     };
-    mockWhyChooseUsCards.push(mockNew);
+    setMockWhyChooseUsCards([...mockWhyChooseUsCards, mockNew]);
     revalidatePath("/");
     return { success: true, card: mockNew };
   }
@@ -619,10 +619,9 @@ export async function updateWhyChooseUsCardAction(
     return { success: true, card: updated };
   } catch (e) {
     console.error("Prisma update error: ", e);
-    const idx = mockWhyChooseUsCards.findIndex(p => p.id === id);
-    if (idx !== -1) {
-      mockWhyChooseUsCards[idx] = { id, ...data };
-    }
+    setMockWhyChooseUsCards(
+      mockWhyChooseUsCards.map(p => p.id === id ? { ...p, ...data } : p)
+    );
     revalidatePath("/");
     return { success: true };
   }
@@ -648,13 +647,130 @@ export async function deleteWhyChooseUsCardAction(id: string) {
     return { success: true };
   } catch (e) {
     console.error("Prisma delete error: ", e);
-    const idx = mockWhyChooseUsCards.findIndex(p => p.id === id);
-    if (idx !== -1) {
-      mockWhyChooseUsCards.splice(idx, 1);
-    }
+    setMockWhyChooseUsCards(
+      mockWhyChooseUsCards.filter(p => p.id !== id)
+    );
     revalidatePath("/");
     return { success: true };
   }
 }
+
+// 9. Testimonial CRUD Actions
+export async function createTestimonialAction(data: {
+  quote: string;
+  name: string;
+  role: string;
+  company: string;
+  order: number;
+}) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const newTestimonial = await prisma.testimonial.create({
+      data: {
+        quote: data.quote,
+        name: data.name,
+        role: data.role,
+        company: data.company,
+        order: data.order,
+      }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "CREATE_TESTIMONIAL",
+        details: `Created testimonial for: ${data.name} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    return { success: true, testimonial: newTestimonial };
+  } catch (e) {
+    console.error("Prisma write error, saving to mock testimonials: ", e);
+    const mockNew = {
+      id: "mock-" + Math.random().toString(36).substr(2, 9),
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    setMockTestimonials([...mockTestimonials, mockNew]);
+    revalidatePath("/");
+    return { success: true, testimonial: mockNew };
+  }
+}
+
+export async function updateTestimonialAction(
+  id: string,
+  data: {
+    quote: string;
+    name: string;
+    role: string;
+    company: string;
+    order: number;
+  }
+) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const updated = await prisma.testimonial.update({
+      where: { id },
+      data: {
+        quote: data.quote,
+        name: data.name,
+        role: data.role,
+        company: data.company,
+        order: data.order,
+      }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "UPDATE_TESTIMONIAL",
+        details: `Updated testimonial for: ${data.name} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    return { success: true, testimonial: updated };
+  } catch (e) {
+    console.error("Prisma update error: ", e);
+    setMockTestimonials(
+      mockTestimonials.map(p => p.id === id ? { ...p, ...data } : p)
+    );
+    revalidatePath("/");
+    return { success: true };
+  }
+}
+
+export async function deleteTestimonialAction(id: string) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const deleted = await prisma.testimonial.delete({
+      where: { id }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "DELETE_TESTIMONIAL",
+        details: `Deleted testimonial for: ${deleted.name} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    return { success: true };
+  } catch (e) {
+    console.error("Prisma delete error: ", e);
+    setMockTestimonials(
+      mockTestimonials.filter(p => p.id !== id)
+    );
+    revalidatePath("/");
+    return { success: true };
+  }
+}
+
 
 
