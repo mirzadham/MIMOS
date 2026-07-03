@@ -42,7 +42,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
   const parsedPrice = formatPrice(program.price);
 
   return (
-    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white p-0 shadow-[0_8px_30px_rgba(0,0,0,0.035)] transition-all duration-300">
+    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white p-0 transition-all duration-300">
 
       {/* Top Banner Image / Placeholder */}
       <div className="relative aspect-video w-full overflow-hidden bg-slate-50">
