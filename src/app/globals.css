@@ -85,7 +85,7 @@
     --border: #e2e8f0; /* Soft Slate 200 Border */
     --input: #e2e8f0;
     --ring: #a72190;
-    --radius: 0rem; /* Flat, square modern design */
+    --radius: 0.5rem; /* Elegant, modern slightly rounded design */
     
     --sidebar: #ffffff;
     --sidebar-foreground: #0f172a;
