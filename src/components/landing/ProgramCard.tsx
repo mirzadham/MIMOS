@@ -122,7 +122,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
               <span className="text-slate-800">{program.dates || "Scheduled Soon"}</span>
             </div>
             {/* Colored horizontal bar in MIMOS Orchid Magenta */}
-            <div className="h-[3px] w-12 bg-primary rounded-full mt-1.5" />
+            <div className="h-[5px] w-[25px] bg-primary rounded-full mt-1.5" />
           </div>
 
           {/* Clickable Elongated Arrow with Spring Effect */}
