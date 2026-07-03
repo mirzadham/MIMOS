@@ -401,5 +401,57 @@ export function setMockTestimonials(newTestimonials: typeof mockTestimonials) {
   mockTestimonials = newTestimonials;
 }
 
+export let mockAboutSettings = {
+  mission: "Empowering the future of technology through excellence in talent development and innovation.",
+  vision: "MIMOS Academy aims to be recognized as a national leader in technology talent development and innovation, making significant contributions to Malaysia’s digital transformation agenda and positioning the country as a hub for technology excellence."
+};
+
+export let mockTeamMembers = [
+  { id: "mock-tm-1", name: "Ir. Dr. Ahmad Nizar", role: "CEO-Designate", imageUrl: "/images/team/nizar.jpg" as string | null, initials: "AN", order: 0 },
+  { id: "mock-tm-2", name: "Fatin Firzana", role: "Office Administrator", imageUrl: "/images/team/fatin.jpg", initials: "FF", order: 1 },
+  { id: "mock-tm-3", name: "Siti Sarah Ramli", role: "Head of Governance & Operation", imageUrl: "/images/team/sarah.jpg", initials: "SR", order: 2 },
+  { id: "mock-tm-4", name: "Zalina Sayuti", role: "TPM Operation & L&D Management", imageUrl: "/images/team/zalina.jpg", initials: "ZS", order: 3 },
+  { id: "mock-tm-5", name: "Abu Said", role: "KHTP Operation & Facilities Management", imageUrl: "/images/team/abu.jpg", initials: "AS", order: 4 },
+  { id: "mock-tm-6", name: "Saidatul Farrah", role: "Head of Business Development", imageUrl: "/images/team/farrah.jpg", initials: "SF", order: 5 },
+  { id: "mock-tm-7", name: "Adilah", role: "Business Development Executive", imageUrl: "/images/team/adilah.jpg", initials: "AD", order: 6 },
+  { id: "mock-tm-8", name: "Fuziah", role: "Business Development Executive", imageUrl: "/images/team/fuziah.jpg", initials: "FZ", order: 7 },
+  { id: "mock-tm-9", name: "Sholihin", role: "Business Development Executive", imageUrl: "/images/team/sholihin.jpg", initials: "SH", order: 8 },
+  { id: "mock-tm-10", name: "Mohd Suhairi", role: "Head of Program Development & Delivery", imageUrl: "/images/team/suhairi.jpg", initials: "MS", order: 9 },
+  { id: "mock-tm-11", name: "Omar", role: "Program Development Specialist", imageUrl: "/images/team/omar.jpg", initials: "OM", order: 10 },
+  { id: "mock-tm-12", name: "Dr. Afiq", role: "Program Development Specialist", imageUrl: "/images/team/afiq.jpg", initials: "AF", order: 11 },
+  { id: "mock-tm-13", name: "Ainur", role: "Program Development Specialist", imageUrl: "/images/team/ainur.jpg", initials: "AI", order: 12 }
+];
+
+export async function getSafeAboutSettings() {
+  try {
+    const settings = await prisma.aboutSettings.findFirst();
+    return settings || mockAboutSettings;
+  } catch (e) {
+    console.warn("Prisma AboutSettings Fetch failed, falling back to mock details: ", e);
+    return mockAboutSettings;
+  }
+}
+
+export async function getSafeTeamMembers() {
+  try {
+    const members = await prisma.teamMember.findMany({
+      orderBy: { order: 'asc' }
+    });
+    return members.length > 0 ? members : mockTeamMembers;
+  } catch (e) {
+    console.warn("Prisma TeamMember Fetch failed, falling back to mock details: ", e);
+    return mockTeamMembers;
+  }
+}
+
+export function setMockAboutSettings(newSettings: typeof mockAboutSettings) {
+  mockAboutSettings = newSettings;
+}
+
+export function setMockTeamMembers(newTeam: typeof mockTeamMembers) {
+  mockTeamMembers = newTeam;
+}
+
+
 
 
