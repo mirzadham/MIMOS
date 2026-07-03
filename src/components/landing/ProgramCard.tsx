@@ -61,8 +61,8 @@ export default function ProgramCard({ program }: ProgramCardProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/5 via-transparent to-transparent" />
         </Link>
         
-        {/* Floating Category Tag (Pastel theme, black text, no border) */}
-        <span className="absolute right-4 top-4 z-10 inline-flex items-center rounded-full bg-[#fdf2fc] px-3 py-1 text-[10px] font-extrabold text-black shadow-sm select-none">
+        {/* Floating Category Tag (Pastel theme, black text, no border, slightly rounded) */}
+        <span className="absolute right-4 top-4 z-10 inline-flex items-center rounded-md bg-[#fdf2fc] px-3 py-1 text-[10px] font-extrabold text-black shadow-sm select-none">
           {program.category?.name || "Upskilling"}
         </span>
       </div>
