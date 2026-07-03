@@ -42,10 +42,10 @@ export default function ProgramCard({ program }: ProgramCardProps) {
   const parsedPrice = formatPrice(program.price);
 
   return (
-    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200 bg-white p-0 transition-all duration-300">
+    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white p-0 transition-all duration-300">
       
       {/* Top Banner Image / Placeholder */}
-      <div className="relative aspect-video w-full overflow-hidden bg-slate-50 border-b border-slate-200">
+      <div className="relative aspect-video w-full overflow-hidden bg-slate-50">
         <Link href={`/programs/${program.slug}`} className="block w-full h-full">
           {displayImageUrl ? (
             <img
@@ -84,8 +84,11 @@ export default function ProgramCard({ program }: ProgramCardProps) {
           </Link>
         </div>
 
+        {/* Divider 1 (Expand fully under title) */}
+        <div className="border-t border-slate-100 -mx-6 mt-4 mb-4" />
+
         {/* Duration/Location & Price */}
-        <div className="mt-4 flex items-end justify-between gap-4">
+        <div className="flex items-end justify-between gap-4">
           {/* Duration & Location (Stacked) */}
           <div className="flex flex-col gap-1 text-[11px] font-bold text-slate-450 font-sans leading-tight">
             {program.duration && (
@@ -107,11 +110,11 @@ export default function ProgramCard({ program }: ProgramCardProps) {
           </div>
         </div>
 
-        {/* Divider Line */}
-        <div className="mt-5 border-t border-slate-100 w-full" />
+        {/* Divider 2 (Expand fully under details) */}
+        <div className="border-t border-slate-100 -mx-6 mt-5 mb-4" />
 
         {/* Next Intake & Clickable Arrow */}
-        <div className="mt-4 flex items-center justify-between">
+        <div className="flex items-center justify-between">
           {/* Next Intake */}
           <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
             <span className="text-slate-400 font-medium">Next Intake:</span>

@@ -22,7 +22,7 @@ export default async function ProgramsPage() {
       {/* Background ambient design */}
       <div className="absolute right-1/4 top-0 -z-10 h-96 w-96 rounded-full bg-primary/3 blur-[120px] pointer-events-none" />
       
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-16">
+      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8 space-y-16">
         
         {/* Breadcrumbs & Header Banner */}
         <div className="space-y-6">
