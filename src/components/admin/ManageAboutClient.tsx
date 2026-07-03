@@ -213,17 +213,15 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
     const targetIndex = direction === "up" ? index - 1 : index + 1;
     if (targetIndex < 0 || targetIndex >= team.length) return;
 
-    const list = [...team];
-    const temp = list[index];
-    list[index] = list[targetIndex];
-    list[targetIndex] = temp;
-
-    // Swap order values
     const originalOrder = team[index].order;
     const swapOrder = team[targetIndex].order;
 
-    list[index].order = originalOrder;
-    list[targetIndex].order = swapOrder;
+    const list = [...team];
+    const itemAtIdx = { ...list[index], order: originalOrder };
+    const itemAtTargetIdx = { ...list[targetIndex], order: swapOrder };
+
+    list[index] = itemAtTargetIdx;
+    list[targetIndex] = itemAtIdx;
 
     setTeam(list);
 
@@ -236,14 +234,14 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
             role: list[index].role,
             imageUrl: list[index].imageUrl || "",
             initials: list[index].initials,
-            order: originalOrder
+            order: list[index].order
           }),
           updateTeamMemberAction(list[targetIndex].id, {
             name: list[targetIndex].name,
             role: list[targetIndex].role,
             imageUrl: list[targetIndex].imageUrl || "",
             initials: list[targetIndex].initials,
-            order: swapOrder
+            order: list[targetIndex].order
           })
         ]);
       } catch (e) {
