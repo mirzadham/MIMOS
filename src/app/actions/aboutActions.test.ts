@@ -50,7 +50,7 @@ vi.mock("@/lib/db", () => {
 });
 
 describe("About and Team Server Actions Tests", () => {
-  const mockAdmin = { email: "admin@mimos.my" };
+  const mockAdmin = { email: "admin@mimos.my", role: "ADMIN" };
 
   beforeEach(() => {
     vi.resetAllMocks();
