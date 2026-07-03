@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { 
   updateAboutSettingsAction, 
@@ -6,7 +7,7 @@ import {
   deleteTeamMemberAction 
 } from "./aboutActions";
 import { getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockAboutSettings, mockTeamMembers } from "@/lib/db";
+import { prisma } from "@/lib/db";
 
 // Mock next/cache
 vi.mock("next/cache", () => ({

@@ -28,7 +28,7 @@ export default function HeroSection() {
       <LatticeNetwork />
       
       {/* Decorative gradient blur in background */}
-      <div className="absolute right-0 top-0 -z-10 h-[500px] w-[500px] rounded-none bg-primary/[0.02] blur-[150px]" />
+      <div className="absolute right-0 top-0 -z-10 h-[500px] w-[500px] rounded-full bg-primary/[0.02] blur-[150px]" />
       
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8 text-center">
         <motion.div 
@@ -40,7 +40,7 @@ export default function HeroSection() {
           {/* Badge Accent */}
           <motion.div 
             variants={itemVariants}
-            className="inline-flex items-center gap-2 rounded-none bg-primary/5 px-4 py-1.5 text-xs font-bold text-primary border border-primary/10"
+            className="inline-flex items-center gap-2 rounded-full bg-primary/5 px-4 py-1.5 text-xs font-bold text-primary border border-primary/10"
           >
             <Cpu className="h-3.5 w-3.5" />
             <span>Trusted by 150K+ Talents Across Malaysia</span>
@@ -73,7 +73,7 @@ export default function HeroSection() {
           >
             <Link
               href="/programs"
-              className="rounded-none bg-primary px-8 py-4 text-xs font-bold text-white hover:bg-primary-hover transition-all flex items-center gap-2 group cursor-pointer"
+              className="rounded-lg bg-primary px-8 py-4 text-xs font-bold text-white hover:bg-primary-hover transition-all flex items-center gap-2 group cursor-pointer"
             >
               <span>Explore Our Programmes</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -81,7 +81,7 @@ export default function HeroSection() {
             
             <Link
               href="/contact"
-              className="rounded-none border border-slate-250 bg-white px-8 py-4 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all cursor-pointer"
+              className="rounded-lg border border-slate-250 bg-white px-8 py-4 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all cursor-pointer"
             >
               Contact Advisory Team
             </Link>

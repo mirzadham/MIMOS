@@ -152,7 +152,7 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
 
         <button
           onClick={handleOpenAdd}
-          className="rounded-none bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all flex items-center gap-1.5 cursor-pointer"
+          className="rounded-lg bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all flex items-center gap-1.5 cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           <span>Add New Partner</span>
@@ -160,7 +160,7 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
       </div>
 
       {/* Partners List Table */}
-      <div className="overflow-hidden border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden border border-slate-200 bg-white shadow-sm rounded-2xl">
         <table className="min-w-full divide-y divide-slate-200 text-left text-xs font-semibold text-slate-700">
           <thead className="bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-200">
             <tr>
@@ -180,7 +180,7 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
               partners.map((partner) => (
                 <tr key={partner.id} className="hover:bg-slate-50/50 transition-colors">
                   <td className="whitespace-nowrap px-6 py-3">
-                    <div className="relative h-10 w-24 bg-slate-50 border border-slate-100 p-1">
+                    <div className="relative h-10 w-24 bg-slate-50 border border-slate-100 p-1 rounded-lg">
                       <Image
                         src={partner.logoUrl}
                         alt={partner.name}
@@ -196,14 +196,14 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
                   <td className="whitespace-nowrap px-6 py-4 text-right space-x-2">
                     <button
                       onClick={() => handleOpenEdit(partner)}
-                      className="inline-flex items-center gap-1 text-slate-500 hover:text-primary transition-colors cursor-pointer px-2 py-1 border border-slate-200 hover:border-primary/20 bg-white"
+                      className="inline-flex items-center gap-1 text-slate-500 hover:text-primary transition-colors cursor-pointer px-2 py-1 border border-slate-200 hover:border-primary/20 bg-white rounded-md"
                     >
                       <Edit2 className="h-3 w-3" />
                       <span>Edit</span>
                     </button>
                     <button
                       onClick={() => handleDelete(partner.id, partner.name)}
-                      className="inline-flex items-center gap-1 text-slate-500 hover:text-red-600 transition-colors cursor-pointer px-2 py-1 border border-slate-200 hover:border-red-200 bg-white"
+                      className="inline-flex items-center gap-1 text-slate-500 hover:text-red-600 transition-colors cursor-pointer px-2 py-1 border border-slate-200 hover:border-red-200 bg-white rounded-md"
                       disabled={isPending}
                     >
                       <Trash2 className="h-3 w-3" />
@@ -220,7 +220,7 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
       {/* Modal Dialog Form */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-fade-in">
-          <div className="w-full max-w-md bg-white border border-slate-200 shadow-2xl overflow-hidden flex flex-col">
+          <div className="w-full max-w-md bg-white border border-slate-200 shadow-2xl overflow-hidden flex flex-col rounded-2xl">
             
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50">
@@ -255,7 +255,7 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
                   placeholder="e.g. Inari Amertron"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 focus:border-primary focus:outline-none placeholder-slate-300 font-heading font-bold"
+                  className="w-full border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 focus:border-primary focus:outline-none placeholder-slate-300 font-heading font-bold rounded-lg"
                 />
               </div>
 
@@ -278,7 +278,7 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="w-full border border-dashed border-slate-300 hover:border-primary/50 bg-slate-50/50 p-4 text-center cursor-pointer transition-colors flex flex-col items-center justify-center gap-1"
+                      className="w-full border border-dashed border-slate-300 hover:border-primary/50 bg-slate-50/50 p-4 text-center cursor-pointer transition-colors flex flex-col items-center justify-center gap-1 rounded-lg"
                     >
                       <Upload className="h-5 w-5 text-slate-400" />
                       <span className="text-[10px] font-bold text-slate-600 block">
@@ -292,7 +292,7 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
 
                   {/* Logo Preview box */}
                   {logoUrl && (
-                    <div className="h-16 w-24 relative bg-slate-50 border border-slate-200 shrink-0 p-1 flex items-center justify-center overflow-hidden">
+                    <div className="h-16 w-24 relative bg-slate-50 border border-slate-200 shrink-0 p-1 flex items-center justify-center overflow-hidden rounded-lg">
                       <Image
                         src={logoUrl}
                         alt="Logo preview"
@@ -316,7 +316,7 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
                 <button
                   type="submit"
                   disabled={isPending || uploading}
-                  className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-xs font-bold text-white transition-colors cursor-pointer"
+                  className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-xs font-bold text-white transition-colors cursor-pointer rounded-lg"
                 >
                   {uploading ? "Uploading Logo..." : isPending ? "Saving..." : editPartner ? "Save Changes" : "Create Partner"}
                 </button>

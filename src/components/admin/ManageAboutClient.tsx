@@ -269,7 +269,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
         
         {/* Left Column: Mission & Vision Settings (5/12 width) */}
-        <form onSubmit={handleSettingsSubmit} className="lg:col-span-5 space-y-6 bg-white border border-slate-200 p-6 rounded-none shadow-sm h-fit">
+        <form onSubmit={handleSettingsSubmit} className="lg:col-span-5 space-y-6 bg-white border border-slate-200 p-6 rounded-xl shadow-sm h-fit">
           <h2 className="font-heading text-sm font-extrabold text-slate-900 border-b border-slate-100 pb-3">
             Company Core Statements
           </h2>
@@ -296,7 +296,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
               value={mission}
               onChange={(e) => setMission(e.target.value)}
               rows={4}
-              className="w-full text-xs p-3 border border-slate-200 rounded-none focus:outline-none focus:border-primary font-body leading-relaxed"
+              className="w-full text-xs p-3 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body leading-relaxed"
               placeholder="Enter the company mission..."
             />
           </div>
@@ -309,7 +309,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
               value={vision}
               onChange={(e) => setVision(e.target.value)}
               rows={5}
-              className="w-full text-xs p-3 border border-slate-200 rounded-none focus:outline-none focus:border-primary font-body leading-relaxed"
+              className="w-full text-xs p-3 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body leading-relaxed"
               placeholder="Enter the company vision..."
             />
           </div>
@@ -317,21 +317,21 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
           <Button
             type="submit"
             disabled={isPending}
-            className="w-full rounded-none h-10 text-xs font-bold bg-primary hover:bg-primary-hover text-white transition-colors cursor-pointer"
+            className="w-full rounded-lg h-10 text-xs font-bold bg-primary hover:bg-primary-hover text-white transition-colors cursor-pointer"
           >
             {isPending ? "Saving..." : "Save Statements"}
           </Button>
         </form>
 
         {/* Right Column: Leadership Team Table (7/12 width) */}
-        <div className="lg:col-span-7 space-y-6 bg-white border border-slate-200 p-6 rounded-none shadow-sm">
+        <div className="lg:col-span-7 space-y-6 bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <h2 className="font-heading text-sm font-extrabold text-slate-900">
               Leadership Team Roster
             </h2>
             <button
               onClick={handleOpenAdd}
-              className="rounded-none bg-primary hover:bg-primary-hover px-3 py-1.5 text-[10px] font-bold text-white transition-colors flex items-center gap-1 cursor-pointer"
+              className="rounded-lg bg-primary hover:bg-primary-hover px-3 py-1.5 text-[10px] font-bold text-white transition-colors flex items-center gap-1 cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Add Member</span>
@@ -342,7 +342,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
             <div className="text-center py-12 border border-dashed border-slate-200 rounded-xl bg-slate-50/50">
               <Users className="h-8 w-8 text-slate-300 mx-auto" />
               <h3 className="text-xs font-bold text-slate-700 mt-2">No team members</h3>
-              <p className="text-[10px] text-slate-400 mt-0.5">Click "Add Member" to populate your directory.</p>
+              <p className="text-[10px] text-slate-400 mt-0.5">Click &quot;Add Member&quot; to populate your directory.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -435,7 +435,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
       {/* Add / Edit Team Member Modal Overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-fade-in">
-          <div className="w-full max-w-md bg-white border border-slate-200 p-6 shadow-xl rounded-none relative">
+          <div className="w-full max-w-md bg-white border border-slate-200 p-6 shadow-xl rounded-2xl relative">
             <button
               onClick={() => setIsOpen(false)}
               className="absolute right-4 top-4 p-1 rounded-full text-slate-400 hover:text-slate-900 transition-colors cursor-pointer"
@@ -466,7 +466,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                   type="text"
                   value={memberName}
                   onChange={(e) => setMemberName(e.target.value)}
-                  className="w-full text-xs p-2.5 border border-slate-200 rounded-none focus:outline-none focus:border-primary font-body"
+                  className="w-full text-xs p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body"
                   placeholder="e.g. Ir. Dr. Ahmad Nizar"
                   required
                 />
@@ -481,7 +481,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                   type="text"
                   value={memberRole}
                   onChange={(e) => setMemberRole(e.target.value)}
-                  className="w-full text-xs p-2.5 border border-slate-200 rounded-none focus:outline-none focus:border-primary font-body"
+                  className="w-full text-xs p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body"
                   placeholder="e.g. CEO-Designate"
                   required
                 />
@@ -497,7 +497,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                     type="text"
                     value={memberInitials}
                     onChange={(e) => setMemberInitials(e.target.value.toUpperCase().slice(0, 3))}
-                    className="w-full text-xs p-2.5 border border-slate-200 rounded-none focus:outline-none focus:border-primary font-body uppercase text-center font-bold tracking-widest"
+                    className="w-full text-xs p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body uppercase text-center font-bold tracking-widest"
                     placeholder="e.g. AN"
                     maxLength={3}
                     required
@@ -512,7 +512,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                   <input
                     type="text"
                     value={editMember ? editMember.order : team.length}
-                    className="w-full text-xs p-2.5 border border-slate-200 bg-slate-50 text-slate-400 rounded-none font-body text-center font-bold"
+                    className="w-full text-xs p-2.5 border border-slate-200 bg-slate-50 text-slate-400 rounded-lg font-body text-center font-bold"
                     disabled
                   />
                 </div>
@@ -550,7 +550,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="rounded-none border border-slate-250 bg-white hover:bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer w-full justify-center"
+                      className="rounded-lg border border-slate-250 bg-white hover:bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer w-full justify-center"
                     >
                       <Upload className="h-4 w-4 text-slate-500" />
                       <span>{selectedFile ? "Change Image" : "Upload Portrait"}</span>
@@ -568,7 +568,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded-none border border-slate-250 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-700 transition-colors cursor-pointer"
+                  className="rounded-lg border border-slate-250 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-700 transition-colors cursor-pointer"
                   disabled={uploading || isPending}
                 >
                   Cancel
@@ -576,7 +576,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                 <Button
                   type="submit"
                   disabled={uploading || isPending}
-                  className="rounded-none h-10 px-4 text-xs font-bold bg-primary hover:bg-primary-hover text-white transition-colors cursor-pointer"
+                  className="rounded-lg h-10 px-4 text-xs font-bold bg-primary hover:bg-primary-hover text-white transition-colors cursor-pointer"
                 >
                   {uploading ? "Uploading..." : isPending ? "Saving..." : editMember ? "Update Details" : "Add Member"}
                 </Button>

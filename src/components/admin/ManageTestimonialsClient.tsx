@@ -123,7 +123,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
 
         <button
           onClick={handleOpenAdd}
-          className="rounded-none bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all flex items-center gap-1.5 cursor-pointer"
+          className="rounded-lg bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all flex items-center gap-1.5 cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           <span>Add Testimonial</span>
@@ -131,7 +131,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
       </div>
 
       {/* Testimonials List Table */}
-      <div className="overflow-hidden border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden border border-slate-200 bg-white shadow-sm rounded-2xl">
         <table className="min-w-full divide-y divide-slate-200 text-left text-xs font-semibold text-slate-700">
           <thead className="bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-200">
             <tr>
@@ -167,14 +167,14 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
                   <td className="whitespace-nowrap px-6 py-4 text-right space-x-2">
                     <button
                       onClick={() => handleOpenEdit(t)}
-                      className="inline-flex items-center gap-1 text-slate-500 hover:text-primary transition-colors cursor-pointer px-2 py-1 border border-slate-200 hover:border-primary/20 bg-white"
+                      className="inline-flex items-center gap-1 text-slate-500 hover:text-primary transition-colors cursor-pointer px-2 py-1 border border-slate-200 hover:border-primary/20 bg-white rounded-md"
                     >
                       <Edit2 className="h-3 w-3" />
                       <span>Edit</span>
                     </button>
                     <button
                       onClick={() => handleDelete(t.id, t.name)}
-                      className="inline-flex items-center gap-1 text-slate-500 hover:text-red-600 transition-colors cursor-pointer px-2 py-1 border border-slate-200 hover:border-red-200 bg-white"
+                      className="inline-flex items-center gap-1 text-slate-500 hover:text-red-600 transition-colors cursor-pointer px-2 py-1 border border-slate-200 hover:border-red-200 bg-white rounded-md"
                       disabled={isPending}
                     >
                       <Trash2 className="h-3 w-3" />
@@ -191,7 +191,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
       {/* Add / Edit Modal Overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-lg border border-slate-200 bg-white p-6 shadow-lg animate-in zoom-in-95 duration-200">
+          <div className="relative w-full max-w-lg border border-slate-200 bg-white p-6 shadow-lg animate-in zoom-in-95 duration-200 rounded-2xl">
             
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
@@ -224,7 +224,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Sarah Lim"
-                  className="w-full rounded-none border border-slate-200 px-3 py-2 text-slate-800 focus:border-primary focus:outline-none"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-slate-800 focus:border-primary focus:outline-none"
                   required
                 />
               </div>
@@ -237,7 +237,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
                     placeholder="e.g. Software Engineer"
-                    className="w-full rounded-none border border-slate-200 px-3 py-2 text-slate-800 focus:border-primary focus:outline-none"
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-slate-800 focus:border-primary focus:outline-none"
                     required
                   />
                 </div>
@@ -248,7 +248,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="e.g. TechNova Solutions"
-                    className="w-full rounded-none border border-slate-200 px-3 py-2 text-slate-800 focus:border-primary focus:outline-none"
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-slate-800 focus:border-primary focus:outline-none"
                     required
                   />
                 </div>
@@ -261,7 +261,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
                   onChange={(e) => setQuote(e.target.value)}
                   placeholder="Enter the graduate's quote here..."
                   rows={4}
-                  className="w-full rounded-none border border-slate-200 px-3 py-2 text-slate-800 focus:border-primary focus:outline-none font-body font-medium"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-slate-800 focus:border-primary focus:outline-none font-body font-medium"
                   required
                 />
               </div>
@@ -272,7 +272,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
                   type="number"
                   value={order}
                   onChange={(e) => setOrder(Number(e.target.value))}
-                  className="w-full rounded-none border border-slate-200 px-3 py-2 text-slate-800 focus:border-primary focus:outline-none"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-slate-800 focus:border-primary focus:outline-none"
                   required
                 />
               </div>
@@ -282,14 +282,14 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded-none border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-650 transition-colors cursor-pointer"
+                  className="rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-650 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-none bg-primary hover:bg-primary-hover px-5 py-2.5 text-xs font-bold text-white transition-colors cursor-pointer"
+                  className="rounded-lg bg-primary hover:bg-primary-hover px-5 py-2.5 text-xs font-bold text-white transition-colors cursor-pointer"
                 >
                   {isPending ? "Saving..." : editTestimonial ? "Save Changes" : "Create Testimonial"}
                 </button>

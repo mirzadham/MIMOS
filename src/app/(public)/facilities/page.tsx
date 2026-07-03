@@ -46,7 +46,7 @@ export default function FacilitiesPage() {
   return (
     <div className="bg-background min-h-screen py-16 sm:py-24 relative overflow-hidden">
       {/* Decorative ambient background */}
-      <div className="absolute right-1/4 top-0 -z-10 h-96 w-96 rounded-none bg-primary/3 blur-[120px] pointer-events-none" />
+      <div className="absolute right-1/4 top-0 -z-10 h-96 w-96 rounded-full bg-primary/3 blur-[120px] pointer-events-none" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-16">
         
@@ -62,9 +62,9 @@ export default function FacilitiesPage() {
           </nav>
 
           {/* Editorial Banner */}
-          <div className="rounded-none border border-slate-200 bg-white p-8 sm:p-14 relative overflow-hidden transition-all duration-300">
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 sm:p-14 relative overflow-hidden transition-all duration-300">
             <div className="max-w-3xl space-y-4 relative z-10">
-              <span className="text-xs font-extrabold text-primary tracking-widest uppercase bg-primary/5 px-3 py-1 rounded-none border border-primary/10">
+              <span className="text-xs font-extrabold text-primary tracking-widest uppercase bg-primary/5 px-3 py-1 rounded-full border border-primary/10">
                 Infrastructure Overview
               </span>
               <h1 className="font-heading text-3xl font-black text-slate-900 sm:text-5xl tracking-tight leading-tight">
@@ -84,11 +84,11 @@ export default function FacilitiesPage() {
             return (
               <div 
                 key={index} 
-                className="grid grid-cols-1 gap-10 lg:grid-cols-2 items-center bg-white rounded-none border border-slate-200 p-6 sm:p-10 transition-all duration-300"
+                className="grid grid-cols-1 gap-10 lg:grid-cols-2 items-center bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 transition-all duration-300"
               >
                 
                 {/* Visual Image container */}
-                <div className={`relative h-64 sm:h-80 overflow-hidden rounded-none border border-slate-200 bg-slate-50 group ${index % 2 === 1 ? 'lg:order-last' : ''}`}>
+                <div className={`relative h-64 sm:h-80 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 group ${index % 2 === 1 ? 'lg:order-last' : ''}`}>
                   <img
                     src={lab.imageUrl}
                     alt={lab.title}
@@ -96,10 +96,10 @@ export default function FacilitiesPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/10 via-transparent to-transparent pointer-events-none" />
                 </div>
-
+ 
                 <div className="space-y-6">
-                  <div className="flex items-center gap-3.5">
-                    <div className="rounded-none bg-primary/5 border border-primary/10 p-3 text-primary">
+                   <div className="flex items-center gap-3.5">
+                    <div className="rounded-lg bg-primary/5 border border-primary/10 p-3 text-primary">
                       <Icon className="h-6 w-6" />
                     </div>
                     <h2 className="font-heading text-xl sm:text-2xl font-black text-slate-900 leading-tight">{lab.title}</h2>
@@ -129,11 +129,11 @@ export default function FacilitiesPage() {
           {/* Training & Seminar Rooms */}
           <div 
             id="training-room"
-            className="grid grid-cols-1 gap-10 lg:grid-cols-2 items-center bg-white rounded-none border border-slate-200 p-6 sm:p-10 transition-all duration-300 scroll-mt-24"
+            className="grid grid-cols-1 gap-10 lg:grid-cols-2 items-center bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 transition-all duration-300 scroll-mt-24"
           >
             
             {/* Visual Image container */}
-            <div className="relative h-64 sm:h-80 overflow-hidden rounded-none border border-slate-200 bg-slate-50 group lg:order-last">
+            <div className="relative h-64 sm:h-80 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 group lg:order-last">
               <img
                 src="/training_seminar_room.png"
                 alt="Training & Seminar Rooms"
@@ -141,10 +141,10 @@ export default function FacilitiesPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/10 via-transparent to-transparent pointer-events-none" />
             </div>
-
+ 
             <div className="space-y-6">
               <div className="flex items-center gap-3.5">
-                <div className="rounded-none bg-primary/5 border border-primary/10 p-3 text-primary">
+                <div className="rounded-lg bg-primary/5 border border-primary/10 p-3 text-primary">
                   <Presentation className="h-6 w-6" />
                 </div>
                 <h2 className="font-heading text-xl sm:text-2xl font-black text-slate-900 leading-tight">Training & Seminar Rooms</h2>

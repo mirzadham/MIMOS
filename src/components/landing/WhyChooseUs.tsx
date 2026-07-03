@@ -74,7 +74,7 @@ export default function WhyChooseUs({ cards }: WhyChooseUsProps) {
   return (
     <section className="border-b border-slate-200/60 bg-background py-20 sm:py-28 relative overflow-hidden">
       {/* Background ambient blurs */}
-      <div className="absolute left-1/3 top-1/2 -translate-y-1/2 -z-10 h-96 w-96 rounded-none bg-primary/3 blur-[120px]" />
+      <div className="absolute left-1/3 top-1/2 -translate-y-1/2 -z-10 h-96 w-96 rounded-full bg-primary/3 blur-[120px]" />
       
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         
@@ -102,7 +102,7 @@ export default function WhyChooseUs({ cards }: WhyChooseUsProps) {
               <motion.div 
                 key={card.id}
                 variants={itemVariants}
-                className={`group relative rounded-none border border-slate-200/80 bg-slate-950 p-8 sm:p-10 hover:border-primary/60 hover:shadow-[0_0_30px_rgba(167,33,144,0.15)] transition-all duration-500 flex flex-col overflow-hidden min-h-[380px] ${
+                className={`group relative rounded-2xl border border-slate-200/80 bg-slate-950 p-8 sm:p-10 hover:border-primary/60 hover:shadow-[0_0_30px_rgba(167,33,144,0.15)] transition-all duration-500 flex flex-col overflow-hidden min-h-[380px] ${
                   card.colspan === 2 ? "md:col-span-2" : "md:col-span-1"
                 } ${align.container}`}
               >

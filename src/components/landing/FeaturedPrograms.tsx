@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight, GraduationCap } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+
 
 interface Program {
   id: string;
@@ -88,7 +88,7 @@ const getProgramImage = (program: Program): string => {
 };
 
 /** Helper to check if an index lies in a circular range [start, end) */
-function isCircularBetween(index: number, start: number, end: number, total: number): boolean {
+function isCircularBetween(index: number, start: number, end: number): boolean {
   if (start === end) return false;
   if (start < end) {
     return index >= start && index < end;
@@ -109,12 +109,13 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  /* Track previous activeIndex so we know which cards are "exiting/shrinking".
-   * The ref holds the OLD value during render; useEffect updates it after paint. */
-  const prevActiveRef = useRef(activeIndex);
-  useEffect(() => {
-    prevActiveRef.current = activeIndex;
-  });
+  const [prevActiveIndex, setPrevActiveIndex] = useState(activeIndex);
+  const [currentActiveIndex, setCurrentActiveIndex] = useState(activeIndex);
+
+  if (activeIndex !== currentActiveIndex) {
+    setPrevActiveIndex(currentActiveIndex);
+    setCurrentActiveIndex(activeIndex);
+  }
 
   /* Clean up transition timeouts on unmount */
   useEffect(() => {
@@ -151,7 +152,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
   const total = programs.length;
   const activeProgram = programs[activeIndex];
-  const prevActiveIndex = prevActiveRef.current;
+
 
   const startTransition = (newIndex: number, dir: "forward" | "backward") => {
     if (transitionTimeoutRef.current) {
@@ -215,7 +216,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     // During transition, skipped cards shrink to 0 on the left and do not wrap to the right
     const isExitingLeft =
       direction === "forward" &&
-      isCircularBetween(programIndex, prevActiveIndex, activeIndex, total) &&
+      isCircularBetween(programIndex, prevActiveIndex, activeIndex) &&
       (isTransitioning || !(pos === 0 || (cfg && pos >= 1 && pos <= maxVisible)));
 
     let width = 0;
@@ -284,14 +285,14 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             <div className="flex gap-1.5 shrink-0">
               <button
                 onClick={handlePrev}
-                className="inline-flex h-8 w-8 items-center justify-center border border-primary/20 bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all duration-200 cursor-pointer rounded-[4px]"
+                className="inline-flex h-8 w-8 items-center justify-center border border-primary/20 bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all duration-200 cursor-pointer rounded-lg"
                 aria-label="Previous Programme"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 onClick={handleNext}
-                className="inline-flex h-8 w-8 items-center justify-center border border-primary/20 bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all duration-200 cursor-pointer rounded-[4px]"
+                className="inline-flex h-8 w-8 items-center justify-center border border-primary/20 bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all duration-200 cursor-pointer rounded-lg"
                 aria-label="Next Programme"
               >
                 <ChevronRight className="h-4 w-4" />
@@ -311,7 +312,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             const isClickable = pos >= 1 && pos <= maxVisible;
             const isExitingLeft =
               direction === "forward" &&
-              isCircularBetween(i, prevActiveIndex, activeIndex, total) &&
+              isCircularBetween(i, prevActiveIndex, activeIndex) &&
               (isTransitioning || !(pos === 0 || (cfg && pos >= 1 && pos <= maxVisible)));
 
             const progImage = getProgramImage(program);
@@ -349,7 +350,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
               <div
                 key={program.id}
                 style={getCardStyle(i)}
-                className={`relative h-full rounded-[4px] border border-slate-200/80 bg-slate-50 ${
+                className={`relative h-full rounded-xl border border-slate-200/80 bg-slate-50 ${
                   isClickable
                     ? "hover:border-primary cursor-pointer group"
                     : ""
@@ -389,7 +390,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
                 {/* Category tag — active card only */}
                 {isActive && (
-                  <span className="absolute left-4 top-4 inline-flex items-center rounded-[4px] bg-white/75 backdrop-blur-md px-3 py-1.5 text-[10px] font-bold text-slate-900 border border-white/20 shadow-sm z-10 select-none uppercase tracking-wider">
+                  <span className="absolute left-4 top-4 inline-flex items-center rounded-md bg-white/75 backdrop-blur-md px-3 py-1.5 text-[10px] font-bold text-slate-900 border border-white/20 shadow-sm z-10 select-none uppercase tracking-wider">
                     {program.category?.name || "Upskilling"}
                   </span>
                 )}
@@ -417,7 +418,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
           <div className="shrink-0 pt-1">
             <Link
               href="/programs"
-              className="inline-flex items-center justify-center gap-1.5 rounded-none bg-primary px-6 py-3.5 text-xs font-bold text-white hover:bg-primary-hover transition-all duration-200 group"
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-6 py-3.5 text-xs font-bold text-white hover:bg-primary-hover transition-all duration-200 group"
             >
               <span>Explore All Programmes</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

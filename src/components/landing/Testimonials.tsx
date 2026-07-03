@@ -60,11 +60,13 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
 
   // Resize and measurement handling
   useEffect(() => {
-    setIsMounted(true);
-    if (!containerRef.current) return;
-    
-    setContainerWidth(containerRef.current.offsetWidth);
-    setIsClientMobile(window.innerWidth < 768);
+    const timer = setTimeout(() => {
+      setIsMounted(true);
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+      setIsClientMobile(window.innerWidth < 768);
+    }, 0);
 
     const handleResize = () => {
       if (containerRef.current) {
@@ -74,7 +76,10 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
     };
 
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   // Auto-rotation effect: changes every 6 seconds
@@ -135,7 +140,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                     opacity: isActive ? 1 : 0.35,
                   }}
                   transition={{ type: "spring", stiffness: 180, damping: 24 }}
-                  className={`relative p-8 sm:p-10 rounded-none cursor-pointer flex flex-col justify-between min-h-[340px] transition-colors duration-500 ${
+                  className={`relative p-8 sm:p-10 rounded-2xl cursor-pointer flex flex-col justify-between min-h-[340px] transition-colors duration-500 ${
                     isActive
                       ? "bg-white border border-slate-100 text-slate-900 shadow-[0_15px_30px_-5px_rgba(167,33,144,0.08)]"
                       : "bg-slate-100/90 border border-slate-200 text-slate-500 hover:border-slate-300"
@@ -182,7 +187,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                 className={`h-1.5 transition-all duration-300 cursor-pointer ${
                   activeIndex === idx ? "w-6 bg-primary" : "w-1.5 bg-slate-300 hover:bg-slate-400"
                 }`}
-                style={{ borderRadius: "0px" }}
+                style={{ borderRadius: "9999px" }}
                 aria-label={`Go to testimonial ${idx + 1}`}
               />
             ))}

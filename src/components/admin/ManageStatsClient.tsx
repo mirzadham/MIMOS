@@ -93,7 +93,7 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
 
         <button
           onClick={handleOpenAdd}
-          className="rounded-none bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all flex items-center gap-1.5 cursor-pointer"
+          className="rounded-lg bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all flex items-center gap-1.5 cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           <span>Add New Stat</span>
@@ -101,7 +101,7 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
       </div>
 
       {/* Stats List Table */}
-      <div className="overflow-hidden border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden border border-slate-200 bg-white shadow-sm rounded-2xl">
         <table className="min-w-full divide-y divide-slate-200 text-left text-xs font-semibold text-slate-700">
           <thead className="bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-200">
             <tr>
@@ -129,14 +129,14 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
                   <td className="whitespace-nowrap px-6 py-4 text-right space-x-2">
                     <button
                       onClick={() => handleOpenEdit(stat)}
-                      className="inline-flex items-center gap-1 text-slate-500 hover:text-primary transition-colors cursor-pointer px-2 py-1 border border-slate-200 hover:border-primary/20 bg-white"
+                      className="inline-flex items-center gap-1 text-slate-500 hover:text-primary transition-colors cursor-pointer px-2 py-1 border border-slate-200 hover:border-primary/20 bg-white rounded-md"
                     >
                       <Edit2 className="h-3 w-3" />
                       <span>Edit</span>
                     </button>
                     <button
                       onClick={() => handleDelete(stat.id, stat.label)}
-                      className="inline-flex items-center gap-1 text-slate-500 hover:text-red-600 transition-colors cursor-pointer px-2 py-1 border border-slate-200 hover:border-red-200 bg-white"
+                      className="inline-flex items-center gap-1 text-slate-500 hover:text-red-600 transition-colors cursor-pointer px-2 py-1 border border-slate-200 hover:border-red-200 bg-white rounded-md"
                       disabled={isPending}
                     >
                       <Trash2 className="h-3 w-3" />
@@ -153,7 +153,7 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
       {/* Modal Dialog Form */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 animate-fade-in">
-          <div className="w-full max-w-md bg-white border border-slate-200 shadow-2xl overflow-hidden flex flex-col">
+          <div className="w-full max-w-md bg-white border border-slate-200 shadow-2xl overflow-hidden flex flex-col rounded-2xl">
             
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50">
@@ -188,7 +188,7 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
                   placeholder="e.g. 150,000+"
                   value={number}
                   onChange={(e) => setNumber(e.target.value)}
-                  className="w-full border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 focus:border-primary focus:outline-none placeholder-slate-300 font-heading font-bold"
+                  className="w-full border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 focus:border-primary focus:outline-none placeholder-slate-300 font-heading font-bold rounded-lg"
                 />
               </div>
 
@@ -203,7 +203,7 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
                   placeholder="e.g. Students & Professionals"
                   value={label}
                   onChange={(e) => setLabel(e.target.value)}
-                  className="w-full border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 focus:border-primary focus:outline-none placeholder-slate-300 font-body font-medium"
+                  className="w-full border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 focus:border-primary focus:outline-none placeholder-slate-300 font-body font-medium rounded-lg"
                 />
               </div>
 
@@ -212,14 +212,14 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="px-4 py-2.5 border border-slate-250 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+                  className="px-4 py-2.5 border border-slate-250 text-xs font-bold text-slate-650 transition-colors cursor-pointer rounded-lg"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-xs font-bold text-white transition-colors cursor-pointer"
+                  className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-xs font-bold text-white transition-colors cursor-pointer rounded-lg"
                 >
                   {isPending ? "Saving..." : editStat ? "Save Changes" : "Create Stat"}
                 </button>

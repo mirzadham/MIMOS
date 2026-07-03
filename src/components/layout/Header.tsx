@@ -79,9 +79,9 @@ export default function Header() {
         {/* Logo - Top Left */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-none bg-primary/5 transition-all duration-300 group-hover:bg-primary">
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-primary/5 transition-all duration-300 group-hover:bg-primary">
               <GraduationCap className="h-6 w-6 text-primary transition-colors duration-300 group-hover:text-white" />
-              <div className="absolute -inset-0.5 rounded-none bg-primary/20 opacity-0 blur group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute -inset-0.5 rounded-xl bg-primary/20 opacity-0 blur group-hover:opacity-100 transition-opacity duration-300" />
             </div>
             <div className="flex flex-col">
               <span className="font-heading text-xl font-black tracking-tight text-slate-900 leading-none">
@@ -102,7 +102,7 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`relative px-4 py-2 text-sm font-bold tracking-wide transition-colors duration-200 rounded-none hover:text-primary ${
+                className={`relative px-4 py-2 text-sm font-bold tracking-wide transition-colors duration-200 rounded-lg hover:text-primary ${
                   isActive ? "text-primary" : "text-slate-600"
                 }`}
               >
@@ -110,7 +110,7 @@ export default function Header() {
                 {isActive && (
                   <motion.div
                     layoutId="activeNavUnderline"
-                    className="absolute inset-0 bg-primary/5 rounded-none border border-primary/10"
+                    className="absolute inset-0 bg-primary/5 rounded-lg border border-primary/10"
                     transition={{ type: "spring", stiffness: 350, damping: 30 }}
                   />
                 )}
@@ -138,7 +138,7 @@ export default function Header() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search courses..."
-                    className="w-full rounded-none border border-slate-200 bg-slate-50/50 px-4 py-1.5 text-xs focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20 text-slate-800 placeholder-slate-400 font-medium"
+                    className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-4 py-1.5 text-xs focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20 text-slate-800 placeholder-slate-400 font-medium"
                     autoFocus
                   />
                 </motion.div>
@@ -146,7 +146,7 @@ export default function Header() {
             </AnimatePresence>
             <button 
               onClick={() => setSearchOpen(!searchOpen)}
-              className="rounded-none p-2 text-slate-400 hover:bg-slate-50 hover:text-primary transition-all cursor-pointer"
+              className="rounded-lg p-2 text-slate-400 hover:bg-slate-50 hover:text-primary transition-all cursor-pointer"
               aria-label="Search"
             >
               {searchOpen ? <X className="h-4.5 w-4.5" /> : <Search className="h-4.5 w-4.5" />}
@@ -155,21 +155,21 @@ export default function Header() {
 
           {/* Language Selector */}
           <div className="relative group/lang">
-            <button className="flex items-center gap-1 rounded-none border border-slate-200/80 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all">
+            <button className="flex items-center gap-1 rounded-lg border border-slate-200/80 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all">
               <Globe className="h-3.5 w-3.5 text-slate-400" />
               <span>{lang}</span>
               <ChevronDown className="h-3 w-3 text-slate-400 group-hover/lang:rotate-180 transition-transform duration-200" />
             </button>
-            <div className="absolute right-0 mt-1.5 w-28 origin-top-right rounded-none border border-slate-100 bg-white p-1 shadow-sm opacity-0 invisible group-hover/lang:opacity-100 group-hover/lang:visible transition-all duration-200 z-50">
+            <div className="absolute right-0 mt-1.5 w-28 origin-top-right rounded-lg border border-slate-100 bg-white p-1 shadow-sm opacity-0 invisible group-hover/lang:opacity-100 group-hover/lang:visible transition-all duration-200 z-50">
               <button 
                 onClick={() => setLang("EN")}
-                className="w-full rounded-none px-3 py-2 text-left text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors"
+                className="w-full rounded-md px-3 py-2 text-left text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors"
               >
                 English
               </button>
               <button 
                 onClick={() => setLang("BM")}
-                className="w-full rounded-none px-3 py-2 text-left text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors"
+                className="w-full rounded-md px-3 py-2 text-left text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors"
               >
                 B. Melayu
               </button>
@@ -182,7 +182,7 @@ export default function Header() {
               href="https://www.linkedin.com/company/mimosacademy/" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="rounded-none p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
+              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
             >
               <LinkedinIcon className="h-4 w-4" />
             </a>
@@ -190,7 +190,7 @@ export default function Header() {
               href="https://www.facebook.com/profile.php?id=61567561791997" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="rounded-none p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
+              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
             >
               <FacebookIcon className="h-4 w-4" />
             </a>
@@ -198,7 +198,7 @@ export default function Header() {
               href="https://www.instagram.com/mimos.academy/" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="rounded-none p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
+              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
             >
               <InstagramIcon className="h-4 w-4" />
             </a>
@@ -206,7 +206,7 @@ export default function Header() {
               href="https://x.com/MIMOSACADEMY?s=20" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="rounded-none p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
+              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
             >
               <XIcon className="h-4 w-4" />
             </a>
@@ -218,7 +218,7 @@ export default function Header() {
         <div className="flex md:hidden items-center gap-3">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="rounded-none p-2 text-slate-600 hover:bg-slate-100 transition-colors"
+            className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 transition-colors"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -243,7 +243,7 @@ export default function Header() {
                     key={link.name}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-none px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors"
+                    className="rounded-lg px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -253,16 +253,16 @@ export default function Header() {
               <div className="border-t border-slate-100 pt-4 flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-500">Language:</span>
-                  <div className="flex gap-1 bg-slate-50 p-0.5 rounded-none border border-slate-200/60">
+                  <div className="flex gap-1 bg-slate-50 p-0.5 rounded-md border border-slate-200/60">
                     <button 
                       onClick={() => setLang("EN")}
-                      className={`text-xs font-bold px-3 py-1 rounded-none transition-colors ${lang === 'EN' ? 'bg-white text-primary shadow-sm' : 'text-slate-600'}`}
+                      className={`text-xs font-bold px-3 py-1 rounded-md transition-colors ${lang === 'EN' ? 'bg-white text-primary shadow-sm' : 'text-slate-600'}`}
                     >
                       EN
                     </button>
                     <button 
                       onClick={() => setLang("BM")}
-                      className={`text-xs font-bold px-3 py-1 rounded-none transition-colors ${lang === 'BM' ? 'bg-white text-primary shadow-sm' : 'text-slate-600'}`}
+                      className={`text-xs font-bold px-3 py-1 rounded-md transition-colors ${lang === 'BM' ? 'bg-white text-primary shadow-sm' : 'text-slate-600'}`}
                     >
                       BM
                     </button>

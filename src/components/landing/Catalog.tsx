@@ -33,7 +33,7 @@ interface CatalogProps {
 
 export default function Catalog({ categories, programs, hideHeader = false }: CatalogProps) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [searchQuery, setSearchQuery] = useState<string>("i"); // Wait! Let's initialize to empty or whatever is correct. Wait, in original code it was `useState<string>("")`. Why did the original have `useState<string>("")`? Yes, standard search query is empty. Let's make it empty!
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [, startTransition] = useTransition();
 
   const handleCategoryChange = (slug: string) => {
@@ -128,7 +128,7 @@ export default function Catalog({ categories, programs, hideHeader = false }: Ca
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
+            className="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
           >
             {filteredPrograms.map((program) => (
               <motion.div 

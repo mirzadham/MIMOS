@@ -224,7 +224,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
         
         <button
           onClick={handleOpenAdd}
-          className="inline-flex items-center gap-2 rounded-none bg-primary hover:bg-primary/95 text-white px-4 py-2.5 text-xs font-bold transition-all shadow-sm shadow-primary/10"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary hover:bg-primary/95 text-white px-4 py-2.5 text-xs font-bold transition-all shadow-sm shadow-primary/10"
         >
           <Plus className="h-4 w-4" />
           <span>Add Card</span>
@@ -238,7 +238,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
           return (
             <div 
               key={card.id} 
-              className={`group relative border border-slate-200 bg-slate-950 rounded-none p-5 flex flex-col overflow-hidden min-h-[260px] hover:border-primary/60 hover:shadow-[0_0_20px_rgba(167,33,144,0.1)] transition-all shadow-sm ${
+              className={`group relative border border-slate-200 bg-slate-950 rounded-xl p-5 flex flex-col overflow-hidden min-h-[260px] hover:border-primary/60 hover:shadow-[0_0_20px_rgba(167,33,144,0.1)] transition-all shadow-sm ${
                 card.colspan === 2 ? "md:col-span-2" : "md:col-span-1"
               } ${align.container}`}
             >
@@ -265,10 +265,10 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
               <div className={`relative z-20 space-y-3 flex flex-col w-full ${align.text}`}>
                 {/* Badge for Order and Colspan */}
                 <div className="flex items-center justify-between w-full">
-                  <span className="inline-flex items-center rounded-none bg-slate-900/80 border border-slate-700/60 px-2 py-0.5 text-[9px] font-bold text-slate-400">
+                  <span className="inline-flex items-center rounded-md bg-slate-900/80 border border-slate-700/60 px-2 py-0.5 text-[9px] font-bold text-slate-400">
                     Order: {card.order}
                   </span>
-                  <span className="inline-flex items-center rounded-none bg-primary/20 border border-primary/30 px-2 py-0.5 text-[9px] font-bold text-white font-sans">
+                  <span className="inline-flex items-center rounded-md bg-primary/20 border border-primary/30 px-2 py-0.5 text-[9px] font-bold text-white font-sans">
                     Colspan: {card.colspan}
                   </span>
                 </div>
@@ -282,7 +282,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
             <div className="relative z-20 flex items-center gap-2 mt-5 pt-3 border-t border-slate-800/80 justify-end">
               <button
                 onClick={() => handleOpenEdit(card)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-none border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 transition-colors"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 transition-colors"
                 title="Edit Card"
               >
                 <Edit2 className="h-3.5 w-3.5" />
@@ -290,7 +290,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
               <button
                 onClick={() => handleDelete(card.id, card.title)}
                 disabled={isPending}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-none border border-slate-200 bg-white hover:bg-red-50 hover:border-red-200 text-slate-600 hover:text-red-650 transition-colors"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-red-50 hover:border-red-200 text-slate-600 hover:text-red-650 transition-colors"
                 title="Delete Card"
               >
                 <Trash2 className="h-3.5 w-3.5" />
@@ -304,7 +304,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
       {/* Modal Dialog */}
       {isOpen && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-none max-w-lg w-full overflow-hidden shadow-xl animate-scale-up">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full overflow-hidden shadow-xl animate-scale-up">
             
             {/* Modal Header */}
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
@@ -313,7 +313,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
               </h2>
               <button 
                 onClick={handleClose}
-                className="h-7 w-7 rounded-none hover:bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-all"
+                className="h-7 w-7 rounded-lg hover:bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-all"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -323,7 +323,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               
               {error && (
-                <div className="p-3 bg-red-50 border border-red-100 rounded-none flex items-start gap-2.5 text-xs font-semibold text-red-600">
+                <div className="p-3 bg-red-50 border border-red-100 rounded-lg flex items-start gap-2.5 text-xs font-semibold text-red-600">
                   <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-red-500" />
                   <span>{error}</span>
                 </div>
@@ -337,7 +337,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Applied Learning & Lab Research"
-                  className="w-full rounded-none border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:border-primary focus:outline-none transition-colors"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:border-primary focus:outline-none transition-colors"
                   required
                 />
               </div>
@@ -350,7 +350,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Describe this academy advantage..."
                   rows={3}
-                  className="w-full rounded-none border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:border-primary focus:outline-none transition-colors resize-none leading-relaxed"
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:border-primary focus:outline-none transition-colors resize-none leading-relaxed"
                   required
                 />
               </div>
@@ -362,7 +362,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                   <select
                     value={colspan}
                     onChange={(e) => setColspan(Number(e.target.value))}
-                    className="w-full rounded-none border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 focus:border-primary focus:outline-none transition-colors"
+                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 focus:border-primary focus:outline-none transition-colors"
                   >
                     <option value={1}>1 Column Span (Narrow)</option>
                     <option value={2}>2 Column Span (Wide)</option>
@@ -375,7 +375,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                     type="number" 
                     value={order}
                     onChange={(e) => setOrder(Number(e.target.value))}
-                    className="w-full rounded-none border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 focus:border-primary focus:outline-none transition-colors"
+                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 focus:border-primary focus:outline-none transition-colors"
                     required
                   />
                 </div>
@@ -386,7 +386,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                 <label className="text-[11px] font-bold text-slate-500 block uppercase">Card Image</label>
                 <div className="flex gap-4 items-center">
                   {/* Preview box */}
-                  <div className="relative h-20 w-32 rounded-none bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden shrink-0">
+                  <div className="relative h-20 w-32 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden shrink-0">
                     {imageUrl ? (
                       <Image src={imageUrl} alt="preview" fill className="object-cover" />
                     ) : (
@@ -399,7 +399,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="inline-flex items-center gap-1.5 rounded-none border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 px-3 py-2 text-xs font-bold transition-all shadow-xs shrink-0"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 px-3 py-2 text-xs font-bold transition-all shadow-xs shrink-0"
                     >
                       <Upload className="h-3.5 w-3.5 text-slate-400" />
                       <span>{selectedFile ? "Change File" : "Select Image File"}</span>
@@ -423,7 +423,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="rounded-none border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-600 transition-colors"
+                  className="rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-600 transition-colors"
                   disabled={uploading || isPending}
                 >
                   Cancel
@@ -431,7 +431,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                 <button
                   type="submit"
                   disabled={uploading || isPending}
-                  className="rounded-none bg-primary hover:bg-primary/95 text-white px-5 py-2.5 text-xs font-bold transition-all shadow-sm shadow-primary/10 flex items-center gap-2"
+                  className="rounded-lg bg-primary hover:bg-primary/95 text-white px-5 py-2.5 text-xs font-bold transition-all shadow-sm shadow-primary/10 flex items-center gap-2"
                 >
                   {(uploading || isPending) ? (
                     <>

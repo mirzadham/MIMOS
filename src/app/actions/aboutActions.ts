@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockAboutSettings, mockTeamMembers, setMockAboutSettings, setMockTeamMembers } from "@/lib/db";
+import { prisma, mockTeamMembers, setMockAboutSettings, setMockTeamMembers } from "@/lib/db";
 
 // About Settings and Team Management Actions
 export async function updateAboutSettingsAction(data: { mission: string; vision: string }) {

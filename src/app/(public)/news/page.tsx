@@ -29,7 +29,7 @@ export default function NewsPage() {
   return (
     <div className="bg-background min-h-screen py-16 sm:py-24 relative overflow-hidden">
       {/* Decorative ambient background */}
-      <div className="absolute right-0 top-0 -z-10 h-96 w-96 rounded-none bg-primary/3 blur-[120px] pointer-events-none" />
+      <div className="absolute right-0 top-0 -z-10 h-96 w-96 rounded-full bg-primary/3 blur-[120px] pointer-events-none" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-16">
         
@@ -45,9 +45,9 @@ export default function NewsPage() {
           </nav>
 
           {/* Editorial Banner */}
-          <div className="rounded-none border border-slate-200 bg-white p-8 sm:p-14 relative overflow-hidden transition-all duration-300">
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 sm:p-14 relative overflow-hidden transition-all duration-300">
             <div className="max-w-3xl space-y-4 relative z-10">
-              <span className="text-xs font-extrabold text-primary tracking-widest uppercase bg-primary/5 px-3 py-1 rounded-none border border-primary/10">
+              <span className="text-xs font-extrabold text-primary tracking-widest uppercase bg-primary/5 px-3 py-1 rounded-full border border-primary/10">
                 Bulletin Board
               </span>
               <h1 className="font-heading text-3xl font-black text-slate-900 sm:text-5xl tracking-tight leading-tight">
@@ -67,10 +67,10 @@ export default function NewsPage() {
             {articles.map((art) => (
               <article 
                 key={art.id} 
-                className="rounded-none border border-slate-200 bg-white p-6 sm:p-8 transition-all duration-300 space-y-4 hover:border-primary"
+                className="rounded-xl border border-slate-200 bg-white p-6 sm:p-8 transition-all duration-300 space-y-4 hover:border-primary"
               >
                 <div className="flex items-center justify-between text-[10px] font-bold">
-                  <span className="text-primary bg-primary/5 px-2.5 py-0.5 rounded-none border border-primary/20 uppercase tracking-wide">
+                  <span className="text-primary bg-primary/5 px-2.5 py-0.5 rounded-md border border-primary/20 uppercase tracking-wide">
                     {art.category}
                   </span>
                   <span className="text-slate-400 uppercase tracking-wider">{art.date}</span>
@@ -88,7 +88,7 @@ export default function NewsPage() {
           {/* Side calendar widget */}
           <div className="space-y-6">
             
-            <div className="rounded-none border border-slate-200 bg-white p-6 sm:p-7 space-y-6">
+            <div className="rounded-xl border border-slate-200 bg-white p-6 sm:p-7 space-y-6">
               <div className="flex items-center gap-2.5 text-slate-900 font-bold text-xs tracking-widest uppercase border-b border-slate-100 pb-4">
                 <Calendar className="h-4.5 w-4.5 text-primary" />
                 <span>Next 30 Days Batches</span>
@@ -117,7 +117,7 @@ export default function NewsPage() {
               </div>
             </div>
 
-            <div className="rounded-none border border-slate-200 bg-white p-6 sm:p-7 space-y-4">
+            <div className="rounded-xl border border-slate-200 bg-white p-6 sm:p-7 space-y-4">
               <div className="flex items-center gap-2 text-slate-900 font-bold text-xs tracking-widest uppercase">
                 <Bell className="h-4 w-4 text-primary" />
                 <span>Corporate Notices</span>
