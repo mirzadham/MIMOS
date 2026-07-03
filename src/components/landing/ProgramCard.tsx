@@ -61,8 +61,8 @@ export default function ProgramCard({ program }: ProgramCardProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/5 via-transparent to-transparent" />
         </Link>
         
-        {/* Floating Category Tag (Pastel theme, black text, no border, slightly rounded) */}
-        <span className="absolute right-4 top-4 z-10 inline-flex items-center rounded-md bg-[#fdf2fc] px-3 py-1 text-[10px] font-extrabold text-black shadow-sm select-none">
+        {/* Floating Category Tag (Rich pastel theme, black text, no border, slightly rounded) */}
+        <span className="absolute right-4 top-4 z-10 inline-flex items-center rounded-md bg-[#f8d3f6] px-3 py-1 text-[10px] font-extrabold text-black shadow-sm select-none">
           {program.category?.name || "Upskilling"}
         </span>
       </div>
@@ -115,10 +115,14 @@ export default function ProgramCard({ program }: ProgramCardProps) {
 
         {/* Next Intake & Clickable Arrow */}
         <div className="flex items-center justify-between">
-          {/* Next Intake */}
-          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-            <span className="text-slate-400 font-medium">Next Intake:</span>
-            <span className="text-slate-800">{program.dates || "Scheduled Soon"}</span>
+          {/* Next Intake with Horizontal Colored Underline */}
+          <div className="flex flex-col items-start">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+              <span className="text-slate-400 font-medium">Next Intake:</span>
+              <span className="text-slate-800">{program.dates || "Scheduled Soon"}</span>
+            </div>
+            {/* Colored horizontal bar in MIMOS Orchid Magenta */}
+            <div className="h-[3px] w-12 bg-primary rounded-full mt-1.5" />
           </div>
 
           {/* Clickable Elongated Arrow with Spring Effect */}
