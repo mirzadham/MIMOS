@@ -207,10 +207,11 @@ async function main() {
     });
   }
 
-  console.log('Cleaning up existing stats, partners & why choose us cards...');
+  console.log('Cleaning up existing stats, partners, why choose us cards & testimonials...');
   await prisma.stat.deleteMany({});
   await prisma.partner.deleteMany({});
   await prisma.whyChooseUsCard.deleteMany({});
+  await prisma.testimonial.deleteMany({});
 
   console.log('Seeding stats...');
   const statsData = [
@@ -270,6 +271,48 @@ async function main() {
   ];
   for (const item of whyChooseUsData) {
     await prisma.whyChooseUsCard.create({ data: item });
+  }
+
+  console.log('Seeding testimonials...');
+  const testimonialsData = [
+    {
+      quote: "MIMOS Academy transformed my career with practical, hands-on training that gave me the confidence to succeed.",
+      name: "Sarah Lim",
+      role: "Software Engineer",
+      company: "TechNova Solutions",
+      order: 0
+    },
+    {
+      quote: "The expert instructors at MIMOS made complex topics easy to understand, and the mentorship was invaluable.",
+      name: "James Wong",
+      role: "Data Analyst",
+      company: "Insight Analytics",
+      order: 1
+    },
+    {
+      quote: "I landed my dream job thanks to the skills and certifications I gained through MIMOS Academy’s top-notch programmes.",
+      name: "Aisha Rahman",
+      role: "Cybersecurity Specialist",
+      company: "SecureNet Global",
+      order: 2
+    },
+    {
+      quote: "MIMOS doesn’t just teach theory—they focus on real-world applications that make a real difference in the job market.",
+      name: "Daniel Tan",
+      role: "AI Developer",
+      company: "FutureTech Innovations",
+      order: 3
+    },
+    {
+      quote: "Enrolling in MIMOS Academy was the best decision I made for my career—highly recommended for technical professionals.",
+      name: "Priya Kumar",
+      role: "Systems Architect",
+      company: "GrowthWave Digital",
+      order: 4
+    }
+  ];
+  for (const t of testimonialsData) {
+    await prisma.testimonial.create({ data: t });
   }
 
   console.log('Seeding completed successfully.');
