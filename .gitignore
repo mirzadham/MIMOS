@@ -45,3 +45,5 @@ next-env.d.ts
 # training posters (exclude heavy webp files, keep markdown files)
 training-poster/*.webp
 
+# local documentation
+aboutus.md

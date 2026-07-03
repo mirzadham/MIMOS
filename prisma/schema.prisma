@@ -131,5 +131,25 @@ model Testimonial {
   @@index([order])
 }
 
+model AboutSettings {
+  id        String   @id @default(uuid())
+  mission   String
+  vision    String
+  updatedAt DateTime @updatedAt
+}
+
+model TeamMember {
+  id        String   @id @default(uuid())
+  name      String
+  role      String
+  imageUrl  String?  // Cloudflare R2 / S3 public upload link
+  initials  String
+  order     Int      @default(0) // For custom drag-and-drop ordering
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
 
 

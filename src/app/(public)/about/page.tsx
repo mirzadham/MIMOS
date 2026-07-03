@@ -1,121 +1,164 @@
-import { ShieldCheck, Award, HeartHandshake, History, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { ChevronRight, ArrowUpRight } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { getSafeAboutSettings, getSafeTeamMembers } from "@/lib/db";
+import TeamMemberCardClient from "@/components/about/TeamMemberCardClient";
 
-export default function AboutPage() {
-  const stats = [
-    { label: "Upskilled Engineers", value: "5,000+" },
-    { label: "Partner Companies", value: "120+" },
-    { label: "R&D Training Labs", value: "6" },
-    { label: "Years of Tech R&D", value: "20+" }
-  ];
+export const dynamic = "force-dynamic";
+
+export default async function AboutPage() {
+  const [settings, teamMembers] = await Promise.all([
+    getSafeAboutSettings(),
+    getSafeTeamMembers()
+  ]);
 
   return (
-    <div className="bg-background min-h-screen py-16 sm:py-24 relative overflow-hidden">
-      {/* Decorative ambient background */}
-      <div className="absolute right-0 top-0 -z-10 h-96 w-96 rounded-none bg-primary/3 blur-[120px] pointer-events-none" />
-      
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-20">
-        
-        {/* Breadcrumbs & Header Banner */}
-        <div className="space-y-8">
-          
-          {/* Breadcrumbs */}
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-bold text-slate-400">
-            <Link href="/" className="hover:text-primary transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="h-3 w-3 text-slate-300" />
-            <span className="text-slate-900">About Us</span>
-          </nav>
+    <div className="relative min-h-screen overflow-hidden bg-background py-16 sm:py-24">
+      {/* Delicate background ambient highlights */}
+      <div className="absolute right-0 top-0 -z-10 h-96 w-96 bg-primary/3 blur-[120px] pointer-events-none" />
+      <div className="absolute left-0 bottom-1/3 -z-10 h-96 w-96 bg-primary/2 blur-[140px] pointer-events-none" />
 
-          {/* Editorial Banner */}
-          <div className="rounded-none border border-slate-200 bg-white p-8 sm:p-14 relative overflow-hidden transition-all duration-300">
-            <div className="max-w-3xl space-y-4 relative z-10">
-              <span className="text-xs font-extrabold text-primary tracking-widest uppercase bg-primary/5 px-3 py-1 rounded-none border border-primary/10">
-                Our History & Mission
-              </span>
-              <h1 className="font-heading text-3xl font-black text-slate-900 sm:text-5xl tracking-tight leading-tight">
-                Upskilling Malaysia&apos;s Engineering Workforce
-              </h1>
-              <p className="text-sm sm:text-md text-slate-600 leading-relaxed font-body">
-                MIMOS Academy was established to bridge the gap between academic theory and practical applied research. As a subsidiary of MIMOS Berhad, we coordinate and conduct hands-on technology upskilling.
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-24">
+        
+        {/* Navigation & Breadcrumbs */}
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-bold text-slate-400">
+          <Link href="/" className="hover:text-primary transition-colors">
+            Home
+          </Link>
+          <ChevronRight className="h-3 w-3 text-slate-300" />
+          <span className="text-slate-900">About Us</span>
+        </nav>
+
+        {/* 1. HERO SECTION (Editorial, Large Typography) */}
+        <section className="space-y-10">
+          <div className="max-w-4xl space-y-3">
+            <h1 className="font-heading text-4xl font-black text-slate-900 sm:text-6xl tracking-tight leading-[1.1]">
+              Architecting Malaysia's Strategic Technology Talent.
+            </h1>
+          </div>
+
+          <div className="grid grid-cols-1 gap-10 border-t border-slate-200 pt-10 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight leading-snug">
+                MIMOS Academy bridges the critical gap between academic theory, deep-tech research, and real industry demands.
+              </h2>
+            </div>
+            <div className="lg:col-span-7 space-y-6 text-slate-600 font-body text-sm md:text-base leading-relaxed">
+              <p>
+                MIMOS Academy is a strategic capability development and technology solutions organisation that develops future-ready talent while supporting digital transformation and innovation initiatives. 
+              </p>
+              <p>
+                Leveraging MIMOS' R&D heritage and ecosystem, the Academy delivers professional development programmes, technology consultancy, project management, and talent solutions across key sectors.
               </p>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Highlight Stats Banner */}
-        <div className="rounded-none border border-slate-200 bg-white p-8 sm:p-10">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4 text-center divide-x divide-slate-100">
-            {stats.map((stat, idx) => (
-              <div key={idx} className="space-y-1.5 px-4 first:pl-0 last:pr-0">
-                <span className="text-3xl sm:text-4xl font-black text-primary block tracking-tight">{stat.value}</span>
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-wider block">{stat.label}</span>
-              </div>
-            ))}
+        {/* 4. MISSION & VISION (Full-Width Magazine Style with Giant Quotes) */}
+        <section className="space-y-20">
+          {/* Mission */}
+          <div className="border-t border-slate-200 pt-16">
+            <span className="text-xs font-extrabold text-slate-400 uppercase tracking-widest block mb-6">
+              OUR MISSION
+            </span>
+            <div className="relative max-w-5xl">
+              <span className="absolute -left-4 -top-8 text-[120px] font-heading font-black text-primary/5 leading-none select-none">
+                “
+              </span>
+              <p className="font-heading text-2xl font-black text-slate-900 md:text-4xl lg:text-5xl tracking-tight leading-tight relative z-10 pl-6 border-l-2 border-primary/20">
+                {settings.mission}
+              </p>
+            </div>
           </div>
-        </div>
 
-        {/* Pillars / Values Grid */}
-        <div className="space-y-10">
-          <div className="border-b border-slate-250 pb-6">
-            <h2 className="font-heading text-2xl font-extrabold text-slate-900">
-              Our Core Pillars
+          {/* Vision */}
+          <div className="border-t border-slate-200 pt-16">
+            <span className="text-xs font-extrabold text-slate-400 uppercase tracking-widest block mb-6">
+              OUR VISION
+            </span>
+            <div className="relative max-w-5xl">
+              <span className="absolute -left-4 -top-8 text-[120px] font-heading font-black text-primary/5 leading-none select-none">
+                “
+              </span>
+              <p className="font-heading text-2xl font-black text-slate-900 md:text-4xl lg:text-5xl tracking-tight leading-tight relative z-10 pl-6 border-l-2 border-primary/20">
+                {settings.vision}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* 5. TEAM DIRECTORY (Simple 4-column Grid matching the Reference Design) */}
+        <section className="space-y-12 border-t border-slate-200 pt-20">
+          <div className="max-w-2xl">
+            <h2 className="font-heading text-3xl font-black text-slate-900 tracking-tight sm:text-4xl">
+              Leadership Team
             </h2>
           </div>
-          
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            
-            <div className="rounded-none border border-slate-200 bg-white p-7 hover:border-primary transition-all duration-300 flex flex-col justify-between">
-              <div className="space-y-5">
-                <div className="rounded-none bg-primary/5 border border-primary/10 p-3 text-primary inline-block">
-                  <Award className="h-6 w-6" />
-                </div>
-                <h3 className="font-heading text-base font-extrabold text-slate-900">National Accreditation</h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-body">
-                  Our certificates and course standards are verified directly under MIMOS R&D structures and supported by national HRD Corp policies.
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-12">
+            {teamMembers.map((member: { id: string; name: string; role: string; imageUrl: string | null; initials: string }) => (
+              <TeamMemberCardClient key={member.id} member={member} />
+            ))}
+          </div>
+        </section>
+
+        {/* 6. DOUBLE CTA SECTION (Enterprise B2B / Talent B2C) */}
+        <section className="border-t border-slate-200 pt-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-accent/30 border border-primary/5 p-8 sm:p-16 rounded-2xl relative overflow-hidden">
+            {/* Ambient subtle glow for CTA */}
+            <div className="absolute right-0 top-0 -z-10 h-64 w-64 bg-primary/2 blur-[80px]" />
+
+            {/* Column 1: B2B Enterprise */}
+            <div className="flex flex-col justify-between space-y-8 pr-0 lg:pr-8 border-b border-slate-200 lg:border-b-0 lg:border-r border-slate-200 pb-12 lg:pb-0">
+              <div className="space-y-4">
+                <span className="text-[10px] font-black text-primary uppercase tracking-widest block">
+                  PARTNERSHIP
+                </span>
+                <h3 className="font-heading text-2xl font-black text-slate-900 tracking-tight sm:text-3xl">
+                  Enterprise Capability Development
+                </h3>
+                <p className="font-body text-sm text-slate-650 leading-relaxed max-w-md">
+                  Collaborate with MIMOS Academy to build specialized deep tech and semiconductor curricula tailored specifically to your organization's technical workforce requirements.
                 </p>
+              </div>
+              <div className="pt-2">
+                <Link 
+                  href="/contact" 
+                  className={cn(buttonVariants({ variant: "default" }), "cursor-pointer group gap-2 h-10 px-5 rounded-lg text-xs font-bold")}
+                >
+                  Partner With Us
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
               </div>
             </div>
 
-            <div className="rounded-none border border-slate-200 bg-white p-7 hover:border-primary transition-all duration-300 flex flex-col justify-between">
-              <div className="space-y-5">
-                <div className="rounded-none bg-primary/5 border border-primary/10 p-3 text-primary inline-block">
-                  <ShieldCheck className="h-6 w-6" />
-                </div>
-                <h3 className="font-heading text-base font-extrabold text-slate-900">Applied Deep Tech</h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-body">
-                  We skip generic theoretical slides. Our students work physically inside actual wafer fab cleanrooms and deep-learning clusters.
+            {/* Column 2: B2C Tech Talent */}
+            <div className="flex flex-col justify-between space-y-8 pl-0 lg:pl-8">
+              <div className="space-y-4">
+                <span className="text-[10px] font-black text-primary uppercase tracking-widest block">
+                  UPSKILLING
+                </span>
+                <h3 className="font-heading text-2xl font-black text-slate-900 tracking-tight sm:text-3xl">
+                  Accelerate Your Technical Career
+                </h3>
+                <p className="font-body text-sm text-slate-650 leading-relaxed max-w-md">
+                  Enroll in our national technology programs. Work hands-on in physical training labs and semiconductor wafer cleanrooms under the guidance of R&D scientists.
                 </p>
               </div>
-            </div>
-
-            <div className="rounded-none border border-slate-200 bg-white p-7 hover:border-primary transition-all duration-300 flex flex-col justify-between">
-              <div className="space-y-5">
-                <div className="rounded-none bg-primary/5 border border-primary/10 p-3 text-primary inline-block">
-                  <HeartHandshake className="h-6 w-6" />
-                </div>
-                <h3 className="font-heading text-base font-extrabold text-slate-900">B2B Co-Design</h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-body">
-                  We collaborate with enterprise partners to build tailored physical training modules targeting active technological gaps.
-                </p>
-              </div>
-            </div>
-
-            <div className="rounded-none border border-slate-200 bg-white p-7 hover:border-primary transition-all duration-300 flex flex-col justify-between">
-              <div className="space-y-5">
-                <div className="rounded-none bg-primary/5 border border-primary/10 p-3 text-primary inline-block">
-                  <History className="h-6 w-6" />
-                </div>
-                <h3 className="font-heading text-base font-extrabold text-slate-900">R&D Legacy</h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-body">
-                  Backed by MIMOS&apos;s 20+ year legacy in microelectronics patenting, material analyses, and national data registries.
-                </p>
+              <div className="pt-2">
+                <Link 
+                  href="/programs" 
+                  className={cn(buttonVariants({ variant: "outline" }), "cursor-pointer group gap-2 h-10 px-5 rounded-lg text-xs font-bold border-slate-300 hover:border-primary")}
+                >
+                  Explore Programs
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
               </div>
             </div>
 
           </div>
-        </div>
+        </section>
 
       </div>
     </div>
