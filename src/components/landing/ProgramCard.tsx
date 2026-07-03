@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, GraduationCap } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 
 interface ProgramCardProps {
   program: {
@@ -55,7 +55,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-slate-50/50">
-              <GraduationCap className="h-10 w-10 text-slate-350" />
+              <GraduationCap className="h-10 w-10 text-slate-355" />
             </div>
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/5 via-transparent to-transparent" />
@@ -70,18 +70,18 @@ export default function ProgramCard({ program }: ProgramCardProps) {
       {/* Card body container */}
       <div className="flex-1 flex flex-col justify-between p-6 bg-white">
         
-        {/* Title & HRD Corp Badge */}
-        <div className="flex-1">
-          <Link href={`/programs/${program.slug}`} className="block">
+        {/* Title & HRD Corp Badge (Badge right-aligned) */}
+        <div className="flex-1 flex items-start justify-between gap-4">
+          <Link href={`/programs/${program.slug}`} className="block flex-1">
             <h3 className="font-heading text-base font-extrabold text-slate-900 leading-snug">
               {program.title}
-              {isHrdCorp && (
-                <span className="ml-2 inline-block align-middle px-1.5 py-0.5 text-[9px] font-extrabold text-slate-500 uppercase border border-slate-300 bg-white rounded-md tracking-wider shrink-0 select-none">
-                  HRD Corp
-                </span>
-              )}
             </h3>
           </Link>
+          {isHrdCorp && (
+            <span className="inline-block px-1.5 py-0.5 text-[9px] font-extrabold text-slate-500 uppercase border border-slate-300 bg-white rounded-md tracking-wider shrink-0 select-none mt-0.5">
+              HRD Corp
+            </span>
+          )}
         </div>
 
         {/* Divider 1 (Expand fully under title) */}
@@ -121,9 +121,19 @@ export default function ProgramCard({ program }: ProgramCardProps) {
             <span className="text-slate-800">{program.dates || "Scheduled Soon"}</span>
           </div>
 
-          {/* Clickable Arrow with Spring Effect */}
+          {/* Clickable Elongated Arrow with Spring Effect */}
           <Link href={`/programs/${program.slug}`} aria-label={`View syllabus for ${program.title}`}>
-            <ArrowRight className="h-5 w-5 text-slate-900 spring-arrow transition-colors hover:text-primary cursor-pointer" />
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-5 w-8 text-slate-900 spring-arrow transition-colors hover:text-primary cursor-pointer"
+            >
+              <path d="M2 12h20M16 6l6 6-6 6" />
+            </svg>
           </Link>
         </div>
         
