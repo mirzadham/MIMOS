@@ -90,7 +90,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
         {/* Duration/Location & Price */}
         <div className="flex items-end justify-between gap-4">
           {/* Duration & Location (Stacked) */}
-          <div className="flex flex-col gap-1 text-[11px] font-bold text-slate-450 font-sans leading-tight">
+          <div className="flex flex-col gap-1 text-[11px] font-bold text-slate-400 font-sans leading-tight">
             {program.duration && (
               <span>{program.duration}</span>
             )}
@@ -134,6 +134,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
+              aria-hidden="true"
               className="h-5 w-8 text-slate-900 spring-arrow transition-colors hover:text-primary cursor-pointer"
             >
               <path d="M2 12h20M16 6l6 6-6 6" />
