@@ -52,6 +52,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
 
   const items = testimonials && testimonials.length > 0 ? testimonials : defaultTestimonials;
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(1200);
@@ -59,6 +60,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
 
   // Resize and measurement handling
   useEffect(() => {
+    setIsMounted(true);
     if (!containerRef.current) return;
     
     setContainerWidth(containerRef.current.offsetWidth);
@@ -114,7 +116,11 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
           <motion.div
             className="flex items-center"
             style={{ gap: `${gap}px` }}
-            animate={{ x: offset }}
+            animate={{ 
+              x: isMounted ? offset : 0,
+              opacity: isMounted ? 1 : 0
+            }}
+            initial={{ opacity: 0 }}
             transition={{ type: "spring", stiffness: 180, damping: 24 }}
           >
             {items.map((item, idx) => {

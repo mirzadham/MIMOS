@@ -291,7 +291,7 @@ export async function getSafePartners() {
   }
 }
 
-export const mockWhyChooseUsCards = [
+export let mockWhyChooseUsCards = [
   {
     id: "mock-wcu-1",
     title: "Applied Learning & Lab Research",
@@ -338,7 +338,11 @@ export async function getSafeWhyChooseUsCards() {
   }
 }
 
-export const mockTestimonials = [
+export function setMockWhyChooseUsCards(newCards: typeof mockWhyChooseUsCards) {
+  mockWhyChooseUsCards = newCards;
+}
+
+export let mockTestimonials = [
   {
     id: "mock-t-1",
     quote: "MIMOS Academy transformed my career with practical, hands-on training that gave me the confidence to succeed.",
@@ -391,6 +395,10 @@ export async function getSafeTestimonials() {
     console.warn("Prisma Testimonial Fetch failed, falling back to mock details: ", e);
     return mockTestimonials;
   }
+}
+
+export function setMockTestimonials(newTestimonials: typeof mockTestimonials) {
+  mockTestimonials = newTestimonials;
 }
 
 

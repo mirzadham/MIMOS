@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials } from "@/lib/db";
+import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials } from "@/lib/db";
 import crypto from "crypto";
 
 // 1. Authentication Server Actions
@@ -577,7 +577,7 @@ export async function createWhyChooseUsCardAction(data: {
       createdAt: new Date(),
       updatedAt: new Date()
     };
-    mockWhyChooseUsCards.push(mockNew);
+    setMockWhyChooseUsCards([...mockWhyChooseUsCards, mockNew]);
     revalidatePath("/");
     return { success: true, card: mockNew };
   }
@@ -619,10 +619,9 @@ export async function updateWhyChooseUsCardAction(
     return { success: true, card: updated };
   } catch (e) {
     console.error("Prisma update error: ", e);
-    const idx = mockWhyChooseUsCards.findIndex(p => p.id === id);
-    if (idx !== -1) {
-      mockWhyChooseUsCards[idx] = { id, ...data };
-    }
+    setMockWhyChooseUsCards(
+      mockWhyChooseUsCards.map(p => p.id === id ? { ...p, ...data } : p)
+    );
     revalidatePath("/");
     return { success: true };
   }
@@ -648,10 +647,9 @@ export async function deleteWhyChooseUsCardAction(id: string) {
     return { success: true };
   } catch (e) {
     console.error("Prisma delete error: ", e);
-    const idx = mockWhyChooseUsCards.findIndex(p => p.id === id);
-    if (idx !== -1) {
-      mockWhyChooseUsCards.splice(idx, 1);
-    }
+    setMockWhyChooseUsCards(
+      mockWhyChooseUsCards.filter(p => p.id !== id)
+    );
     revalidatePath("/");
     return { success: true };
   }
@@ -696,7 +694,7 @@ export async function createTestimonialAction(data: {
       createdAt: new Date(),
       updatedAt: new Date()
     };
-    mockTestimonials.push(mockNew);
+    setMockTestimonials([...mockTestimonials, mockNew]);
     revalidatePath("/");
     return { success: true, testimonial: mockNew };
   }
@@ -738,10 +736,9 @@ export async function updateTestimonialAction(
     return { success: true, testimonial: updated };
   } catch (e) {
     console.error("Prisma update error: ", e);
-    const idx = mockTestimonials.findIndex(p => p.id === id);
-    if (idx !== -1) {
-      mockTestimonials[idx] = { id, ...data };
-    }
+    setMockTestimonials(
+      mockTestimonials.map(p => p.id === id ? { ...p, ...data } : p)
+    );
     revalidatePath("/");
     return { success: true };
   }
@@ -767,10 +764,9 @@ export async function deleteTestimonialAction(id: string) {
     return { success: true };
   } catch (e) {
     console.error("Prisma delete error: ", e);
-    const idx = mockTestimonials.findIndex(p => p.id === id);
-    if (idx !== -1) {
-      mockTestimonials.splice(idx, 1);
-    }
+    setMockTestimonials(
+      mockTestimonials.filter(p => p.id !== id)
+    );
     revalidatePath("/");
     return { success: true };
   }
