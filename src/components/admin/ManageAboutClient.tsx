@@ -7,7 +7,7 @@ import {
   createTeamMemberAction, 
   updateTeamMemberAction, 
   deleteTeamMemberAction 
-} from "@/app/actions/adminActions";
+} from "@/app/actions/aboutActions";
 import { Button } from "@/components/ui/button";
 
 interface TeamMember {
