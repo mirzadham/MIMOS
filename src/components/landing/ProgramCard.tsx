@@ -68,8 +68,8 @@ export default function ProgramCard({ program }: ProgramCardProps) {
       </div>
 
       {/* Card body container */}
-      <div className="flex-1 flex flex-col justify-between p-6 bg-white">
-
+      <div className="flex-1 flex flex-col justify-between p-7 sm:p-8 bg-white min-h-[260px] sm:min-h-[280px]">
+        
         {/* Title & HRD Corp Badge (Badge right-aligned) */}
         <div className="flex-1 flex items-start justify-between gap-4">
           <Link href={`/programs/${program.slug}`} className="block flex-1">
@@ -85,7 +85,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
         </div>
 
         {/* Divider 1 (Expand fully under title) */}
-        <div className="border-t border-slate-100 -mx-6 mt-4 mb-4" />
+        <div className="border-t border-slate-100 -mx-7 sm:-mx-8 mt-6 mb-6" />
 
         {/* Duration/Location & Price */}
         <div className="flex items-end justify-between gap-4">
@@ -111,7 +111,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
         </div>
 
         {/* Divider 2 (Expand fully under details) */}
-        <div className="border-t border-slate-100 -mx-6 mt-5 mb-4" />
+        <div className="border-t border-slate-100 -mx-7 sm:-mx-8 mt-7 mb-6" />
 
         {/* Next Intake & Clickable Arrow */}
         <div className="flex items-center justify-between">
@@ -122,7 +122,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
               <span className="text-slate-800">{program.dates || "Scheduled Soon"}</span>
             </div>
             {/* Colored horizontal bar in MIMOS Orchid Magenta */}
-            <div className="h-[4px] w-25 bg-primary rounded-full mt-1.5" />
+            <div className="h-[3px] w-12 bg-primary rounded-full mt-1.5" />
           </div>
 
           {/* Clickable Elongated Arrow with Spring Effect */}
