@@ -42,8 +42,8 @@ export default function ProgramCard({ program }: ProgramCardProps) {
   const parsedPrice = formatPrice(program.price);
 
   return (
-    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white p-0 transition-all duration-300">
-      
+    <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white p-0 shadow-[0_8px_30px_rgba(0,0,0,0.035)] transition-all duration-300">
+
       {/* Top Banner Image / Placeholder */}
       <div className="relative aspect-video w-full overflow-hidden bg-slate-50">
         <Link href={`/programs/${program.slug}`} className="block w-full h-full">
@@ -60,7 +60,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/5 via-transparent to-transparent" />
         </Link>
-        
+
         {/* Floating Category Tag (Rich pastel theme, black text, no border, slightly rounded) */}
         <span className="absolute right-4 top-4 z-10 inline-flex items-center rounded-md bg-[#f8d3f6] px-3 py-1 text-[10px] font-extrabold text-black shadow-sm select-none">
           {program.category?.name || "Upskilling"}
@@ -69,7 +69,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
 
       {/* Card body container */}
       <div className="flex-1 flex flex-col justify-between p-6 bg-white">
-        
+
         {/* Title & HRD Corp Badge (Badge right-aligned) */}
         <div className="flex-1 flex items-start justify-between gap-4">
           <Link href={`/programs/${program.slug}`} className="block flex-1">
@@ -122,7 +122,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
               <span className="text-slate-800">{program.dates || "Scheduled Soon"}</span>
             </div>
             {/* Colored horizontal bar in MIMOS Orchid Magenta */}
-            <div className="h-[3px] w-12 bg-primary rounded-full mt-1.5" />
+            <div className="h-[4px] w-25 bg-primary rounded-full mt-1.5" />
           </div>
 
           {/* Clickable Elongated Arrow with Spring Effect */}
@@ -140,7 +140,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
             </svg>
           </Link>
         </div>
-        
+
       </div>
     </div>
   );

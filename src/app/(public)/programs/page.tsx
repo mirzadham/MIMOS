@@ -18,7 +18,7 @@ export default async function ProgramsPage() {
   ]);
 
   return (
-    <div className="bg-background min-h-screen py-16 sm:py-24 relative overflow-hidden">
+    <div className="bg-[#f5f7fa] min-h-screen py-16 sm:py-24 relative overflow-hidden">
       {/* Background ambient design */}
       <div className="absolute right-1/4 top-0 -z-10 h-96 w-96 rounded-full bg-primary/3 blur-[120px] pointer-events-none" />
       
