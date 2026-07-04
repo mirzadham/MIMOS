@@ -69,7 +69,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
 
       {/* Card body container */}
       <div className="flex-1 flex flex-col justify-between p-7 sm:p-8 bg-white min-h-[260px] sm:min-h-[280px]">
-        
+
         {/* Title & HRD Corp Badge (Badge right-aligned) */}
         <div className="flex-1 flex items-start justify-between gap-4">
           <Link href={`/programs/${program.slug}`} className="block flex-1">
@@ -122,7 +122,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
               <span className="text-slate-800">{program.dates || "Scheduled Soon"}</span>
             </div>
             {/* Colored horizontal bar in MIMOS Orchid Magenta (33% card width) */}
-            <div className="h-[5px] w-1/3 bg-primary rounded-full mt-1.5" />
+            <div className="h-[4px] w-25 bg-primary rounded-full mt-1.5" />
           </div>
 
           {/* Clickable Elongated Arrow with Spring Effect */}
