@@ -98,7 +98,7 @@ const articles: Article[] = [
     category: "Syllabus Update",
     date: "2 April 2026",
     desc: "Our Project Management courses have been updated to reflect the latest agile methodologies in PMBOK Guide 7th Edition.",
-    image: "/images/programs/cmosamplifierdesign.webp",
+    image: "/images/programs/pmp.webp",
   },
   {
     id: 4,
@@ -122,7 +122,7 @@ const articles: Article[] = [
     category: "Facilities Update",
     date: "15 January 2026",
     desc: "Upgraded our cybersecurity simulation range with real-time multi-vector threat injection tools.",
-    image: "/semiconductor_cleanroom.png",
+    image: "/cyber_security_range.png",
   },
 ];
 
@@ -259,9 +259,9 @@ export default function NewsPage() {
 
                         {/* Headline */}
                         <Link href="#" className="block hover:opacity-60 transition-opacity duration-200">
-                          <h1 className="text-[32px] sm:text-[38px] lg:text-[42px] font-extrabold leading-[1.12] tracking-[-0.025em] text-[#0a2540]">
+                          <h2 className="text-[32px] sm:text-[38px] lg:text-[42px] font-extrabold leading-[1.12] tracking-[-0.025em] text-[#0a2540]">
                             {story.title}
-                          </h1>
+                          </h2>
                         </Link>
 
                         {/* Read more */}
