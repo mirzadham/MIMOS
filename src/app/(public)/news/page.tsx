@@ -196,21 +196,19 @@ export default function NewsPage() {
           <nav className="flex items-center gap-7">
             <button
               onClick={() => setActiveTab("overview")}
-              className={`relative text-[15px] font-semibold tracking-[-0.01em] transition-colors cursor-pointer ${
-                activeTab === "overview"
-                  ? "text-[#0a2540]"
-                  : "text-[#ff26b9] hover:text-[#0a2540]"
-              }`}
+              className={`relative text-[15px] font-semibold tracking-[-0.01em] transition-colors cursor-pointer ${activeTab === "overview"
+                ? "text-[#0a2540]"
+                : "text-[#ff26b9] hover:text-[#0a2540]"
+                }`}
             >
               Overview
             </button>
             <button
               onClick={() => setActiveTab("news")}
-              className={`relative text-[15px] font-semibold tracking-[-0.01em] transition-colors cursor-pointer ${
-                activeTab === "news"
-                  ? "text-[#0a2540]"
-                  : "text-[#ff26b9] hover:text-[#0a2540]"
-              }`}
+              className={`relative text-[15px] font-semibold tracking-[-0.01em] transition-colors cursor-pointer ${activeTab === "news"
+                ? "text-[#0a2540]"
+                : "text-[#ff26b9] hover:text-[#0a2540]"
+                }`}
             >
               News
             </button>
@@ -249,7 +247,7 @@ export default function NewsPage() {
                         {/* Category tag with vertical bar */}
                         <div className="flex items-center gap-2.5">
                           <span
-                            className="block h-[18px] w-[3px] rounded-full"
+                            className="block h-[15px] w-[1px] rounded-full"
                             style={{ backgroundColor: story.tagColor }}
                           />
                           <span className="text-[13px] font-semibold text-[#ff26b9] tracking-wide">
@@ -344,7 +342,7 @@ export default function NewsPage() {
                   >
                     {/* Column 1: Date */}
                     <div className="md:col-span-3 flex items-start gap-3 pt-[3px]">
-                      <span className="block w-[1.5px] h-[14px] bg-[#ff26b9] shrink-0 mt-[4px]" />
+                      <span className="block w-[1px] h-[14px] bg-[#ff26b9] shrink-0 mt-[4px]" />
                       <span className="text-[15px] font-semibold text-[#425466] tracking-tight">
                         {art.date}
                       </span>
@@ -352,7 +350,7 @@ export default function NewsPage() {
 
                     {/* Column 2: Category + Title */}
                     <div className="md:col-span-6 flex items-start gap-3">
-                      <span className="block w-[1.5px] h-[14px] bg-[#ff26b9] shrink-0 mt-[4px]" />
+                      <span className="block w-[1px] h-[14px] bg-[#ff26b9] shrink-0 mt-[4px]" />
                       <div className="flex flex-col gap-1.5">
                         <span className="text-[15px] font-semibold text-[#ff26b9]">
                           {art.category}
@@ -403,11 +401,10 @@ export default function NewsPage() {
                     <button
                       key={c}
                       onClick={() => setSelectedCategory(c)}
-                      className={`whitespace-nowrap px-4 py-1.5 text-[15px] font-semibold transition-all duration-200 cursor-pointer rounded-full hover:opacity-60 ${
-                        selectedCategory === c
-                          ? "bg-[#ff26b9] text-white shadow-sm"
-                          : "text-[#425466]"
-                      }`}
+                      className={`whitespace-nowrap px-4 py-1.5 text-[15px] font-semibold transition-all duration-200 cursor-pointer rounded-full hover:opacity-60 ${selectedCategory === c
+                        ? "bg-[#ff26b9] text-white shadow-sm"
+                        : "text-[#425466]"
+                        }`}
                     >
                       {label}
                     </button>
