@@ -1,168 +1,439 @@
 "use client";
 
-import { MapPin, Phone, Printer, Mail, Send, Landmark, ChevronRight } from "lucide-react";
-import Link from "next/link";
+import React, { useState } from "react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
+import { Send, ArrowRight, Loader2, ExternalLink } from "lucide-react";
+
+// Animation settings for the staggered columns fade-in
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 80,
+      damping: 15,
+    },
+  },
+};
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    organization: "",
+    message: "",
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Card cursor glow tracking coordinates
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setCoords({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) return;
+
+    setIsSubmitting(true);
+
+    // Simulate an API submit call with 1.5s delay
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+    }, 1500);
+  };
+
+  const handleReset = () => {
+    setFormData({
+      name: "",
+      email: "",
+      organization: "",
+      message: "",
+    });
+    setIsSubmitted(false);
+  };
+
   return (
-    <div className="bg-background min-h-screen py-16 sm:py-24 relative overflow-hidden">
-      {/* Decorative ambient background */}
-      <div className="absolute right-0 top-0 -z-10 h-96 w-96 rounded-full bg-primary/3 blur-[120px] pointer-events-none" />
+    <div className="relative min-h-screen w-full bg-[#f8fafc] text-[#0f172a] overflow-hidden flex flex-col justify-between">
+      
+      {/* 1. Background Grid & Ambient Blur Orbs */}
+      <div 
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30 pointer-events-none" 
+        aria-hidden="true"
+      />
+      
+      {/* Soft floating background colors */}
+      <div 
+        className="absolute top-[10%] left-[-10%] -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-[#a72190]/10 to-transparent blur-[120px] pointer-events-none animate-[pulse_12s_infinite]" 
+        aria-hidden="true"
+      />
+      <div 
+        className="absolute bottom-[20%] right-[-15%] -z-10 h-[600px] w-[600px] rounded-full bg-gradient-to-br from-indigo-500/8 to-transparent blur-[140px] pointer-events-none animate-[pulse_15s_infinite]" 
+        aria-hidden="true"
+      />
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-16">
+      {/* Main Content Layout Container (Top Padded Section) */}
+      <div className="mx-auto w-full max-w-7xl px-6 lg:px-8 space-y-12 md:space-y-20 relative z-10 flex-1 flex flex-col justify-center pt-10 pb-16 sm:pt-14 sm:pb-20">
         
-        {/* Breadcrumbs & Header */}
-        <div className="space-y-8">
-          {/* Breadcrumbs */}
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-bold text-slate-400">
-            <Link href="/" className="hover:text-primary transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="h-3 w-3 text-slate-300" />
-            <span className="text-slate-900">Contact Us</span>
-          </nav>
-
-          {/* Editorial Banner */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-8 sm:p-14 relative overflow-hidden transition-all duration-300">
-            <div className="max-w-3xl space-y-4 relative z-10">
-              <span className="text-xs font-extrabold text-primary tracking-widest uppercase bg-primary/5 px-3 py-1 rounded-full border border-primary/10">
-                Get In Touch
-              </span>
-              <h1 className="font-heading text-3xl font-black text-slate-900 sm:text-5xl tracking-tight leading-tight">
-                Reach Our Advisory Team
-              </h1>
-              <p className="text-sm sm:text-md text-slate-600 leading-relaxed font-body">
-                Get in touch with MIMOS Academy coordinate officers regarding enrollment questions, training schedules, or B2B custom physical training layouts.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-3 items-start">
+        {/* Main Content Layout Split */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start my-auto">
           
-          {/* Column 1 & 2: Contact Details & Location map */}
-          <div className="lg:col-span-2 space-y-8">
+          {/* Left Column: Title and Editorial Grid Details */}
+          <div className="lg:col-span-7 space-y-12 sm:space-y-16">
             
-            {/* Info panel */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-              <div className="space-y-5 font-body">
-                <h3 className="font-heading text-xs font-bold text-slate-900 uppercase tracking-widest">MIMOS Headquarters</h3>
-                <div className="flex gap-3 items-start text-xs text-slate-500 leading-relaxed">
-                  <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span className="text-slate-600">
-                    MIMOS Berhad, Technology Park Malaysia, Bukit Jalil, 57000 Kuala Lumpur, Malaysia.
-                  </span>
-                </div>
-                <div className="flex gap-3 items-center text-xs text-slate-500 border-t border-slate-100 pt-4">
-                  <Phone className="h-4 w-4 text-primary shrink-0" />
-                  <span className="font-semibold text-slate-700">Tel: +603-8995 5000</span>
-                </div>
-                <div className="flex gap-3 items-center text-xs text-slate-500">
-                  <Printer className="h-4 w-4 text-primary shrink-0" />
-                  <span className="font-semibold text-slate-700">Fax: +603-8996 2755</span>
-                </div>
-                <div className="flex gap-3 items-center text-xs text-slate-500">
-                  <Mail className="h-4 w-4 text-primary shrink-0" />
-                  <a href="mailto:info@mimos.my" className="hover:text-primary transition-colors font-bold text-slate-700">
-                    info@mimos.my
-                  </a>
-                </div>
-              </div>
-
-              {/* B2B Coordination notes */}
-              <div className="rounded-xl bg-slate-50/50 p-6 border border-slate-200/80 space-y-4 font-body">
-                <div className="flex items-center gap-2.5 text-slate-900 font-bold text-xs uppercase tracking-wider">
-                  <Landmark className="h-4.5 w-4.5 text-primary" />
-                  <span>Corporate Cohorts</span>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Companies interested in organizing dedicated physical training runs for their teams can contact our academic planning division directly at <a href="mailto:info@mimos.my" className="text-primary hover:underline font-bold">info@mimos.my</a> to coordinate schedules, customized course modules, and HRD Corp claim arrangements.
-                </p>
+            {/* Title Block */}
+            <div className="space-y-4">
+              <div className="overflow-hidden">
+                <h1 className="font-heading text-left">
+                  <motion.span 
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+                    className="block text-3xl sm:text-5xl md:text-6xl text-slate-900 font-semibold tracking-tight"
+                  >
+                    Contact with
+                  </motion.span>
+                  <motion.span 
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                    className="block text-3xl sm:text-5xl md:text-6xl text-slate-900 font-semibold tracking-tight mt-1"
+                  >
+                    MIMOS Academy
+                  </motion.span>
+                </h1>
               </div>
             </div>
 
-            {/* Simulated Map Visual Placeholder */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-6">
-              <span className="text-[10px] font-bold text-slate-400 block uppercase tracking-wider mb-4">MIMOS Bukit Jalil HQ Location Map</span>
-              <div className="relative h-60 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex flex-col items-center justify-center text-slate-400">
-                {/* Visual grid lines for map placeholder */}
-                <div className="absolute inset-0 placeholder-image opacity-30 pointer-events-none" />
-                <MapPin className="h-10 w-10 text-primary relative z-10 drop-shadow-sm animate-pulse" />
-                <span className="text-sm text-slate-900 font-extrabold mt-3 relative z-10"> Bukit Jalil R&D Headquarters </span>
+            {/* Editorial Details Grid - 4 columns/sections without numbers/cards */}
+            <motion.div 
+              variants={containerVariants}
+              initial="hidden"
+              animate="show"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-10 pt-10 border-t border-slate-200/60"
+            >
+              
+              {/* KL HQ */}
+              <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
+                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Kuala Lumpur HQ</span>
                 <a 
                   href="https://www.google.com.my/maps/place/MIMOS+Berhad/@3.0459671,101.6937111,17z"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-primary hover:underline font-bold mt-2.5 relative z-10"
+                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-[#a72190] transition-colors leading-relaxed font-body"
                 >
-                  View on Google Maps
+                  <span className="relative">
+                    Technology Park Malaysia, Bukit Jalil
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#a72190] group-hover/link:w-full transition-all duration-300" />
+                  </span>
+                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-[#a72190] transition-colors shrink-0 mt-1" />
                 </a>
-              </div>
-            </div>
+                <p className="text-xs text-slate-500 font-body">
+                  57000 Kuala Lumpur, Malaysia
+                </p>
+              </motion.div>
+
+              {/* Kulim Office */}
+              <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
+                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Kedah Branch</span>
+                <a 
+                  href="https://www.google.com/maps/search/MIMOS+Berhad+Kulim+Hi-Tech+Park"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-[#a72190] transition-colors leading-relaxed font-body"
+                >
+                  <span className="relative">
+                    Kulim Hi-Tech Park, Kulim
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#a72190] group-hover/link:w-full transition-all duration-300" />
+                  </span>
+                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-[#a72190] transition-colors shrink-0 mt-1" />
+                </a>
+                <p className="text-xs text-slate-500 font-body">
+                  09000 Kulim, Kedah, Malaysia
+                </p>
+              </motion.div>
+
+              {/* Email */}
+              <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
+                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Direct Email</span>
+                <a 
+                  href="mailto:academy@mimos.my" 
+                  className="group/link inline-flex items-start gap-1.5 text-sm font-bold text-slate-800 hover:text-[#a72190] transition-colors font-body leading-relaxed"
+                >
+                  <span className="relative">
+                    academy@mimos.my
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#a72190] group-hover/link:w-full transition-all duration-300" />
+                  </span>
+                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-[#a72190] transition-colors shrink-0 mt-1" />
+                </a>
+                <p className="text-[10px] text-slate-400 font-body">
+                  Response within 24 business hours
+                </p>
+              </motion.div>
+
+              {/* Phone */}
+              <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
+                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Hotline</span>
+                <a 
+                  href="tel:04-40525404" 
+                  className="group/link inline-flex items-start gap-1.5 text-sm font-bold text-slate-800 hover:text-[#a72190] transition-colors font-body leading-relaxed"
+                >
+                  <span className="relative">
+                    04-40525404
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#a72190] group-hover/link:w-full transition-all duration-300" />
+                  </span>
+                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-[#a72190] transition-colors shrink-0 mt-1" />
+                </a>
+                <p className="text-[10px] text-slate-400 font-body">
+                  Mon - Fri, 9:00 AM - 5:00 PM (GMT+8)
+                </p>
+              </motion.div>
+
+            </motion.div>
 
           </div>
 
-          {/* Right Column: Dynamic Inquiry Form */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 space-y-6">
-            
-            <div>
-              <h3 className="font-heading text-xs font-bold text-slate-900 uppercase tracking-widest">Inquiry Console</h3>
-              <p className="text-xs text-slate-400 mt-1 leading-normal font-body">
-                Send an academic coordination query directly to our team.
-              </p>
+          {/* Right Column: Glassmorphic Inquiry Form Card */}
+          <motion.div 
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 w-full"
+          >
+            <div 
+              onMouseMove={handleMouseMove}
+              className="relative overflow-hidden rounded-3xl border border-white/40 bg-white/70 backdrop-blur-xl p-8 shadow-[0_20px_50px_rgba(15,23,42,0.08)] group"
+            >
+              
+              {/* Radial gradient spotlight element */}
+              <div 
+                className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" 
+                style={{
+                  background: `radial-gradient(350px circle at ${coords.x}px ${coords.y}px, rgba(167, 33, 144, 0.08), transparent 80%)`,
+                }}
+                aria-hidden="true"
+              />
+              
+              <AnimatePresence mode="wait">
+                {!isSubmitted ? (
+                  <motion.div
+                    key="contact-form"
+                    initial={{ opacity: 1 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="space-y-6"
+                  >
+                    <div>
+                      <h3 className="font-heading text-base font-bold text-slate-900 uppercase tracking-widest">Inquiry Console</h3>
+                      <p className="text-xs text-slate-500 mt-1 leading-normal font-body">
+                        Send an academic coordination query directly to our team.
+                      </p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                      
+                      {/* Name input */}
+                      <div className="relative z-0 w-full group">
+                        <input 
+                          type="text" 
+                          name="name" 
+                          id="name" 
+                          value={formData.name}
+                          onChange={handleChange}
+                          required
+                          placeholder=" " 
+                          className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#a72190] peer transition-colors duration-300"
+                        />
+                        <label 
+                          htmlFor="name" 
+                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-[#a72190] uppercase tracking-wider font-extrabold text-[9px]"
+                        >
+                          Full Name
+                        </label>
+                        <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-[#a72190] peer-focus:w-full transition-all duration-500 ease-out" />
+                      </div>
+
+                      {/* Email input */}
+                      <div className="relative z-0 w-full group">
+                        <input 
+                          type="email" 
+                          name="email" 
+                          id="email" 
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          placeholder=" " 
+                          className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#a72190] peer transition-colors duration-300"
+                        />
+                        <label 
+                          htmlFor="email" 
+                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-[#a72190] uppercase tracking-wider font-extrabold text-[9px]"
+                        >
+                          Email Address
+                        </label>
+                        <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-[#a72190] peer-focus:w-full transition-all duration-500 ease-out" />
+                      </div>
+
+                      {/* Organization input */}
+                      <div className="relative z-0 w-full group">
+                        <input 
+                          type="text" 
+                          name="organization" 
+                          id="organization" 
+                          value={formData.organization}
+                          onChange={handleChange}
+                          placeholder=" " 
+                          className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#a72190] peer transition-colors duration-300"
+                        />
+                        <label 
+                          htmlFor="organization" 
+                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-[#a72190] uppercase tracking-wider font-extrabold text-[9px]"
+                        >
+                          Organization / Company
+                        </label>
+                        <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-[#a72190] peer-focus:w-full transition-all duration-500 ease-out" />
+                      </div>
+
+                      {/* Message input */}
+                      <div className="relative z-0 w-full group">
+                        <textarea 
+                          name="message" 
+                          id="message" 
+                          rows={4}
+                          value={formData.message}
+                          onChange={handleChange}
+                          required
+                          placeholder=" " 
+                          className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#a72190] peer transition-colors duration-300 resize-none"
+                        />
+                        <label 
+                          htmlFor="message" 
+                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-[#a72190] uppercase tracking-wider font-extrabold text-[9px]"
+                        >
+                          Your Message
+                        </label>
+                        <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-[#a72190] peer-focus:w-full transition-all duration-500 ease-out" />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full relative flex items-center justify-center gap-2 rounded-xl bg-[#a72190] hover:bg-[#8f177a] text-white py-4 text-xs font-black uppercase tracking-widest transition-all duration-300 shadow-lg shadow-[#a72190]/20 cursor-pointer disabled:opacity-80"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <span>Submitting Query</span>
+                            <Loader2 className="h-4.5 w-4.5 animate-spin" />
+                          </>
+                        ) : (
+                          <>
+                            <span>Submit Inquiry</span>
+                            <Send className="h-3.5 w-3.5" />
+                          </>
+                        )}
+                      </button>
+
+                    </form>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="success-screen"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="flex flex-col items-center justify-center py-10 text-center space-y-6"
+                  >
+                    {/* Animated checkmark circle */}
+                    <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-[#a72190]/10 text-[#a72190]">
+                      <svg className="h-8 w-8" viewBox="0 0 24 24">
+                        <motion.path
+                          d="M20 6L9 17L4 12"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          initial={{ pathLength: 0 }}
+                          animate={{ pathLength: 1 }}
+                          transition={{ duration: 0.6, ease: "easeOut" }}
+                        />
+                      </svg>
+                      <motion.div 
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.3, duration: 0.3 }}
+                        className="absolute -inset-1 rounded-full border border-[#a72190]/30 animate-ping [animation-duration:2s]" 
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <h3 className="font-heading text-xl font-extrabold text-slate-900">Inquiry Dispatched</h3>
+                      <p className="text-xs font-semibold text-[#a72190] uppercase tracking-wider">Thank you, {formData.name}!</p>
+                    </div>
+
+                    <p className="text-xs text-slate-500 leading-relaxed max-w-sm font-body">
+                      We have received your B2B / general academic coordination inquiry. A member of the MIMOS Academy advisory team will get in touch with you shortly at <span className="font-bold text-slate-700">{formData.email}</span>.
+                    </p>
+
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleReset}
+                      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 px-5 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 transition-all cursor-pointer"
+                    >
+                      <span>Submit another inquiry</span>
+                      <ArrowRight className="h-3 w-3" />
+                    </motion.button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
             </div>
-
-            <form className="space-y-4 text-xs font-body" onSubmit={(e) => e.preventDefault()}>
-              <div className="space-y-1.5">
-                <label className="font-bold text-slate-700 uppercase block">Full Name</label>
-                <input 
-                  type="text" 
-                  placeholder="e.g. Ahmad Kamal"
-                  className="w-full rounded-lg border border-slate-250 bg-white px-4 py-2.5 text-xs font-semibold focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all text-slate-800 placeholder-slate-400"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="font-bold text-slate-700 uppercase block">Email Address</label>
-                <input 
-                  type="email" 
-                  placeholder="e.g. kamal@company.my"
-                  className="w-full rounded-lg border border-slate-250 bg-white px-4 py-2.5 text-xs font-semibold focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all text-slate-800 placeholder-slate-400"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="font-bold text-slate-700 uppercase block">Organization / Company</label>
-                <input 
-                  type="text" 
-                  placeholder="e.g. Micro Tech Sdn Bhd"
-                  className="w-full rounded-lg border border-slate-250 bg-white px-4 py-2.5 text-xs font-semibold focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all text-slate-800 placeholder-slate-400"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="font-bold text-slate-700 uppercase block">Your Message</label>
-                <textarea 
-                  rows={4}
-                  placeholder="Describe your corporate training needs or general questions here..."
-                  className="w-full rounded-lg border border-slate-250 bg-white px-4 py-2.5 text-xs font-semibold focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all text-slate-800 placeholder-slate-400"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-primary hover:bg-primary-hover text-white py-4 text-xs font-bold transition-all cursor-pointer"
-              >
-                <span>Submit Query</span>
-                <Send className="h-3.5 w-3.5" />
-              </button>
-            </form>
-
-          </div>
+          </motion.div>
 
         </div>
 
       </div>
+
+      {/* 3. Bottom Tagline Section: Full-width background block in MIMOS pastel orchid with cream white text */}
+      <div className="w-full bg-[#b0529c] py-16 sm:py-24 px-6 lg:px-8 flex justify-center items-center relative z-10 border-t border-[#b0529c]/20">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="font-heading text-2xl sm:text-4xl md:text-5xl font-semibold italic text-[#fdfbf7] tracking-tight leading-normal select-none text-center max-w-4xl"
+        >
+          The opportunity to create, grow, and look ahead.
+        </motion.p>
+      </div>
+
     </div>
   );
 }
