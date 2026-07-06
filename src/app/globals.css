@@ -98,6 +98,8 @@
     
     --shadow-neon-light: none;
     --shadow-neon-hover: none;
+    --fontWeightNormal: 400;
+    --fontFamily: 'Open Sans', system-ui, sans-serif;
 }
 
 @layer base {
@@ -180,4 +182,11 @@
 
 .spring-arrow:hover {
   animation: arrow-spring 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.ArticleMarkdown {
+  display: grid;
+  gap: 24px 0;
+  font: var(--fontWeightNormal) 15px / 24px var(--fontFamily);
+  letter-spacing: .2px;
 }

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials } from "@/lib/db";
+import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles } from "@/lib/db";
 import crypto from "crypto";
 
 // 1. Authentication Server Actions
@@ -772,8 +772,218 @@ export async function deleteTestimonialAction(id: string) {
   }
 }
 
+// 10. News Article CRUD Actions
+export async function createNewsArticleAction(data: {
+  title: string;
+  category: string;
+  date: string;
+  description: string;
+  content: string;
+  imageUrl: string | null;
+  isHighlighted: boolean;
+  order: number;
+}) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
 
+  // Enforce max 4 highlighted
+  if (data.isHighlighted) {
+    try {
+      const highlightedCount = await prisma.newsArticle.count({ where: { isHighlighted: true } });
+      if (highlightedCount >= 4) {
+        return { success: false, error: "Maximum 4 highlighted articles allowed. Please un-highlight another article first." };
+      }
+    } catch {
+      const mockHighlightedCount = mockNewsArticles.filter(a => a.isHighlighted).length;
+      if (mockHighlightedCount >= 4) {
+        return { success: false, error: "Maximum 4 highlighted articles allowed. Please un-highlight another article first." };
+      }
+    }
+  }
 
+  try {
+    const newArticle = await prisma.newsArticle.create({
+      data: {
+        title: data.title,
+        category: data.category,
+        date: data.date,
+        description: data.description,
+        content: data.content,
+        imageUrl: data.imageUrl,
+        isHighlighted: data.isHighlighted,
+        order: data.order,
+      }
+    });
 
+    await prisma.auditLog.create({
+      data: {
+        action: "CREATE_NEWS_ARTICLE",
+        details: `Created news article: ${data.title} by admin ${admin.email}`
+      }
+    });
 
+    revalidatePath("/");
+    revalidatePath("/news");
+    return { success: true, article: newArticle };
+  } catch (e) {
+    console.error("Prisma write error, saving to mock news articles: ", e);
+    const mockNew = {
+      id: "mock-" + Math.random().toString(36).substr(2, 9),
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    setMockNewsArticles([...mockNewsArticles, mockNew]);
+    revalidatePath("/");
+    revalidatePath("/news");
+    return { success: true, article: mockNew };
+  }
+}
+
+export async function updateNewsArticleAction(
+  id: string,
+  data: {
+    title: string;
+    category: string;
+    date: string;
+    description: string;
+    content: string;
+    imageUrl: string | null;
+    isHighlighted: boolean;
+    order: number;
+  }
+) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  // Enforce max 4 highlighted (exclude current article from count)
+  if (data.isHighlighted) {
+    try {
+      const highlightedCount = await prisma.newsArticle.count({
+        where: { isHighlighted: true, id: { not: id } }
+      });
+      if (highlightedCount >= 4) {
+        return { success: false, error: "Maximum 4 highlighted articles allowed. Please un-highlight another article first." };
+      }
+    } catch {
+      const mockHighlightedCount = mockNewsArticles.filter(a => a.isHighlighted && a.id !== id).length;
+      if (mockHighlightedCount >= 4) {
+        return { success: false, error: "Maximum 4 highlighted articles allowed. Please un-highlight another article first." };
+      }
+    }
+  }
+
+  try {
+    const updated = await prisma.newsArticle.update({
+      where: { id },
+      data: {
+        title: data.title,
+        category: data.category,
+        date: data.date,
+        description: data.description,
+        content: data.content,
+        imageUrl: data.imageUrl,
+        isHighlighted: data.isHighlighted,
+        order: data.order,
+      }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "UPDATE_NEWS_ARTICLE",
+        details: `Updated news article: ${data.title} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    revalidatePath("/news");
+    return { success: true, article: updated };
+  } catch (e) {
+    console.error("Prisma update error: ", e);
+    setMockNewsArticles(
+      mockNewsArticles.map(p => p.id === id ? { ...p, ...data } : p)
+    );
+    revalidatePath("/");
+    revalidatePath("/news");
+    return { success: true };
+  }
+}
+
+export async function deleteNewsArticleAction(id: string) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const deleted = await prisma.newsArticle.delete({
+      where: { id }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "DELETE_NEWS_ARTICLE",
+        details: `Deleted news article: ${deleted.title} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    revalidatePath("/news");
+    return { success: true };
+  } catch (e) {
+    console.error("Prisma delete error: ", e);
+    setMockNewsArticles(
+      mockNewsArticles.filter(p => p.id !== id)
+    );
+    revalidatePath("/");
+    revalidatePath("/news");
+    return { success: true };
+  }
+}
+
+export async function toggleNewsHighlightAction(id: string, isHighlighted: boolean) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  // Enforce max 4 highlighted when enabling
+  if (isHighlighted) {
+    try {
+      const highlightedCount = await prisma.newsArticle.count({
+        where: { isHighlighted: true, id: { not: id } }
+      });
+      if (highlightedCount >= 4) {
+        return { success: false, error: "Maximum 4 highlighted articles allowed. Please un-highlight another article first." };
+      }
+    } catch {
+      const mockHighlightedCount = mockNewsArticles.filter(a => a.isHighlighted && a.id !== id).length;
+      if (mockHighlightedCount >= 4) {
+        return { success: false, error: "Maximum 4 highlighted articles allowed. Please un-highlight another article first." };
+      }
+    }
+  }
+
+  try {
+    await prisma.newsArticle.update({
+      where: { id },
+      data: { isHighlighted }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "TOGGLE_NEWS_HIGHLIGHT",
+        details: `${isHighlighted ? "Highlighted" : "Un-highlighted"} news article ID: ${id} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/");
+    revalidatePath("/news");
+    return { success: true };
+  } catch (e) {
+    console.error("Prisma update error: ", e);
+    setMockNewsArticles(
+      mockNewsArticles.map(a => a.id === id ? { ...a, isHighlighted } : a)
+    );
+    revalidatePath("/");
+    revalidatePath("/news");
+    return { success: true };
+  }
+}
 

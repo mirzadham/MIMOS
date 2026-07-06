@@ -452,6 +452,114 @@ export function setMockTeamMembers(newTeam: typeof mockTeamMembers) {
   mockTeamMembers = newTeam;
 }
 
+export let mockNewsArticles = [
+  {
+    id: "mock-news-1",
+    title: "New tools from Stripe allow German businesses to sell globally—including to AI agents",
+    category: "Administration",
+    date: "30 June 2026",
+    description: "Stripe today shared new tools to help businesses in Germany sell to and via AI agents, and reach more markets around the world.",
+    content: "BERLIN—Stripe today shared new tools to help businesses in Germany sell to and via AI agents, and reach more markets around the world. Stripe works with half of the DAX40—including BMW, E.ON, Allianz, and SAP—and over three hundred thousand other German businesses, from large family enterprises like Viessmann to tech leaders like DeepL, N26, and Black Forest Labs.\n\n### Enabling online commerce in the AI era\n\nStripe announced that, beginning later this year, businesses in Germany will be able to sell to customers inside AI interfaces with the [Agentic Commerce Suite](https://stripe.com), which makes products discoverable and purchasable from inside AI interfaces through a single integration. Businesses with entities in the US can already sell to customers in the US via platforms including Gemini and Copilot.\n\nAI companies in Germany can now meter token consumption and charge customers for their exact usage in real time with [Metronome](https://stripe.com), integrated into [Stripe Billing](https://stripe.com). And [Stripe Radar](https://stripe.com), which blocked over €2 billion in fraudulent volume for German merchants last year, now defends against [token theft](https://stripe.com), with protection against multi-account abuse, free trial fraud, and pay-as-you-go abuse.",
+    imageUrl: "/semiconductor_cleanroom.png" as string | null,
+    isHighlighted: true,
+    order: 0
+  },
+  {
+    id: "mock-news-2",
+    title: "Corporate HRD Corp Claimable status active",
+    category: "Administration",
+    date: "15 May 2026",
+    description: "All upskilling programs under MIMOS Academy are officially claiming-enabled. Corporate groups can claim training costs directly through HRD Corp.",
+    content: "All upskilling programs under MIMOS Academy are officially claiming-enabled. Corporate groups can claim training costs directly through HRD Corp.\n\nThis update is part of our commitment to supporting the continuous upskilling of the technical workforce in Malaysia. Organisations registered with HRD Corp can now claim 100% of the training fee under the HRD Corp levy scheme. Our certified training coordinators will handle the registration process and provide the necessary compliance documents for submission.",
+    imageUrl: "/training_seminar_room.png",
+    isHighlighted: true,
+    order: 1
+  },
+  {
+    id: "mock-news-3",
+    title: "Generative AI LLM Enterprise Deployment track launched",
+    category: "Syllabus Update",
+    date: "18 March 2026",
+    description: "A brand-new hands-on learning track covering private fine-tuning, retrieval-augmented generation (RAG), and quantization strategies.",
+    content: "A brand-new hands-on learning track covering private fine-tuning, retrieval-augmented generation (RAG), and quantization strategies is now open for enrollment.\n\nThis syllabus track is designed for software developers and technical architects looking to deploy large language models locally and privately within enterprise infrastructures. Attendees will gain direct experience setting up localized model pipelines, managing context length limits, and configuring safe vector search layers.",
+    imageUrl: "/ai_5g_hub.png",
+    isHighlighted: true,
+    order: 2
+  },
+  {
+    id: "mock-news-4",
+    title: "IC Design & layout verification program certified",
+    category: "Certifications",
+    date: "28 February 2026",
+    description: "Our analog and digital IC layout training programs have been officially certified by leading global fabless semiconductor design houses.",
+    content: "Our analog and digital IC layout training programs have been officially certified by leading global fabless semiconductor design houses.\n\nThis certification guarantees that participants learn industry-standard electronic design automation (EDA) tools and design rules. Graduates of this program will be eligible for direct internship and job placements with our partner semiconductor design firms, addressing the growing demand for silicon design talent in the region.",
+    imageUrl: "/images/programs/cmosamplifierdesign.webp",
+    isHighlighted: true,
+    order: 3
+  },
+  {
+    id: "mock-news-5",
+    title: "PMP hybrid Agile frameworks alignment completed",
+    category: "Syllabus Update",
+    date: "2 April 2026",
+    description: "Our Project Management courses have been updated to reflect the latest agile methodologies in PMBOK Guide 7th Edition.",
+    content: "Our Project Management courses have been updated to reflect the latest agile methodologies in PMBOK Guide 7th Edition.\n\nThe updated course structure introduces hybrid lifecycle modules combining predictive milestones with iterative sprint executions. Participants will learn how to design flexible governance structures and lead multi-disciplinary technical teams under modern PM frameworks.",
+    imageUrl: "/images/programs/pmp.webp",
+    isHighlighted: false,
+    order: 4
+  },
+  {
+    id: "mock-news-6",
+    title: "Cyber Security Range training lab upgrade completed",
+    category: "Facilities Update",
+    date: "15 January 2026",
+    description: "Upgraded our cybersecurity simulation range with real-time multi-vector threat injection tools.",
+    content: "Upgraded our cybersecurity simulation range with real-time multi-vector threat injection tools.\n\nThe upgraded range enables trainees to simulate complex threat scenarios including DDoS, zero-day exploits, and ransomware injection. Trainees can practice response procedures and forensic analysis inside isolated server environments.",
+    imageUrl: "/cyber_security_range.png",
+    isHighlighted: false,
+    order: 5
+  }
+];
 
+export async function getSafeNewsArticles() {
+  try {
+    const articles = await prisma.newsArticle.findMany({
+      orderBy: { order: 'asc' }
+    });
+    return articles.length > 0 ? articles : mockNewsArticles;
+  } catch (e) {
+    console.warn("Prisma NewsArticle Fetch failed, falling back to mock details: ", e);
+    return mockNewsArticles;
+  }
+}
+
+export async function getSafeHighlightedNews() {
+  try {
+    const highlighted = await prisma.newsArticle.findMany({
+      where: { isHighlighted: true },
+      orderBy: { order: 'asc' }
+    });
+    return highlighted.length > 0 ? highlighted : mockNewsArticles.filter(a => a.isHighlighted);
+  } catch (e) {
+    console.warn("Prisma Highlighted News Fetch failed, falling back to mock details: ", e);
+    return mockNewsArticles.filter(a => a.isHighlighted);
+  }
+}
+
+export async function getSafeNewsArticleById(id: string) {
+  try {
+    const article = await prisma.newsArticle.findUnique({
+      where: { id }
+    });
+    return article || mockNewsArticles.find(a => a.id === id) || null;
+  } catch (e) {
+    console.warn("Prisma NewsArticle findUnique failed, falling back to mock: ", e);
+    return mockNewsArticles.find(a => a.id === id) || null;
+  }
+}
+
+export function setMockNewsArticles(newArticles: typeof mockNewsArticles) {
+  mockNewsArticles = newArticles;
+}
 
 

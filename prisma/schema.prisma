@@ -151,5 +151,20 @@ model TeamMember {
   @@index([order])
 }
 
+model NewsArticle {
+  id            String   @id @default(uuid())
+  title         String
+  category      String   // e.g. "Facilities Update", "Administration"
+  date          String   // Display date e.g. "20 June 2026"
+  description   String   // Short description
+  content       String   @default("") // Detailed article body content (Markdown)
+  imageUrl      String?  // Cloudflare R2 public URL
+  isHighlighted Boolean  @default(false) // If true, shown in hero carousel
+  order         Int      @default(0) // Sort order
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
+  @@index([isHighlighted])
+  @@index([order])
+}
 
