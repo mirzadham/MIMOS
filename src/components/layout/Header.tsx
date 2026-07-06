@@ -43,6 +43,12 @@ const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+);
+
 export default function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -210,6 +216,14 @@ export default function Header() {
             >
               <XIcon className="h-4 w-4" />
             </a>
+            <a 
+              href="https://www.tiktok.com/@mimos.academy?_r=1&_t=ZS-97niHcJy2wa" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
+            >
+              <TikTokIcon className="h-4 w-4" />
+            </a>
           </div>
 
         </div>
@@ -274,6 +288,7 @@ export default function Header() {
                   <a href="https://www.facebook.com/profile.php?id=61567561791997" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><FacebookIcon className="h-5 w-5" /></a>
                   <a href="https://www.instagram.com/mimos.academy/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><InstagramIcon className="h-5 w-5" /></a>
                   <a href="https://x.com/MIMOSACADEMY?s=20" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><XIcon className="h-5 w-5" /></a>
+                  <a href="https://www.tiktok.com/@mimos.academy?_r=1&_t=ZS-97niHcJy2wa" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><TikTokIcon className="h-5 w-5" /></a>
                 </div>
               </div>
             </div>

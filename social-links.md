@@ -7,3 +7,5 @@ instagram = https://www.instagram.com/mimos.academy/
 there's no youtube. replace it with X
 
 X = https://x.com/MIMOSACADEMY?s=20
+
+tiktok = https://www.tiktok.com/@mimos.academy?_r=1&_t=ZS-97niHcJy2wa
