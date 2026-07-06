@@ -9,7 +9,7 @@ export default async function NewsPage() {
     getSafeHighlightedNews()
   ]);
 
-  const articles = allArticles.map(a => ({
+  const articles = allArticles.map((a: any) => ({
     id: a.id,
     title: a.title,
     category: a.category,
@@ -18,7 +18,7 @@ export default async function NewsPage() {
     image: a.imageUrl || "/semiconductor_cleanroom.png",
   }));
 
-  const featured = highlightedArticles.map(a => ({
+  const featured = highlightedArticles.map((a: any) => ({
     id: a.id,
     category: a.category,
     title: a.title,
@@ -34,7 +34,7 @@ export default async function NewsPage() {
     "linear-gradient(90deg, #ff8ae2, #ff47cb)",
     "linear-gradient(90deg, #ff47cb, #ff00aa)",
   ];
-  featured.forEach((f, i) => {
+  featured.forEach((f: any, i: number) => {
     f.barColor = barGradients[i % barGradients.length];
   });
 
