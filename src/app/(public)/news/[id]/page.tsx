@@ -131,20 +131,6 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
   return (
     <div className="relative min-h-screen bg-white overflow-hidden pb-20">
-      {/* Custom CSS block for specific fonts and grid spacing */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        :root {
-          --fontWeightNormal: 400;
-          --fontFamily: 'Open Sans', system-ui, sans-serif;
-        }
-        .ArticleMarkdown {
-          display: grid;
-          gap: 24px 0;
-          font: var(--fontWeightNormal) 15px / 24px var(--fontFamily);
-          letter-spacing: .2px;
-        }
-      ` }} />
-
       <div className="relative z-10 mx-auto max-w-[1080px] px-6 lg:px-8">
         {/* Top sub-navigation bar (Stripe newsroom design) */}
         <div className="flex items-center justify-between py-5 border-b border-[#e6ebf1]/10">
