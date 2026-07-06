@@ -81,37 +81,37 @@ export default function ContactPage() {
 
   return (
     <div className="relative min-h-screen w-full bg-[#f8fafc] text-[#0f172a] overflow-hidden flex flex-col justify-between">
-      
+
       {/* 1. Background Grid & Ambient Blur Orbs */}
-      <div 
-        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30 pointer-events-none" 
+      <div
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30 pointer-events-none"
         aria-hidden="true"
       />
-      
+
       {/* Soft floating background colors */}
-      <div 
-        className="absolute top-[10%] left-[-10%] -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-[#a72190]/10 to-transparent blur-[120px] pointer-events-none animate-[pulse_12s_infinite]" 
+      <div
+        className="absolute top-[10%] left-[-10%] -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-[#a72190]/10 to-transparent blur-[120px] pointer-events-none animate-[pulse_12s_infinite]"
         aria-hidden="true"
       />
-      <div 
-        className="absolute bottom-[20%] right-[-15%] -z-10 h-[600px] w-[600px] rounded-full bg-gradient-to-br from-indigo-500/8 to-transparent blur-[140px] pointer-events-none animate-[pulse_15s_infinite]" 
+      <div
+        className="absolute bottom-[20%] right-[-15%] -z-10 h-[600px] w-[600px] rounded-full bg-gradient-to-br from-indigo-500/8 to-transparent blur-[140px] pointer-events-none animate-[pulse_15s_infinite]"
         aria-hidden="true"
       />
 
       {/* Main Content Layout Container (Top Padded Section) */}
       <div className="mx-auto w-full max-w-7xl px-6 lg:px-8 space-y-12 md:space-y-20 relative z-10 flex-1 flex flex-col justify-center pt-10 pb-16 sm:pt-14 sm:pb-20">
-        
+
         {/* Main Content Layout Split */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start my-auto">
-          
+
           {/* Left Column: Title and Editorial Grid Details */}
           <div className="lg:col-span-7 space-y-12 sm:space-y-16">
-            
+
             {/* Title Block */}
             <div className="space-y-4">
               <div className="overflow-hidden">
                 <h1 className="font-heading text-left">
-                  <motion.span 
+                  <motion.span
                     initial={{ y: "100%" }}
                     animate={{ y: 0 }}
                     transition={{ duration: 0.8, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
@@ -119,7 +119,7 @@ export default function ContactPage() {
                   >
                     Contact with
                   </motion.span>
-                  <motion.span 
+                  <motion.span
                     initial={{ y: "100%" }}
                     animate={{ y: 0 }}
                     transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
@@ -132,18 +132,18 @@ export default function ContactPage() {
             </div>
 
             {/* Editorial Details Grid - 4 columns/sections without numbers/cards */}
-            <motion.div 
+            <motion.div
               variants={containerVariants}
               initial="hidden"
               animate="show"
               className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-10 pt-10 border-t border-slate-200/60"
             >
-              
+
               {/* KL HQ */}
               <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
                 <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Kuala Lumpur HQ</span>
-                <a 
-                  href="https://www.google.com.my/maps/place/MIMOS+Berhad/@3.0459671,101.6937111,17z"
+                <a
+                  href="https://maps.app.goo.gl/xSVfSpm4y676p2k59"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-[#a72190] transition-colors leading-relaxed font-body"
@@ -162,8 +162,8 @@ export default function ContactPage() {
               {/* Kulim Office */}
               <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
                 <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Kedah Branch</span>
-                <a 
-                  href="https://www.google.com/maps/search/MIMOS+Berhad+Kulim+Hi-Tech+Park"
+                <a
+                  href="https://maps.app.goo.gl/sjTpprYimsJfLyqr7"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-[#a72190] transition-colors leading-relaxed font-body"
@@ -182,9 +182,9 @@ export default function ContactPage() {
               {/* Email */}
               <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
                 <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Direct Email</span>
-                <a 
-                  href="mailto:academy@mimos.my" 
-                  className="group/link inline-flex items-start gap-1.5 text-sm font-bold text-slate-800 hover:text-[#a72190] transition-colors font-body leading-relaxed"
+                <a
+                  href="mailto:academy@mimos.my"
+                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-[#a72190] transition-colors font-body leading-relaxed"
                 >
                   <span className="relative">
                     academy@mimos.my
@@ -200,9 +200,9 @@ export default function ContactPage() {
               {/* Phone */}
               <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
                 <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Hotline</span>
-                <a 
-                  href="tel:04-40525404" 
-                  className="group/link inline-flex items-start gap-1.5 text-sm font-bold text-slate-800 hover:text-[#a72190] transition-colors font-body leading-relaxed"
+                <a
+                  href="tel:04-40525404"
+                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-[#a72190] transition-colors font-body leading-relaxed"
                 >
                   <span className="relative">
                     04-40525404
@@ -220,26 +220,26 @@ export default function ContactPage() {
           </div>
 
           {/* Right Column: Glassmorphic Inquiry Form Card */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-5 w-full"
           >
-            <div 
+            <div
               onMouseMove={handleMouseMove}
               className="relative overflow-hidden rounded-3xl border border-white/40 bg-white/70 backdrop-blur-xl p-8 shadow-[0_20px_50px_rgba(15,23,42,0.08)] group"
             >
-              
+
               {/* Radial gradient spotlight element */}
-              <div 
-                className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" 
+              <div
+                className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 style={{
                   background: `radial-gradient(350px circle at ${coords.x}px ${coords.y}px, rgba(167, 33, 144, 0.08), transparent 80%)`,
                 }}
                 aria-hidden="true"
               />
-              
+
               <AnimatePresence mode="wait">
                 {!isSubmitted ? (
                   <motion.div
@@ -257,21 +257,21 @@ export default function ContactPage() {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                      
+
                       {/* Name input */}
                       <div className="relative z-0 w-full group">
-                        <input 
-                          type="text" 
-                          name="name" 
-                          id="name" 
+                        <input
+                          type="text"
+                          name="name"
+                          id="name"
                           value={formData.name}
                           onChange={handleChange}
                           required
-                          placeholder=" " 
+                          placeholder=" "
                           className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#a72190] peer transition-colors duration-300"
                         />
-                        <label 
-                          htmlFor="name" 
+                        <label
+                          htmlFor="name"
                           className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-[#a72190] uppercase tracking-wider font-extrabold text-[9px]"
                         >
                           Full Name
@@ -281,18 +281,18 @@ export default function ContactPage() {
 
                       {/* Email input */}
                       <div className="relative z-0 w-full group">
-                        <input 
-                          type="email" 
-                          name="email" 
-                          id="email" 
+                        <input
+                          type="email"
+                          name="email"
+                          id="email"
                           value={formData.email}
                           onChange={handleChange}
                           required
-                          placeholder=" " 
+                          placeholder=" "
                           className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#a72190] peer transition-colors duration-300"
                         />
-                        <label 
-                          htmlFor="email" 
+                        <label
+                          htmlFor="email"
                           className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-[#a72190] uppercase tracking-wider font-extrabold text-[9px]"
                         >
                           Email Address
@@ -302,17 +302,17 @@ export default function ContactPage() {
 
                       {/* Organization input */}
                       <div className="relative z-0 w-full group">
-                        <input 
-                          type="text" 
-                          name="organization" 
-                          id="organization" 
+                        <input
+                          type="text"
+                          name="organization"
+                          id="organization"
                           value={formData.organization}
                           onChange={handleChange}
-                          placeholder=" " 
+                          placeholder=" "
                           className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#a72190] peer transition-colors duration-300"
                         />
-                        <label 
-                          htmlFor="organization" 
+                        <label
+                          htmlFor="organization"
                           className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-[#a72190] uppercase tracking-wider font-extrabold text-[9px]"
                         >
                           Organization / Company
@@ -322,18 +322,18 @@ export default function ContactPage() {
 
                       {/* Message input */}
                       <div className="relative z-0 w-full group">
-                        <textarea 
-                          name="message" 
-                          id="message" 
+                        <textarea
+                          name="message"
+                          id="message"
                           rows={4}
                           value={formData.message}
                           onChange={handleChange}
                           required
-                          placeholder=" " 
+                          placeholder=" "
                           className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#a72190] peer transition-colors duration-300 resize-none"
                         />
-                        <label 
-                          htmlFor="message" 
+                        <label
+                          htmlFor="message"
                           className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-[#a72190] uppercase tracking-wider font-extrabold text-[9px]"
                         >
                           Your Message
@@ -385,11 +385,11 @@ export default function ContactPage() {
                           transition={{ duration: 0.6, ease: "easeOut" }}
                         />
                       </svg>
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.3, duration: 0.3 }}
-                        className="absolute -inset-1 rounded-full border border-[#a72190]/30 animate-ping [animation-duration:2s]" 
+                        className="absolute -inset-1 rounded-full border border-[#a72190]/30 animate-ping [animation-duration:2s]"
                       />
                     </div>
 
