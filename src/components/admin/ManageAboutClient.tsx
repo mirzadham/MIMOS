@@ -360,7 +360,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                     <tr key={member.id} className="hover:bg-slate-50/50 transition-colors">
                       {/* Avatar preview */}
                       <td className="py-3 px-3">
-                        <div className="h-12 w-9 rounded-lg bg-gradient-to-b from-[#faf5fa] to-[#e6d0e4] border border-primary/5 flex items-center justify-center overflow-hidden">
+                        <div className="h-12 w-9 rounded-lg bg-gradient-to-b from-brand-light-start to-brand-light-end border border-primary/5 flex items-center justify-center overflow-hidden">
                           {member.imageUrl ? (
                             <img
                               src={member.imageUrl}
@@ -525,7 +525,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                 </label>
                 
                 <div className="flex items-center gap-3">
-                  <div className="h-16 w-12 rounded-lg bg-gradient-to-b from-[#faf5fa] to-[#e6d0e4] border border-primary/5 flex items-center justify-center overflow-hidden shrink-0">
+                  <div className="h-16 w-12 rounded-lg bg-gradient-to-b from-brand-light-start to-brand-light-end border border-primary/5 flex items-center justify-center overflow-hidden shrink-0">
                     {imageUrl ? (
                       <img
                         src={imageUrl}

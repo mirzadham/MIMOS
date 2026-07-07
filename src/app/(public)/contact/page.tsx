@@ -80,21 +80,21 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-[#f8fafc] text-[#0f172a] overflow-hidden flex flex-col justify-between">
+    <div className="relative min-h-screen w-full bg-background text-foreground overflow-hidden flex flex-col justify-between">
 
       {/* 1. Background Grid & Ambient Blur Orbs */}
       <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30 pointer-events-none"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30 pointer-events-none"
         aria-hidden="true"
       />
 
       {/* Soft floating background colors */}
       <div
-        className="absolute top-[10%] left-[-10%] -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-[#a72190]/10 to-transparent blur-[120px] pointer-events-none animate-[pulse_12s_infinite]"
+        className="absolute top-[10%] left-[-10%] -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-primary/10 to-transparent blur-[120px] pointer-events-none animate-[pulse_12s_infinite]"
         aria-hidden="true"
       />
       <div
-        className="absolute bottom-[20%] right-[-15%] -z-10 h-[600px] w-[600px] rounded-full bg-gradient-to-br from-indigo-500/8 to-transparent blur-[140px] pointer-events-none animate-[pulse_15s_infinite]"
+        className="absolute bottom-[20%] right-[-15%] -z-10 h-[600px] w-[600px] rounded-full bg-gradient-to-br from-primary/5 to-transparent blur-[140px] pointer-events-none animate-[pulse_15s_infinite]"
         aria-hidden="true"
       />
 
@@ -146,13 +146,13 @@ export default function ContactPage() {
                   href="https://maps.app.goo.gl/xSVfSpm4y676p2k59"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-[#a72190] transition-colors leading-relaxed font-body"
+                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-primary transition-colors leading-relaxed font-body"
                 >
                   <span className="relative">
                     Technology Park Malaysia, Bukit Jalil
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#a72190] group-hover/link:w-full transition-all duration-300" />
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover/link:w-full transition-all duration-300" />
                   </span>
-                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-[#a72190] transition-colors shrink-0 mt-1" />
+                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-primary transition-colors shrink-0 mt-1" />
                 </a>
                 <p className="text-xs text-slate-500 font-body">
                   57000 Kuala Lumpur, Malaysia
@@ -166,13 +166,13 @@ export default function ContactPage() {
                   href="https://maps.app.goo.gl/sjTpprYimsJfLyqr7"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-[#a72190] transition-colors leading-relaxed font-body"
+                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-primary transition-colors leading-relaxed font-body"
                 >
                   <span className="relative">
                     Kulim Hi-Tech Park, Kulim
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#a72190] group-hover/link:w-full transition-all duration-300" />
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover/link:w-full transition-all duration-300" />
                   </span>
-                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-[#a72190] transition-colors shrink-0 mt-1" />
+                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-primary transition-colors shrink-0 mt-1" />
                 </a>
                 <p className="text-xs text-slate-500 font-body">
                   09000 Kulim, Kedah, Malaysia
@@ -184,13 +184,13 @@ export default function ContactPage() {
                 <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Direct Email</span>
                 <a
                   href="mailto:academy@mimos.my"
-                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-[#a72190] transition-colors font-body leading-relaxed"
+                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-primary transition-colors font-body leading-relaxed"
                 >
                   <span className="relative">
                     academy@mimos.my
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#a72190] group-hover/link:w-full transition-all duration-300" />
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover/link:w-full transition-all duration-300" />
                   </span>
-                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-[#a72190] transition-colors shrink-0 mt-1" />
+                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-primary transition-colors shrink-0 mt-1" />
                 </a>
                 <p className="text-[10px] text-slate-400 font-body">
                   Response within 24 business hours
@@ -202,13 +202,13 @@ export default function ContactPage() {
                 <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Hotline</span>
                 <a
                   href="tel:04-40525404"
-                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-[#a72190] transition-colors font-body leading-relaxed"
+                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-primary transition-colors font-body leading-relaxed"
                 >
                   <span className="relative">
                     04-40525404
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#a72190] group-hover/link:w-full transition-all duration-300" />
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover/link:w-full transition-all duration-300" />
                   </span>
-                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-[#a72190] transition-colors shrink-0 mt-1" />
+                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-primary transition-colors shrink-0 mt-1" />
                 </a>
                 <p className="text-[10px] text-slate-400 font-body">
                   Mon - Fri, 9:00 AM - 5:00 PM (GMT+8)
@@ -268,15 +268,15 @@ export default function ContactPage() {
                           onChange={handleChange}
                           required
                           placeholder=" "
-                          className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#a72190] peer transition-colors duration-300"
+                          className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary peer transition-colors duration-300"
                         />
                         <label
                           htmlFor="name"
-                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-[#a72190] uppercase tracking-wider font-extrabold text-[9px]"
+                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-extrabold text-[9px]"
                         >
                           Full Name
                         </label>
-                        <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-[#a72190] peer-focus:w-full transition-all duration-500 ease-out" />
+                        <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-primary peer-focus:w-full transition-all duration-500 ease-out" />
                       </div>
 
                       {/* Email input */}
@@ -289,15 +289,15 @@ export default function ContactPage() {
                           onChange={handleChange}
                           required
                           placeholder=" "
-                          className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#a72190] peer transition-colors duration-300"
+                          className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary peer transition-colors duration-300"
                         />
                         <label
                           htmlFor="email"
-                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-[#a72190] uppercase tracking-wider font-extrabold text-[9px]"
+                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-extrabold text-[9px]"
                         >
                           Email Address
                         </label>
-                        <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-[#a72190] peer-focus:w-full transition-all duration-500 ease-out" />
+                        <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-primary peer-focus:w-full transition-all duration-500 ease-out" />
                       </div>
 
                       {/* Organization input */}
@@ -309,15 +309,15 @@ export default function ContactPage() {
                           value={formData.organization}
                           onChange={handleChange}
                           placeholder=" "
-                          className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#a72190] peer transition-colors duration-300"
+                          className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary peer transition-colors duration-300"
                         />
                         <label
                           htmlFor="organization"
-                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-[#a72190] uppercase tracking-wider font-extrabold text-[9px]"
+                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-extrabold text-[9px]"
                         >
                           Organization / Company
                         </label>
-                        <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-[#a72190] peer-focus:w-full transition-all duration-500 ease-out" />
+                        <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-primary peer-focus:w-full transition-all duration-500 ease-out" />
                       </div>
 
                       {/* Message input */}
@@ -330,21 +330,21 @@ export default function ContactPage() {
                           onChange={handleChange}
                           required
                           placeholder=" "
-                          className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-[#a72190] peer transition-colors duration-300 resize-none"
+                          className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary peer transition-colors duration-300 resize-none"
                         />
                         <label
                           htmlFor="message"
-                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-[#a72190] uppercase tracking-wider font-extrabold text-[9px]"
+                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-extrabold text-[9px]"
                         >
                           Your Message
                         </label>
-                        <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-[#a72190] peer-focus:w-full transition-all duration-500 ease-out" />
+                        <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-primary peer-focus:w-full transition-all duration-500 ease-out" />
                       </div>
 
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full relative flex items-center justify-center gap-2 rounded-xl bg-[#a72190] hover:bg-[#8f177a] text-white py-4 text-xs font-black uppercase tracking-widest transition-all duration-300 shadow-lg shadow-[#a72190]/20 cursor-pointer disabled:opacity-80"
+                        className="w-full relative flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-hover text-white py-4 text-xs font-black uppercase tracking-widest transition-all duration-300 shadow-lg shadow-primary/20 cursor-pointer disabled:opacity-80"
                       >
                         {isSubmitting ? (
                           <>
@@ -371,11 +371,25 @@ export default function ContactPage() {
                     className="flex flex-col items-center justify-center py-10 text-center space-y-6"
                   >
                     {/* Animated checkmark circle */}
-                    <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-[#a72190]/10 text-[#a72190]">
-                      <svg className="h-8 w-8" viewBox="0 0 24 24">
+                    <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <svg
+                        className="h-8 w-8"
+                        viewBox="0 0 52 52"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <motion.circle
+                          cx="26"
+                          cy="26"
+                          r="23"
+                          stroke="currentColor"
+                          strokeWidth="3.5"
+                          initial={{ pathLength: 0 }}
+                          animate={{ pathLength: 1 }}
+                          transition={{ duration: 0.6, ease: "easeOut" }}
+                        />
                         <motion.path
-                          d="M20 6L9 17L4 12"
-                          fill="none"
+                          d="M16 26l7 7 13-13"
                           stroke="currentColor"
                           strokeWidth="3.5"
                           strokeLinecap="round"
@@ -389,13 +403,13 @@ export default function ContactPage() {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.3, duration: 0.3 }}
-                        className="absolute -inset-1 rounded-full border border-[#a72190]/30 animate-ping [animation-duration:2s]"
+                        className="absolute -inset-1 rounded-full border border-primary/30 animate-ping [animation-duration:2s]"
                       />
                     </div>
 
                     <div className="space-y-2">
                       <h3 className="font-heading text-xl font-extrabold text-slate-900">Inquiry Dispatched</h3>
-                      <p className="text-xs font-semibold text-[#a72190] uppercase tracking-wider">Thank you, {formData.name}!</p>
+                      <p className="text-xs font-semibold text-primary uppercase tracking-wider">Thank you, {formData.name}!</p>
                     </div>
 
                     <p className="text-xs text-slate-500 leading-relaxed max-w-sm font-body">
@@ -422,13 +436,13 @@ export default function ContactPage() {
 
       </div>
 
-      {/* 3. Bottom Tagline Section: Full-width background block in MIMOS pastel orchid with cream white text */}
-      <div className="w-full bg-[#b0529c] py-16 sm:py-24 px-6 lg:px-8 flex justify-center items-center relative z-10 border-t border-[#b0529c]/20">
+      {/* 3. Bottom Tagline Section: Full-width background block in Awwwards-style plum dark gradient with clean slate text */}
+      <div className="w-full bg-gradient-to-br from-brand-plum-start via-brand-plum-via to-brand-plum-end py-16 sm:py-24 px-6 lg:px-8 flex justify-center items-center relative z-10 border-t border-brand-plum-start/20">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="font-heading text-2xl sm:text-4xl md:text-5xl font-semibold italic text-[#fdfbf7] tracking-tight leading-normal select-none text-center max-w-4xl"
+          className="font-heading text-2xl sm:text-4xl md:text-5xl font-semibold italic text-slate-50 tracking-tight leading-normal select-none text-center max-w-4xl"
         >
           The opportunity to create, grow, and look ahead.
         </motion.p>

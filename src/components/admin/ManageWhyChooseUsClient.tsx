@@ -253,12 +253,12 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                     sizes="(max-w-768px) 100vw, 33vw"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-[#2a0a25] via-[#100318] to-slate-950 flex items-center justify-center">
+                  <div className="w-full h-full bg-gradient-to-br from-brand-plum-start via-brand-plum-via to-brand-plum-end flex items-center justify-center">
                     <span className="text-[9px] font-bold text-slate-500 tracking-wider uppercase font-sans">[Placeholder Image]</span>
                   </div>
                 )}
                 {/* Dark Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-[#3a0b33]/25 to-[#10000e]/95 z-10" />
+                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-brand-plum-via/25 to-brand-plum-end/95 z-10" />
               </div>
 
               {/* Floating Content */}

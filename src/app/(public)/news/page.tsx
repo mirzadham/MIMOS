@@ -9,7 +9,7 @@ export default async function NewsPage() {
     getSafeHighlightedNews()
   ]);
 
-  const articles = allArticles.map((a: any) => ({
+  const articles = allArticles.map((a) => ({
     id: a.id,
     title: a.title,
     category: a.category,
@@ -18,23 +18,23 @@ export default async function NewsPage() {
     image: a.imageUrl || "/semiconductor_cleanroom.png",
   }));
 
-  const featured = highlightedArticles.map((a: any) => ({
+  const featured = highlightedArticles.map((a) => ({
     id: a.id,
     category: a.category,
     title: a.title,
     image: a.imageUrl || "/semiconductor_cleanroom.png",
     barColor: "",
-    tagColor: "#ff26b9",
+    tagColor: "var(--primary)",
   }));
 
   // Assign gradient colors to the featured bar
   const barGradients = [
-    "linear-gradient(90deg, #ffe5f9, #ffbde8)",
-    "linear-gradient(90deg, #ffbde8, #ff8ae2)",
-    "linear-gradient(90deg, #ff8ae2, #ff47cb)",
-    "linear-gradient(90deg, #ff47cb, #ff00aa)",
+    "linear-gradient(90deg, #fbf5fa, #f3dced)",
+    "linear-gradient(90deg, #f3dced, #e6bada)",
+    "linear-gradient(90deg, #e6bada, #c576af)",
+    "linear-gradient(90deg, #c576af, #a72190)",
   ];
-  featured.forEach((f: any, i: number) => {
+  featured.forEach((f, i) => {
     f.barColor = barGradients[i % barGradients.length];
   });
 

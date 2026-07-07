@@ -15,7 +15,7 @@ export default function TeamMemberCardClient({ member }: { member: TeamMember })
   return (
     <div className="flex flex-col">
       {/* Aspect 3/4 Image Container with Soft MIMOS Orchid Gradient Backing */}
-      <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-gradient-to-b from-[#faf5fa] to-[#e6d0e4]">
+      <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-gradient-to-b from-brand-light-start to-brand-light-end">
         {!imgError && member.imageUrl ? (
           <img
             src={member.imageUrl}

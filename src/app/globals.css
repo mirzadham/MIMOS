@@ -38,6 +38,12 @@
     --color-slate-teal: var(--slate-teal);
     --color-slate-teal-hover: var(--slate-teal-hover);
     
+    --color-brand-plum-start: var(--brand-plum-start);
+    --color-brand-plum-via: var(--brand-plum-via);
+    --color-brand-plum-end: var(--brand-plum-end);
+    --color-brand-light-start: var(--brand-light-start);
+    --color-brand-light-end: var(--brand-light-end);
+    
     --color-popover-foreground: var(--popover-foreground);
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);
@@ -74,6 +80,12 @@
     --gold-hover: #475569;
     --slate-teal: #475569; /* Replaced Teal with Slate 600 */
     --slate-teal-hover: #334155;
+    
+    --brand-plum-start: #2a0a25;
+    --brand-plum-via: #100318;
+    --brand-plum-end: #0f172a;
+    --brand-light-start: #faf5fa;
+    --brand-light-end: #e6d0e4;
     
     --muted: #f1f5f9; /* Neutral Slate 100 */
     --muted-foreground: #64748b; /* Muted Slate Text */

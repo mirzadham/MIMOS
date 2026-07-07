@@ -53,7 +53,9 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       if (params.get("tab") === "news") {
-        setActiveTab("news");
+        setTimeout(() => {
+          setActiveTab("news");
+        }, 0);
       }
     }
   }, []);
@@ -102,7 +104,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
               e.preventDefault();
               setActiveTab("overview");
             }}
-            className="text-[15px] font-semibold text-[#ff26b9] tracking-[-0.01em] hover:text-black transition-colors duration-200"
+            className="text-[15px] font-semibold text-primary tracking-[-0.01em] hover:text-slate-900 transition-colors duration-200"
           >
             Newsroom
           </Link>
@@ -113,8 +115,8 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
               <button
                 onClick={() => setActiveTab("overview")}
                 className={`relative text-[15px] font-semibold tracking-[-0.01em] transition-colors cursor-pointer ${activeTab === "overview"
-                  ? "text-[#0a2540]"
-                  : "text-[#ff26b9] hover:text-[#0a2540]"
+                  ? "text-slate-900"
+                  : "text-primary hover:text-slate-900"
                   }`}
               >
                 Overview
@@ -123,8 +125,8 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
             <button
               onClick={() => setActiveTab("news")}
               className={`relative text-[15px] font-semibold tracking-[-0.01em] transition-colors cursor-pointer ${activeTab === "news"
-                ? "text-[#0a2540]"
-                : "text-[#ff26b9] hover:text-[#0a2540]"
+                ? "text-slate-900"
+                : "text-primary hover:text-slate-900"
                 }`}
             >
               News
@@ -167,14 +169,14 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
                             className="block h-[15px] w-[1px] rounded-full"
                             style={{ backgroundColor: story.tagColor }}
                           />
-                          <span className="text-[13px] font-semibold text-[#ff26b9] tracking-wide">
+                          <span className="text-[13px] font-semibold text-primary tracking-wide">
                             {story.category}
                           </span>
                         </div>
 
                         {/* Headline */}
                         <Link href={`/news/${story.id}`} className="block hover:opacity-60 transition-opacity duration-200">
-                          <h2 className="text-[32px] sm:text-[38px] lg:text-[42px] font-extrabold leading-[1.12] tracking-[-0.025em] text-[#0a2540]">
+                          <h2 className="text-[32px] sm:text-[38px] lg:text-[42px] font-extrabold leading-[1.12] tracking-[-0.025em] text-slate-900">
                             {story.title}
                           </h2>
                         </Link>
@@ -182,7 +184,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
                         {/* Read more */}
                         <Link
                           href={`/news/${story.id}`}
-                          className="inline-flex items-center gap-1.5 text-[15px] font-semibold text-[#ff26b9] hover:text-black transition-colors duration-200 group"
+                          className="inline-flex items-center gap-1.5 text-[15px] font-semibold text-primary hover:text-slate-900 transition-colors duration-200 group"
                         >
                           Read more
                           <ChevronRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -190,7 +192,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
                       </div>
 
                       {/* Right: image with proper shadow container */}
-                      <div className="relative aspect-[16/12] w-full bg-[#f6f9fc] rounded-xl shadow-[0_30px_60px_-12px_rgba(50,50,93,0.15),0_18px_36px_-18px_rgba(0,0,0,0.1)]">
+                      <div className="relative aspect-[16/12] w-full bg-slate-50 rounded-xl shadow-[0_30px_60px_-12px_rgba(50,50,93,0.15),0_18px_36px_-18px_rgba(0,0,0,0.1)]">
                         <div className="absolute inset-0 overflow-hidden rounded-xl">
                           <img
                             src={story.image}
@@ -208,7 +210,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
             {/* ─── Sliding progress bar with grey background track ─────── */}
             <div className="relative group/progress cursor-pointer mt-2 h-[8px] flex items-center z-20">
               {/* Grey track background that expands by 2px on hover (centered to prevent layout shift) */}
-              <div className="relative h-[4px] group-hover/progress:h-[6px] w-full bg-[#e6ebf1] rounded-full transition-all duration-200">
+              <div className="relative h-[4px] group-hover/progress:h-[6px] w-full bg-slate-100 rounded-full transition-all duration-200">
                 {/* Fixed-width colored bar that slides to active position */}
                 <div
                   className="absolute top-0 h-full rounded-full transition-all duration-200"
@@ -238,12 +240,12 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
             <div className="pt-10 pb-16 space-y-12">
               {/* Heading section */}
               <div className="space-y-3">
-                <h2 className="text-[36px] font-extrabold tracking-tight text-[#0a2540]">
+                <h2 className="text-[36px] font-extrabold tracking-tight text-slate-900">
                   News
                 </h2>
                 <button
                   onClick={() => setActiveTab("news")}
-                  className="inline-flex items-center gap-1.5 text-[15px] font-semibold text-[#ff26b9] hover:text-black transition-colors duration-200 group cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-[15px] font-semibold text-primary hover:text-slate-900 transition-colors duration-200 group cursor-pointer"
                 >
                   All news
                   <ChevronRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -259,20 +261,20 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
                   >
                     {/* Column 1: Date */}
                     <div className="md:col-span-3 flex items-start gap-3 pt-[3px]">
-                      <span className="block w-[1px] h-[14px] bg-[#ff26b9] shrink-0 mt-[4px]" />
-                      <span className="text-[15px] font-semibold text-[#425466] tracking-tight">
+                      <span className="block w-[1px] h-[14px] bg-primary shrink-0 mt-[4px]" />
+                      <span className="text-[15px] font-semibold text-slate-600 tracking-tight">
                         {art.date}
                       </span>
                     </div>
 
                     {/* Column 2: Category + Title */}
                     <div className="md:col-span-6 flex items-start gap-3">
-                      <span className="block w-[1px] h-[14px] bg-[#ff26b9] shrink-0 mt-[4px]" />
+                      <span className="block w-[1px] h-[14px] bg-primary shrink-0 mt-[4px]" />
                       <div className="flex flex-col gap-1.5">
-                        <span className="text-[15px] font-semibold text-[#ff26b9]">
+                        <span className="text-[15px] font-semibold text-primary">
                           {art.category}
                         </span>
-                        <Link href={`/news/${art.id}`} className="block text-[#0a2540] hover:text-black hover:opacity-60 transition-all duration-200">
+                        <Link href={`/news/${art.id}`} className="block text-slate-900 hover:text-primary transition-all duration-200">
                           <h3 className="text-[18px] font-semibold leading-snug">
                             {art.title}
                           </h3>
@@ -283,7 +285,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
                     {/* Column 3: Image */}
                     <div className="md:col-span-3 flex justify-end md:justify-start">
                       <Link href={`/news/${art.id}`} className="block w-full max-w-[240px]">
-                        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-[#f6f9fc] shadow-[0_10px_30px_-5px_rgba(50,50,93,0.08),0_6px_16px_-8px_rgba(0,0,0,0.05)]">
+                        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-slate-50 shadow-[0_10px_30px_-5px_rgba(50,50,93,0.08),0_6px_16px_-8px_rgba(0,0,0,0.05)]">
                           <img
                             src={art.image}
                             alt={art.title}
@@ -306,12 +308,12 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
           <div className="pt-10 pb-16 space-y-10">
             {/* Title */}
             <div className="space-y-6">
-              <h2 className="text-[36px] font-extrabold tracking-tight text-[#0a2540]">
+              <h2 className="text-[36px] font-extrabold tracking-tight text-slate-900">
                 News
               </h2>
 
               {/* Filters (Clean inline tags matching reference image) */}
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-[#e6ebf1]/10">
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-slate-200/40">
                 {categories.map((c) => {
                   const label = c === "All" ? "Latest" : c;
                   return (
@@ -319,8 +321,8 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
                       key={c}
                       onClick={() => setSelectedCategory(c)}
                       className={`whitespace-nowrap px-4 py-1.5 text-[15px] font-semibold transition-all duration-200 cursor-pointer rounded-full hover:opacity-60 ${selectedCategory === c
-                        ? "bg-[#ff26b9] text-white shadow-sm"
-                        : "text-[#425466]"
+                        ? "bg-primary text-white shadow-sm"
+                        : "text-slate-600"
                         }`}
                     >
                       {label}
@@ -340,20 +342,20 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
                   >
                     {/* Column 1: Date */}
                     <div className="md:col-span-3 flex items-start gap-3 pt-[3px]">
-                      <span className="block w-[1.5px] h-[14px] bg-[#ff26b9] shrink-0 mt-[4px]" />
-                      <span className="text-[15px] font-semibold text-[#425466] tracking-tight">
+                      <span className="block w-[1.5px] h-[14px] bg-primary shrink-0 mt-[4px]" />
+                      <span className="text-[15px] font-semibold text-slate-600 tracking-tight">
                         {art.date}
                       </span>
                     </div>
 
                     {/* Column 2: Category + Title */}
                     <div className="md:col-span-6 flex items-start gap-3">
-                      <span className="block w-[1.5px] h-[14px] bg-[#ff26b9] shrink-0 mt-[4px]" />
+                      <span className="block w-[1.5px] h-[14px] bg-primary shrink-0 mt-[4px]" />
                       <div className="flex flex-col gap-1.5">
-                        <span className="text-[15px] font-semibold text-[#ff26b9]">
+                        <span className="text-[15px] font-semibold text-primary">
                           {art.category}
                         </span>
-                        <Link href={`/news/${art.id}`} className="block text-[#0a2540] hover:text-black hover:opacity-60 transition-all duration-200">
+                        <Link href={`/news/${art.id}`} className="block text-slate-900 hover:text-primary transition-all duration-200">
                           <h3 className="text-[18px] font-semibold leading-snug">
                             {art.title}
                           </h3>
@@ -364,7 +366,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
                     {/* Column 3: Image */}
                     <div className="md:col-span-3 flex justify-end md:justify-start">
                       <Link href={`/news/${art.id}`} className="block w-full max-w-[240px]">
-                        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-[#f6f9fc] shadow-[0_10px_30px_-5px_rgba(50,50,93,0.08),0_6px_16px_-8px_rgba(0,0,0,0.05)]">
+                        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-slate-50 shadow-[0_10px_30px_-5px_rgba(50,50,93,0.08),0_6px_16px_-8px_rgba(0,0,0,0.05)]">
                           <img
                             src={art.image}
                             alt={art.title}
@@ -378,16 +380,16 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
               </div>
             ) : (
               <div className="py-20 text-center space-y-3">
-                <Newspaper className="h-10 w-10 text-[#c1c9d2] mx-auto" />
-                <p className="text-[15px] font-semibold text-[#0a2540]">
+                <Newspaper className="h-10 w-10 text-slate-400 mx-auto" />
+                <p className="text-[15px] font-semibold text-slate-900">
                   No articles found
                 </p>
-                <p className="text-[13px] text-[#425466]">
+                <p className="text-[13px] text-slate-500">
                   Try selecting a different filter.
                 </p>
                 <button
                   onClick={() => setSelectedCategory("All")}
-                  className="text-[13px] font-semibold text-[#ff26b9] hover:underline cursor-pointer"
+                  className="text-[13px] font-semibold text-primary hover:underline cursor-pointer"
                 >
                   Reset filters
                 </button>

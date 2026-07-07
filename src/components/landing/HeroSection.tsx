@@ -52,7 +52,7 @@ export default function HeroSection() {
             className="mx-auto max-w-5xl font-heading text-4xl font-black tracking-tight text-slate-900 sm:text-6xl md:text-7xl leading-[1.08] lg:leading-[1.05]"
           >
             Driving Malaysia’s <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-primary to-[#b83ca1] bg-clip-text text-transparent group-hover:to-primary transition-all duration-300">
+            <span className="bg-gradient-to-r from-primary to-primary-hover bg-clip-text text-transparent group-hover:to-primary transition-all duration-300">
               High-Tech Excellence
             </span>{" "}
             in R&D Talent

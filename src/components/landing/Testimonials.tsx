@@ -98,7 +98,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
   const offset = (containerWidth - cardWidth) / 2 - activeIndex * (cardWidth + gap);
 
   return (
-    <section className="relative overflow-hidden border-b border-slate-200/80 bg-gradient-to-b from-[#f3eff6] via-[#eae5ee] to-[#e3dbe7] py-20 sm:py-28">
+    <section className="relative overflow-hidden border-b border-slate-200/80 bg-gradient-to-b from-slate-50 via-accent/30 to-slate-100 py-20 sm:py-28">
       {/* Premium subtle orchid glow background */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(167,33,144,0.04),transparent_60%)] pointer-events-none" />
       <div className="absolute left-1/4 top-10 -z-10 h-72 w-72 rounded-full bg-primary/4 blur-[100px] pointer-events-none" />

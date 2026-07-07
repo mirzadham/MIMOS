@@ -117,13 +117,13 @@ export default function WhyChooseUs({ cards }: WhyChooseUsProps) {
                       sizes="(max-w-768px) 100vw, 50vw"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[#2a0a25] via-[#100318] to-slate-950 flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
+                    <div className="w-full h-full bg-gradient-to-br from-brand-plum-start via-brand-plum-via to-brand-plum-end flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
                       <span className="text-[10px] font-bold text-slate-500 tracking-widest uppercase font-sans">[Placeholder Image]</span>
                     </div>
                   )}
                   
                   {/* Deep premium purplish gradient overlay to blend image and ensure readable text */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-[#3a0b33]/25 to-[#10000e]/95 group-hover:via-[#470f3f]/35 transition-all duration-700 z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-brand-plum-via/25 to-brand-plum-end/95 group-hover:via-primary/10 transition-all duration-700 z-10" />
                 </div>
 
                 {/* Text content placed at the top/bottom left/right (floating on top of background) */}

@@ -140,7 +140,7 @@ export default function FacilitiesPage() {
       </div>
 
       {/* 3. Immersive Dark Scroll Showcase */}
-      <section className="bg-[#090d16] text-white border-t border-slate-900 transition-colors duration-500 mt-8 relative">
+      <section className="bg-slate-950 text-white border-t border-slate-900 transition-colors duration-500 mt-8 relative">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row lg:items-start gap-12 lg:gap-20">
             
@@ -162,7 +162,7 @@ export default function FacilitiesPage() {
                       className="w-full h-full object-cover"
                     />
                     {/* Editorial dark overlay gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#090d16]/90 via-[#090d16]/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
                   </div>
                 ))}
               </div>
@@ -198,7 +198,7 @@ export default function FacilitiesPage() {
                       alt={fac.title}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#090d16]/65 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-transparent to-transparent pointer-events-none" />
                   </div>
 
                   {/* Section content animation */}
@@ -211,7 +211,7 @@ export default function FacilitiesPage() {
                   >
                     <div className="space-y-2">
                       <div className="font-mono text-xs tracking-widest text-primary font-bold uppercase">
-                        // {fac.index} // {fac.subtitle}
+                        {`// ${fac.index} // ${fac.subtitle}`}
                       </div>
                       <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-white uppercase">
                         {fac.title}
@@ -262,7 +262,7 @@ export default function FacilitiesPage() {
       </section>
 
       {/* 4. Sleek Outro Section */}
-      <div className="bg-[#090d16] border-t border-slate-900 text-center py-20 lg:py-32 relative z-10">
+      <div className="bg-slate-950 border-t border-slate-900 text-center py-20 lg:py-32 relative z-10">
         <div className="mx-auto max-w-2xl px-6 lg:px-8 space-y-6">
           <h2 className="text-xs font-mono tracking-widest text-primary uppercase">MIMOS Academy</h2>
           <p className="text-xl sm:text-2xl font-medium tracking-tight text-slate-200">
