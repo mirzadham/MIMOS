@@ -5,12 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Search, 
-  Globe, 
   Menu, 
-  X, 
-  GraduationCap,
-  ChevronDown
+  X
 } from "lucide-react";
 
 // Safe SVG fallbacks for social icons
@@ -52,18 +48,40 @@ const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export default function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [lang, setLang] = useState("EN");
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
+  // Track scroll position for threshold (10% viewport height)
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const threshold = window.innerHeight * 0.1;
+      setIsScrolled(window.scrollY > threshold);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Track mobile screen size for responsive variants
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Lock scroll when mobile overlay is active
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -74,33 +92,101 @@ export default function Header() {
     { name: "Contact", href: "/contact" },
   ];
 
+  // Motion variants for the outer header inner container
+  const headerVariants = {
+    top: {
+      width: "100%",
+      maxWidth: "1280px",
+      marginTop: "0px",
+      height: "80px",
+      backgroundColor: "rgba(255, 255, 255, 0)",
+      borderRadius: "0px",
+      borderWidth: "0px 0px 1px 0px",
+      borderColor: "rgba(226, 232, 240, 0)", // transparent border
+      boxShadow: "none",
+      paddingLeft: isMobile ? "24px" : "32px",
+      paddingRight: isMobile ? "24px" : "32px",
+    },
+    scrolled: {
+      width: isMobile ? "90%" : "auto",
+      maxWidth: isMobile ? "240px" : "620px", // compact floating bar width
+      marginTop: "12px",
+      height: "44px", // compact floating bar height
+      backgroundColor: "#000000cc", // black with 80% opacity
+      borderRadius: "12px", // rounded a little bit more
+      borderWidth: "1px",
+      borderColor: "rgba(51, 65, 85, 0.5)", // slate-800
+      boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3)",
+      paddingLeft: isMobile ? "8px" : "12px",
+      paddingRight: isMobile ? "8px" : "12px",
+    }
+  };
+
+  // Motion variants for logo container clipping (cuts out text on scroll)
+  const logoContainerVariants = {
+    top: {
+      width: "136px",
+      height: "40px",
+      transition: { duration: 0.3, ease: "easeOut" as const }
+    },
+    scrolled: {
+      width: "32px",
+      height: "32px",
+      transition: { duration: 0.3, ease: "easeIn" as const }
+    }
+  };
+
+  // Motion variants for control items fading out
+  const controlsVariants = {
+    top: {
+      width: "auto",
+      opacity: 1,
+      scale: 1,
+      display: "flex",
+      transition: { duration: 0.3, ease: "easeOut" as const }
+    },
+    scrolled: {
+      width: 0,
+      opacity: 0,
+      scale: 0.8,
+      transitionEnd: { display: "none" },
+      transition: { duration: 0.2, ease: "easeIn" as const }
+    }
+  };
+
   return (
-    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-      isScrolled 
-        ? "border-b border-slate-100 bg-white/90 backdrop-blur-md shadow-sm" 
-        : "border-b border-transparent bg-transparent"
-    }`}>
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full h-20 pointer-events-none bg-transparent">
+      <motion.div
+        layout
+        initial="top"
+        animate={isScrolled ? "scrolled" : "top"}
+        variants={headerVariants}
+        transition={{ type: "spring", stiffness: 180, damping: 24 }}
+        className={`mx-auto flex items-center pointer-events-auto backdrop-blur-md border-solid ${
+          isScrolled ? "justify-between md:justify-center md:gap-5" : "justify-between"
+        }`}
+      >
         
         {/* Logo - Top Left */}
         <div className="flex items-center">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-primary/5 transition-all duration-300 group-hover:bg-primary">
-              <GraduationCap className="h-6 w-6 text-primary transition-colors duration-300 group-hover:text-white" />
-              <div className="absolute -inset-0.5 rounded-xl bg-primary/20 opacity-0 blur group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-heading text-xl font-black tracking-tight text-slate-900 leading-none">
-                MIMOS
-              </span>
-              <span className="font-sans text-[10px] font-bold tracking-widest text-primary uppercase mt-0.5">
-                Academy
-              </span>
-            </div>
+          <Link href="/" className="flex items-center group">
+            <motion.div
+              variants={logoContainerVariants}
+              className="relative overflow-hidden flex items-center justify-start select-none"
+            >
+              {isScrolled && (
+                <div className="absolute inset-[2px] bg-white -z-10" />
+              )}
+              <img 
+                src="/MIMOS-Academy.png" 
+                alt="MIMOS Academy" 
+                className="h-full w-auto max-w-none block object-contain object-left relative z-10"
+              />
+            </motion.div>
           </Link>
         </div>
 
-        {/* Desktop Navigation - Center */}
+        {/* Desktop Navigation - Center / Right */}
         <nav className="hidden md:flex space-x-1">
           {navLinks.map((link) => {
             const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
@@ -108,15 +194,23 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`relative px-4 py-2 text-sm font-bold tracking-wide transition-colors duration-200 rounded-lg hover:text-primary ${
-                  isActive ? "text-primary" : "text-slate-600"
+                className={`relative transition-all duration-250 rounded-lg font-bold tracking-wide select-none ${
+                  isScrolled
+                    ? "px-3 py-1.5 text-xs text-white hover:text-white/80"
+                    : isActive 
+                      ? "text-primary px-4 py-2 text-sm" 
+                      : "text-black hover:text-primary px-4 py-2 text-sm"
                 }`}
               >
                 <span className="relative z-10">{link.name}</span>
                 {isActive && (
                   <motion.div
                     layoutId="activeNavUnderline"
-                    className="absolute inset-0 bg-primary/5 rounded-lg border border-primary/10"
+                    className={`absolute inset-0 rounded-lg border ${
+                      isScrolled
+                        ? "bg-white/10 border-white/10"
+                        : "bg-primary/5 border-primary/10"
+                    }`}
                     transition={{ type: "spring", stiffness: 350, damping: 30 }}
                   />
                 )}
@@ -126,69 +220,18 @@ export default function Header() {
         </nav>
 
         {/* Controls - Top Right */}
-        <div className="hidden md:flex items-center gap-4">
-          
-          {/* Animated Search Input Wrapper */}
-          <div className="relative flex items-center">
-            <AnimatePresence initial={false}>
-              {searchOpen && (
-                <motion.div 
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 220, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  transition={{ duration: 0.25, ease: "easeInOut" }}
-                  className="overflow-hidden mr-2"
-                >
-                  <input 
-                    type="text" 
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search courses..."
-                    className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-4 py-1.5 text-xs focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20 text-slate-800 placeholder-slate-400 font-medium"
-                    autoFocus
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <button 
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="rounded-lg p-2 text-slate-400 hover:bg-slate-50 hover:text-primary transition-all cursor-pointer"
-              aria-label="Search"
-            >
-              {searchOpen ? <X className="h-4.5 w-4.5" /> : <Search className="h-4.5 w-4.5" />}
-            </button>
-          </div>
-
-          {/* Language Selector */}
-          <div className="relative group/lang">
-            <button className="flex items-center gap-1 rounded-lg border border-slate-200/80 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all">
-              <Globe className="h-3.5 w-3.5 text-slate-400" />
-              <span>{lang}</span>
-              <ChevronDown className="h-3 w-3 text-slate-400 group-hover/lang:rotate-180 transition-transform duration-200" />
-            </button>
-            <div className="absolute right-0 mt-1.5 w-28 origin-top-right rounded-lg border border-slate-100 bg-white p-1 shadow-sm opacity-0 invisible group-hover/lang:opacity-100 group-hover/lang:visible transition-all duration-200 z-50">
-              <button 
-                onClick={() => setLang("EN")}
-                className="w-full rounded-md px-3 py-2 text-left text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors"
-              >
-                English
-              </button>
-              <button 
-                onClick={() => setLang("BM")}
-                className="w-full rounded-md px-3 py-2 text-left text-xs font-bold hover:bg-slate-50 text-slate-700 transition-colors"
-              >
-                B. Melayu
-              </button>
-            </div>
-          </div>
-
+        <motion.div 
+          variants={controlsVariants}
+          className="hidden md:flex items-center gap-4"
+        >
           {/* Social Icons */}
-          <div className="flex items-center gap-2 border-l border-slate-200/80 pl-4">
+          <div className="flex items-center gap-2">
             <a 
               href="https://www.linkedin.com/company/mimosacademy/" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
+              className="rounded-full p-1.5 text-black hover:text-primary hover:bg-primary/5 transition-all animate-none"
+              aria-label="LinkedIn"
             >
               <LinkedinIcon className="h-4 w-4" />
             </a>
@@ -196,7 +239,8 @@ export default function Header() {
               href="https://www.facebook.com/profile.php?id=61567561791997" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
+              className="rounded-full p-1.5 text-black hover:text-primary hover:bg-primary/5 transition-all animate-none"
+              aria-label="Facebook"
             >
               <FacebookIcon className="h-4 w-4" />
             </a>
@@ -204,7 +248,8 @@ export default function Header() {
               href="https://www.instagram.com/mimos.academy/" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
+              className="rounded-full p-1.5 text-black hover:text-primary hover:bg-primary/5 transition-all animate-none"
+              aria-label="Instagram"
             >
               <InstagramIcon className="h-4 w-4" />
             </a>
@@ -212,7 +257,8 @@ export default function Header() {
               href="https://x.com/MIMOSACADEMY?s=20" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
+              className="rounded-full p-1.5 text-black hover:text-primary hover:bg-primary/5 transition-all animate-none"
+              aria-label="X (formerly Twitter)"
             >
               <XIcon className="h-4 w-4" />
             </a>
@@ -220,76 +266,103 @@ export default function Header() {
               href="https://www.tiktok.com/@mimos.academy?_r=1&_t=ZS-97niHcJy2wa" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="rounded-full p-1.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all"
+              className="rounded-full p-1.5 text-black hover:text-primary hover:bg-primary/5 transition-all animate-none"
+              aria-label="TikTok"
             >
               <TikTokIcon className="h-4 w-4" />
             </a>
           </div>
 
-        </div>
+        </motion.div>
 
         {/* Mobile Menu Button */}
-        <div className="flex md:hidden items-center gap-3">
+        <div className="flex md:hidden items-center">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 transition-colors"
+            className={`rounded-full p-2.5 transition-colors ${
+              isScrolled 
+                ? "text-white hover:bg-white/10" 
+                : "text-slate-600 hover:bg-slate-100"
+            }`}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 
-      </div>
+      </motion.div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Fullscreen Drawer Overlay */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div 
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="md:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-xl overflow-hidden shadow-inner"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed inset-0 z-50 bg-slate-950/98 backdrop-blur-xl flex flex-col justify-between p-8 pointer-events-auto"
           >
-            <div className="px-6 py-5 space-y-4">
-              <nav className="flex flex-col space-y-1">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-lg px-4 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                ))}
-              </nav>
-              
-              <div className="border-t border-slate-100 pt-4 flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-500">Language:</span>
-                  <div className="flex gap-1 bg-slate-50 p-0.5 rounded-md border border-slate-200/60">
-                    <button 
-                      onClick={() => setLang("EN")}
-                      className={`text-xs font-bold px-3 py-1 rounded-md transition-colors ${lang === 'EN' ? 'bg-white text-primary shadow-sm' : 'text-slate-600'}`}
-                    >
-                      EN
-                    </button>
-                    <button 
-                      onClick={() => setLang("BM")}
-                      className={`text-xs font-bold px-3 py-1 rounded-md transition-colors ${lang === 'BM' ? 'bg-white text-primary shadow-sm' : 'text-slate-600'}`}
-                    >
-                      BM
-                    </button>
-                  </div>
+            {/* Header row */}
+            <div className="flex items-center justify-between">
+              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5">
+                <div className="overflow-hidden flex h-10 w-10 items-center justify-center bg-white/10">
+                  <img 
+                    src="/MIMOS-Academy.png" 
+                    alt="MIMOS Academy" 
+                    className="h-10 w-auto max-w-none block object-contain object-left"
+                  />
                 </div>
+                <div className="flex flex-col select-none">
+                  <span className="font-heading text-xl font-black tracking-tight text-white leading-none">
+                    MIMOS
+                  </span>
+                  <span className="font-sans text-[10px] font-bold tracking-widest text-primary uppercase mt-0.5">
+                    Academy
+                  </span>
+                </div>
+              </Link>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-full p-2.5 text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <X className="h-6 w-6 text-white" />
+              </button>
+            </div>
 
-                <div className="flex gap-4 justify-center text-slate-400 py-2 border-t border-slate-100">
-                  <a href="https://www.linkedin.com/company/mimosacademy/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><LinkedinIcon className="h-5 w-5" /></a>
-                  <a href="https://www.facebook.com/profile.php?id=61567561791997" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><FacebookIcon className="h-5 w-5" /></a>
-                  <a href="https://www.instagram.com/mimos.academy/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><InstagramIcon className="h-5 w-5" /></a>
-                  <a href="https://x.com/MIMOSACADEMY?s=20" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><XIcon className="h-5 w-5" /></a>
-                  <a href="https://www.tiktok.com/@mimos.academy?_r=1&_t=ZS-97niHcJy2wa" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><TikTokIcon className="h-5 w-5" /></a>
-                </div>
+            {/* Nav Links Stack */}
+            <nav className="flex flex-col items-center justify-center space-y-6 my-auto">
+              {navLinks.map((link, idx) => {
+                const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+                return (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.04 }}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`text-2xl font-black font-heading tracking-wide transition-colors ${
+                        isActive ? "text-primary" : "text-slate-300 hover:text-white"
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </nav>
+
+            {/* Bottom Panel */}
+            <div className="border-t border-slate-800 pt-6 flex flex-col gap-6">
+              {/* Social Icons row */}
+              <div className="flex gap-6 justify-center text-slate-400 py-2">
+                <a href="https://www.linkedin.com/company/mimosacademy/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="LinkedIn"><LinkedinIcon className="h-6 w-6" /></a>
+                <a href="https://www.facebook.com/profile.php?id=61567561791997" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="Facebook"><FacebookIcon className="h-6 w-6" /></a>
+                <a href="https://www.instagram.com/mimos.academy/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="Instagram"><InstagramIcon className="h-6 w-6" /></a>
+                <a href="https://x.com/MIMOSACADEMY?s=20" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="X (formerly Twitter)"><XIcon className="h-6 w-6" /></a>
+                <a href="https://www.tiktok.com/@mimos.academy?_r=1&_t=ZS-97niHcJy2wa" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="TikTok"><TikTokIcon className="h-6 w-6" /></a>
               </div>
             </div>
           </motion.div>
