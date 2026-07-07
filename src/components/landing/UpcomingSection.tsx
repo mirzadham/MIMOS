@@ -151,6 +151,7 @@ export default function UpcomingSection() {
           <button
             onClick={() => scroll("prev")}
             disabled={isStart}
+            type="button"
             className={`text-sm md:text-base font-medium transition-opacity duration-200 cursor-pointer ${
               isStart ? "opacity-30 pointer-events-none text-primary" : "text-primary hover:opacity-60"
             }`}
@@ -160,6 +161,7 @@ export default function UpcomingSection() {
           <button
             onClick={() => scroll("next")}
             disabled={isEnd}
+            type="button"
             className={`text-sm md:text-base font-medium transition-opacity duration-200 cursor-pointer ${
               isEnd ? "opacity-30 pointer-events-none text-primary" : "text-primary hover:opacity-60"
             }`}
