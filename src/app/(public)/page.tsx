@@ -8,15 +8,16 @@ import Testimonials from "@/components/landing/Testimonials";
 import Partners from "@/components/landing/Partners";
 import StatsSection from "@/components/landing/StatsSection";
 import StatsAndFacilities from "@/components/landing/StatsAndFacilities";
-import { getSafePrograms, getSafeStats, getSafePartners, getSafeWhyChooseUsCards, getSafeTestimonials } from "@/lib/db";
+import { getSafePrograms, getSafeStats, getSafePartners, getSafeWhyChooseUsCards, getSafeTestimonials, getSafeNewsArticles } from "@/lib/db";
 
 export default async function Home() {
-  const [programs, stats, partners, whyChooseUsCards, testimonials] = await Promise.all([
+  const [programs, stats, partners, whyChooseUsCards, testimonials, newsArticles] = await Promise.all([
     getSafePrograms(),
     getSafeStats(),
     getSafePartners(),
     getSafeWhyChooseUsCards(),
-    getSafeTestimonials()
+    getSafeTestimonials(),
+    getSafeNewsArticles()
   ]);
 
   return (
@@ -35,7 +36,7 @@ export default async function Home() {
       <WhyChooseUs cards={whyChooseUsCards} />
 
       {/* 5. Upcoming Trainings & Events Section */}
-      <UpcomingSection />
+      <UpcomingSection articles={newsArticles} />
 
       {/* 6. Featured Programmes Section */}
       <section id="featured-programs">
