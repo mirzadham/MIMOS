@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
@@ -27,13 +27,13 @@ export default function UpcomingSection({ articles }: UpcomingSectionProps) {
   const displayArticles = (articles || []).slice(0, 6);
 
   // Update navigation button states on scroll
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const container = carouselRef.current;
     if (!container) return;
 
     setIsStart(container.scrollLeft <= 5);
     setIsEnd(container.scrollLeft + container.clientWidth >= container.scrollWidth - 5);
-  };
+  }, []);
 
   useEffect(() => {
     const container = carouselRef.current;
@@ -44,7 +44,7 @@ export default function UpcomingSection({ articles }: UpcomingSectionProps) {
     handleScroll();
 
     return () => container.removeEventListener("scroll", handleScroll);
-  }, [displayArticles]);
+  }, [handleScroll, displayArticles.length]);
 
   // Scroll function for buttons
   const scroll = (direction: "prev" | "next") => {
