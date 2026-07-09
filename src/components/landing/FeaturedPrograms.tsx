@@ -272,7 +272,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         {/* ── Section Header ── */}
         <div className="flex flex-row items-end justify-between pb-4 mb-6">
           <div className="space-y-2 max-w-2xl">
-            <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+            <h2 className="font-heading text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
               Training Programmes
             </h2>
             <p className="text-sm sm:text-md text-slate-600 font-body leading-relaxed">
@@ -390,7 +390,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
                 {/* Category tag — active card only */}
                 {isActive && (
-                  <span className="absolute left-4 top-4 inline-flex items-center rounded-md bg-white/75 backdrop-blur-md px-3 py-1.5 text-[10px] font-bold text-slate-900 border border-white/20 shadow-sm z-10 select-none uppercase tracking-wider">
+                  <span className="absolute left-4 top-4 inline-flex items-center rounded-md bg-white/75 backdrop-blur-md px-3 py-1.5 text-[10px] font-semibold text-slate-900 border border-white/20 shadow-sm z-10 select-none uppercase tracking-wider">
                     {program.category?.name || "Upskilling"}
                   </span>
                 )}
@@ -406,7 +406,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
               href={`/programs/${activeProgram.slug}`}
               className="group/title inline-block"
             >
-              <h3 className="font-heading text-2xl font-extrabold text-slate-900 group-hover/title:text-primary transition-colors leading-snug">
+              <h3 className="font-heading text-2xl font-semibold text-slate-900 group-hover/title:text-primary transition-colors leading-snug">
                 {activeProgram.title}
               </h3>
             </Link>
@@ -418,7 +418,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
           <div className="shrink-0 pt-1">
             <Link
               href="/programs"
-              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-6 py-3.5 text-xs font-bold text-white hover:bg-primary-hover transition-all duration-200 group"
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-6 py-3.5 text-xs font-semibold text-white hover:bg-primary-hover transition-all duration-200 group"
             >
               <span>Explore All Programmes</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

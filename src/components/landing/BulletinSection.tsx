@@ -35,7 +35,7 @@ export default function BulletinSection() {
         
         {/* Header */}
         <div className="text-center space-y-3">
-          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-foreground">
+          <h2 className="font-heading text-3xl font-semibold tracking-tight text-foreground">
             MIMOS Academy Bulletin
           </h2>
           <p className="mx-auto max-w-2xl text-md text-slate-500">
@@ -49,7 +49,7 @@ export default function BulletinSection() {
           {/* Column 1: Announcements */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col justify-between">
             <div>
-              <div className="flex items-center gap-2 text-slate-500 font-bold text-sm tracking-wider uppercase">
+              <div className="flex items-center gap-2 text-slate-500 font-semibold text-sm tracking-wider uppercase">
                 <Bell className="h-4 w-4" />
                 <span>Notice Board</span>
               </div>
@@ -57,7 +57,7 @@ export default function BulletinSection() {
                 {announcements.map((item) => (
                   <div key={item.id} className="group border-l-2 border-slate-100 pl-4 hover:border-slate-400 transition-all">
                     <span className="text-xs text-slate-400 font-semibold">{item.date}</span>
-                    <h4 className="font-heading text-sm font-bold text-foreground mt-1 group-hover:text-slate-900 transition-colors">
+                    <h4 className="font-heading text-sm font-semibold text-foreground mt-1 group-hover:text-slate-900 transition-colors">
                       {item.title}
                     </h4>
                     <p className="text-xs text-slate-500 mt-1 leading-relaxed">{item.desc}</p>
@@ -73,7 +73,7 @@ export default function BulletinSection() {
 
           {/* Column 2: Upcoming Calendar Table */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2">
-            <div className="flex items-center gap-2 text-slate-500 font-bold text-sm tracking-wider uppercase">
+            <div className="flex items-center gap-2 text-slate-500 font-semibold text-sm tracking-wider uppercase">
               <Calendar className="h-4 w-4" />
               <span>Training Calendar (2026 batches)</span>
             </div>
@@ -81,7 +81,7 @@ export default function BulletinSection() {
             <div className="mt-6 overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider">
+                  <tr className="border-b border-slate-100 text-slate-400 font-semibold uppercase tracking-wider">
                     <th className="pb-3 font-semibold">Course Title</th>
                     <th className="pb-3 font-semibold">Batch Schedule</th>
                     <th className="pb-3 font-semibold">Training Venue</th>
@@ -91,11 +91,11 @@ export default function BulletinSection() {
                 <tbody className="divide-y divide-slate-100 text-slate-600 font-medium">
                   {calendarSchedules.map((row) => (
                     <tr key={row.id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="py-3.5 font-bold text-foreground pr-2">{row.course}</td>
+                      <td className="py-3.5 font-semibold text-foreground pr-2">{row.course}</td>
                       <td className="py-3.5">{row.date}</td>
                       <td className="py-3.5">{row.location}</td>
                       <td className="py-3.5 text-right">
-                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[9px] font-bold ${
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[9px] font-semibold ${
                           row.status === "Closing Soon" ? "bg-amber-50 text-amber-600" : "bg-emerald-50 text-emerald-600"
                         }`}>
                           {row.status}
@@ -112,7 +112,7 @@ export default function BulletinSection() {
 
         {/* Cohort Image Gallery Placeholders */}
         <div className="mt-12 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center gap-2 text-slate-500 font-bold text-sm tracking-wider uppercase mb-6">
+          <div className="flex items-center gap-2 text-slate-500 font-semibold text-sm tracking-wider uppercase mb-6">
             <Users className="h-4 w-4" />
             <span>MIMOS Academy Alumni & Cohorts</span>
           </div>
@@ -130,7 +130,7 @@ export default function BulletinSection() {
                 {/* Label Overlay */}
                 <div className="border-t border-slate-100 p-4 bg-white">
                   <div className="flex justify-between items-center">
-                    <h4 className="font-heading text-xs font-bold text-foreground">{cohort.title}</h4>
+                    <h4 className="font-heading text-xs font-semibold text-foreground">{cohort.title}</h4>
                     <span className="text-[9px] font-semibold text-slate-500">{cohort.date}</span>
                   </div>
                   <p className="text-[10px] text-slate-400 mt-0.5">{cohort.count} certified</p>

@@ -70,7 +70,7 @@ export default async function AdminDashboardOverview() {
       
       {/* Page Header */}
       <div>
-        <h1 className="font-heading text-2xl font-extrabold text-foreground">
+        <h1 className="font-heading text-2xl font-semibold text-foreground">
           Command Center Overview
         </h1>
         <p className="text-xs text-slate-500 mt-1">
@@ -84,8 +84,8 @@ export default async function AdminDashboardOverview() {
         {/* Stat Item: Programs */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
           <div className="space-y-1">
-            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Active Programs</span>
-            <span className="text-2xl font-extrabold text-foreground block">{stats.programs}</span>
+            <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Active Programs</span>
+            <span className="text-2xl font-semibold text-foreground block">{stats.programs}</span>
           </div>
           <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-slate-600">
             <GraduationCap className="h-5 w-5" />
@@ -95,8 +95,8 @@ export default async function AdminDashboardOverview() {
         {/* Stat Item: Enrollments */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
           <div className="space-y-1">
-            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Enrollments</span>
-            <span className="text-2xl font-extrabold text-foreground block">{stats.enrollments}</span>
+            <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Total Enrollments</span>
+            <span className="text-2xl font-semibold text-foreground block">{stats.enrollments}</span>
           </div>
           <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-slate-600">
             <Users className="h-5 w-5" />
@@ -106,8 +106,8 @@ export default async function AdminDashboardOverview() {
         {/* Stat Item: Certificates */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
           <div className="space-y-1">
-            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Issued Certificates</span>
-            <span className="text-2xl font-extrabold text-foreground block">{stats.certificates}</span>
+            <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Issued Certificates</span>
+            <span className="text-2xl font-semibold text-foreground block">{stats.certificates}</span>
           </div>
           <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-slate-600">
             <Award className="h-5 w-5" />
@@ -123,7 +123,7 @@ export default async function AdminDashboardOverview() {
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2 space-y-6">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
             <TrendingUp className="h-4.5 w-4.5 text-slate-500" />
-            <h3 className="font-heading text-sm font-bold text-foreground uppercase tracking-wider">
+            <h3 className="font-heading text-sm font-semibold text-foreground uppercase tracking-wider">
               Registrations by Program
             </h3>
           </div>
@@ -154,7 +154,7 @@ export default async function AdminDashboardOverview() {
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
             <Terminal className="h-4.5 w-4.5 text-slate-500" />
-            <h3 className="font-heading text-sm font-bold text-foreground uppercase tracking-wider">
+            <h3 className="font-heading text-sm font-semibold text-foreground uppercase tracking-wider">
               Security Action Logs
             </h3>
           </div>
@@ -165,7 +165,7 @@ export default async function AdminDashboardOverview() {
                 {/* Timeline node */}
                 <div className="absolute -left-1 top-1.5 h-2 w-2 rounded-full border-2 border-white bg-primary" />
                 <div className="space-y-0.5">
-                  <span className="font-bold text-foreground uppercase text-[9px] block">
+                  <span className="font-semibold text-foreground uppercase text-[9px] block">
                     {log.action}
                   </span>
                   <p className="text-[10px] text-slate-500 leading-relaxed font-body">

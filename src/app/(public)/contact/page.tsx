@@ -109,8 +109,8 @@ export default function ContactPage() {
 
             {/* Title Block */}
             <div className="space-y-4">
-              <div className="overflow-hidden">
-                <h1 className="font-heading text-left">
+              <h1 className="font-heading text-left">
+                <span className="block overflow-hidden py-2 -my-2">
                   <motion.span
                     initial={{ y: "100%" }}
                     animate={{ y: 0 }}
@@ -119,16 +119,18 @@ export default function ContactPage() {
                   >
                     Contact with
                   </motion.span>
+                </span>
+                <span className="block overflow-hidden py-2 -my-2 mt-1">
                   <motion.span
                     initial={{ y: "100%" }}
                     animate={{ y: 0 }}
                     transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                    className="block text-3xl sm:text-5xl md:text-6xl text-slate-900 font-semibold tracking-tight mt-1"
+                    className="block text-3xl sm:text-5xl md:text-6xl text-slate-900 font-semibold tracking-tight"
                   >
                     MIMOS Academy
                   </motion.span>
-                </h1>
-              </div>
+                </span>
+              </h1>
             </div>
 
             {/* Editorial Details Grid - 4 columns/sections without numbers/cards */}
@@ -141,7 +143,7 @@ export default function ContactPage() {
 
               {/* KL HQ */}
               <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
-                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Kuala Lumpur HQ</span>
+                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-semibold">Kuala Lumpur HQ</span>
                 <a
                   href="https://maps.app.goo.gl/xSVfSpm4y676p2k59"
                   target="_blank"
@@ -161,7 +163,7 @@ export default function ContactPage() {
 
               {/* Kulim Office */}
               <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
-                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Kedah Branch</span>
+                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-semibold">Kedah Branch</span>
                 <a
                   href="https://maps.app.goo.gl/sjTpprYimsJfLyqr7"
                   target="_blank"
@@ -181,7 +183,7 @@ export default function ContactPage() {
 
               {/* Email */}
               <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
-                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Direct Email</span>
+                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-semibold">Direct Email</span>
                 <a
                   href="mailto:academy@mimos.my"
                   className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-primary transition-colors font-body leading-relaxed"
@@ -199,7 +201,7 @@ export default function ContactPage() {
 
               {/* Phone */}
               <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
-                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-black">Hotline</span>
+                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-semibold">Hotline</span>
                 <a
                   href="tel:04-40525404"
                   className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-primary transition-colors font-body leading-relaxed"
@@ -250,7 +252,7 @@ export default function ContactPage() {
                     className="space-y-6"
                   >
                     <div>
-                      <h3 className="font-heading text-base font-bold text-slate-900 uppercase tracking-widest">Inquiry Console</h3>
+                      <h3 className="font-heading text-base font-semibold text-slate-900 uppercase tracking-widest">Inquiry Console</h3>
                       <p className="text-xs text-slate-500 mt-1 leading-normal font-body">
                         Send an academic coordination query directly to our team.
                       </p>
@@ -272,7 +274,7 @@ export default function ContactPage() {
                         />
                         <label
                           htmlFor="name"
-                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-extrabold text-[9px]"
+                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-semibold text-[9px]"
                         >
                           Full Name
                         </label>
@@ -293,7 +295,7 @@ export default function ContactPage() {
                         />
                         <label
                           htmlFor="email"
-                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-extrabold text-[9px]"
+                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-semibold text-[9px]"
                         >
                           Email Address
                         </label>
@@ -313,7 +315,7 @@ export default function ContactPage() {
                         />
                         <label
                           htmlFor="organization"
-                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-extrabold text-[9px]"
+                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-semibold text-[9px]"
                         >
                           Organization / Company
                         </label>
@@ -334,7 +336,7 @@ export default function ContactPage() {
                         />
                         <label
                           htmlFor="message"
-                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-extrabold text-[9px]"
+                          className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-semibold text-[9px]"
                         >
                           Your Message
                         </label>
@@ -344,7 +346,7 @@ export default function ContactPage() {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full relative flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-hover text-white py-4 text-xs font-black uppercase tracking-widest transition-all duration-300 shadow-lg shadow-primary/20 cursor-pointer disabled:opacity-80"
+                        className="w-full relative flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-hover text-white py-4 text-xs font-semibold uppercase tracking-widest transition-all duration-300 shadow-lg shadow-primary/20 cursor-pointer disabled:opacity-80"
                       >
                         {isSubmitting ? (
                           <>
@@ -408,19 +410,19 @@ export default function ContactPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="font-heading text-xl font-extrabold text-slate-900">Inquiry Dispatched</h3>
+                      <h3 className="font-heading text-xl font-semibold text-slate-900">Inquiry Dispatched</h3>
                       <p className="text-xs font-semibold text-primary uppercase tracking-wider">Thank you, {formData.name}!</p>
                     </div>
 
                     <p className="text-xs text-slate-500 leading-relaxed max-w-sm font-body">
-                      We have received your B2B / general academic coordination inquiry. A member of the MIMOS Academy advisory team will get in touch with you shortly at <span className="font-bold text-slate-700">{formData.email}</span>.
+                      We have received your B2B / general academic coordination inquiry. A member of the MIMOS Academy advisory team will get in touch with you shortly at <span className="font-semibold text-slate-700">{formData.email}</span>.
                     </p>
 
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleReset}
-                      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 px-5 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 transition-all cursor-pointer"
+                      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 px-5 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-slate-600 transition-all cursor-pointer"
                     >
                       <span>Submit another inquiry</span>
                       <ArrowRight className="h-3 w-3" />

@@ -168,7 +168,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="font-heading text-2xl font-extrabold text-foreground">Certificate Vault</h1>
+          <h1 className="font-heading text-2xl font-semibold text-foreground">Certificate Vault</h1>
           <p className="text-xs text-slate-500 mt-1">Issue digital, cryptographically verifiable certificates to attendees.</p>
         </div>
       </div>
@@ -178,7 +178,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
         <div className="flex gap-2 w-full sm:w-auto">
           <button
             onClick={() => setActiveTab("PENDING")}
-            className={`rounded-full px-4 py-2 text-xs font-bold border transition-all ${
+            className={`rounded-full px-4 py-2 text-xs font-semibold border transition-all ${
               activeTab === "PENDING"
                 ? "bg-primary border-primary text-white shadow-sm"
                 : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
@@ -188,7 +188,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
           </button>
           <button
             onClick={() => setActiveTab("ISSUED")}
-            className={`rounded-full px-4 py-2 text-xs font-bold border transition-all ${
+            className={`rounded-full px-4 py-2 text-xs font-semibold border transition-all ${
               activeTab === "ISSUED"
                 ? "bg-primary border-primary text-white shadow-sm"
                 : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
@@ -215,7 +215,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
         <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="border-b border-slate-100 bg-slate-50 text-slate-400 font-bold uppercase tracking-wider">
+              <tr className="border-b border-slate-100 bg-slate-50 text-slate-400 font-semibold uppercase tracking-wider">
                 <th className="px-6 py-3 font-semibold">Student Details</th>
                 <th className="px-6 py-3 font-semibold">Program Title</th>
                 <th className="px-6 py-3 font-semibold">
@@ -230,10 +230,10 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
                 return (
                   <tr key={student.id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="px-6 py-4">
-                      <span className="font-bold text-slate-800 block text-sm">{student.name}</span>
+                      <span className="font-semibold text-slate-800 block text-sm">{student.name}</span>
                       <span className="text-[10px] text-slate-400 block mt-0.5">{student.email}</span>
                       {student.company && (
-                        <span className="text-[9px] font-bold text-slate-400 block uppercase mt-0.5">
+                        <span className="text-[9px] font-semibold text-slate-400 block uppercase mt-0.5">
                           {student.company}
                         </span>
                       )}
@@ -245,14 +245,14 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
                     </td>
                     <td className="px-6 py-4 space-y-1">
                       {activeTab === "PENDING" ? (
-                        <span className="inline-flex items-center gap-1 rounded bg-blue-50 text-blue-600 px-2.5 py-0.5 text-[9px] font-bold">
+                        <span className="inline-flex items-center gap-1 rounded bg-blue-50 text-blue-600 px-2.5 py-0.5 text-[9px] font-semibold">
                           <Users className="h-3 w-3" />
                           <span>Attended Program</span>
                         </span>
                       ) : (
                         cert && (
                           <div className="font-body space-y-0.5">
-                            <span className="font-bold text-slate-800 block">No: {cert.certificateNumber}</span>
+                            <span className="font-semibold text-slate-800 block">No: {cert.certificateNumber}</span>
                             <span className="text-[9px] text-slate-400 font-mono block truncate max-w-[150px]" title={cert.verifyHash}>
                               Hash: {cert.verifyHash}
                             </span>
@@ -265,7 +265,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
                         <button
                           onClick={() => handleIssueCertificate(student)}
                           disabled={isPending}
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-primary hover:bg-primary-hover text-white px-3.5 py-2 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-primary hover:bg-primary-hover text-white px-3.5 py-2 text-xs font-semibold transition-all disabled:opacity-50 cursor-pointer"
                         >
                           {isPending ? (
                             <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -286,7 +286,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
                                 cert.verifyHash
                               )
                             }
-                            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-3.5 py-2 text-xs font-bold text-slate-700 transition-all shadow-sm"
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-3.5 py-2 text-xs font-semibold text-slate-700 transition-all shadow-sm"
                           >
                             <Download className="h-3.5 w-3.5" />
                             <span>Download PDF</span>
@@ -303,7 +303,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
       ) : (
         <div className="text-center py-16 border border-dashed border-slate-200 rounded-2xl bg-slate-50">
           <Award className="mx-auto h-10 w-10 text-slate-300 animate-pulse" />
-          <h3 className="mt-4 font-heading text-sm font-bold text-foreground">
+          <h3 className="mt-4 font-heading text-sm font-semibold text-foreground">
             {activeTab === "PENDING" ? "No pending issuances" : "No certificates issued yet"}
           </h3>
           <p className="mt-2 text-xs text-slate-500 font-body">

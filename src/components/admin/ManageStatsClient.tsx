@@ -82,7 +82,7 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
       {/* Header Row */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-heading text-xl font-extrabold text-foreground flex items-center gap-2">
+          <h1 className="font-heading text-xl font-semibold text-foreground flex items-center gap-2">
             <BarChart3 className="h-5 w-5 text-primary" />
             <span>Manage Homepage Stats</span>
           </h1>
@@ -93,7 +93,7 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
 
         <button
           onClick={handleOpenAdd}
-          className="rounded-lg bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all flex items-center gap-1.5 cursor-pointer"
+          className="rounded-lg bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-semibold text-white transition-all flex items-center gap-1.5 cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           <span>Add New Stat</span>
@@ -103,7 +103,7 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
       {/* Stats List Table */}
       <div className="overflow-hidden border border-slate-200 bg-white shadow-sm rounded-2xl">
         <table className="min-w-full divide-y divide-slate-200 text-left text-xs font-semibold text-slate-700">
-          <thead className="bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-200">
+          <thead className="bg-slate-50 text-[10px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-200">
             <tr>
               <th className="px-6 py-3">Stat Value</th>
               <th className="px-6 py-3">What it is about</th>
@@ -120,7 +120,7 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
             ) : (
               stats.map((stat) => (
                 <tr key={stat.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="whitespace-nowrap px-6 py-4 font-heading text-lg font-black text-slate-900">
+                  <td className="whitespace-nowrap px-6 py-4 font-heading text-lg font-semibold text-slate-900">
                     {stat.number}
                   </td>
                   <td className="px-6 py-4 text-slate-600 font-medium font-body">
@@ -157,7 +157,7 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
             
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4 bg-slate-50">
-              <h2 className="font-heading text-sm font-bold text-slate-900 uppercase tracking-wider">
+              <h2 className="font-heading text-sm font-semibold text-slate-900 uppercase tracking-wider">
                 {editStat ? "Edit Homepage Stat" : "Add Homepage Stat"}
               </h2>
               <button
@@ -179,7 +179,7 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
 
               {/* Stat Value Input */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                   Stat Value (e.g. 150,000+, 20+, 99.9%)
                 </label>
                 <input
@@ -188,13 +188,13 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
                   placeholder="e.g. 150,000+"
                   value={number}
                   onChange={(e) => setNumber(e.target.value)}
-                  className="w-full border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 focus:border-primary focus:outline-none placeholder-slate-300 font-heading font-bold rounded-lg"
+                  className="w-full border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 focus:border-primary focus:outline-none placeholder-slate-300 font-heading font-semibold rounded-lg"
                 />
               </div>
 
               {/* Stat Label Input */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                   What it is about
                 </label>
                 <input
@@ -212,14 +212,14 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="px-4 py-2.5 border border-slate-250 text-xs font-bold text-slate-650 transition-colors cursor-pointer rounded-lg"
+                  className="px-4 py-2.5 border border-slate-250 text-xs font-semibold text-slate-650 transition-colors cursor-pointer rounded-lg"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-xs font-bold text-white transition-colors cursor-pointer rounded-lg"
+                  className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-xs font-semibold text-white transition-colors cursor-pointer rounded-lg"
                 >
                   {isPending ? "Saving..." : editStat ? "Save Changes" : "Create Stat"}
                 </button>

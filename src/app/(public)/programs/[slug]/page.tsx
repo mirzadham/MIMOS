@@ -26,7 +26,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
       const trimmed = line.trim();
       if (trimmed.startsWith("###")) {
         return (
-          <h3 key={idx} className="font-heading text-lg font-bold text-foreground mt-6 mb-3">
+          <h3 key={idx} className="font-heading text-lg font-semibold text-foreground mt-6 mb-3">
             {trimmed.replace("###", "")}
           </h3>
         );
@@ -44,7 +44,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
         if (titleMatch) {
           return (
             <div key={idx} className="mt-4 border-l-2 border-primary pl-3 py-0.5">
-              <span className="text-sm font-bold text-foreground block">
+              <span className="text-sm font-semibold text-foreground block">
                 {titleMatch[1]}
               </span>
               <span className="text-xs text-slate-500 block mt-0.5">
@@ -74,7 +74,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
         {/* Back Link */}
         <Link
           href="/#programs-catalog"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-primary transition-colors mb-8"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Back to Catalog</span>
@@ -95,10 +95,10 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
                   title={program.title}
                 />
               </div>
-              <span className="inline-flex items-center rounded-md bg-accent px-3 py-0.5 text-xs font-bold text-primary border border-primary/20">
+              <span className="inline-flex items-center rounded-md bg-accent px-3 py-0.5 text-xs font-semibold text-primary border border-primary/20">
                 {program.category?.name || "Physical Training"}
               </span>
-              <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-foreground">
+              <h1 className="font-heading text-2xl sm:text-3xl font-semibold text-foreground">
                 {program.title}
               </h1>
               <p className="text-sm sm:text-md text-slate-605 leading-relaxed font-body text-slate-600">
@@ -110,7 +110,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
             <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
               <div className="flex items-center gap-2 border-b border-slate-200 pb-4 mb-4">
                 <Sparkles className="h-5 w-5 text-slate-500" />
-                <h2 className="font-heading text-lg font-bold text-foreground">Course Syllabus</h2>
+                <h2 className="font-heading text-lg font-semibold text-foreground">Course Syllabus</h2>
               </div>
               <div className="space-y-1 font-body">
                 {formatSyllabus(program.syllabus)}
@@ -121,7 +121,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
             <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
               <div className="flex items-center gap-2 border-b border-slate-200 pb-4 mb-4">
                 <Building className="h-5 w-5 text-slate-500" />
-                <h2 className="font-heading text-lg font-bold text-foreground">Training Venue Details</h2>
+                <h2 className="font-heading text-lg font-semibold text-foreground">Training Venue Details</h2>
               </div>
               <div className="space-y-4 font-body">
                 <p className="text-sm text-slate-600 leading-relaxed">
@@ -130,7 +130,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
                 <div className="rounded-lg bg-slate-50 p-4 border border-slate-200 flex items-start gap-3">
                   <MapPin className="h-5 w-5 text-slate-500 shrink-0 mt-0.5" />
                   <div>
-                    <span className="text-xs font-bold text-foreground block">Lab Location:</span>
+                    <span className="text-xs font-semibold text-foreground block">Lab Location:</span>
                     <span className="text-xs text-slate-550 block mt-0.5 text-slate-500">{program.location}</span>
                   </div>
                 </div>
@@ -144,7 +144,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
             
             <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-6">
               
-              <h3 className="font-heading text-sm font-bold tracking-wider text-foreground uppercase border-b border-slate-200 pb-3">
+              <h3 className="font-heading text-sm font-semibold tracking-wider text-foreground uppercase border-b border-slate-200 pb-3">
                 Course Specifications
               </h3>
 
@@ -154,8 +154,8 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
                   <BadgeDollarSign className="h-5 w-5" />
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 block uppercase">Course Fee</span>
-                  <span className="text-sm font-bold text-foreground block">{program.price || "Free"}</span>
+                  <span className="text-[10px] font-semibold text-slate-400 block uppercase">Course Fee</span>
+                  <span className="text-sm font-semibold text-foreground block">{program.price || "Free"}</span>
                 </div>
               </div>
 
@@ -165,8 +165,8 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
                   <Clock className="h-5 w-5" />
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 block uppercase">Course Duration</span>
-                  <span className="text-sm font-bold text-foreground block">{program.duration || "N/A"}</span>
+                  <span className="text-[10px] font-semibold text-slate-400 block uppercase">Course Duration</span>
+                  <span className="text-sm font-semibold text-foreground block">{program.duration || "N/A"}</span>
                 </div>
               </div>
 
@@ -176,15 +176,15 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
                   <MapPin className="h-5 w-5" />
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 block uppercase">Conduct Method</span>
-                  <span className="text-sm font-bold text-foreground block">Physical (Classroom & Lab)</span>
+                  <span className="text-[10px] font-semibold text-slate-400 block uppercase">Conduct Method</span>
+                  <span className="text-sm font-semibold text-foreground block">Physical (Classroom & Lab)</span>
                 </div>
               </div>
 
               {/* Upcoming Batch Schedule */}
               <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                <span className="text-[10px] font-bold text-slate-400 block uppercase tracking-wider">Next Active Batch</span>
-                <span className="text-sm font-extrabold text-slate-800 block mt-1">{program.dates || "Scheduled Soon"}</span>
+                <span className="text-[10px] font-semibold text-slate-400 block uppercase tracking-wider">Next Active Batch</span>
+                <span className="text-sm font-semibold text-slate-800 block mt-1">{program.dates || "Scheduled Soon"}</span>
                 <span className="text-[10px] text-slate-400 block mt-1 leading-normal">Registration closing 7 days prior to start date.</span>
               </div>
 
@@ -193,7 +193,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
                 href={program.microsoftFormUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-hover text-white py-3.5 text-sm font-bold transition-all cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-hover text-white py-3.5 text-sm font-semibold transition-all cursor-pointer"
               >
                 <span>Register Interest</span>
                 <Send className="h-4 w-4" />
@@ -209,13 +209,13 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
 
             {/* B2B request notice inside sticky column */}
             <div className="rounded-2xl border border-slate-800 bg-slate-900 text-white p-6 space-y-4">
-              <h4 className="font-heading text-sm font-bold">Request Private Cohort?</h4>
+              <h4 className="font-heading text-sm font-semibold">Request Private Cohort?</h4>
               <p className="text-xs text-slate-400 leading-relaxed font-body">
                 We can customize this course structure and run private physical labs for your company&apos;s employees.
               </p>
               <Link
                 href="/contact"
-                className="text-xs font-bold text-primary hover:text-primary-hover transition-colors inline-block font-sans"
+                className="text-xs font-semibold text-primary hover:text-primary-hover transition-colors inline-block font-sans"
               >
                 Contact B2B Coordination →
               </Link>

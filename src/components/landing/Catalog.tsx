@@ -67,7 +67,7 @@ export default function Catalog({ categories, programs, hideHeader = false }: Ca
       {/* Section Header */}
       {!hideHeader && (
         <div className="text-center space-y-3 mb-10">
-          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="font-heading text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
             Upskilling & Industrial Training Catalog
           </h2>
           <p className="mx-auto max-w-2xl text-sm text-slate-500 font-body">
@@ -83,7 +83,7 @@ export default function Catalog({ categories, programs, hideHeader = false }: Ca
         <div className="flex flex-wrap gap-2 justify-center md:justify-start w-full md:w-auto">
           <button
             onClick={() => handleCategoryChange("all")}
-            className={`rounded-lg px-5 py-2.5 text-xs font-bold transition-all duration-200 border cursor-pointer ${
+            className={`rounded-lg px-5 py-2.5 text-xs font-semibold transition-all duration-200 border cursor-pointer ${
               activeCategory === "all"
                 ? "bg-primary border-primary text-white"
                 : "bg-white border-slate-200 text-slate-600 hover:border-slate-350 hover:bg-slate-50"
@@ -95,7 +95,7 @@ export default function Catalog({ categories, programs, hideHeader = false }: Ca
             <button
               key={cat.id}
               onClick={() => handleCategoryChange(cat.id)}
-              className={`rounded-lg px-5 py-2.5 text-xs font-bold transition-all duration-200 border cursor-pointer ${
+              className={`rounded-lg px-5 py-2.5 text-xs font-semibold transition-all duration-200 border cursor-pointer ${
                 activeCategory === cat.id
                   ? "bg-primary border-primary text-white"
                   : "bg-white border-slate-200 text-slate-600 hover:border-slate-350 hover:bg-slate-50"
@@ -151,7 +151,7 @@ export default function Catalog({ categories, programs, hideHeader = false }: Ca
             className="mt-16 text-center border border-dashed border-slate-200 rounded-2xl p-16 bg-slate-50/50"
           >
             <FolderSync className="mx-auto h-12 w-12 text-slate-300" />
-            <h3 className="mt-4 font-heading text-base font-bold text-slate-900">No programmes found</h3>
+            <h3 className="mt-4 font-heading text-base font-semibold text-slate-900">No programmes found</h3>
             <p className="mt-2 text-xs text-slate-500 font-body max-w-sm mx-auto leading-relaxed">
               We couldn&apos;t find any courses matching &quot;{searchQuery}&quot; under the selected category.
             </p>
@@ -160,7 +160,7 @@ export default function Catalog({ categories, programs, hideHeader = false }: Ca
                 setActiveCategory("all");
                 setSearchQuery("");
               }}
-              className="mt-6 inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-xs font-bold text-white hover:bg-primary-hover transition-all cursor-pointer"
+              className="mt-6 inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-xs font-semibold text-white hover:bg-primary-hover transition-all cursor-pointer"
             >
               Reset Filters
             </button>

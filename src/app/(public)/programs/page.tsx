@@ -27,10 +27,10 @@ export default async function ProgramsPage() {
           
           {/* Centered Editorial Header */}
           <div className="flex flex-col items-center text-center space-y-4 pt-6 pb-2">
-            <span className="text-xs font-extrabold text-slate-500 tracking-widest uppercase">
+            <span className="text-xs font-semibold text-slate-500 tracking-widest uppercase">
               Learn from the Best
             </span>
-            <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl font-black text-slate-900 tracking-tight leading-none uppercase">
+            <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl font-semibold text-slate-900 tracking-tight leading-none uppercase">
               Academy
             </h1>
             <p className="max-w-2xl text-sm sm:text-base text-slate-650 leading-relaxed font-body font-medium">

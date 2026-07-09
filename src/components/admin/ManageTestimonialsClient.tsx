@@ -112,7 +112,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
       {/* Header Row */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-heading text-xl font-extrabold text-foreground flex items-center gap-2">
+          <h1 className="font-heading text-xl font-semibold text-foreground flex items-center gap-2">
             <MessageSquare className="h-5 w-5 text-primary" />
             <span>Manage Homepage Testimonials</span>
           </h1>
@@ -123,7 +123,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
 
         <button
           onClick={handleOpenAdd}
-          className="rounded-lg bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all flex items-center gap-1.5 cursor-pointer"
+          className="rounded-lg bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-semibold text-white transition-all flex items-center gap-1.5 cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           <span>Add Testimonial</span>
@@ -133,7 +133,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
       {/* Testimonials List Table */}
       <div className="overflow-hidden border border-slate-200 bg-white shadow-sm rounded-2xl">
         <table className="min-w-full divide-y divide-slate-200 text-left text-xs font-semibold text-slate-700">
-          <thead className="bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-200">
+          <thead className="bg-slate-50 text-[10px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-200">
             <tr>
               <th className="px-6 py-3 w-16">Order</th>
               <th className="px-6 py-3">Graduate</th>
@@ -152,14 +152,14 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
             ) : (
               testimonials.map((t) => (
                 <tr key={t.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="px-6 py-4 font-mono text-slate-400 font-bold">
+                  <td className="px-6 py-4 font-mono text-slate-400 font-semibold">
                     {t.order}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 font-heading font-bold text-slate-900">
+                  <td className="whitespace-nowrap px-6 py-4 font-heading font-semibold text-slate-900">
                     {t.name}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-slate-500 font-medium font-body">
-                    {t.role} at <span className="text-primary font-bold">{t.company}</span>
+                    {t.role} at <span className="text-primary font-semibold">{t.company}</span>
                   </td>
                   <td className="px-6 py-4 text-slate-600 font-medium font-body line-clamp-2 max-w-md">
                     &ldquo;{t.quote}&rdquo;
@@ -195,7 +195,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
             
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-              <h2 className="font-heading text-sm font-bold text-slate-900">
+              <h2 className="font-heading text-sm font-semibold text-slate-900">
                 {editTestimonial ? "Edit Testimonial" : "Create New Testimonial"}
               </h2>
               <button 
@@ -282,14 +282,14 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-650 transition-colors cursor-pointer"
+                  className="rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-semibold text-slate-650 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-lg bg-primary hover:bg-primary-hover px-5 py-2.5 text-xs font-bold text-white transition-colors cursor-pointer"
+                  className="rounded-lg bg-primary hover:bg-primary-hover px-5 py-2.5 text-xs font-semibold text-white transition-colors cursor-pointer"
                 >
                   {isPending ? "Saving..." : editTestimonial ? "Save Changes" : "Create Testimonial"}
                 </button>

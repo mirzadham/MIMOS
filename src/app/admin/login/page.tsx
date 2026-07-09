@@ -36,7 +36,7 @@ export default function AdminLoginPage() {
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-accent text-primary">
             <GraduationCap className="h-6 w-6" />
           </div>
-          <h2 className="font-heading text-2xl font-extrabold text-foreground leading-none">
+          <h2 className="font-heading text-2xl font-semibold text-foreground leading-none">
             MIMOS Academy
           </h2>
           <span className="font-sans text-xs font-semibold tracking-wider text-slate-400 uppercase block">
@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
         <form className="mt-8 space-y-4 text-xs font-body" onSubmit={handleSubmit}>
           
           <div className="space-y-1">
-            <label className="font-bold text-slate-700 uppercase block">Administrator Email</label>
+            <label className="font-semibold text-slate-700 uppercase block">Administrator Email</label>
             <div className="relative">
               <input
                 type="email"
@@ -71,7 +71,7 @@ export default function AdminLoginPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="font-bold text-slate-700 uppercase block">Access Password</label>
+            <label className="font-semibold text-slate-700 uppercase block">Access Password</label>
             <div className="relative">
               <input
                 type="password"
@@ -88,7 +88,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-slate-teal hover:from-primary-hover hover:to-slate-teal-hover text-white py-3.5 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
+            className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-slate-teal hover:from-primary-hover hover:to-slate-teal-hover text-white py-3.5 text-xs font-semibold transition-all disabled:opacity-50 cursor-pointer"
           >
             <span>{loading ? "Verifying..." : "Access Control Center"}</span>
             {!loading && <ArrowRight className="h-4 w-4" />}

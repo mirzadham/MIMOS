@@ -193,13 +193,13 @@ export default function ManageProgramsClient({
       {/* Action Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="font-heading text-2xl font-extrabold text-slate-900">Manage Programs</h1>
+          <h1 className="font-heading text-2xl font-semibold text-slate-900">Manage Programs</h1>
           <p className="text-xs text-slate-500 mt-1">Publish, update, and categorize physical training runs.</p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => setCategoryModalOpen(true)}
-            className="flex items-center gap-1 rounded-md border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-700 transition-all"
+            className="flex items-center gap-1 rounded-md border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all"
           >
             <PlusCircle className="h-4 w-4" />
             <span>Add Category</span>
@@ -210,7 +210,7 @@ export default function ManageProgramsClient({
               setPosters([]);
               setModalOpen(true);
             }}
-            className="flex items-center gap-1 rounded-md bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all hover:shadow-md cursor-pointer"
+            className="flex items-center gap-1 rounded-md bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-semibold text-white transition-all hover:shadow-md cursor-pointer"
           >
             <Plus className="h-4 w-4" />
             <span>Create Program</span>
@@ -222,7 +222,7 @@ export default function ManageProgramsClient({
       <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <table className="w-full text-left border-collapse text-xs">
           <thead>
-            <tr className="border-b border-slate-100 bg-slate-50 text-slate-400 font-bold uppercase tracking-wider">
+            <tr className="border-b border-slate-100 bg-slate-50 text-slate-400 font-semibold uppercase tracking-wider">
               <th className="px-6 py-3 font-semibold">Course Title</th>
               <th className="px-6 py-3 font-semibold">Category</th>
               <th className="px-6 py-3 font-semibold">Venue / Dates</th>
@@ -243,7 +243,7 @@ export default function ManageProgramsClient({
                       />
                     )}
                     <div>
-                      <span className="font-bold text-slate-800 block text-sm">{prog.title}</span>
+                      <span className="font-semibold text-slate-800 block text-sm">{prog.title}</span>
                       <span className="text-[10px] text-slate-400 font-medium block truncate max-w-xs mt-0.5">
                         {prog.description}
                       </span>
@@ -251,7 +251,7 @@ export default function ManageProgramsClient({
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600">
+                  <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
                     {prog.category?.name || "Upskilling"}
                   </span>
                 </td>
@@ -315,7 +315,7 @@ export default function ManageProgramsClient({
           <div className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
             {/* Modal Header */}
             <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center shrink-0">
-              <h3 className="font-heading text-sm font-bold text-slate-900 uppercase">
+              <h3 className="font-heading text-sm font-semibold text-slate-900 uppercase">
                 {editProgram ? "Edit Program Details" : "Create New Program"}
               </h3>
               <button 
@@ -331,7 +331,7 @@ export default function ManageProgramsClient({
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1 col-span-2">
-                  <label className="font-bold text-slate-700 uppercase block">Course Title</label>
+                  <label className="font-semibold text-slate-700 uppercase block">Course Title</label>
                   <input
                     type="text"
                     name="title"
@@ -343,7 +343,7 @@ export default function ManageProgramsClient({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700 uppercase block">Category Selection</label>
+                  <label className="font-semibold text-slate-700 uppercase block">Category Selection</label>
                   <select
                     name="categoryId"
                     required
@@ -358,7 +358,7 @@ export default function ManageProgramsClient({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700 uppercase block">Conduct Duration</label>
+                  <label className="font-semibold text-slate-700 uppercase block">Conduct Duration</label>
                   <input
                     type="text"
                     name="duration"
@@ -370,7 +370,7 @@ export default function ManageProgramsClient({
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-slate-700 uppercase block">Short Description</label>
+                <label className="font-semibold text-slate-700 uppercase block">Short Description</label>
                 <textarea
                   name="description"
                   required
@@ -382,7 +382,7 @@ export default function ManageProgramsClient({
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-slate-700 uppercase block">Detailed Syllabus (Markdown outline)</label>
+                <label className="font-semibold text-slate-700 uppercase block">Detailed Syllabus (Markdown outline)</label>
                 <textarea
                   name="syllabus"
                   required
@@ -395,7 +395,7 @@ export default function ManageProgramsClient({
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1 col-span-2">
-                  <label className="font-bold text-slate-700 uppercase block">Microsoft Form URL (Redirection link)</label>
+                  <label className="font-semibold text-slate-700 uppercase block">Microsoft Form URL (Redirection link)</label>
                   <input
                     type="url"
                     name="microsoftFormUrl"
@@ -407,7 +407,7 @@ export default function ManageProgramsClient({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700 uppercase block">Training Lab Location</label>
+                  <label className="font-semibold text-slate-700 uppercase block">Training Lab Location</label>
                   <input
                     type="text"
                     name="location"
@@ -419,7 +419,7 @@ export default function ManageProgramsClient({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700 uppercase block">Course Fee Info</label>
+                  <label className="font-semibold text-slate-700 uppercase block">Course Fee Info</label>
                   <input
                     type="text"
                     name="price"
@@ -430,7 +430,7 @@ export default function ManageProgramsClient({
                 </div>
 
                 <div className="space-y-1 col-span-2">
-                  <label className="font-bold text-slate-700 uppercase block">Active Batch Dates</label>
+                  <label className="font-semibold text-slate-700 uppercase block">Active Batch Dates</label>
                   <input
                     type="text"
                     name="dates"
@@ -442,10 +442,10 @@ export default function ManageProgramsClient({
 
                 <div className="space-y-1 col-span-2">
                   <div className="flex justify-between items-center">
-                    <label className="font-bold text-slate-700 uppercase block font-medium">
+                    <label className="font-semibold text-slate-700 uppercase block font-medium">
                       Program Image / Poster Pages (Cloudflare R2)
                     </label>
-                    <span className="text-[10px] text-slate-400 font-bold uppercase">
+                    <span className="text-[10px] text-slate-400 font-semibold uppercase">
                       {posters.length} / 5 Pages
                     </span>
                   </div>
@@ -473,7 +473,7 @@ export default function ManageProgramsClient({
                     />
                     <div className="text-center space-y-1 flex flex-col items-center">
                       <PlusCircle className="h-6 w-6 text-slate-400 group-hover/drop:text-primary transition-colors" />
-                      <span className="text-[11px] font-bold text-slate-700">Click or Drag & Drop to Upload Poster Pages</span>
+                      <span className="text-[11px] font-semibold text-slate-700">Click or Drag & Drop to Upload Poster Pages</span>
                       <span className="text-[9px] text-slate-400">PNG, JPG, or WEBP up to 5 pages. Drag to sort pages.</span>
                     </div>
                   </div>
@@ -519,14 +519,14 @@ export default function ManageProgramsClient({
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="rounded-md border border-slate-200 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50"
+                  className="rounded-md border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isPending || uploading}
-                  className="rounded-md bg-primary hover:bg-primary-hover text-white px-4 py-2 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
+                  className="rounded-md bg-primary hover:bg-primary-hover text-white px-4 py-2 text-xs font-semibold transition-all disabled:opacity-50 cursor-pointer"
                 >
                   {uploading ? "Uploading Image..." : isPending ? "Processing..." : editProgram ? "Save Changes" : "Create Program"}
                 </button>
@@ -541,10 +541,10 @@ export default function ManageProgramsClient({
       {categoryModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
           <div className="w-full max-w-sm bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden p-6">
-            <h3 className="font-heading text-sm font-bold text-slate-900 uppercase mb-4">Add Course Category</h3>
+            <h3 className="font-heading text-sm font-semibold text-slate-900 uppercase mb-4">Add Course Category</h3>
             <form onSubmit={handleAddCategory} className="space-y-4 text-xs font-body">
               <div className="space-y-1">
-                <label className="font-bold text-slate-700 uppercase block">Category Name</label>
+                <label className="font-semibold text-slate-700 uppercase block">Category Name</label>
                 <input
                   type="text"
                   required
@@ -562,14 +562,14 @@ export default function ManageProgramsClient({
                     setNewCategoryName("");
                     setCategoryModalOpen(false);
                   }}
-                  className="rounded-md border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-50"
+                  className="rounded-md border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-md bg-primary hover:bg-primary-hover text-white px-3 py-1.5 text-xs font-bold transition-all cursor-pointer"
+                  className="rounded-md bg-primary hover:bg-primary-hover text-white px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer"
                 >
                   {isPending ? "Creating..." : "Create"}
                 </button>
@@ -630,7 +630,7 @@ function SortablePosterCard({ poster, index, onRemove }: SortablePosterCardProps
           alt={`Poster Page ${index + 1}`} 
           className="w-full h-full object-cover pointer-events-none" 
         />
-        <div className="absolute top-2 left-2 bg-slate-900/75 backdrop-blur-md text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase font-mono">
+        <div className="absolute top-2 left-2 bg-slate-900/75 backdrop-blur-md text-white text-[9px] font-semibold px-1.5 py-0.5 rounded uppercase font-mono">
           Page {index + 1} {index === 0 && "(Cover)"}
         </div>
       </div>

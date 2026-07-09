@@ -16,10 +16,10 @@ export default function Footer() {
                 <GraduationCap className="h-5 w-5 text-primary" />
               </div>
               <div className="flex flex-col">
-                <span className="font-heading text-md font-extrabold tracking-tight text-slate-900 leading-none">
+                <span className="font-heading text-md font-semibold tracking-tight text-slate-900 leading-none">
                   MIMOS
                 </span>
-                <span className="font-sans text-[9px] font-bold tracking-widest text-primary uppercase mt-0.5">
+                <span className="font-sans text-[9px] font-semibold tracking-widest text-primary uppercase mt-0.5">
                   Academy
                 </span>
               </div>
@@ -31,7 +31,7 @@ export default function Footer() {
 
           {/* Column 2: Quick Links */}
           <div className="space-y-4 md:ml-8">
-            <h3 className="font-heading text-xs font-bold tracking-wider text-slate-900 uppercase">
+            <h3 className="font-heading text-xs font-semibold tracking-wider text-slate-900 uppercase">
               Quick Links
             </h3>
             <ul className="space-y-2.5 text-sm font-semibold text-slate-500">
@@ -64,7 +64,7 @@ export default function Footer() {
 
           {/* Column 3: Bulletins */}
           <div className="space-y-4">
-            <h3 className="font-heading text-xs font-bold tracking-wider text-slate-900 uppercase">
+            <h3 className="font-heading text-xs font-semibold tracking-wider text-slate-900 uppercase">
               Academy Bulletin
             </h3>
             <ul className="space-y-2.5 text-sm font-semibold text-slate-500">
@@ -82,7 +82,7 @@ export default function Footer() {
 
           {/* Column 4: Contact Details */}
           <div className="space-y-4">
-            <h3 className="font-heading text-xs font-bold tracking-wider text-slate-900 uppercase">
+            <h3 className="font-heading text-xs font-semibold tracking-wider text-slate-900 uppercase">
               Contact Us
             </h3>
             <ul className="space-y-3.5 text-sm font-medium text-slate-500">

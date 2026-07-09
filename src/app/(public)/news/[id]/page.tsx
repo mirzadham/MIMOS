@@ -42,7 +42,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         if (nextBold !== -1) {
           const boldText = currentText.substring(boldIndex + 2, nextBold);
           parts.push(
-            <strong key={`bold-${keyIdx++}`} className="font-bold text-slate-900">
+            <strong key={`bold-${keyIdx++}`} className="font-semibold text-slate-900">
               {boldText}
             </strong>
           );
@@ -107,7 +107,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       }
       if (trimmed.startsWith("#")) {
         return (
-          <h1 key={idx} className="text-[28px] font-bold text-slate-900 leading-tight mt-10">
+          <h1 key={idx} className="text-[28px] font-semibold text-slate-900 leading-tight mt-10">
             {trimmed.replace("#", "").trim()}
           </h1>
         );
@@ -115,7 +115,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
       if (trimmed.startsWith("**") && trimmed.endsWith("**")) {
         return (
-          <h3 key={idx} className="text-[15px] font-bold text-slate-900 mt-4">
+          <h3 key={idx} className="text-[15px] font-semibold text-slate-900 mt-4">
             {trimmed.replace(/\*\*/g, "").trim()}
           </h3>
         );

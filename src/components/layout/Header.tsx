@@ -196,7 +196,7 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`relative transition-all duration-250 rounded-lg font-bold tracking-wide select-none ${
+                className={`relative transition-all duration-250 rounded-lg font-semibold tracking-wide select-none ${
                   isScrolled
                     ? "px-3 py-1.5 text-xs text-white hover:text-white/80"
                     : isActive 
@@ -315,10 +315,10 @@ export default function Header() {
                   />
                 </div>
                 <div className="flex flex-col select-none">
-                  <span className="font-heading text-xl font-black tracking-tight text-white leading-none">
+                  <span className="font-heading text-xl font-semibold tracking-tight text-white leading-none">
                     MIMOS
                   </span>
-                  <span className="font-sans text-[10px] font-bold tracking-widest text-primary uppercase mt-0.5">
+                  <span className="font-sans text-[10px] font-semibold tracking-widest text-primary uppercase mt-0.5">
                     Academy
                   </span>
                 </div>
@@ -345,7 +345,7 @@ export default function Header() {
                     <Link
                       href={link.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`text-2xl font-black font-heading tracking-wide transition-colors ${
+                      className={`text-2xl font-semibold font-heading tracking-wide transition-colors ${
                         isActive ? "text-primary" : "text-slate-300 hover:text-white"
                       }`}
                     >

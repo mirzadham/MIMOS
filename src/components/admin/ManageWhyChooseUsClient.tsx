@@ -213,7 +213,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
       {/* Header Row */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-heading text-xl font-extrabold text-foreground flex items-center gap-2">
+          <h1 className="font-heading text-xl font-semibold text-foreground flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
             <span>Manage Why Choose Us Bento Cards</span>
           </h1>
@@ -224,7 +224,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
         
         <button
           onClick={handleOpenAdd}
-          className="inline-flex items-center gap-2 rounded-lg bg-primary hover:bg-primary/95 text-white px-4 py-2.5 text-xs font-bold transition-all shadow-sm shadow-primary/10"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary hover:bg-primary/95 text-white px-4 py-2.5 text-xs font-semibold transition-all shadow-sm shadow-primary/10"
         >
           <Plus className="h-4 w-4" />
           <span>Add Card</span>
@@ -254,7 +254,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-brand-plum-start via-brand-plum-via to-brand-plum-end flex items-center justify-center">
-                    <span className="text-[9px] font-bold text-slate-500 tracking-wider uppercase font-sans">[Placeholder Image]</span>
+                    <span className="text-[9px] font-semibold text-slate-500 tracking-wider uppercase font-sans">[Placeholder Image]</span>
                   </div>
                 )}
                 {/* Dark Gradient Overlay */}
@@ -265,16 +265,16 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
               <div className={`relative z-20 space-y-3 flex flex-col w-full ${align.text}`}>
                 {/* Badge for Order and Colspan */}
                 <div className="flex items-center justify-between w-full">
-                  <span className="inline-flex items-center rounded-md bg-slate-900/80 border border-slate-700/60 px-2 py-0.5 text-[9px] font-bold text-slate-400">
+                  <span className="inline-flex items-center rounded-md bg-slate-900/80 border border-slate-700/60 px-2 py-0.5 text-[9px] font-semibold text-slate-400">
                     Order: {card.order}
                   </span>
-                  <span className="inline-flex items-center rounded-md bg-primary/20 border border-primary/30 px-2 py-0.5 text-[9px] font-bold text-white font-sans">
+                  <span className="inline-flex items-center rounded-md bg-primary/20 border border-primary/30 px-2 py-0.5 text-[9px] font-semibold text-white font-sans">
                     Colspan: {card.colspan}
                   </span>
                 </div>
 
                 {/* Title & Desc */}
-                <h3 className="font-heading font-extrabold text-white text-sm">{card.title}</h3>
+                <h3 className="font-heading font-semibold text-white text-sm">{card.title}</h3>
                 <p className="text-[11px] text-slate-300 leading-relaxed font-body mt-2 line-clamp-3">{card.description}</p>
               </div>
 
@@ -308,7 +308,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
             
             {/* Modal Header */}
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-              <h2 className="font-heading font-extrabold text-slate-900 text-sm">
+              <h2 className="font-heading font-semibold text-slate-900 text-sm">
                 {editCard ? "Edit Bento Card" : "Add Bento Card"}
               </h2>
               <button 
@@ -331,7 +331,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
 
               {/* Title input */}
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-500 block uppercase">Card Title</label>
+                <label className="text-[11px] font-semibold text-slate-500 block uppercase">Card Title</label>
                 <input 
                   type="text" 
                   value={title}
@@ -344,7 +344,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
 
               {/* Description input */}
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-500 block uppercase">Card Description</label>
+                <label className="text-[11px] font-semibold text-slate-500 block uppercase">Card Description</label>
                 <textarea 
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -358,7 +358,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
               {/* Grid Layout Configuration */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-slate-500 block uppercase">Bento Grid Span</label>
+                  <label className="text-[11px] font-semibold text-slate-500 block uppercase">Bento Grid Span</label>
                   <select
                     value={colspan}
                     onChange={(e) => setColspan(Number(e.target.value))}
@@ -370,7 +370,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                 </div>
                 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-slate-500 block uppercase">Display Order Index</label>
+                  <label className="text-[11px] font-semibold text-slate-500 block uppercase">Display Order Index</label>
                   <input 
                     type="number" 
                     value={order}
@@ -383,14 +383,14 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
 
               {/* Image Upload Block */}
               <div className="space-y-1.5">
-                <label className="text-[11px] font-bold text-slate-500 block uppercase">Card Image</label>
+                <label className="text-[11px] font-semibold text-slate-500 block uppercase">Card Image</label>
                 <div className="flex gap-4 items-center">
                   {/* Preview box */}
                   <div className="relative h-20 w-32 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden shrink-0">
                     {imageUrl ? (
                       <Image src={imageUrl} alt="preview" fill className="object-cover" />
                     ) : (
-                      <span className="text-[9px] font-bold text-slate-400 uppercase">No Image</span>
+                      <span className="text-[9px] font-semibold text-slate-400 uppercase">No Image</span>
                     )}
                   </div>
                   
@@ -399,7 +399,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 px-3 py-2 text-xs font-bold transition-all shadow-xs shrink-0"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 px-3 py-2 text-xs font-semibold transition-all shadow-xs shrink-0"
                     >
                       <Upload className="h-3.5 w-3.5 text-slate-400" />
                       <span>{selectedFile ? "Change File" : "Select Image File"}</span>
@@ -423,7 +423,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-600 transition-colors"
+                  className="rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-semibold text-slate-600 transition-colors"
                   disabled={uploading || isPending}
                 >
                   Cancel
@@ -431,7 +431,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
                 <button
                   type="submit"
                   disabled={uploading || isPending}
-                  className="rounded-lg bg-primary hover:bg-primary/95 text-white px-5 py-2.5 text-xs font-bold transition-all shadow-sm shadow-primary/10 flex items-center gap-2"
+                  className="rounded-lg bg-primary hover:bg-primary/95 text-white px-5 py-2.5 text-xs font-semibold transition-all shadow-sm shadow-primary/10 flex items-center gap-2"
                 >
                   {(uploading || isPending) ? (
                     <>

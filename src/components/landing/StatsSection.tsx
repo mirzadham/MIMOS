@@ -69,10 +69,10 @@ export default function StatsSection({ stats }: StatsSectionProps) {
               key={stat.id || idx} 
               className="flex flex-col items-center space-y-1.5 transition-all duration-300 hover:-translate-y-0.5"
             >
-              <span className="font-heading text-4xl sm:text-5xl font-black text-slate-900 tracking-tight leading-none">
+              <span className="font-heading text-4xl sm:text-5xl font-semibold text-slate-900 tracking-tight leading-none">
                 <AnimatedNumber value={stat.number} />
               </span>
-              <span className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider font-mono">
+              <span className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider font-mono">
                 {stat.label}
               </span>
             </div>

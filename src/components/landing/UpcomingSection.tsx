@@ -94,7 +94,7 @@ export default function UpcomingSection({ articles }: UpcomingSectionProps) {
       {/* Header Row */}
       <div className="mx-auto max-w-[1600px] w-full px-6 lg:px-20 flex items-end justify-between">
         <div className="flex items-baseline gap-4 md:gap-5">
-          <h2 className="font-sans text-3xl font-extrabold tracking-tight text-black leading-none">
+          <h2 className="font-sans text-3xl font-semibold tracking-tight text-black leading-none">
             Latest News
           </h2>
           <Link
@@ -112,7 +112,7 @@ export default function UpcomingSection({ articles }: UpcomingSectionProps) {
             onClick={() => scroll("prev")}
             disabled={isStart}
             type="button"
-            className={`text-sm md:text-base font-bold transition-opacity duration-200 cursor-pointer ${isStart ? "opacity-30 pointer-events-none text-primary" : "text-primary hover:opacity-60"
+            className={`text-sm md:text-base font-semibold transition-opacity duration-200 cursor-pointer ${isStart ? "opacity-30 pointer-events-none text-primary" : "text-primary hover:opacity-60"
               }`}
           >
             Prev.
@@ -121,7 +121,7 @@ export default function UpcomingSection({ articles }: UpcomingSectionProps) {
             onClick={() => scroll("next")}
             disabled={isEnd}
             type="button"
-            className={`text-sm md:text-base font-bold transition-opacity duration-200 cursor-pointer ${isEnd ? "opacity-30 pointer-events-none text-primary" : "text-primary hover:opacity-60"
+            className={`text-sm md:text-base font-semibold transition-opacity duration-200 cursor-pointer ${isEnd ? "opacity-30 pointer-events-none text-primary" : "text-primary hover:opacity-60"
               }`}
           >
             Next

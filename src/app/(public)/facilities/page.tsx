@@ -105,7 +105,7 @@ export default function FacilitiesPage() {
 
         {/* Clean Editorial Title */}
         <div className="max-w-4xl space-y-4">
-          <h1 className="font-heading text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-none uppercase">
+          <h1 className="font-heading text-4xl sm:text-6xl font-semibold text-slate-900 tracking-tight leading-none uppercase">
             Applied R&D <br />
             <span className="text-primary font-light italic">Environments</span>
           </h1>
@@ -161,7 +161,7 @@ export default function FacilitiesPage() {
 
               {/* Minimal Scroll Progress Indicator */}
               <div className="mt-8 flex items-center gap-6 text-xs font-mono text-slate-500">
-                <span className="text-slate-400 font-bold">{`0${activeIndex + 1}`}</span>
+                <span className="text-slate-400 font-semibold">{`0${activeIndex + 1}`}</span>
                 <div className="relative h-[2px] flex-1 bg-slate-800">
                   <motion.div
                     className="absolute left-0 top-0 h-full bg-primary"
@@ -202,10 +202,10 @@ export default function FacilitiesPage() {
                     className="space-y-6"
                   >
                     <div className="space-y-2">
-                      <div className="font-mono text-xs tracking-widest text-primary font-bold uppercase">
+                      <div className="font-mono text-xs tracking-widest text-primary font-semibold uppercase">
                         {`// ${fac.index} // ${fac.subtitle}`}
                       </div>
-                      <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-white uppercase">
+                      <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white uppercase">
                         {fac.title}
                       </h3>
                     </div>
@@ -216,7 +216,7 @@ export default function FacilitiesPage() {
 
                     {/* Specification list - minimalist border design without icons */}
                     <div className="border-t border-slate-850 pt-2 max-w-xl">
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-2">
+                      <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest block mb-2">
                         Specifications
                       </span>
                       <div className="divide-y divide-slate-850">

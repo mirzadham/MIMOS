@@ -256,7 +256,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
       {/* Overview Page Title */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-heading text-xl font-extrabold text-foreground flex items-center gap-2">
+          <h1 className="font-heading text-xl font-semibold text-foreground flex items-center gap-2">
             <Users className="h-5 w-5 text-primary" />
             <span>Manage About Us & Team</span>
           </h1>
@@ -270,7 +270,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
         
         {/* Left Column: Mission & Vision Settings (5/12 width) */}
         <form onSubmit={handleSettingsSubmit} className="lg:col-span-5 space-y-6 bg-white border border-slate-200 p-6 rounded-xl shadow-sm h-fit">
-          <h2 className="font-heading text-sm font-extrabold text-slate-900 border-b border-slate-100 pb-3">
+          <h2 className="font-heading text-sm font-semibold text-slate-900 border-b border-slate-100 pb-3">
             Company Core Statements
           </h2>
 
@@ -289,7 +289,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
           )}
 
           <div className="space-y-1.5">
-            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
               Mission Statement
             </label>
             <textarea
@@ -302,7 +302,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
               Vision Statement
             </label>
             <textarea
@@ -317,7 +317,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
           <Button
             type="submit"
             disabled={isPending}
-            className="w-full rounded-lg h-10 text-xs font-bold bg-primary hover:bg-primary-hover text-white transition-colors cursor-pointer"
+            className="w-full rounded-lg h-10 text-xs font-semibold bg-primary hover:bg-primary-hover text-white transition-colors cursor-pointer"
           >
             {isPending ? "Saving..." : "Save Statements"}
           </Button>
@@ -326,12 +326,12 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
         {/* Right Column: Leadership Team Table (7/12 width) */}
         <div className="lg:col-span-7 space-y-6 bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <h2 className="font-heading text-sm font-extrabold text-slate-900">
+            <h2 className="font-heading text-sm font-semibold text-slate-900">
               Leadership Team Roster
             </h2>
             <button
               onClick={handleOpenAdd}
-              className="rounded-lg bg-primary hover:bg-primary-hover px-3 py-1.5 text-[10px] font-bold text-white transition-colors flex items-center gap-1 cursor-pointer"
+              className="rounded-lg bg-primary hover:bg-primary-hover px-3 py-1.5 text-[10px] font-semibold text-white transition-colors flex items-center gap-1 cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Add Member</span>
@@ -341,14 +341,14 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
           {team.length === 0 ? (
             <div className="text-center py-12 border border-dashed border-slate-200 rounded-xl bg-slate-50/50">
               <Users className="h-8 w-8 text-slate-300 mx-auto" />
-              <h3 className="text-xs font-bold text-slate-700 mt-2">No team members</h3>
+              <h3 className="text-xs font-semibold text-slate-700 mt-2">No team members</h3>
               <p className="text-[10px] text-slate-400 mt-0.5">Click &quot;Add Member&quot; to populate your directory.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs text-slate-650">
                 <thead>
-                  <tr className="border-b border-slate-150 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  <tr className="border-b border-slate-150 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                     <th className="py-2.5 px-3">Avatar</th>
                     <th className="py-2.5 px-3">Details</th>
                     <th className="py-2.5 px-3 text-center">Reorder</th>
@@ -368,7 +368,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                               className="h-full w-full object-cover"
                             />
                           ) : (
-                            <span className="font-heading font-black text-xs text-[#a72190]/30 select-none">
+                            <span className="font-heading font-semibold text-xs text-[#a72190]/30 select-none">
                               {member.initials}
                             </span>
                           )}
@@ -377,7 +377,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
 
                       {/* Name & Role */}
                       <td className="py-3 px-3">
-                        <span className="font-heading font-bold text-slate-900 block">{member.name}</span>
+                        <span className="font-heading font-semibold text-slate-900 block">{member.name}</span>
                         <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block mt-0.5">{member.role}</span>
                       </td>
 
@@ -443,7 +443,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
               <X className="h-4 w-4" />
             </button>
 
-            <h3 className="font-heading text-base font-extrabold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+            <h3 className="font-heading text-base font-semibold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
               <Users className="h-4 w-4 text-primary" />
               <span>{editMember ? "Edit Team Member" : "Add New Team Member"}</span>
             </h3>
@@ -459,7 +459,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
               
               {/* Form Field: Name */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
                   Full Name
                 </label>
                 <input
@@ -474,7 +474,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
 
               {/* Form Field: Role */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
                   Role / Title
                 </label>
                 <input
@@ -490,14 +490,14 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
               <div className="grid grid-cols-2 gap-4">
                 {/* Form Field: Monogram Initials */}
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block" title="Used if photo is missing">
+                  <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block" title="Used if photo is missing">
                     Monogram Initials
                   </label>
                   <input
                     type="text"
                     value={memberInitials}
                     onChange={(e) => setMemberInitials(e.target.value.toUpperCase().slice(0, 3))}
-                    className="w-full text-xs p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body uppercase text-center font-bold tracking-widest"
+                    className="w-full text-xs p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body uppercase text-center font-semibold tracking-widest"
                     placeholder="e.g. AN"
                     maxLength={3}
                     required
@@ -506,13 +506,13 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
 
                 {/* Form Field: Order index (Readonly inside modal) */}
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
                     Display Order
                   </label>
                   <input
                     type="text"
                     value={editMember ? editMember.order : team.length}
-                    className="w-full text-xs p-2.5 border border-slate-200 bg-slate-50 text-slate-400 rounded-lg font-body text-center font-bold"
+                    className="w-full text-xs p-2.5 border border-slate-200 bg-slate-50 text-slate-400 rounded-lg font-body text-center font-semibold"
                     disabled
                   />
                 </div>
@@ -520,7 +520,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
 
               {/* File Upload / Image Picker */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
                   Portrait Photo
                 </label>
                 
@@ -533,7 +533,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <span className="font-heading font-black text-sm text-[#a72190]/30 select-none">
+                      <span className="font-heading font-semibold text-sm text-[#a72190]/30 select-none">
                         {memberInitials || "?"}
                       </span>
                     )}
@@ -550,7 +550,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="rounded-lg border border-slate-250 bg-white hover:bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer w-full justify-center"
+                      className="rounded-lg border border-slate-250 bg-white hover:bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer w-full justify-center"
                     >
                       <Upload className="h-4 w-4 text-slate-500" />
                       <span>{selectedFile ? "Change Image" : "Upload Portrait"}</span>
@@ -568,7 +568,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded-lg border border-slate-250 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-700 transition-colors cursor-pointer"
+                  className="rounded-lg border border-slate-250 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
                   disabled={uploading || isPending}
                 >
                   Cancel
@@ -576,7 +576,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                 <Button
                   type="submit"
                   disabled={uploading || isPending}
-                  className="rounded-lg h-10 px-4 text-xs font-bold bg-primary hover:bg-primary-hover text-white transition-colors cursor-pointer"
+                  className="rounded-lg h-10 px-4 text-xs font-semibold bg-primary hover:bg-primary-hover text-white transition-colors cursor-pointer"
                 >
                   {uploading ? "Uploading..." : isPending ? "Saving..." : editMember ? "Update Details" : "Add Member"}
                 </Button>

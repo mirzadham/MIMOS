@@ -108,7 +108,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
         
         {/* Header */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="font-heading text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
             What Our Graduates Say
           </h2>
           <p className="text-sm sm:text-md text-slate-600 leading-relaxed font-body">
@@ -164,11 +164,11 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
                   </div>
 
                   <div className={`mt-8 pt-5 border-t transition-colors duration-500 ${isActive ? "border-slate-100" : "border-slate-200"}`}>
-                    <h4 className={`font-heading text-sm font-bold transition-colors duration-300 ${isActive ? "text-slate-900" : "text-slate-700"}`}>
+                    <h4 className={`font-heading text-sm font-semibold transition-colors duration-300 ${isActive ? "text-slate-900" : "text-slate-700"}`}>
                       {item.name}
                     </h4>
                     <p className="text-xs text-slate-500 mt-1">
-                      {item.role} at <span className={`font-bold transition-colors duration-300 ${isActive ? "text-primary" : "text-slate-600"}`}>{item.company}</span>
+                      {item.role} at <span className={`font-semibold transition-colors duration-300 ${isActive ? "text-primary" : "text-slate-600"}`}>{item.company}</span>
                     </p>
                   </div>
                 </motion.div>

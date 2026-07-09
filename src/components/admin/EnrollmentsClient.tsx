@@ -161,7 +161,7 @@ export default function EnrollmentsClient({
       
       {/* Action Header */}
       <div>
-        <h1 className="font-heading text-2xl font-extrabold text-slate-900">Registrations & Importer</h1>
+        <h1 className="font-heading text-2xl font-semibold text-slate-900">Registrations & Importer</h1>
         <p className="text-xs text-slate-500 mt-1">Upload Microsoft Forms CSV schedules and track physical attendance.</p>
       </div>
 
@@ -169,7 +169,7 @@ export default function EnrollmentsClient({
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
           <FileSpreadsheet className="h-4.5 w-4.5 text-slate-500" />
-          <h3 className="font-heading text-sm font-bold text-foreground uppercase tracking-wider">
+          <h3 className="font-heading text-sm font-semibold text-foreground uppercase tracking-wider">
             Microsoft Forms CSV Importer
           </h3>
         </div>
@@ -177,7 +177,7 @@ export default function EnrollmentsClient({
         {/* Form Settings */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-body items-end">
           <div className="space-y-1 md:col-span-2">
-            <label className="font-bold text-slate-700 uppercase block">Target Training Program</label>
+            <label className="font-semibold text-slate-700 uppercase block">Target Training Program</label>
             <select
               value={selectedProgramId}
               onChange={(e) => {
@@ -207,7 +207,7 @@ export default function EnrollmentsClient({
             />
             <label
               htmlFor="csv-file-selector"
-              className={`w-full flex items-center justify-center gap-2 border border-dashed rounded-lg px-4 py-2.5 font-bold cursor-pointer transition-all ${
+              className={`w-full flex items-center justify-center gap-2 border border-dashed rounded-lg px-4 py-2.5 font-semibold cursor-pointer transition-all ${
                 selectedProgramId 
                   ? "border-primary/40 bg-accent/50 text-primary hover:bg-accent" 
                   : "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
@@ -236,14 +236,14 @@ export default function EnrollmentsClient({
         {/* Preview of Mapped Rows */}
         {parsedData.length > 0 && (
           <div className="border border-slate-100 rounded-xl overflow-hidden space-y-4">
-            <div className="bg-slate-50 px-4 py-2.5 border-b border-slate-100 flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+            <div className="bg-slate-50 px-4 py-2.5 border-b border-slate-100 flex justify-between items-center text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
               <span>CSV Importer Preview (First 5 Rows)</span>
-              <span className="text-slate-800 font-bold">{parsedData.length} valid rows mapped</span>
+              <span className="text-slate-800 font-semibold">{parsedData.length} valid rows mapped</span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse font-body">
                 <thead>
-                  <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider">
+                  <tr className="border-b border-slate-100 text-slate-400 font-semibold uppercase tracking-wider">
                     <th className="px-4 py-2 font-semibold">Name</th>
                     <th className="px-4 py-2 font-semibold">Email</th>
                     <th className="px-4 py-2 font-semibold">Company</th>
@@ -252,7 +252,7 @@ export default function EnrollmentsClient({
                 <tbody className="divide-y divide-slate-150 text-slate-600 font-medium">
                   {parsedData.slice(0, 5).map((row, idx) => (
                     <tr key={idx}>
-                      <td className="px-4 py-2.5 text-slate-800 font-bold">{row.name}</td>
+                      <td className="px-4 py-2.5 text-slate-800 font-semibold">{row.name}</td>
                       <td className="px-4 py-2.5 font-mono text-[11px]">{row.email}</td>
                       <td className="px-4 py-2.5">{row.company || "Individual"}</td>
                     </tr>
@@ -264,7 +264,7 @@ export default function EnrollmentsClient({
               <button
                 onClick={handleImport}
                 disabled={isPending}
-                className="flex items-center gap-1.5 rounded-lg bg-primary hover:bg-primary-hover text-white px-5 py-2.5 text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
+                className="flex items-center gap-1.5 rounded-lg bg-primary hover:bg-primary-hover text-white px-5 py-2.5 text-xs font-semibold transition-all disabled:opacity-50 cursor-pointer"
               >
                 {isPending ? (
                   <>
@@ -288,7 +288,7 @@ export default function EnrollmentsClient({
         <div className="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-4">
           <div className="flex items-center gap-2">
             <UserCheck className="h-4.5 w-4.5 text-slate-500" />
-            <h3 className="font-heading text-sm font-bold text-foreground uppercase tracking-wider">
+            <h3 className="font-heading text-sm font-semibold text-foreground uppercase tracking-wider">
               Student Attendance & Status
             </h3>
           </div>
@@ -326,7 +326,7 @@ export default function EnrollmentsClient({
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-100 bg-slate-50 text-slate-400 font-bold uppercase tracking-wider">
+                <tr className="border-b border-slate-100 bg-slate-50 text-slate-400 font-semibold uppercase tracking-wider">
                   <th className="px-4 py-3 font-semibold">Student info</th>
                   <th className="px-4 py-3 font-semibold">Training Course</th>
                   <th className="px-4 py-3 font-semibold">Registered Date</th>
@@ -338,10 +338,10 @@ export default function EnrollmentsClient({
                 {filteredEnrollments.map((student) => (
                   <tr key={student.id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="px-4 py-3.5">
-                      <span className="font-bold text-slate-800 block">{student.name}</span>
+                      <span className="font-semibold text-slate-800 block">{student.name}</span>
                       <span className="text-[10px] text-slate-400 block mt-0.5">{student.email}</span>
                       {student.company && (
-                        <span className="text-[9px] font-bold text-slate-400 block uppercase mt-0.5">
+                        <span className="text-[9px] font-semibold text-slate-400 block uppercase mt-0.5">
                           {student.company}
                         </span>
                       )}
@@ -353,7 +353,7 @@ export default function EnrollmentsClient({
                       <span>{formatDate(student.registrationDate)}</span>
                     </td>
                     <td className="px-4 py-3.5">
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[9px] font-bold ${
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[9px] font-semibold ${
                         student.status === "CERTIFIED" ? "bg-emerald-50 text-emerald-600" :
                         student.status === "ATTENDED" ? "bg-blue-50 text-blue-600" :
                         student.status === "CANCELLED" ? "bg-red-50 text-red-600" : "bg-amber-50 text-amber-600"
@@ -365,25 +365,25 @@ export default function EnrollmentsClient({
                       {student.status === "REGISTERED" && (
                         <button
                           onClick={() => handleStatusChange(student.id, "ATTENDED")}
-                          className="inline-flex items-center gap-1 rounded bg-slate-100 text-slate-700 px-2.5 py-1 hover:bg-slate-900 hover:text-white transition-all text-[10px] font-bold cursor-pointer"
+                          className="inline-flex items-center gap-1 rounded bg-slate-100 text-slate-700 px-2.5 py-1 hover:bg-slate-900 hover:text-white transition-all text-[10px] font-semibold cursor-pointer"
                         >
                           <Check className="h-3 w-3" />
                           <span>Mark Attended</span>
                         </button>
                       )}
                       {student.status === "ATTENDED" && (
-                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                        <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
                           Ready for Certification
                         </span>
                       )}
                       {student.status === "CERTIFIED" && (
                         <div className="flex justify-end gap-1 text-emerald-600">
                           <ShieldCheck className="h-4.5 w-4.5" />
-                          <span className="text-[10px] font-bold uppercase">Certified</span>
+                          <span className="text-[10px] font-semibold uppercase">Certified</span>
                         </div>
                       )}
                       {student.status === "CANCELLED" && (
-                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                        <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
                           Cancelled
                         </span>
                       )}
@@ -396,7 +396,7 @@ export default function EnrollmentsClient({
         ) : (
           <div className="text-center py-12 text-slate-400 border border-dashed border-slate-100 rounded-xl bg-slate-50">
             <Users className="mx-auto h-8 w-8 text-slate-300" />
-            <h4 className="font-heading text-xs font-bold text-slate-800 mt-2">No student records matches filter</h4>
+            <h4 className="font-heading text-xs font-semibold text-slate-800 mt-2">No student records matches filter</h4>
           </div>
         )}
       </div>

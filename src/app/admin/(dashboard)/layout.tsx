@@ -53,7 +53,7 @@ export default async function AdminDashboardLayout({
           <div className="h-16 border-b border-slate-100 flex items-center px-6 gap-2">
             <GraduationCap className="h-7 w-7 text-primary" />
             <div className="flex flex-col">
-              <span className="font-heading text-sm font-bold tracking-tight text-foreground leading-none">
+              <span className="font-heading text-sm font-semibold tracking-tight text-foreground leading-none">
                 MIMOS
               </span>
               <span className="font-sans text-[10px] font-semibold tracking-widest text-primary uppercase">
@@ -68,7 +68,7 @@ export default async function AdminDashboardLayout({
               <ShieldCheck className="h-4 w-4" />
             </div>
             <div className="overflow-hidden">
-              <span className="text-[10px] text-slate-400 font-bold block uppercase leading-none">Logged In</span>
+              <span className="text-[10px] text-slate-400 font-semibold block uppercase leading-none">Logged In</span>
               <span className="text-xs font-semibold text-slate-700 block truncate mt-0.5">{admin.email}</span>
             </div>
           </div>
@@ -99,7 +99,7 @@ export default async function AdminDashboardLayout({
           <form action={adminLogoutAction}>
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white hover:bg-red-50 hover:text-red-600 hover:border-red-150 py-2.5 text-xs font-bold text-slate-600 transition-colors"
+              className="w-full flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white hover:bg-red-50 hover:text-red-600 hover:border-red-150 py-2.5 text-xs font-semibold text-slate-600 transition-colors"
             >
               <LogOut className="h-4 w-4" />
               <span>Sign Out</span>

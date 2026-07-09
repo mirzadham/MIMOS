@@ -83,7 +83,7 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
 
       {/* Pagination indicators (Only if multiple pages) */}
       {urls.length > 1 && (
-        <div className="flex justify-between items-center mt-3 px-1 text-[11px] font-bold text-slate-500">
+        <div className="flex justify-between items-center mt-3 px-1 text-[11px] font-semibold text-slate-500">
           <div className="flex gap-1.5">
             {urls.map((_, idx) => (
               <button
@@ -112,7 +112,7 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
           >
             {/* Top Close Panel */}
             <div className="absolute top-4 right-4 flex items-center gap-3">
-              <span className="text-white/60 text-xs font-bold font-mono">
+              <span className="text-white/60 text-xs font-semibold font-mono">
                 Page {currentIndex + 1} / {urls.length}
               </span>
               <button
@@ -166,7 +166,7 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
             </div>
 
             {/* Helper notice */}
-            <span className="absolute bottom-4 text-white/40 text-[10px] uppercase font-bold tracking-wider pointer-events-none">
+            <span className="absolute bottom-4 text-white/40 text-[10px] uppercase font-semibold tracking-wider pointer-events-none">
               Click anywhere outside the poster to close
             </span>
           </motion.div>

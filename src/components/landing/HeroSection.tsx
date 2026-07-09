@@ -40,7 +40,7 @@ export default function HeroSection() {
           {/* Badge Accent */}
           <motion.div 
             variants={itemVariants}
-            className="inline-flex items-center gap-2 rounded-full bg-primary/5 px-4 py-1.5 text-xs font-bold text-primary border border-primary/10"
+            className="inline-flex items-center gap-2 rounded-full bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary border border-primary/10"
           >
             <Cpu className="h-3.5 w-3.5" />
             <span>Trusted by 150K+ Talents Across Malaysia</span>
@@ -49,7 +49,7 @@ export default function HeroSection() {
           {/* Heading */}
           <motion.h1 
             variants={itemVariants}
-            className="mx-auto max-w-5xl font-heading text-4xl font-black tracking-tight text-slate-900 sm:text-6xl md:text-7xl leading-[1.08] lg:leading-[1.05]"
+            className="mx-auto max-w-5xl font-heading text-4xl font-semibold tracking-tight text-slate-900 sm:text-6xl md:text-7xl leading-[1.08] lg:leading-[1.05]"
           >
             Driving Malaysia’s <br className="hidden sm:inline" />
             <span className="bg-gradient-to-r from-primary to-primary-hover bg-clip-text text-transparent group-hover:to-primary transition-all duration-300">
@@ -73,7 +73,7 @@ export default function HeroSection() {
           >
             <Link
               href="/programs"
-              className="rounded-lg bg-primary px-8 py-4 text-xs font-bold text-white hover:bg-primary-hover transition-all flex items-center gap-2 group cursor-pointer"
+              className="rounded-lg bg-primary px-8 py-4 text-xs font-semibold text-white hover:bg-primary-hover transition-all flex items-center gap-2 group cursor-pointer"
             >
               <span>Explore Our Programmes</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -81,7 +81,7 @@ export default function HeroSection() {
             
             <Link
               href="/contact"
-              className="rounded-lg border border-slate-250 bg-white px-8 py-4 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all cursor-pointer"
+              className="rounded-lg border border-slate-250 bg-white px-8 py-4 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all cursor-pointer"
             >
               Contact Advisory Team
             </Link>

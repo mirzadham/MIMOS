@@ -176,7 +176,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
 
                         {/* Headline */}
                         <Link href={`/news/${story.id}`} className="block hover:opacity-60 transition-opacity duration-200">
-                          <h2 className="text-[32px] sm:text-[38px] lg:text-[42px] font-extrabold leading-[1.12] tracking-[-0.025em] text-slate-900">
+                          <h2 className="text-[32px] sm:text-[38px] lg:text-[42px] font-semibold leading-[1.12] tracking-[-0.025em] text-slate-900">
                             {story.title}
                           </h2>
                         </Link>
@@ -240,7 +240,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
             <div className="pt-10 pb-16 space-y-12">
               {/* Heading section */}
               <div className="space-y-3">
-                <h2 className="text-[36px] font-extrabold tracking-tight text-slate-900">
+                <h2 className="text-[36px] font-semibold tracking-tight text-slate-900">
                   News
                 </h2>
                 <button
@@ -308,7 +308,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
           <div className="pt-10 pb-16 space-y-10">
             {/* Title */}
             <div className="space-y-6">
-              <h2 className="text-[36px] font-extrabold tracking-tight text-slate-900">
+              <h2 className="text-[36px] font-semibold tracking-tight text-slate-900">
                 News
               </h2>
 

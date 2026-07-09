@@ -244,7 +244,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
       {/* Header Row */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-heading text-xl font-extrabold text-foreground flex items-center gap-2">
+          <h1 className="font-heading text-xl font-semibold text-foreground flex items-center gap-2">
             <Newspaper className="h-5 w-5 text-primary" />
             <span>Manage News Articles</span>
           </h1>
@@ -255,7 +255,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
 
         <button
           onClick={handleOpenAdd}
-          className="rounded-lg bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-bold text-white transition-all flex items-center gap-1.5 cursor-pointer"
+          className="rounded-lg bg-primary hover:bg-primary-hover px-4 py-2.5 text-xs font-semibold text-white transition-all flex items-center gap-1.5 cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           <span>Add Article</span>
@@ -267,9 +267,9 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
-            <h2 className="text-sm font-bold text-slate-800">Highlighted Articles</h2>
+            <h2 className="text-sm font-semibold text-slate-800">Highlighted Articles</h2>
           </div>
-          <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+          <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
             highlightedCount === 4
               ? "bg-emerald-100 text-emerald-700"
               : highlightedCount > 4
@@ -288,7 +288,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
                 className="relative bg-white border border-amber-200/60 rounded-xl p-3 flex flex-col gap-2 group"
               >
                 {/* Slot number badge */}
-                <div className="absolute -top-2 -left-2 h-6 w-6 bg-amber-500 text-white rounded-full flex items-center justify-center text-[10px] font-extrabold shadow-sm">
+                <div className="absolute -top-2 -left-2 h-6 w-6 bg-amber-500 text-white rounded-full flex items-center justify-center text-[10px] font-semibold shadow-sm">
                   {idx + 1}
                 </div>
 
@@ -307,7 +307,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
                   </div>
                 )}
 
-                <p className="text-[11px] font-bold text-slate-800 leading-tight line-clamp-2">
+                <p className="text-[11px] font-semibold text-slate-800 leading-tight line-clamp-2">
                   {article.title}
                 </p>
                 <span className="text-[10px] font-semibold text-amber-600">{article.category}</span>
@@ -316,7 +316,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
                 <button
                   onClick={() => handleToggleHighlight(article.id, article.isHighlighted)}
                   disabled={isPending}
-                  className="mt-auto text-[10px] font-bold text-amber-600 hover:text-red-600 transition-colors cursor-pointer flex items-center gap-1"
+                  className="mt-auto text-[10px] font-semibold text-amber-600 hover:text-red-600 transition-colors cursor-pointer flex items-center gap-1"
                 >
                   <Star className="h-3 w-3 fill-amber-500" />
                   <span>Remove highlight</span>
@@ -334,7 +334,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
       {/* Articles List Table */}
       <div className="overflow-hidden border border-slate-200 bg-white shadow-sm rounded-2xl">
         <table className="min-w-full divide-y divide-slate-200 text-left text-xs font-semibold text-slate-700">
-          <thead className="bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-200">
+          <thead className="bg-slate-50 text-[10px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-200">
             <tr>
               <th className="px-5 py-3 w-14">Order</th>
               <th className="px-5 py-3 w-14 text-center">
@@ -357,7 +357,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
             ) : (
               articles.map((article) => (
                 <tr key={article.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="px-5 py-3.5 font-mono text-slate-400 font-bold">
+                  <td className="px-5 py-3.5 font-mono text-slate-400 font-semibold">
                     {article.order}
                   </td>
                   <td className="px-5 py-3.5 text-center">
@@ -375,7 +375,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
                     </button>
                   </td>
                   <td className="px-5 py-3.5">
-                    <p className="font-heading font-bold text-slate-900 leading-tight line-clamp-1">
+                    <p className="font-heading font-semibold text-slate-900 leading-tight line-clamp-1">
                       {article.title}
                     </p>
                     <p className="text-[10px] text-slate-400 font-medium mt-0.5 line-clamp-1">
@@ -383,7 +383,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
                     </p>
                   </td>
                   <td className="whitespace-nowrap px-5 py-3.5">
-                    <span className="inline-block px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md text-[10px] font-bold">
+                    <span className="inline-block px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md text-[10px] font-semibold">
                       {article.category}
                     </span>
                   </td>
@@ -436,7 +436,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
 
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-              <h2 className="font-heading text-sm font-bold text-slate-900">
+              <h2 className="font-heading text-sm font-semibold text-slate-900">
                 {editArticle ? "Edit News Article" : "Create New Article"}
               </h2>
               <button
@@ -550,7 +550,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
                       className="w-full border border-dashed border-slate-300 hover:border-primary/50 bg-slate-50/50 p-4 text-center cursor-pointer transition-colors flex flex-col items-center justify-center gap-1 rounded-lg"
                     >
                       <Upload className="h-5 w-5 text-slate-400" />
-                      <span className="text-[10px] font-bold text-slate-600 block">
+                      <span className="text-[10px] font-semibold text-slate-600 block">
                         {selectedFile ? selectedFile.name : "Choose image file"}
                       </span>
                       <span className="text-[8px] text-slate-400 block font-medium">
@@ -594,7 +594,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
                     }`}
                   >
                     <Star className={`h-4 w-4 ${isHighlighted ? "fill-amber-500 text-amber-500" : "text-slate-300"}`} />
-                    <span className="font-bold">{isHighlighted ? "Highlighted" : "Not highlighted"}</span>
+                    <span className="font-semibold">{isHighlighted ? "Highlighted" : "Not highlighted"}</span>
                   </div>
                   {isHighlighted && !editArticle && highlightedCount >= 4 && (
                     <p className="text-[10px] text-red-500 font-medium mt-1">
@@ -609,14 +609,14 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-650 transition-colors cursor-pointer"
+                  className="rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2.5 text-xs font-semibold text-slate-650 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isPending || uploading}
-                  className="rounded-lg bg-primary hover:bg-primary-hover px-5 py-2.5 text-xs font-bold text-white transition-colors cursor-pointer disabled:opacity-50"
+                  className="rounded-lg bg-primary hover:bg-primary-hover px-5 py-2.5 text-xs font-semibold text-white transition-colors cursor-pointer disabled:opacity-50"
                 >
                   {uploading ? "Uploading image..." : isPending ? "Saving..." : editArticle ? "Save Changes" : "Create Article"}
                 </button>

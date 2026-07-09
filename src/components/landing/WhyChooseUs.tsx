@@ -80,7 +80,7 @@ export default function WhyChooseUs({ cards }: WhyChooseUsProps) {
         
         {/* Header - Aligned to Left */}
         <div className="text-left space-y-4 max-w-3xl">
-          <h2 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="font-heading text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
             Bridging Education and Industry Excellence
           </h2>
           <p className="text-sm sm:text-md text-slate-600 leading-relaxed font-body">
@@ -118,7 +118,7 @@ export default function WhyChooseUs({ cards }: WhyChooseUsProps) {
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-brand-plum-start via-brand-plum-via to-brand-plum-end flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
-                      <span className="text-[10px] font-bold text-slate-500 tracking-widest uppercase font-sans">[Placeholder Image]</span>
+                      <span className="text-[10px] font-semibold text-slate-500 tracking-widest uppercase font-sans">[Placeholder Image]</span>
                     </div>
                   )}
                   
@@ -128,7 +128,7 @@ export default function WhyChooseUs({ cards }: WhyChooseUsProps) {
 
                 {/* Text content placed at the top/bottom left/right (floating on top of background) */}
                 <div className={`relative z-20 space-y-4 max-w-xl flex flex-col ${align.text}`}>
-                  <h3 className="font-heading text-xl sm:text-2xl font-black text-white leading-tight drop-shadow-sm">
+                  <h3 className="font-heading text-xl sm:text-2xl font-semibold text-white leading-tight drop-shadow-sm">
                     {card.title}
                   </h3>
                   <p className="text-sm text-slate-200 leading-relaxed font-body drop-shadow-sm">

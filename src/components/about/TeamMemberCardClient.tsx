@@ -25,7 +25,7 @@ export default function TeamMemberCardClient({ member }: { member: TeamMember })
           />
         ) : (
           <div className="flex h-full w-full flex-col items-center justify-center p-4 select-none relative">
-            <span className="font-heading text-3xl font-black tracking-widest text-[#a72190]/25">
+            <span className="font-heading text-3xl font-semibold tracking-widest text-[#a72190]/25">
               {member.initials}
             </span>
             <div className="absolute bottom-3 right-3 w-1.5 h-1.5 rounded-full bg-primary/20" />
@@ -35,7 +35,7 @@ export default function TeamMemberCardClient({ member }: { member: TeamMember })
 
       {/* Typography placed strictly below the image frame, matching user's reference design */}
       <div className="mt-4 flex flex-col">
-        <span className="font-heading text-sm font-extrabold text-slate-900">
+        <span className="font-heading text-sm font-semibold text-slate-900">
           {member.name}
         </span>
         <span className="mt-0.5 font-body text-xs font-semibold text-slate-400 uppercase tracking-wider">

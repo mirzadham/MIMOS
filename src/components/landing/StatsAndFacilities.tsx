@@ -24,7 +24,7 @@ export default function StatsAndFacilities() {
         
         {/* Centered Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <h3 className="font-heading text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+          <h3 className="font-heading text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
             Our Facilities
           </h3>
           <p className="text-sm text-slate-600 leading-relaxed font-body">
@@ -56,10 +56,10 @@ export default function StatsAndFacilities() {
             
             {/* Centered Content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-100 lg:opacity-0 lg:group-hover/pane:opacity-100 lg:group-focus-within/pane:opacity-100 transition-opacity duration-500">
-              <h4 className="font-heading text-2xl sm:text-3xl font-black text-white tracking-tight drop-shadow-sm mb-3">
+              <h4 className="font-heading text-2xl sm:text-3xl font-semibold text-white tracking-tight drop-shadow-sm mb-3">
                 Lab
               </h4>
-              <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-primary transition-colors hover:text-primary-hover hover:underline">
+              <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-primary transition-colors hover:text-primary-hover hover:underline">
                 <span>Click for details</span>
                 <ArrowRight className="h-4 w-4" />
               </span>
@@ -82,10 +82,10 @@ export default function StatsAndFacilities() {
             
             {/* Centered Content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-100 lg:opacity-0 lg:group-hover/pane:opacity-100 lg:group-focus-within/pane:opacity-100 transition-opacity duration-500">
-              <h4 className="font-heading text-2xl sm:text-3xl font-black text-white tracking-tight drop-shadow-sm mb-3">
+              <h4 className="font-heading text-2xl sm:text-3xl font-semibold text-white tracking-tight drop-shadow-sm mb-3">
                 Training Room
               </h4>
-              <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-primary transition-colors hover:text-primary-hover hover:underline">
+              <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-primary transition-colors hover:text-primary-hover hover:underline">
                 <span>Click for details</span>
                 <ArrowRight className="h-4 w-4" />
               </span>

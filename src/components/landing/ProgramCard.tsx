@@ -62,7 +62,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
         </Link>
 
         {/* Floating Category Tag (Rich pastel theme, black text, no border, slightly rounded) */}
-        <span className="absolute right-4 top-4 z-10 inline-flex items-center rounded-md bg-[#f8d3f6] px-3 py-1 text-[10px] font-extrabold text-black shadow-sm select-none">
+        <span className="absolute right-4 top-4 z-10 inline-flex items-center rounded-md bg-[#f8d3f6] px-3 py-1 text-[10px] font-semibold text-black shadow-sm select-none">
           {program.category?.name || "Upskilling"}
         </span>
       </div>
@@ -73,12 +73,12 @@ export default function ProgramCard({ program }: ProgramCardProps) {
         {/* Title & HRD Corp Badge (Badge right-aligned) */}
         <div className="flex-1 flex items-start justify-between gap-4">
           <Link href={`/programs/${program.slug}`} className="block flex-1">
-            <h3 className="font-heading text-base font-extrabold text-slate-900 leading-snug">
+            <h3 className="font-heading text-base font-semibold text-slate-900 leading-snug">
               {program.title}
             </h3>
           </Link>
           {isHrdCorp && (
-            <span className="inline-block px-1.5 py-0.5 text-[9px] font-extrabold text-slate-500 uppercase border border-slate-300 bg-white rounded-md tracking-wider shrink-0 select-none mt-0.5">
+            <span className="inline-block px-1.5 py-0.5 text-[9px] font-semibold text-slate-500 uppercase border border-slate-300 bg-white rounded-md tracking-wider shrink-0 select-none mt-0.5">
               HRD Corp
             </span>
           )}
@@ -90,7 +90,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
         {/* Duration/Location & Price */}
         <div className="flex items-end justify-between gap-4">
           {/* Duration & Location (Stacked) */}
-          <div className="flex flex-col gap-1 text-[11px] font-bold text-slate-400 font-sans leading-tight">
+          <div className="flex flex-col gap-1 text-[11px] font-semibold text-slate-400 font-sans leading-tight">
             {program.duration && (
               <span>{program.duration}</span>
             )}
@@ -99,11 +99,11 @@ export default function ProgramCard({ program }: ProgramCardProps) {
 
           {/* Price */}
           <div className="text-right flex flex-col justify-end shrink-0">
-            <span className="text-lg font-black text-slate-900 leading-none">
+            <span className="text-lg font-semibold text-slate-900 leading-none">
               {parsedPrice.main}
             </span>
             {parsedPrice.sub && (
-              <span className="text-[9px] font-extrabold text-slate-400 mt-1 block uppercase tracking-wider font-sans">
+              <span className="text-[9px] font-semibold text-slate-400 mt-1 block uppercase tracking-wider font-sans">
                 {parsedPrice.sub}
               </span>
             )}
@@ -117,7 +117,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
         <div className="flex items-center justify-between">
           {/* Next Intake with Horizontal Colored Underline */}
           <div className="flex flex-col items-start">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700">
               <span className="text-slate-400 font-medium">Next Intake:</span>
               <span className="text-slate-800">{program.dates || "Scheduled Soon"}</span>
             </div>
