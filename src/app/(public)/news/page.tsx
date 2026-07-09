@@ -29,10 +29,7 @@ export default async function NewsPage() {
 
   // Assign gradient colors to the featured bar
   const barGradients = [
-    "linear-gradient(90deg, #fbf5fa, #f3dced)",
-    "linear-gradient(90deg, #f3dced, #e6bada)",
-    "linear-gradient(90deg, #e6bada, #c576af)",
-    "linear-gradient(90deg, #c576af, #a72190)",
+    "linear-gradient(90deg, #ff5e97, #a72190)",
   ];
   featured.forEach((f, i) => {
     f.barColor = barGradients[i % barGradients.length];
