@@ -101,7 +101,7 @@ export default function FacilitiesPage() {
       </div>
 
       {/* 1. Light Header Section */}
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-16 pb-12 sm:pt-24 sm:pb-16 space-y-8">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-28 pb-12 sm:pt-36 sm:pb-16 space-y-8">
         {/* Editorial Breadcrumbs */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-mono tracking-widest text-slate-400 uppercase">
           <Link href="/" className="hover:text-primary transition-colors duration-300">

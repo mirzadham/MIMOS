@@ -68,7 +68,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
   };
 
   return (
-    <div className="bg-background min-h-screen py-12">
+    <div className="bg-background min-h-screen pt-28 pb-12 sm:pt-32 sm:pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Back Link */}

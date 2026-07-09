@@ -131,7 +131,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
   return (
     <div className="relative min-h-screen bg-white overflow-hidden pb-20">
-      <div className="relative z-10 mx-auto max-w-[1080px] px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-[1080px] px-6 lg:px-8 pt-24 sm:pt-28">
         {/* Top sub-navigation bar (Stripe newsroom design) */}
         <div className="flex items-center justify-between py-5 border-b border-slate-200/40">
           <Link

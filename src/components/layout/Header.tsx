@@ -155,15 +155,17 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full h-20 pointer-events-none bg-transparent">
+    <header className="fixed top-0 left-0 z-50 w-full pointer-events-none bg-transparent">
       <motion.div
         layout
         initial="top"
         animate={isScrolled ? "scrolled" : "top"}
         variants={headerVariants}
         transition={{ type: "spring", stiffness: 180, damping: 24 }}
-        className={`mx-auto flex items-center pointer-events-auto backdrop-blur-md border-solid ${
-          isScrolled ? "justify-between md:justify-center md:gap-5" : "justify-between"
+        className={`mx-auto flex items-center pointer-events-auto border-solid ${
+          isScrolled 
+            ? "backdrop-blur-md justify-between md:justify-center md:gap-5" 
+            : "justify-between"
         }`}
       >
         

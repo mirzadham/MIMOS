@@ -14,7 +14,7 @@ export default async function AboutPage() {
   ]);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background py-16 sm:py-24">
+    <div className="relative min-h-screen overflow-hidden bg-background pt-28 pb-16 sm:pt-36 sm:pb-24">
       {/* Delicate background ambient highlights */}
       <div className="absolute right-0 top-0 -z-10 h-96 w-96 bg-primary/3 blur-[120px] pointer-events-none" />
       <div className="absolute left-0 bottom-1/3 -z-10 h-96 w-96 bg-primary/2 blur-[140px] pointer-events-none" />
