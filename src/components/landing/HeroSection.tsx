@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import LatticeNetwork from "./LatticeNetwork";
-import { Cpu, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function HeroSection() {
@@ -37,15 +37,6 @@ export default function HeroSection() {
           animate="show"
           className="space-y-8"
         >
-          {/* Badge Accent */}
-          <motion.div 
-            variants={itemVariants}
-            className="inline-flex items-center gap-2 rounded-full bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary border border-primary/10"
-          >
-            <Cpu className="h-3.5 w-3.5" />
-            <span>Trusted by 150K+ Talents Across Malaysia</span>
-          </motion.div>
-
           {/* Heading */}
           <motion.h1 
             variants={itemVariants}
