@@ -357,7 +357,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
             ) : (
               articles.map((article) => (
                 <tr key={article.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="px-5 py-3.5 font-mono text-slate-400 font-semibold">
+                  <td className="px-5 py-3.5 font-sans text-slate-400 font-semibold">
                     {article.order}
                   </td>
                   <td className="px-5 py-3.5 text-center">

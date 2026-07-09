@@ -112,7 +112,7 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
           >
             {/* Top Close Panel */}
             <div className="absolute top-4 right-4 flex items-center gap-3">
-              <span className="text-white/60 text-xs font-semibold font-mono">
+              <span className="text-white/60 text-xs font-semibold font-sans">
                 Page {currentIndex + 1} / {urls.length}
               </span>
               <button

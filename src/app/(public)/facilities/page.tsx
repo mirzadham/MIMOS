@@ -120,12 +120,12 @@ export default function FacilitiesPage() {
         <div className="h-[1px] bg-slate-200 w-full mb-10" />
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="max-w-xl">
-            <h2 className="text-xs font-mono tracking-widest text-primary uppercase mb-2">Technical Capabilities</h2>
+            <h2 className="text-xs font-sans tracking-widest text-primary uppercase mb-2">Technical Capabilities</h2>
             <p className="text-xl sm:text-2xl text-slate-850 font-medium tracking-tight leading-snug">
               Step inside our certified wafer fab cleanrooms, threat ranges, and compute cores.
             </p>
           </div>
-          <div className="text-xs font-mono text-slate-400 tracking-widest uppercase animate-pulse">
+          <div className="text-xs font-sans text-slate-400 tracking-widest uppercase animate-pulse">
             [ Scroll to Explore ]
           </div>
         </div>
@@ -160,7 +160,7 @@ export default function FacilitiesPage() {
               </div>
 
               {/* Minimal Scroll Progress Indicator */}
-              <div className="mt-8 flex items-center gap-6 text-xs font-mono text-slate-500">
+              <div className="mt-8 flex items-center gap-6 text-xs font-sans text-slate-500">
                 <span className="text-slate-400 font-semibold">{`0${activeIndex + 1}`}</span>
                 <div className="relative h-[2px] flex-1 bg-slate-800">
                   <motion.div
@@ -202,7 +202,7 @@ export default function FacilitiesPage() {
                     className="space-y-6"
                   >
                     <div className="space-y-2">
-                      <div className="font-mono text-xs tracking-widest text-primary font-semibold uppercase">
+                      <div className="font-sans text-xs tracking-widest text-primary font-semibold uppercase">
                         {`// ${fac.index} // ${fac.subtitle}`}
                       </div>
                       <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white uppercase">
@@ -227,7 +227,7 @@ export default function FacilitiesPage() {
                               key={sIdx}
                               className="py-3 flex gap-4 text-xs sm:text-sm items-baseline hover:bg-slate-900/30 transition-colors duration-300 px-2 rounded-md"
                             >
-                              <span className="font-mono text-slate-500 text-[10px] sm:text-xs shrink-0 select-none">
+                              <span className="font-sans text-slate-500 text-[10px] sm:text-xs shrink-0 select-none">
                                 {`0${sIdx + 1}`}
                               </span>
                               <div className="flex flex-col sm:flex-row sm:gap-2">
@@ -256,14 +256,14 @@ export default function FacilitiesPage() {
       {/* 4. Sleek Outro Section */}
       <div className="bg-slate-950 border-t border-slate-900 text-center py-20 lg:py-32 relative z-10">
         <div className="mx-auto max-w-2xl px-6 lg:px-8 space-y-6">
-          <h2 className="text-xs font-mono tracking-widest text-primary uppercase">MIMOS Academy</h2>
+          <h2 className="text-xs font-sans tracking-widest text-primary uppercase">MIMOS Academy</h2>
           <p className="text-xl sm:text-2xl font-medium tracking-tight text-slate-200">
             Gain direct learning access to production-grade semiconductor lines, networks, and computing infrastructures.
           </p>
           <div className="pt-4">
             <Link
               href="/contact"
-              className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-xs font-mono tracking-widest text-white uppercase hover:bg-primary-hover transition-colors duration-300 shadow-lg shadow-primary/20"
+              className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-xs font-sans tracking-widest text-white uppercase hover:bg-primary-hover transition-colors duration-300 shadow-lg shadow-primary/20"
             >
               Request Campus Tour
             </Link>

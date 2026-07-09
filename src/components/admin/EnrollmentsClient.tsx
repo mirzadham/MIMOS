@@ -253,7 +253,7 @@ export default function EnrollmentsClient({
                   {parsedData.slice(0, 5).map((row, idx) => (
                     <tr key={idx}>
                       <td className="px-4 py-2.5 text-slate-800 font-semibold">{row.name}</td>
-                      <td className="px-4 py-2.5 font-mono text-[11px]">{row.email}</td>
+                      <td className="px-4 py-2.5 font-sans text-[11px]">{row.email}</td>
                       <td className="px-4 py-2.5">{row.company || "Individual"}</td>
                     </tr>
                   ))}

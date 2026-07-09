@@ -388,7 +388,7 @@ export default function ManageProgramsClient({
                   required
                   rows={4}
                   defaultValue={editProgram?.syllabus || ""}
-                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none font-mono"
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 focus:border-primary focus:outline-none font-sans"
                   placeholder="### Course Modules&#10;1. **Cleanroom Safety** (Day 1)&#10;- Clothes protocols"
                 />
               </div>
@@ -630,7 +630,7 @@ function SortablePosterCard({ poster, index, onRemove }: SortablePosterCardProps
           alt={`Poster Page ${index + 1}`} 
           className="w-full h-full object-cover pointer-events-none" 
         />
-        <div className="absolute top-2 left-2 bg-slate-900/75 backdrop-blur-md text-white text-[9px] font-semibold px-1.5 py-0.5 rounded uppercase font-mono">
+        <div className="absolute top-2 left-2 bg-slate-900/75 backdrop-blur-md text-white text-[9px] font-semibold px-1.5 py-0.5 rounded uppercase font-sans">
           Page {index + 1} {index === 0 && "(Cover)"}
         </div>
       </div>

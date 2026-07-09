@@ -152,7 +152,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
             ) : (
               testimonials.map((t) => (
                 <tr key={t.id} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="px-6 py-4 font-mono text-slate-400 font-semibold">
+                  <td className="px-6 py-4 font-sans text-slate-400 font-semibold">
                     {t.order}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 font-heading font-semibold text-slate-900">
