@@ -73,7 +73,7 @@ export default function Footer() {
         </div>
 
         {/* Right side: Sleek Columns (No Titles, No Icons) */}
-        <div className="flex flex-col sm:flex-row gap-16 sm:gap-24 lg:gap-32 text-sm text-slate-900 font-semibold self-stretch lg:self-auto justify-end">
+        <div className="flex flex-col sm:flex-row gap-16 sm:gap-24 lg:gap-28 text-sm text-slate-900 font-semibold self-stretch lg:self-auto justify-end">
           {/* Quick Links Column */}
           <ul className="space-y-4">
             <li>
@@ -116,6 +116,60 @@ export default function Footer() {
               HQ: Technology Park Malaysia, Bukit Jalil, KL
             </p>
           </div>
+
+          {/* Social Links Column */}
+          <ul className="space-y-4">
+            <li>
+              <a 
+                href="https://www.linkedin.com/company/mimosacademy/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-primary transition-colors"
+              >
+                LinkedIn
+              </a>
+            </li>
+            <li>
+              <a 
+                href="https://www.facebook.com/profile.php?id=61567561791997" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-primary transition-colors"
+              >
+                Facebook
+              </a>
+            </li>
+            <li>
+              <a 
+                href="https://www.instagram.com/mimos.academy/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-primary transition-colors"
+              >
+                Instagram
+              </a>
+            </li>
+            <li>
+              <a 
+                href="https://x.com/MIMOSACADEMY?s=20" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-primary transition-colors"
+              >
+                X
+              </a>
+            </li>
+            <li>
+              <a 
+                href="https://www.tiktok.com/@mimos.academy?_r=1&_t=ZS-97niHcJy2wa" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-primary transition-colors"
+              >
+                TikTok
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
 
