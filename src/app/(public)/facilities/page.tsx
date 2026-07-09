@@ -102,14 +102,6 @@ export default function FacilitiesPage() {
 
       {/* 1. Light Header Section */}
       <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-28 pb-12 sm:pt-36 sm:pb-16 space-y-8">
-        {/* Editorial Breadcrumbs */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-mono tracking-widest text-slate-400 uppercase">
-          <Link href="/" className="hover:text-primary transition-colors duration-300">
-            Home
-          </Link>
-          <span className="text-slate-300">/</span>
-          <span className="text-slate-800 font-semibold">Facilities</span>
-        </nav>
 
         {/* Clean Editorial Title */}
         <div className="max-w-4xl space-y-4">

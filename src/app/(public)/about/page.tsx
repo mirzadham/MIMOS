@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getSafeAboutSettings, getSafeTeamMembers } from "@/lib/db";
@@ -20,15 +20,6 @@ export default async function AboutPage() {
       <div className="absolute left-0 bottom-1/3 -z-10 h-96 w-96 bg-primary/2 blur-[140px] pointer-events-none" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-24">
-        
-        {/* Navigation & Breadcrumbs */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-bold text-slate-400">
-          <Link href="/" className="hover:text-primary transition-colors">
-            Home
-          </Link>
-          <ChevronRight className="h-3 w-3 text-slate-300" />
-          <span className="text-slate-900">About Us</span>
-        </nav>
 
         {/* 1. HERO SECTION (Editorial, Large Typography) */}
         <section className="space-y-10">
