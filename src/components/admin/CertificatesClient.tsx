@@ -253,7 +253,7 @@ export default function CertificatesClient({ enrollments }: CertificatesClientPr
                         cert && (
                           <div className="font-body space-y-0.5">
                             <span className="font-semibold text-slate-800 block">No: {cert.certificateNumber}</span>
-                            <span className="text-[9px] text-slate-400 font-mono block truncate max-w-[150px]" title={cert.verifyHash}>
+                            <span className="text-[9px] text-slate-400 font-sans block truncate max-w-[150px]" title={cert.verifyHash}>
                               Hash: {cert.verifyHash}
                             </span>
                           </div>

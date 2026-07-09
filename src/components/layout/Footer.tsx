@@ -1,130 +1,163 @@
 import Link from "next/link";
-import { GraduationCap, Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";
+import React from "react";
+
+// Component representing a single row of dots flowing at independent speeds
+const MovingDotsRow = ({ rowIndex }: { rowIndex: number }) => {
+  const dotCount = 28; // Increased dot density
+  const dots: React.ReactNode[] = [];
+  
+  // Seeded random helper so the delays and durations are stable and consistent on renders
+  let seed = rowIndex * 123;
+  const random = () => {
+    const x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  };
+
+  for (let i = 0; i < dotCount; i++) {
+    // Slowed down the dots: duration between 25s and 45s
+    const duration = 25 + random() * 20; 
+    // Randomize delay between -45s and 0s to match new slower speed distribution
+    const delay = -random() * 45;
+    // Slight vertical wobble within the row
+    const yOffset = (random() - 0.5) * 6; // -3px to +3px
+    const opacity = 0.45 + random() * 0.45; // 0.45 to 0.9
+    const isDouble = random() > 0.8; // 20% chance of being a double-dot
+
+    const dotStyle: React.CSSProperties = {
+      position: 'absolute',
+      left: 0,
+      top: `calc(50% + ${yOffset}px)`,
+      opacity: opacity,
+      animation: `dot-move-left ${duration}s linear infinite`,
+      animationDelay: `${delay}s`,
+      willChange: 'transform',
+    };
+
+    dots.push(
+      <div key={i} style={dotStyle} className="pointer-events-none select-none">
+        {isDouble ? (
+          <div className="flex gap-[3px]">
+            {/* Tighter shadow glow for a cleaner look */}
+            <div className="w-[3px] h-[3px] rounded-full bg-[#ff00cc] shadow-[0_0_2px_#ff00cc]" />
+            <div className="w-[3px] h-[3px] rounded-full bg-[#ff00cc] shadow-[0_0_2px_#ff00cc]" />
+          </div>
+        ) : (
+          <div className="w-[5px] h-[5px] rounded-full bg-[#ff00cc] shadow-[0_0_3px_#ff00cc]" />
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full relative h-8 overflow-hidden bg-transparent">
+      {dots}
+    </div>
+  );
+};
 
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-200/80 bg-slate-50/50 text-slate-600">
+    <footer className="w-full bg-white border-t border-slate-200 text-slate-900 md:h-[580px] flex flex-col justify-between relative font-sans">
       
-      {/* Main Footer Links & Info */}
-      <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:py-20">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
-          
-          {/* Column 1: Brand Info */}
-          <div className="space-y-5">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/5 border border-primary/10">
-                <GraduationCap className="h-5 w-5 text-primary" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-heading text-md font-semibold tracking-tight text-slate-900 leading-none">
-                  MIMOS
-                </span>
-                <span className="font-sans text-[9px] font-semibold tracking-widest text-primary uppercase mt-0.5">
-                  Academy
-                </span>
-              </div>
-            </div>
-            <p className="text-sm text-slate-500 leading-relaxed font-body">
-              MIMOS Academy is the professional talent development arm of MIMOS Berhad, Malaysia&apos;s National Applied Research and Development Centre. We bridge education and industry through high-tech hands-on R&D training.
+      {/* Top Spacer: 3rem (48px) */}
+      <div className="h-12 w-full block shrink-0" aria-hidden="true" />
+
+      {/* Top Part: Tagline & Sleek Columns (Padded layout aligned to grid) */}
+      <div className="mx-auto max-w-[1440px] w-full px-8 md:px-16 flex flex-col lg:flex-row justify-between items-start gap-16 lg:gap-8 relative z-2">
+        {/* Tagline */}
+        <div className="max-w-2xl">
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-[42px] lg:text-[46px] font-light tracking-tight text-slate-900 leading-[1.08]">
+            Driving Malaysia&apos;s<br />
+            High-Tech Excellence
+          </h2>
+        </div>
+
+        {/* Right side: Sleek Columns (No Titles, No Icons) */}
+        <div className="flex flex-col sm:flex-row gap-16 sm:gap-24 lg:gap-32 text-sm text-slate-900 font-semibold self-stretch lg:self-auto justify-end">
+          {/* Quick Links Column */}
+          <ul className="space-y-4">
+            <li>
+              <Link href="/" className="hover:text-primary transition-colors">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link href="/about" className="hover:text-primary transition-colors">
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link href="/programs" className="hover:text-primary transition-colors">
+                Programmes
+              </Link>
+            </li>
+            <li>
+              <Link href="/facilities" className="hover:text-primary transition-colors">
+                Facilities
+              </Link>
+            </li>
+          </ul>
+
+          {/* Contact Details Column */}
+          <div className="space-y-4">
+            <p>MIMOS Academy</p>
+            <p className="text-slate-500 font-normal">
+              Kulim Hi-Tech Park, Kedah
+            </p>
+            <p className="text-slate-500 font-normal">
+              Tel: +604-405 2540
+            </p>
+            <p>
+              <a href="mailto:academy@mimos.my" className="hover:text-primary transition-colors">
+                academy@mimos.my
+              </a>
+            </p>
+            <p className="text-xs text-slate-400 font-normal pt-2 border-t border-slate-100">
+              HQ: Technology Park Malaysia, Bukit Jalil, KL
             </p>
           </div>
-
-          {/* Column 2: Quick Links */}
-          <div className="space-y-4 md:ml-8">
-            <h3 className="font-heading text-xs font-semibold tracking-wider text-slate-900 uppercase">
-              Quick Links
-            </h3>
-            <ul className="space-y-2.5 text-sm font-semibold text-slate-500">
-              <li>
-                <Link href="/" className="hover:text-primary transition-colors flex items-center gap-1 group">
-                  <span>Home</span>
-                  <ArrowUpRight className="h-3 w-3 opacity-0 -translate-y-0.5 group-hover:opacity-100 transition-all" />
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="hover:text-primary transition-colors flex items-center gap-1 group">
-                  <span>About Us</span>
-                  <ArrowUpRight className="h-3 w-3 opacity-0 -translate-y-0.5 group-hover:opacity-100 transition-all" />
-                </Link>
-              </li>
-              <li>
-                <Link href="/programs" className="hover:text-primary transition-colors flex items-center gap-1 group">
-                  <span>Programmes</span>
-                  <ArrowUpRight className="h-3 w-3 opacity-0 -translate-y-0.5 group-hover:opacity-100 transition-all" />
-                </Link>
-              </li>
-              <li>
-                <Link href="/facilities" className="hover:text-primary transition-colors flex items-center gap-1 group">
-                  <span>Facilities</span>
-                  <ArrowUpRight className="h-3 w-3 opacity-0 -translate-y-0.5 group-hover:opacity-100 transition-all" />
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 3: Bulletins */}
-          <div className="space-y-4">
-            <h3 className="font-heading text-xs font-semibold tracking-wider text-slate-900 uppercase">
-              Academy Bulletin
-            </h3>
-            <ul className="space-y-2.5 text-sm font-semibold text-slate-500">
-              <li>
-                <Link href="/news" className="hover:text-primary transition-colors">Upcoming Training Schedules</Link>
-              </li>
-              <li>
-                <Link href="/news" className="hover:text-primary transition-colors">Past Cohort Galleries</Link>
-              </li>
-              <li>
-                <Link href="/news" className="hover:text-primary transition-colors">Corporate Collaboration Notices</Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 4: Contact Details */}
-          <div className="space-y-4">
-            <h3 className="font-heading text-xs font-semibold tracking-wider text-slate-900 uppercase">
-              Contact Us
-            </h3>
-            <ul className="space-y-3.5 text-sm font-medium text-slate-500">
-              <li className="flex gap-2.5 items-start">
-                <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                <span className="text-slate-500 text-xs">
-                  MIMOS Academy, Kulim Hi-Tech Park, 09000 Kulim, Kedah, Malaysia.
-                </span>
-              </li>
-              <li className="flex gap-2.5 items-center">
-                <Phone className="h-4 w-4 text-primary" />
-                <span className="text-slate-500 text-xs font-semibold">Tel: +604-405 2540</span>
-              </li>
-              <li className="flex gap-2.5 items-center">
-                <Mail className="h-4 w-4 text-primary" />
-                <a href="mailto:academy@mimos.my" className="text-slate-500 hover:text-primary text-xs font-semibold transition-colors">
-                  academy@mimos.my
-                </a>
-              </li>
-              <li className="flex gap-2.5 items-start border-t border-slate-200/60 pt-3">
-                <MapPin className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
-                <span className="text-slate-400 text-[11px] leading-snug">
-                  HQ: Technology Park Malaysia, Bukit Jalil, 57000 Kuala Lumpur.
-                </span>
-              </li>
-            </ul>
-          </div>
-
         </div>
-
-        {/* Divider */}
-        <div className="mt-12 border-t border-slate-200/80 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-semibold text-slate-400">
-          <p>
-            &copy; {new Date().getFullYear()} MIMOS Berhad. All Rights Reserved. | <a href="https://www.mimos.my/legal-notice/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-all">Legal Notice</a>
-          </p>
-          <div className="flex gap-1.5 items-center">
-            <span>Powered by Next.js & Tailwind CSS</span>
-          </div>
-        </div>
-
       </div>
+
+      {/* Middle Part: Horizontal Moving Dot Matrix (Borderless, full edge-to-edge width, no horizontal spacing) */}
+      <div className="w-full overflow-hidden my-12 py-2 h-[120px] flex flex-col justify-around relative z-1 bg-transparent">
+        {/* Style block for the custom particle translate animation */}
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes dot-move-left {
+            0% {
+              transform: translateX(102vw);
+            }
+            100% {
+              transform: translateX(-10vw);
+            }
+          }
+        `}} />
+        <MovingDotsRow rowIndex={0} />
+        <MovingDotsRow rowIndex={1} />
+        <MovingDotsRow rowIndex={2} />
+      </div>
+
+      {/* Bottom Part: Logo & Copyright (Borderless, padded layout aligned to grid) */}
+      <div className="mx-auto max-w-[1440px] w-full px-8 md:px-16 flex flex-col sm:flex-row justify-between items-center gap-8 relative z-2">
+        {/* Logo on the Bottom Left */}
+        <Link href="/" className="flex items-center">
+          <img 
+            src="/MIMOS-Academy.png" 
+            alt="MIMOS Academy Logo" 
+            className="h-16 w-auto object-contain block"
+          />
+        </Link>
+
+        {/* Copyright on the Bottom Right */}
+        <span className="text-xs font-semibold text-slate-400 select-none">
+          &copy; {new Date().getFullYear()} MIMOS Berhad. All Rights Reserved.
+        </span>
+      </div>
+
+      {/* Bottom Spacer: 3rem (48px) */}
+      <div className="h-12 w-full block shrink-0" aria-hidden="true" />
 
     </footer>
   );
 }
+

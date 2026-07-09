@@ -72,7 +72,7 @@ export default function StatsSection({ stats }: StatsSectionProps) {
               <span className="font-heading text-4xl sm:text-5xl font-semibold text-slate-900 tracking-tight leading-none">
                 <AnimatedNumber value={stat.number} />
               </span>
-              <span className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider font-mono">
+              <span className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider font-sans">
                 {stat.label}
               </span>
             </div>
