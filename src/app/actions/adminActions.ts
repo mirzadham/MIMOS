@@ -10,7 +10,10 @@ export async function adminLoginAction(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
-  if (email === "admin@mimos.my" && password === "mimos2026") {
+  const expectedEmail = process.env.ADMIN_EMAIL || "admin@mimos.my";
+  const expectedPassword = process.env.ADMIN_PASSWORD || "mimos2026";
+
+  if (email === expectedEmail && password === expectedPassword) {
     await loginAdmin(email);
     // Create Audit Log
     try {
