@@ -209,7 +209,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
 
             {/* B2B request notice inside sticky column */}
             <div className="rounded-2xl border border-slate-800 bg-slate-900 text-white p-6 space-y-4">
-              <h4 className="font-heading text-sm font-semibold">Request Private Cohort?</h4>
+              <h4 className="font-heading text-sm font-semibold text-white">Request Private Cohort?</h4>
               <p className="text-xs text-slate-400 leading-relaxed font-body">
                 Upskill your entire team with a tailored curriculum and hands-on private sessions designed specifically for your organization goals.
               </p>
