@@ -22,10 +22,11 @@ export const prisma = new Proxy({} as PrismaClient, {
 
 // Rich default mock database for fallback and local development
 export const mockCategories = [
-  { id: 'cat-1', name: 'Semiconductor Technology', slug: 'semiconductor' },
-  { id: 'cat-2', name: 'Artificial Intelligence & Data Science', slug: 'ai-data-science' },
-  { id: 'cat-3', name: 'Information Security & 5G', slug: 'security-5g' },
-  { id: 'cat-4', name: 'Professional Management & PMP', slug: 'management-pmp' }
+  { id: 'cat-1', name: 'Semiconductor', slug: 'semiconductor' },
+  { id: 'cat-2', name: 'Artificial intelligence & data science', slug: 'ai-data-science' },
+  { id: 'cat-3', name: 'Information security', slug: 'information-security' },
+  { id: 'cat-4', name: 'Project management', slug: 'project-management' },
+  { id: 'cat-5', name: 'Engineering', slug: 'engineering' }
 ];
 
 export const mockPrograms = [
@@ -92,7 +93,7 @@ export const mockPrograms = [
     duration: '2 Days',
     dates: 'Scheduled Soon',
     microsoftFormUrl: 'https://forms.office.com/r/electrical-eng',
-    categoryId: 'cat-1'
+    categoryId: 'cat-5'
   },
   {
     id: 'prog-6',

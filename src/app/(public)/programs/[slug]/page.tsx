@@ -73,7 +73,7 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
         
         {/* Back Link */}
         <Link
-          href="/#programs-catalog"
+          href="/programs"
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-primary transition-colors mb-8"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -211,13 +211,13 @@ export default async function ProgramDetailPage({ params }: ProgramPageProps) {
             <div className="rounded-2xl border border-slate-800 bg-slate-900 text-white p-6 space-y-4">
               <h4 className="font-heading text-sm font-semibold">Request Private Cohort?</h4>
               <p className="text-xs text-slate-400 leading-relaxed font-body">
-                We can customize this course structure and run private physical labs for your company&apos;s employees.
+                Upskill your entire team with a tailored curriculum and hands-on private sessions designed specifically for your organization goals.
               </p>
               <Link
                 href="/contact"
                 className="text-xs font-semibold text-primary hover:text-primary-hover transition-colors inline-block font-sans"
               >
-                Contact B2B Coordination →
+                Talk to our Team →
               </Link>
             </div>
 

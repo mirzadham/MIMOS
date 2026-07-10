@@ -258,14 +258,14 @@ export default function FacilitiesPage() {
         <div className="mx-auto max-w-2xl px-6 lg:px-8 space-y-6">
           <h2 className="text-xs font-sans tracking-widest text-primary uppercase">MIMOS Academy</h2>
           <p className="text-xl sm:text-2xl font-medium tracking-tight text-slate-200">
-            Gain direct learning access to production-grade semiconductor lines, networks, and computing infrastructures.
+            Gain direct learning access to our industry-standard labs and premium training environments.
           </p>
           <div className="pt-4">
             <Link
               href="/contact"
               className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-xs font-sans tracking-widest text-white uppercase hover:bg-primary-hover transition-colors duration-300 shadow-lg shadow-primary/20"
             >
-              Request Campus Tour
+              Get in Touch
             </Link>
           </div>
         </div>

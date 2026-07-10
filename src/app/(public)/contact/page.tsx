@@ -252,9 +252,9 @@ export default function ContactPage() {
                     className="space-y-6"
                   >
                     <div>
-                      <h3 className="font-heading text-base font-semibold text-slate-900 uppercase tracking-widest">Inquiry Console</h3>
+                      <h3 className="font-heading text-base font-semibold text-slate-900 uppercase tracking-widest">Send Us an Email</h3>
                       <p className="text-xs text-slate-500 mt-1 leading-normal font-body">
-                        Send an academic coordination query directly to our team.
+                        Please fill in the information below. Fields marked with * are required.
                       </p>
                     </div>
 
@@ -350,13 +350,12 @@ export default function ContactPage() {
                       >
                         {isSubmitting ? (
                           <>
-                            <span>Submitting Query</span>
+                            <span>Submitting</span>
                             <Loader2 className="h-4.5 w-4.5 animate-spin" />
                           </>
                         ) : (
                           <>
-                            <span>Submit Inquiry</span>
-                            <Send className="h-3.5 w-3.5" />
+                            <span>Submit</span>
                           </>
                         )}
                       </button>
