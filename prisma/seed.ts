@@ -208,11 +208,16 @@ async function main() {
     });
   }
 
-  console.log('Cleaning up existing stats, partners, why choose us cards & testimonials...');
+  console.log('Cleaning up existing stats, partners, why choose us cards, testimonials & facilities...');
   await prisma.stat.deleteMany({});
   await prisma.partner.deleteMany({});
   await prisma.whyChooseUsCard.deleteMany({});
   await prisma.testimonial.deleteMany({});
+  try {
+    await prisma.facility.deleteMany({});
+  } catch (err) {
+    console.warn("Facility table clean up ignored during seeding:", err);
+  }
   try {
     await prisma.aboutSettings.deleteMany({});
     await prisma.teamMember.deleteMany({});
@@ -358,6 +363,72 @@ async function main() {
         order: i
       }
     });
+  }
+
+  console.log('Seeding facilities...');
+  const facilitiesData = [
+    {
+      index: "01",
+      title: "Semiconductor Technology Centre (STC)",
+      subtitle: "Wafer Fabrication & Microelectronics R&D",
+      imageUrl: "/semiconductor_cleanroom.png",
+      desc: "Malaysia's premier shared R&D fabrication center. Providing hands-on practical training space for engineering cohorts inside advanced cleanroom environments.",
+      specs: [
+        "Wafer Fabrication: Complete 6-inch wafer processing line",
+        "Cleanroom Class: Certified Class 10 to Class 1000 environments",
+        "Lithography: Precision E-beam & photolithography systems",
+        "Thin Film Deposition: PECVD, LPCVD, and sputtering chambers",
+        "Failure Analysis: Scanning electron microscopes (SEM)"
+      ],
+      order: 0
+    },
+    {
+      index: "02",
+      title: "5G & AI Innovation Hub",
+      subtitle: "Enterprise Workloads & Generative Modeling",
+      imageUrl: "/ai_5g_hub.png",
+      desc: "A cooperative facility simulating enterprise workloads. Students train and deploy generative models and verify networking latency in real-world scenarios.",
+      specs: [
+        "AI Compute: NVIDIA H100 GPU nodes with NVMe SAN storage",
+        "Standalone 5G: Private sub-6GHz testbeds for latency testing",
+        "Secure Sandbox: Air-gapped model training and verification",
+        "IoT Arrays: Comprehensive protocol verification frameworks"
+      ],
+      order: 1
+    },
+    {
+      index: "03",
+      title: "Cyber Security Range",
+      subtitle: "Threat Simulation & Incident Response",
+      imageUrl: "/cyber_security_range.png",
+      desc: "Designed to train cybersecurity groups. The lab runs physical simulations of high-level threat profiles, privilege escalation, and active logging analytics.",
+      specs: [
+        "Cyber-Range: Active threat simulation and response testing",
+        "Network Racks: Modular hardware racks for network virtualization",
+        "Packet Capture: Real-time packet inspection and analysis nodes",
+        "Verification: Dedicated air-gapped forensic sandboxes"
+      ],
+      order: 2
+    },
+    {
+      index: "04",
+      title: "Training & Seminar Rooms",
+      subtitle: "Technical Lecture & Seminars",
+      imageUrl: "/training_seminar_room.png",
+      desc: "Premium multi-functional spaces tailored for technical training cohorts and executive presentations with state-of-the-art visual hardware.",
+      specs: [
+        "AV Systems: Interactive smart displays & dual-projector arrays",
+        "Dev Terminals: Pre-configured developer stations for students",
+        "Conferencing: High-definition audio-visual integration",
+        "Seating Capacity: Flexible layouts accommodating up to 60 pax",
+        "Power Reliability: Localized UPS backup arrays"
+      ],
+      order: 3
+    }
+  ];
+
+  for (const fac of facilitiesData) {
+    await prisma.facility.create({ data: fac });
   }
 
   console.log('Seeding completed successfully.');

@@ -4,6 +4,9 @@ import {
   createNewsArticleAction, 
   updateNewsArticleAction,
   deleteNewsArticleAction,
+  createFacilityAction,
+  updateFacilityAction,
+  deleteFacilityAction,
 } from "./adminActions";
 import { getSessionAdmin } from "@/lib/adminAuth";
 import { prisma } from "@/lib/db";
@@ -27,6 +30,11 @@ vi.mock("@/lib/db", () => {
       update: vi.fn(),
       delete: vi.fn(),
     },
+    facility: {
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+    },
     auditLog: {
       create: vi.fn(),
     },
@@ -40,6 +48,10 @@ vi.mock("@/lib/db", () => {
       { id: "mock-4", title: "Article 4", isHighlighted: true },
     ],
     setMockNewsArticles: vi.fn(),
+    mockFacilities: [
+      { id: "mock-fac-1", title: "Facility 1", specs: [] },
+    ],
+    setMockFacilities: vi.fn(),
   };
 });
 
@@ -160,6 +172,119 @@ describe("Admin News Server Actions Tests", () => {
             title: "Updated Title",
             content: "Content"
           })
+        })
+      );
+    });
+  });
+
+  describe("createFacilityAction", () => {
+    it("should throw an error if unauthorized", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(null);
+      await expect(
+        createFacilityAction({
+          index: "01",
+          title: "STC",
+          subtitle: "Wafer",
+          imageUrl: null,
+          desc: "Desc",
+          specs: [],
+          order: 0
+        })
+      ).rejects.toThrow("Unauthorized");
+    });
+
+    it("should create facility in DB if authorized", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
+      const facilityData = {
+        index: "01",
+        title: "STC",
+        subtitle: "Wafer",
+        imageUrl: null,
+        desc: "Desc",
+        specs: ["Spec 1: Val"],
+        order: 0
+      };
+
+      const createdFacility = { id: "new-fac-id", ...facilityData };
+      vi.mocked(prisma.facility.create).mockResolvedValue(createdFacility as any);
+
+      const res = await createFacilityAction(facilityData);
+
+      expect(res.success).toBe(true);
+      expect(res.facility?.title).toBe("STC");
+      expect(prisma.facility.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            title: "STC",
+            specs: expect.arrayContaining(["Spec 1: Val"])
+          })
+        })
+      );
+    });
+  });
+
+  describe("updateFacilityAction", () => {
+    it("should throw an error if unauthorized", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(null);
+      await expect(
+        updateFacilityAction("mock-fac-1", {
+          index: "01",
+          title: "STC",
+          subtitle: "Wafer",
+          imageUrl: null,
+          desc: "Desc",
+          specs: [],
+          order: 0
+        })
+      ).rejects.toThrow("Unauthorized");
+    });
+
+    it("should update facility in DB if authorized", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
+      const facilityData = {
+        index: "01",
+        title: "STC Updated",
+        subtitle: "Wafer",
+        imageUrl: null,
+        desc: "Desc",
+        specs: [],
+        order: 0
+      };
+
+      const updatedFacility = { id: "mock-fac-1", ...facilityData };
+      vi.mocked(prisma.facility.update).mockResolvedValue(updatedFacility as any);
+
+      const res = await updateFacilityAction("mock-fac-1", facilityData);
+
+      expect(res.success).toBe(true);
+      expect(prisma.facility.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: "mock-fac-1" },
+          data: expect.objectContaining({
+            title: "STC Updated"
+          })
+        })
+      );
+    });
+  });
+
+  describe("deleteFacilityAction", () => {
+    it("should throw an error if unauthorized", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(null);
+      await expect(deleteFacilityAction("mock-fac-1")).rejects.toThrow("Unauthorized");
+    });
+
+    it("should delete facility from DB if authorized", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
+      const deletedFacility = { id: "mock-fac-1", title: "Deleted" };
+      vi.mocked(prisma.facility.delete).mockResolvedValue(deletedFacility as any);
+
+      const res = await deleteFacilityAction("mock-fac-1");
+
+      expect(res.success).toBe(true);
+      expect(prisma.facility.delete).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: "mock-fac-1" }
         })
       );
     });

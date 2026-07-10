@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles } from "@/lib/db";
+import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles, mockFacilities, setMockFacilities } from "@/lib/db";
 import crypto from "crypto";
 
 // 1. Authentication Server Actions
@@ -986,4 +986,137 @@ export async function toggleNewsHighlightAction(id: string, isHighlighted: boole
     return { success: true };
   }
 }
+
+// 10. Facilities CRUD Actions
+export async function createFacilityAction(data: {
+  index: string;
+  title: string;
+  subtitle: string;
+  imageUrl?: string | null;
+  desc: string;
+  specs: string[];
+  order: number;
+}) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const newFacility = await prisma.facility.create({
+      data: {
+        index: data.index,
+        title: data.title,
+        subtitle: data.subtitle,
+        imageUrl: data.imageUrl,
+        desc: data.desc,
+        specs: data.specs,
+        order: data.order,
+      }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "CREATE_FACILITY",
+        details: `Created facility: ${data.title} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/facilities");
+    revalidatePath("/");
+    return { success: true, facility: newFacility };
+  } catch (e) {
+    console.error("Prisma write error, saving to mock facilities: ", e);
+    const mockNew = {
+      id: "mock-" + Math.random().toString(36).substr(2, 9),
+      ...data,
+      imageUrl: data.imageUrl || null,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    setMockFacilities([...mockFacilities, mockNew]);
+    revalidatePath("/facilities");
+    revalidatePath("/");
+    return { success: true, facility: mockNew };
+  }
+}
+
+export async function updateFacilityAction(id: string, data: {
+  index: string;
+  title: string;
+  subtitle: string;
+  imageUrl?: string | null;
+  desc: string;
+  specs: string[];
+  order: number;
+}) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const updated = await prisma.facility.update({
+      where: { id },
+      data: {
+        index: data.index,
+        title: data.title,
+        subtitle: data.subtitle,
+        imageUrl: data.imageUrl,
+        desc: data.desc,
+        specs: data.specs,
+        order: data.order,
+      }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "UPDATE_FACILITY",
+        details: `Updated facility: ${data.title} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/facilities");
+    revalidatePath("/");
+    return { success: true, facility: updated };
+  } catch (e) {
+    console.error("Prisma update error: ", e);
+    const updatedMock = {
+      id,
+      ...data,
+      imageUrl: data.imageUrl || null,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    setMockFacilities(mockFacilities.map(f => f.id === id ? updatedMock : f));
+    revalidatePath("/facilities");
+    revalidatePath("/");
+    return { success: true, facility: updatedMock };
+  }
+}
+
+export async function deleteFacilityAction(id: string) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  try {
+    const deleted = await prisma.facility.delete({
+      where: { id }
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        action: "DELETE_FACILITY",
+        details: `Deleted facility: ${deleted.title} by admin ${admin.email}`
+      }
+    });
+
+    revalidatePath("/facilities");
+    revalidatePath("/");
+    return { success: true };
+  } catch (e) {
+    console.error("Prisma delete error: ", e);
+    setMockFacilities(mockFacilities.filter(f => f.id !== id));
+    revalidatePath("/facilities");
+    revalidatePath("/");
+    return { success: true };
+  }
+}
+
 
