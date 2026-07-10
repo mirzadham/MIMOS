@@ -276,8 +276,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
               Training Programmes
             </h2>
             <p className="text-sm sm:text-md text-slate-600 font-body leading-relaxed">
-              Accelerate your engineering credentials. Explore our flagship
-              upskilling courses.
+              Enhance your professional credentials. Explore our flagship upskilling courses.
             </p>
           </div>
 

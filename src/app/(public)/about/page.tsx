@@ -110,7 +110,7 @@ export default async function AboutPage() {
                   Enterprise Capability Development
                 </h3>
                 <p className="font-body text-sm text-slate-650 leading-relaxed max-w-md">
-                  Collaborate with MIMOS Academy to build specialized deep tech and semiconductor curricula tailored specifically to your organization&apos;s technical workforce requirements.
+                  Leverage MIMOS Academy’s expertise to build specialized technical curricula and advanced training programs tailored to your organization’s diverse workforce requirements across all sectors.
                 </p>
               </div>
               <div className="pt-2">
@@ -118,7 +118,7 @@ export default async function AboutPage() {
                   href="/contact" 
                   className={cn(buttonVariants({ variant: "default" }), "cursor-pointer group gap-2 h-10 px-5 rounded-lg text-xs font-semibold")}
                 >
-                  Partner With Us
+                  Contact Us
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </Link>
               </div>
@@ -131,10 +131,10 @@ export default async function AboutPage() {
                   UPSKILLING
                 </span>
                 <h3 className="font-heading text-2xl font-semibold text-slate-900 tracking-tight sm:text-3xl">
-                  Accelerate Your Technical Career
+                  Elevate Your Professional Career
                 </h3>
                 <p className="font-body text-sm text-slate-650 leading-relaxed max-w-md">
-                  Enroll in our national technology programs. Work hands-on in physical training labs and semiconductor wafer cleanrooms under the guidance of R&D scientists.
+                  Transform your skill set with high-impact technical programs designed for today’s demands. Benefit from hands-on learning in specialized environments led by our expert trainers.
                 </p>
               </div>
               <div className="pt-2">

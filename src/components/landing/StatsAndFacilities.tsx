@@ -27,9 +27,6 @@ export default function StatsAndFacilities() {
           <h3 className="font-heading text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
             Our Facilities
           </h3>
-          <p className="text-sm text-slate-600 leading-relaxed font-body">
-            MIMOS Academy courses are conducted physically inside Malaysia&apos;s leading applied research labs and modern classrooms, allowing students direct hands-on exposure to advanced industrial systems.
-          </p>
         </div>
 
         {/* Dual Split-Pane Hover Container */}
@@ -42,7 +39,7 @@ export default function StatsAndFacilities() {
         >
           {/* Left Pane - Lab */}
           <Link
-            href="/facilities#lab"
+            href="/facilities"
             className="group/pane relative w-full h-[280px] lg:h-full lg:w-1/2 lg:group-hover:w-[30%] lg:group-focus-within:w-[30%] lg:hover:!w-[70%] lg:focus-within:!w-[70%] transition-all duration-500 ease-in-out overflow-hidden border-b lg:border-b-0 border-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:z-10"
           >
             {/* Background Image */}
@@ -68,7 +65,7 @@ export default function StatsAndFacilities() {
 
           {/* Right Pane - Training Room */}
           <Link
-            href="/facilities#training-room"
+            href="/facilities"
             className="group/pane relative w-full h-[280px] lg:h-full lg:w-1/2 lg:group-hover:w-[30%] lg:group-focus-within:w-[30%] lg:hover:!w-[70%] lg:focus-within:!w-[70%] transition-all duration-500 ease-in-out overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:z-10"
           >
             {/* Background Image */}

@@ -77,22 +77,22 @@ export default function Footer() {
           {/* Quick Links Column */}
           <ul className="space-y-4">
             <li>
-              <Link href="/" className="hover:text-primary transition-colors">
+              <Link href="/" className="hover:text-primary transition-colors footer-hover-line">
                 Home
               </Link>
             </li>
             <li>
-              <Link href="/about" className="hover:text-primary transition-colors">
+              <Link href="/about" className="hover:text-primary transition-colors footer-hover-line">
                 About Us
               </Link>
             </li>
             <li>
-              <Link href="/programs" className="hover:text-primary transition-colors">
+              <Link href="/programs" className="hover:text-primary transition-colors footer-hover-line">
                 Programmes
               </Link>
             </li>
             <li>
-              <Link href="/facilities" className="hover:text-primary transition-colors">
+              <Link href="/facilities" className="hover:text-primary transition-colors footer-hover-line">
                 Facilities
               </Link>
             </li>
@@ -100,20 +100,41 @@ export default function Footer() {
 
           {/* Contact Details Column */}
           <div className="space-y-4">
-            <p>MIMOS Academy</p>
-            <p className="text-slate-500 font-normal">
-              Kulim Hi-Tech Park, Kedah
-            </p>
-            <p className="text-slate-500 font-normal">
-              Tel: +604-405 2540
-            </p>
             <p>
-              <a href="mailto:academy@mimos.my" className="hover:text-primary transition-colors">
-                academy@mimos.my
+              <a 
+                href="https://www.google.com/maps/search/?api=1&query=Technology+Park+Malaysia,+Kuala+Lumpur" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-primary transition-colors footer-hover-line"
+              >
+                Technology Park Malaysia, Kuala Lumpur
               </a>
             </p>
-            <p className="text-xs text-slate-400 font-normal pt-2 border-t border-slate-100">
-              HQ: Technology Park Malaysia, Bukit Jalil, KL
+            <p>
+              <a 
+                href="https://www.google.com/maps/search/?api=1&query=Kulim+Hi-Tech+Park,+Kedah" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-primary transition-colors footer-hover-line"
+              >
+                Kulim Hi-Tech Park, Kedah
+              </a>
+            </p>
+            <p>
+              <a 
+                href="tel:+6044052540" 
+                className="hover:text-primary transition-colors footer-hover-line"
+              >
+                Tel: +604-405 2540
+              </a>
+            </p>
+            <p>
+              <a 
+                href="mailto:academy@mimos.my" 
+                className="hover:text-primary transition-colors footer-hover-line"
+              >
+                academy@mimos.my
+              </a>
             </p>
           </div>
 
@@ -124,7 +145,7 @@ export default function Footer() {
                 href="https://www.linkedin.com/company/mimosacademy/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="hover:text-primary transition-colors"
+                className="hover:text-primary transition-colors footer-hover-line"
               >
                 LinkedIn
               </a>
@@ -134,7 +155,7 @@ export default function Footer() {
                 href="https://www.facebook.com/profile.php?id=61567561791997" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="hover:text-primary transition-colors"
+                className="hover:text-primary transition-colors footer-hover-line"
               >
                 Facebook
               </a>
@@ -144,7 +165,7 @@ export default function Footer() {
                 href="https://www.instagram.com/mimos.academy/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="hover:text-primary transition-colors"
+                className="hover:text-primary transition-colors footer-hover-line"
               >
                 Instagram
               </a>
@@ -154,7 +175,7 @@ export default function Footer() {
                 href="https://x.com/MIMOSACADEMY?s=20" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="hover:text-primary transition-colors"
+                className="hover:text-primary transition-colors footer-hover-line"
               >
                 X
               </a>
@@ -164,7 +185,7 @@ export default function Footer() {
                 href="https://www.tiktok.com/@mimos.academy?_r=1&_t=ZS-97niHcJy2wa" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="hover:text-primary transition-colors"
+                className="hover:text-primary transition-colors footer-hover-line"
               >
                 TikTok
               </a>

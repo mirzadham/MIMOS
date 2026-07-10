@@ -201,4 +201,28 @@
   gap: 24px 0;
   font: var(--fontWeightNormal) 15px / 24px var(--fontFamily);
   letter-spacing: .2px;
+}
+
+/* Footer Link Hover Underline Animation */
+.footer-hover-line {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.footer-hover-line::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--primary, #a72190);
+  transform-origin: bottom left;
+  transition: transform 0.25s ease-out;
+}
+
+.footer-hover-line:hover::after {
+  transform: scaleX(1);
 }

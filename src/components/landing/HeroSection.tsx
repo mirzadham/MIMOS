@@ -46,7 +46,7 @@ export default function HeroSection() {
             <span className="bg-gradient-to-r from-primary to-primary-hover bg-clip-text text-transparent group-hover:to-primary transition-all duration-300">
               High-Tech Excellence
             </span>{" "}
-            in R&D Talent
+            In Talent
           </motion.h1>
 
           {/* Description */}
@@ -54,7 +54,7 @@ export default function HeroSection() {
             variants={itemVariants}
             className="mx-auto max-w-3xl text-sm sm:text-lg text-slate-500 leading-relaxed font-body"
           >
-            Empowering engineers for Malaysia’s high-tech future. We bridge industry and advanced R&D by providing hands-on upskilling programmes inside national research laboratories.
+            Empowering talent for Malaysia’s high-tech future — bridging education and industry for a ready workforce.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -74,7 +74,7 @@ export default function HeroSection() {
               href="/contact"
               className="rounded-lg border border-slate-250 bg-white px-8 py-4 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all cursor-pointer"
             >
-              Contact Advisory Team
+              Contact Us
             </Link>
           </motion.div>
         </motion.div>

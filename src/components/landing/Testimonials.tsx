@@ -109,10 +109,10 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
         {/* Header */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">
           <h2 className="font-heading text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-            What Our Graduates Say
+            What People Said About Us
           </h2>
           <p className="text-sm sm:text-md text-slate-600 leading-relaxed font-body">
-            Discover how MIMOS Academy helps professionals upskill, build career confidence, and achieve engineering leadership.
+            Discover how Mimos Academy has helped professionals upskill, gain confidence, and achieve career success.
           </p>
         </div>
 
