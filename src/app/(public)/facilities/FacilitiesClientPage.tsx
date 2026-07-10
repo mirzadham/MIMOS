@@ -97,7 +97,7 @@ export default function FacilitiesClientPage({ facilities }: FacilitiesClientPag
               <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-950 border border-slate-880/80 shadow-2xl">
                 {facilities.map((fac, idx) => (
                   <div
-                    key={idx}
+                    key={fac.id}
                     className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
                       activeIndex === idx
                         ? "opacity-100 scale-100 pointer-events-auto"
@@ -139,7 +139,7 @@ export default function FacilitiesClientPage({ facilities }: FacilitiesClientPag
             <div className="w-full lg:w-1/2 lg:py-12">
               {facilities.map((fac, idx) => (
                 <div
-                  key={idx}
+                  key={fac.id}
                   ref={(el) => {
                     sectionRefs.current[idx] = el;
                   }}

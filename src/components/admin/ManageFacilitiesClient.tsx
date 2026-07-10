@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useTransition, useRef } from "react";
-import Image from "next/image";
 import { Plus, Edit2, Trash2, X, AlertCircle, Upload, Building2, Eye, ListPlus, Trash } from "lucide-react";
 import { createFacilityAction, updateFacilityAction, deleteFacilityAction } from "@/app/actions/adminActions";
 
@@ -44,11 +43,21 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
       return [{ label: "", content: "" }];
     }
     return specsArray.map(spec => {
-      const parts = spec.split(": ");
-      const label = parts[0] || "";
-      const content = parts.slice(1).join(": ") || "";
+      const idx = spec.indexOf(": ");
+      if (idx === -1) {
+        return { label: spec, content: "" };
+      }
+      const label = spec.substring(0, idx);
+      const content = spec.substring(idx + 2);
       return { label, content };
     });
+  };
+
+  const handleClose = () => {
+    if (imageUrl && imageUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(imageUrl);
+    }
+    setIsOpen(false);
   };
 
   const handleOpenAdd = () => {
@@ -83,7 +92,10 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setSelectedFile(file);
-      // Create local URL for preview
+      // Clean up previous blob URL if any
+      if (imageUrl && imageUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(imageUrl);
+      }
       setImageUrl(URL.createObjectURL(file));
     }
   };
@@ -142,8 +154,13 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
 
         // Format specs
         const formattedSpecs = specs
-          .filter(s => s.label.trim() && s.content.trim())
-          .map(s => `${s.label.trim()}: ${s.content.trim()}`);
+          .filter(s => s.label.trim() || s.content.trim())
+          .map(s => {
+            const lbl = s.label.trim();
+            const val = s.content.trim();
+            if (lbl && val) return `${lbl}: ${val}`;
+            return lbl || val;
+          });
 
         startTransition(async () => {
           try {
@@ -164,7 +181,7 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
               const res = await createFacilityAction(dataObj);
               if (!res.success) throw new Error("Failed to create facility.");
             }
-            setIsOpen(false);
+            handleClose();
           } catch (err) {
             setError(err instanceof Error ? err.message : "An error occurred.");
           } finally {
@@ -245,11 +262,10 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="relative h-12 w-20 rounded-md overflow-hidden bg-slate-100 border border-slate-200">
                       {fac.imageUrl ? (
-                        <Image
+                        <img
                           src={fac.imageUrl}
                           alt={fac.title}
-                          fill
-                          className="object-cover"
+                          className="object-cover w-full h-full"
                         />
                       ) : (
                         <div className="h-full w-full flex items-center justify-center text-slate-350 bg-slate-50">
@@ -300,7 +316,7 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
                 {editFacility ? "Edit Facility" : "Add Facility"}
               </h2>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={handleClose}
                 className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
               >
                 <X className="h-4.5 w-4.5" />
@@ -501,7 +517,7 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
               <div className="pt-4 flex justify-end gap-3 border-t border-slate-100 mt-6">
                 <button
                   type="button"
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleClose}
                   className="px-4 py-2.5 border border-slate-250 text-xs font-semibold text-slate-650 transition-colors cursor-pointer rounded-lg"
                 >
                   Cancel

@@ -1032,7 +1032,7 @@ export async function createFacilityAction(data: {
       createdAt: new Date(),
       updatedAt: new Date()
     };
-    mockFacilities.push(mockNew);
+    setMockFacilities([...mockFacilities, mockNew]);
     revalidatePath("/facilities");
     revalidatePath("/");
     return { success: true, facility: mockNew };
@@ -1077,13 +1077,17 @@ export async function updateFacilityAction(id: string, data: {
     return { success: true, facility: updated };
   } catch (e) {
     console.error("Prisma update error: ", e);
-    const idx = mockFacilities.findIndex(f => f.id === id);
-    if (idx !== -1) {
-      mockFacilities[idx] = { id, ...data, imageUrl: data.imageUrl || null };
-    }
+    const updatedMock = {
+      id,
+      ...data,
+      imageUrl: data.imageUrl || null,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    setMockFacilities(mockFacilities.map(f => f.id === id ? updatedMock : f));
     revalidatePath("/facilities");
     revalidatePath("/");
-    return { success: true };
+    return { success: true, facility: updatedMock };
   }
 }
 
@@ -1108,10 +1112,7 @@ export async function deleteFacilityAction(id: string) {
     return { success: true };
   } catch (e) {
     console.error("Prisma delete error: ", e);
-    const idx = mockFacilities.findIndex(f => f.id === id);
-    if (idx !== -1) {
-      mockFacilities.splice(idx, 1);
-    }
+    setMockFacilities(mockFacilities.filter(f => f.id !== id));
     revalidatePath("/facilities");
     revalidatePath("/");
     return { success: true };
