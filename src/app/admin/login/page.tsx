@@ -62,7 +62,6 @@ export default function AdminLoginPage() {
                 type="email"
                 name="email"
                 required
-                defaultValue="admin@mimos.my"
                 className="w-full rounded-md border border-slate-300 bg-white py-2.5 pl-10 pr-4 focus:border-primary focus:outline-none"
                 placeholder="admin@mimos.my"
               />
@@ -77,7 +76,6 @@ export default function AdminLoginPage() {
                 type="password"
                 name="password"
                 required
-                defaultValue="mimos2026"
                 className="w-full rounded-md border border-slate-300 bg-white py-2.5 pl-10 pr-4 focus:border-primary focus:outline-none"
                 placeholder="••••••••"
               />
@@ -93,10 +91,6 @@ export default function AdminLoginPage() {
             <span>{loading ? "Verifying..." : "Access Control Center"}</span>
             {!loading && <ArrowRight className="h-4 w-4" />}
           </button>
-          
-          <div className="text-center text-[10px] text-slate-400 font-semibold mt-2">
-            Username: admin@mimos.my | Password: mimos2026
-          </div>
 
         </form>
 

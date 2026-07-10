@@ -177,6 +177,28 @@ describe("Admin News Server Actions Tests", () => {
     });
   });
 
+  describe("deleteNewsArticleAction", () => {
+    it("should throw an error if unauthorized", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(null);
+      await expect(deleteNewsArticleAction("mock-1")).rejects.toThrow("Unauthorized");
+    });
+
+    it("should delete article from DB if authorized", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
+      const deletedArticle = { id: "mock-1", title: "Deleted News" };
+      vi.mocked(prisma.newsArticle.delete).mockResolvedValue(deletedArticle as any);
+
+      const res = await deleteNewsArticleAction("mock-1");
+
+      expect(res.success).toBe(true);
+      expect(prisma.newsArticle.delete).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: "mock-1" }
+        })
+      );
+    });
+  });
+
   describe("createFacilityAction", () => {
     it("should throw an error if unauthorized", async () => {
       vi.mocked(getSessionAdmin).mockResolvedValue(null);
