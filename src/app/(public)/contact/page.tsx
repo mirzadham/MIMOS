@@ -29,10 +29,25 @@ const itemVariants: Variants = {
   },
 };
 
+// Common country codes for dropdown selection
+const COUNTRY_CODES = [
+  { code: "+60", country: "MY", flag: "🇲🇾" },
+  { code: "+65", country: "SG", flag: "🇸🇬" },
+  { code: "+1", country: "US", flag: "🇺🇸" },
+  { code: "+44", country: "GB", flag: "🇬🇧" },
+  { code: "+61", country: "AU", flag: "🇦🇺" },
+  { code: "+62", country: "ID", flag: "🇮🇩" },
+  { code: "+66", country: "TH", flag: "🇹🇭" },
+  { code: "+81", country: "JP", flag: "🇯🇵" },
+  { code: "+86", country: "CN", flag: "🇨🇳" },
+];
+
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    countryCode: "+60",
+    phone: "",
     organization: "",
     message: "",
   });
@@ -51,14 +66,14 @@ export default function ContactPage() {
     });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
+    if (!formData.name || !formData.email || !formData.phone || !formData.message) return;
 
     setIsSubmitting(true);
 
@@ -73,6 +88,8 @@ export default function ContactPage() {
     setFormData({
       name: "",
       email: "",
+      countryCode: "+60",
+      phone: "",
       organization: "",
       message: "",
     });
@@ -276,7 +293,7 @@ export default function ContactPage() {
                           htmlFor="name"
                           className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-semibold text-[9px]"
                         >
-                          Full Name
+                          Full Name *
                         </label>
                         <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-primary peer-focus:w-full transition-all duration-500 ease-out" />
                       </div>
@@ -297,9 +314,56 @@ export default function ContactPage() {
                           htmlFor="email"
                           className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-semibold text-[9px]"
                         >
-                          Email Address
+                          Email Address *
                         </label>
                         <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-primary peer-focus:w-full transition-all duration-500 ease-out" />
+                      </div>
+
+                      {/* Phone input with country code selector */}
+                      <div className="flex items-end gap-3 w-full">
+                        {/* Country code selector */}
+                        <div className="relative z-0 shrink-0">
+                          <select
+                            name="countryCode"
+                            id="countryCode"
+                            value={formData.countryCode}
+                            onChange={handleChange}
+                            className="block py-3 pl-0 pr-6 text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 focus:outline-none focus:ring-0 focus:border-primary peer cursor-pointer transition-colors duration-300 appearance-none"
+                          >
+                            {COUNTRY_CODES.map((c) => (
+                              <option key={c.code} value={c.code} className="bg-white text-slate-800">
+                                {c.flag} {c.code}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="pointer-events-none absolute right-1 bottom-3.5 flex items-center text-slate-400">
+                            <svg className="w-3 h-3 fill-current" viewBox="0 0 20 20">
+                              <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                            </svg>
+                          </div>
+                          <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-primary peer-focus:w-full transition-all duration-500 ease-out" />
+                        </div>
+
+                        {/* Phone input */}
+                        <div className="relative z-0 flex-1 group">
+                          <input
+                            type="tel"
+                            name="phone"
+                            id="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            required
+                            placeholder=" "
+                            className="block py-3 px-0 w-full text-xs font-semibold text-slate-800 bg-transparent border-0 border-b border-slate-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary peer transition-colors duration-300"
+                          />
+                          <label
+                            htmlFor="phone"
+                            className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-semibold text-[9px]"
+                          >
+                            Phone Number *
+                          </label>
+                          <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-primary peer-focus:w-full transition-all duration-500 ease-out" />
+                        </div>
                       </div>
 
                       {/* Organization input */}
@@ -338,7 +402,7 @@ export default function ContactPage() {
                           htmlFor="message"
                           className="absolute text-slate-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5 peer-focus:text-primary uppercase tracking-wider font-semibold text-[9px]"
                         >
-                          Your Message
+                          Your Message *
                         </label>
                         <div className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-primary peer-focus:w-full transition-all duration-500 ease-out" />
                       </div>
@@ -414,7 +478,7 @@ export default function ContactPage() {
                     </div>
 
                     <p className="text-xs text-slate-500 leading-relaxed max-w-sm font-body">
-                      We have received your B2B / general academic coordination inquiry. A member of the MIMOS Academy advisory team will get in touch with you shortly at <span className="font-semibold text-slate-700">{formData.email}</span>.
+                      We have received your B2B / general academic coordination inquiry. A member of the MIMOS Academy advisory team will get in touch with you shortly at <span className="font-semibold text-slate-700">{formData.email}</span> or <span className="font-semibold text-slate-700">{formData.countryCode} {formData.phone}</span>.
                     </p>
 
                     <motion.button
