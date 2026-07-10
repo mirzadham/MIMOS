@@ -16,7 +16,8 @@ import {
   Sparkles,
   MessageSquare,
   Users,
-  Newspaper
+  Newspaper,
+  Building2
 } from "lucide-react";
 
 export default async function AdminDashboardLayout({
@@ -37,6 +38,7 @@ export default async function AdminDashboardLayout({
     { name: "Manage Partners", href: "/admin/partners", icon: Handshake },
     { name: "Why Choose Us", href: "/admin/why-choose-us", icon: Sparkles },
     { name: "Manage About Us", href: "/admin/about", icon: Users },
+    { name: "Manage Facilities", href: "/admin/facilities", icon: Building2 },
     { name: "Manage Testimonials", href: "/admin/testimonials", icon: MessageSquare },
     { name: "Manage News", href: "/admin/news", icon: Newspaper },
     { name: "MS Forms Importer", href: "/admin/enrollments", icon: FileSpreadsheet },

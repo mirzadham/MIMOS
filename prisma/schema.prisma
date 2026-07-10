@@ -168,3 +168,19 @@ model NewsArticle {
   @@index([order])
 }
 
+model Facility {
+  id        String   @id @default(uuid())
+  index     String
+  title     String
+  subtitle  String
+  imageUrl  String?
+  desc      String
+  specs     String[] @default([])
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+}
+
+
