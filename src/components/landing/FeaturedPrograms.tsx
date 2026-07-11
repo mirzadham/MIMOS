@@ -324,6 +324,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
               minWidth: imageFixedWidth,
               height: "100%",
               objectFit: "cover",
+              objectPosition: "top",
             };
 
             if (direction === "forward") {

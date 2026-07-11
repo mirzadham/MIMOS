@@ -50,7 +50,7 @@ export default function ProgramPosterGallery({ imageUrls, fallbackUrl, title }: 
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-top"
             />
           </AnimatePresence>
         </div>

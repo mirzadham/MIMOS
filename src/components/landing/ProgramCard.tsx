@@ -54,7 +54,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
               alt={program.title}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover"
+              className="object-cover object-top"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-slate-50/50">
