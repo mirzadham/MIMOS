@@ -48,7 +48,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden border-b border-slate-900 min-h-[650px] h-screen flex items-center bg-slate-950 text-white">
+    <section className="relative overflow-hidden border-b border-slate-900 min-h-[650px] h-screen flex items-end pb-24 sm:pb-32 bg-slate-950 text-white">
       {/* Background Slideshow Layers */}
       <div className="absolute inset-0 z-0">
         {backgrounds.map((bg, idx) => (
