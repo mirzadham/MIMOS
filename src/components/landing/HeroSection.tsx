@@ -54,7 +54,7 @@ export default function HeroSection() {
         {backgrounds.map((bg, idx) => (
           <div
             key={idx}
-            className={`absolute inset-0 transition-all duration-[1500ms] ease-in-out ${
+            className={`absolute inset-0 transition-all duration-[1500ms] ease-in-out will-change-[transform,opacity] ${
               idx === currentIndex ? "opacity-100 scale-100" : "opacity-0 scale-105"
             }`}
           >
