@@ -68,7 +68,7 @@ export default function LatticeNetwork() {
       ctx.clearRect(0, 0, width, height);
 
       // Draw background grid lines (very subtle)
-      ctx.strokeStyle = "rgba(226, 232, 240, 0.4)";
+      ctx.strokeStyle = "rgba(51, 65, 85, 0.15)";
       ctx.lineWidth = 0.5;
       const gridSize = 40;
       for (let x = 0; x < width; x += gridSize) {
@@ -107,13 +107,13 @@ export default function LatticeNetwork() {
         // Draw dot
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = node.label ? "#a72190" : "#94a3b8";
+        ctx.fillStyle = node.label ? "#a72190" : "#475569";
         ctx.fill();
 
         // Draw labels for key technology nodes
         if (node.label && dist < 120) {
           ctx.font = "bold 9px sans-serif";
-          ctx.fillStyle = "rgba(15, 23, 42, 0.8)";
+          ctx.fillStyle = "rgba(241, 245, 249, 0.85)";
           ctx.fillText(node.label, node.x + 8, node.y + 3);
         }
       });
@@ -141,7 +141,7 @@ export default function LatticeNetwork() {
               ctx.lineWidth = 1.0;
             } else {
               // Regular subtle gray connection
-              ctx.strokeStyle = `rgba(203, 213, 225, ${alpha * 0.4})`;
+              ctx.strokeStyle = `rgba(71, 85, 105, ${alpha * 0.35})`;
               ctx.lineWidth = 0.6;
             }
 
