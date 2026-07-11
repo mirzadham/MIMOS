@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 interface TeamMember {
   name: string;
@@ -17,11 +18,13 @@ export default function TeamMemberCardClient({ member }: { member: TeamMember })
       {/* Aspect 3/4 Image Container with Soft MIMOS Orchid Gradient Backing */}
       <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-gradient-to-b from-brand-light-start to-brand-light-end">
         {!imgError && member.imageUrl ? (
-          <img
+          <Image
             src={member.imageUrl}
             alt={member.name}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             onError={() => setImgError(true)}
-            className="h-full w-full object-cover object-center"
+            className="object-cover object-center"
           />
         ) : (
           <div className="flex h-full w-full flex-col items-center justify-center p-4 select-none relative">

@@ -182,6 +182,7 @@ export default function Header() {
               <img 
                 src="/MIMOS-Academy.png" 
                 alt="MIMOS Academy" 
+                fetchPriority="high"
                 className="h-full w-auto max-w-none block object-contain object-left relative z-10"
               />
             </motion.div>
@@ -311,6 +312,7 @@ export default function Header() {
                   <img 
                     src="/MIMOS-Academy.png" 
                     alt="MIMOS Academy" 
+                    fetchPriority="high"
                     className="h-10 w-auto max-w-none block object-contain object-left"
                   />
                 </div>

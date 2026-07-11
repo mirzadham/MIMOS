@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ChevronRight,
   Newspaper,
@@ -155,7 +156,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
                     transition: "transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)",
                   }}
                 >
-                  {featuredStories.map((story) => (
+                  {featuredStories.map((story, idx) => (
                     <div
                       key={story.id}
                       className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start px-6 md:px-10 lg:px-16"
@@ -194,10 +195,13 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
                       {/* Right: image with proper shadow container */}
                       <div className="relative aspect-[16/12] w-full bg-slate-50 rounded-xl shadow-[0_30px_60px_-12px_rgba(50,50,93,0.15),0_18px_36px_-18px_rgba(0,0,0,0.1)]">
                         <div className="absolute inset-0 overflow-hidden rounded-xl">
-                          <img
+                          <Image
                             src={story.image}
                             alt={story.title}
-                            className="absolute inset-0 h-full w-full object-cover"
+                            fill
+                            sizes="(max-width: 1024px) 100vw, 50vw"
+                            className="object-cover"
+                            priority={idx < 2}
                           />
                         </div>
                       </div>
@@ -254,7 +258,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
 
               {/* Articles Row List */}
               <div className="space-y-8 md:space-y-6">
-                {articles.slice(0, 6).map((art) => (
+                {articles.slice(0, 6).map((art, idx) => (
                   <div
                     key={art.id}
                     className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-start group"
@@ -286,10 +290,13 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
                     <div className="md:col-span-3 flex justify-end md:justify-start">
                       <Link href={`/news/${art.id}`} className="block w-full max-w-[240px]">
                         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-slate-50 shadow-[0_10px_30px_-5px_rgba(50,50,93,0.08),0_6px_16px_-8px_rgba(0,0,0,0.05)]">
-                          <img
+                          <Image
                             src={art.image}
                             alt={art.title}
-                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            fill
+                            sizes="(max-width: 768px) 100vw, 240px"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            priority={idx < 2}
                           />
                         </div>
                       </Link>
@@ -335,7 +342,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
             {/* Articles Row List */}
             {filtered.length > 0 ? (
               <div className="space-y-8 md:space-y-6">
-                {filtered.map((art) => (
+                {filtered.map((art, idx) => (
                   <div
                     key={art.id}
                     className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-start group"
@@ -367,10 +374,13 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
                     <div className="md:col-span-3 flex justify-end md:justify-start">
                       <Link href={`/news/${art.id}`} className="block w-full max-w-[240px]">
                         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-slate-50 shadow-[0_10px_30px_-5px_rgba(50,50,93,0.08),0_6px_16px_-8px_rgba(0,0,0,0.05)]">
-                          <img
+                          <Image
                             src={art.image}
                             alt={art.title}
-                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            fill
+                            sizes="(max-width: 768px) 100vw, 240px"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            priority={idx < 2}
                           />
                         </div>
                       </Link>

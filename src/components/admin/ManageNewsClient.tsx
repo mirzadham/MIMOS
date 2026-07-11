@@ -66,6 +66,11 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      if (file.size > 5 * 1024 * 1024) {
+        showToast("Error: Image file size exceeds 5MB limit.");
+        if (e.target) e.target.value = "";
+        return;
+      }
       setSelectedFile(file);
       setImageUrl(URL.createObjectURL(file));
     }

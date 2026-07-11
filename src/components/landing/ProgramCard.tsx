@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GraduationCap } from "lucide-react";
+import Image from "next/image";
 
 interface ProgramCardProps {
   program: {
@@ -46,12 +47,14 @@ export default function ProgramCard({ program }: ProgramCardProps) {
 
       {/* Top Banner Image / Placeholder */}
       <div className="relative aspect-video w-full overflow-hidden bg-slate-50">
-        <Link href={`/programs/${program.slug}`} className="block w-full h-full">
+        <Link href={`/programs/${program.slug}`} className="block w-full h-full relative">
           {displayImageUrl ? (
-            <img
+            <Image
               src={displayImageUrl}
               alt={program.title}
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-slate-50/50">

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface Facility {
   id: string;
@@ -105,10 +106,13 @@ export default function FacilitiesClientPage({ facilities }: FacilitiesClientPag
                     }`}
                   >
                     {fac.imageUrl ? (
-                      <img
+                      <Image
                         src={fac.imageUrl}
                         alt={fac.title}
-                        className="w-full h-full object-cover"
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="object-cover"
+                        priority={idx === 0}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-slate-900 text-slate-500">
@@ -148,10 +152,13 @@ export default function FacilitiesClientPage({ facilities }: FacilitiesClientPag
                   {/* Inline Image for Mobile Devices */}
                   <div className="block lg:hidden w-full aspect-[16/10] rounded-xl overflow-hidden bg-slate-950 border border-slate-850 mb-8 relative">
                     {fac.imageUrl ? (
-                      <img
+                      <Image
                         src={fac.imageUrl}
                         alt={fac.title}
-                        className="w-full h-full object-cover"
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="object-cover"
+                        priority={idx === 0}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-slate-900 text-slate-500">

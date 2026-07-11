@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
 
 // Component representing a single row of dots flowing at independent speeds
 const MovingDotsRow = ({ rowIndex }: { rowIndex: number }) => {
@@ -216,9 +217,11 @@ export default function Footer() {
       <div className="mx-auto max-w-[1440px] w-full px-8 md:px-16 flex flex-col sm:flex-row justify-between items-center gap-8 relative z-2">
         {/* Logo on the Bottom Left */}
         <Link href="/" className="flex items-center">
-          <img 
+          <Image 
             src="/MIMOS-Academy.png" 
             alt="MIMOS Academy Logo" 
+            width={218}
+            height={64}
             className="h-16 w-auto object-contain block"
           />
         </Link>
