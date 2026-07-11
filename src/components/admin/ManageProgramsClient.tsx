@@ -462,7 +462,12 @@ export default function ManageProgramsClient({
                           alert("You can only upload up to 5 poster pages in total.");
                           return;
                         }
-                        const newPosters = files.map((file) => {
+                        const oversized = files.filter(f => f.size > 5 * 1024 * 1024);
+                        if (oversized.length > 0) {
+                          alert(`Error: Some files exceed the 5MB limit and will not be added:\n${oversized.map(f => f.name).join(", ")}`);
+                        }
+                        const validFiles = files.filter(f => f.size <= 5 * 1024 * 1024);
+                        const newPosters = validFiles.map((file) => {
                           const id = `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
                           const url = URL.createObjectURL(file);
                           return { id, url, file };

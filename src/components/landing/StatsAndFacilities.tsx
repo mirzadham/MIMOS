@@ -4,6 +4,7 @@ import React from "react";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function StatsAndFacilities() {
   const containerVariants = {
@@ -43,10 +44,12 @@ export default function StatsAndFacilities() {
             className="group/pane relative w-full h-[280px] lg:h-full lg:w-1/2 lg:group-hover:w-[30%] lg:group-focus-within:w-[30%] lg:hover:!w-[70%] lg:focus-within:!w-[70%] transition-all duration-500 ease-in-out overflow-hidden border-b lg:border-b-0 border-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:z-10"
           >
             {/* Background Image */}
-            <img
+            <Image
               src="/semiconductor_cleanroom.png"
               alt="Lab"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 lg:group-hover/pane:scale-105"
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover transition-transform duration-700 lg:group-hover/pane:scale-105"
             />
             {/* Overlay */}
             <div className="absolute inset-0 bg-slate-950/40 lg:bg-slate-950/45 transition-colors duration-500 lg:group-hover/pane:bg-slate-950/70" />
@@ -69,10 +72,12 @@ export default function StatsAndFacilities() {
             className="group/pane relative w-full h-[280px] lg:h-full lg:w-1/2 lg:group-hover:w-[30%] lg:group-focus-within:w-[30%] lg:hover:!w-[70%] lg:focus-within:!w-[70%] transition-all duration-500 ease-in-out overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:z-10"
           >
             {/* Background Image */}
-            <img
+            <Image
               src="/ai_5g_hub.png"
               alt="Training Room"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 lg:group-hover/pane:scale-105"
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover transition-transform duration-700 lg:group-hover/pane:scale-105"
             />
             {/* Overlay */}
             <div className="absolute inset-0 bg-slate-950/40 lg:bg-slate-950/45 transition-colors duration-500 lg:group-hover/pane:bg-slate-950/70" />

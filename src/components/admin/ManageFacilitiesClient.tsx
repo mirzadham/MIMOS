@@ -91,6 +91,11 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      if (file.size > 5 * 1024 * 1024) {
+        setError("Error: Facility image size exceeds 5MB limit.");
+        if (e.target) e.target.value = "";
+        return;
+      }
       setSelectedFile(file);
       // Clean up previous blob URL if any
       if (imageUrl && imageUrl.startsWith("blob:")) {

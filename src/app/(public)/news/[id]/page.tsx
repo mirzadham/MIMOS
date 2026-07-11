@@ -2,6 +2,7 @@ import { getSafeNewsArticleById } from "@/lib/db";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
@@ -175,10 +176,13 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                 className="relative w-full bg-slate-50 rounded-xl overflow-hidden shadow-[0_30px_60px_-12px_rgba(50,50,93,0.15),0_18px_36px_-18px_rgba(0,0,0,0.1)]"
                 style={{ aspectRatio: "1600 / 1067" }}
               >
-                <img
+                <Image
                   src={article.imageUrl}
                   alt={article.title}
-                  className="absolute inset-0 h-full w-full object-cover"
+                  fill
+                  sizes="(max-width: 1200px) 100vw, 75vw"
+                  className="object-cover"
+                  priority={true}
                 />
               </div>
             )}
