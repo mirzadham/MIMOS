@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Menu, 
+import {
+  Menu,
   X
 } from "lucide-react";
 
@@ -92,6 +92,12 @@ export default function Header() {
     { name: "Contact", href: "/contact" },
   ];
 
+  const socialIconClass = isScrolled
+    ? "rounded-full p-1.5 text-white hover:text-white/80 transition-all animate-none"
+    : pathname === "/"
+      ? "rounded-full p-1.5 text-white hover:text-primary hover:bg-white/10 transition-all animate-none"
+      : "rounded-full p-1.5 text-black hover:text-primary hover:bg-primary/5 transition-all animate-none";
+
   // Motion variants for the outer header inner container
   const headerVariants = {
     top: {
@@ -162,13 +168,12 @@ export default function Header() {
         animate={isScrolled ? "scrolled" : "top"}
         variants={headerVariants}
         transition={{ type: "spring", stiffness: 180, damping: 24 }}
-        className={`mx-auto flex items-center pointer-events-auto border-solid ${
-          isScrolled 
-            ? "backdrop-blur-md justify-between md:justify-center md:gap-5" 
+        className={`mx-auto flex items-center pointer-events-auto border-solid ${isScrolled
+            ? "backdrop-blur-md justify-between md:justify-center md:gap-5"
             : "justify-between"
-        }`}
+          }`}
       >
-        
+
         {/* Logo - Top Left */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center group">
@@ -179,11 +184,16 @@ export default function Header() {
               {isScrolled && (
                 <div className="absolute inset-[2px] bg-white -z-10" />
               )}
-              <img 
-                src="/MIMOS-Academy.png" 
-                alt="MIMOS Academy" 
+              <img
+                src="/MIMOS-Academy.png"
+                alt="MIMOS Academy"
                 fetchPriority="high"
-                className="h-full w-auto max-w-none block object-contain object-left relative z-10"
+                className="h-full w-auto max-w-none block object-contain object-left relative z-10 transition-all"
+                style={
+                  !isScrolled && pathname === "/"
+                    ? { filter: "drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.7))" }
+                    : undefined
+                }
               />
             </motion.div>
           </Link>
@@ -197,23 +207,23 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`relative transition-all duration-250 rounded-lg font-semibold tracking-wide select-none ${
-                  isScrolled
+                className={`relative transition-all duration-250 rounded-lg font-semibold tracking-wide select-none ${isScrolled
                     ? "px-3 py-1.5 text-xs text-white hover:text-white/80"
-                    : isActive 
-                      ? "text-primary px-4 py-2 text-sm" 
-                      : "text-black hover:text-primary px-4 py-2 text-sm"
-                }`}
+                    : isActive
+                      ? "text-primary px-4 py-2 text-sm"
+                      : pathname === "/"
+                        ? "text-white hover:text-white/80 px-4 py-2 text-sm"
+                        : "text-black hover:text-primary px-4 py-2 text-sm"
+                  }`}
               >
                 <span className="relative z-10">{link.name}</span>
                 {isActive && (
                   <motion.div
                     layoutId="activeNavUnderline"
-                    className={`absolute inset-0 rounded-lg border ${
-                      isScrolled
+                    className={`absolute inset-0 rounded-lg border ${isScrolled
                         ? "bg-white/10 border-white/10"
                         : "bg-primary/5 border-primary/10"
-                    }`}
+                      }`}
                     transition={{ type: "spring", stiffness: 350, damping: 30 }}
                   />
                 )}
@@ -223,53 +233,53 @@ export default function Header() {
         </nav>
 
         {/* Controls - Top Right */}
-        <motion.div 
+        <motion.div
           variants={controlsVariants}
           className="hidden md:flex items-center gap-4"
         >
           {/* Social Icons */}
           <div className="flex items-center gap-2">
-            <a 
-              href="https://www.linkedin.com/company/mimosacademy/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="rounded-full p-1.5 text-black hover:text-primary hover:bg-primary/5 transition-all animate-none"
+            <a
+              href="https://www.linkedin.com/company/mimosacademy/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={socialIconClass}
               aria-label="LinkedIn"
             >
               <LinkedinIcon className="h-4 w-4" />
             </a>
-            <a 
-              href="https://www.facebook.com/profile.php?id=61567561791997" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="rounded-full p-1.5 text-black hover:text-primary hover:bg-primary/5 transition-all animate-none"
+            <a
+              href="https://www.facebook.com/profile.php?id=61567561791997"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={socialIconClass}
               aria-label="Facebook"
             >
               <FacebookIcon className="h-4 w-4" />
             </a>
-            <a 
-              href="https://www.instagram.com/mimos.academy/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="rounded-full p-1.5 text-black hover:text-primary hover:bg-primary/5 transition-all animate-none"
+            <a
+              href="https://www.instagram.com/mimos.academy/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={socialIconClass}
               aria-label="Instagram"
             >
               <InstagramIcon className="h-4 w-4" />
             </a>
-            <a 
-              href="https://x.com/MIMOSACADEMY?s=20" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="rounded-full p-1.5 text-black hover:text-primary hover:bg-primary/5 transition-all animate-none"
+            <a
+              href="https://x.com/MIMOSACADEMY?s=20"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={socialIconClass}
               aria-label="X (formerly Twitter)"
             >
               <XIcon className="h-4 w-4" />
             </a>
-            <a 
-              href="https://www.tiktok.com/@mimos.academy?_r=1&_t=ZS-97niHcJy2wa" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="rounded-full p-1.5 text-black hover:text-primary hover:bg-primary/5 transition-all animate-none"
+            <a
+              href="https://www.tiktok.com/@mimos.academy?_r=1&_t=ZS-97niHcJy2wa"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={socialIconClass}
               aria-label="TikTok"
             >
               <TikTokIcon className="h-4 w-4" />
@@ -282,11 +292,12 @@ export default function Header() {
         <div className="flex md:hidden items-center">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`rounded-full p-2.5 transition-colors ${
-              isScrolled 
-                ? "text-white hover:bg-white/10" 
-                : "text-slate-600 hover:bg-slate-100"
-            }`}
+            className={`rounded-full p-2.5 transition-colors ${isScrolled
+                ? "text-white hover:bg-white/10"
+                : pathname === "/"
+                  ? "text-white hover:bg-white/10"
+                  : "text-slate-600 hover:bg-slate-100"
+              }`}
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -298,7 +309,7 @@ export default function Header() {
       {/* Mobile Fullscreen Drawer Overlay */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -309,9 +320,9 @@ export default function Header() {
             <div className="flex items-center justify-between">
               <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5">
                 <div className="overflow-hidden flex h-10 w-10 items-center justify-center bg-white/10">
-                  <img 
-                    src="/MIMOS-Academy.png" 
-                    alt="MIMOS Academy" 
+                  <img
+                    src="/MIMOS-Academy.png"
+                    alt="MIMOS Academy"
                     fetchPriority="high"
                     className="h-10 w-auto max-w-none block object-contain object-left"
                   />
@@ -347,9 +358,8 @@ export default function Header() {
                     <Link
                       href={link.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`text-2xl font-semibold font-heading tracking-wide transition-colors ${
-                        isActive ? "text-primary" : "text-slate-300 hover:text-white"
-                      }`}
+                      className={`text-2xl font-semibold font-heading tracking-wide transition-colors ${isActive ? "text-primary" : "text-slate-300 hover:text-white"
+                        }`}
                     >
                       {link.name}
                     </Link>

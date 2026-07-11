@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
-  <rect width="100%" height="100%" fill="none" />
-  <g transform="translate(10, 0)">
-    <polygon points="25,15 35,35 15,35" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linejoin="round" />
-    <circle cx="25" cy="27" r="3" fill="#64748b" />
-    <text x="110" y="36" dominant-baseline="middle" text-anchor="middle" font-family="Georgia, serif" font-size="28" font-weight="bold" font-style="italic" fill="#475569" letter-spacing="2">USM</text>
-  </g>
-</svg>
