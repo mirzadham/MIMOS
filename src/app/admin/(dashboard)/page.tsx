@@ -1,69 +1,87 @@
 import { prisma, mockPrograms } from "@/lib/db";
 import { 
   GraduationCap, 
-  Users, 
-  Award, 
-  TrendingUp, 
-  Terminal
+  Building2, 
+  Newspaper, 
+  Terminal,
+  BookOpen,
+  MapPin,
+  Calendar
 } from "lucide-react";
 
 function getFallbackLogs() {
   const now = Date.now();
   return [
-    { id: "1", action: "IMPORT_ENROLLMENTS", details: "Imported 34 registrations for Wafer Fab", createdAt: new Date(now) },
-    { id: "2", action: "CREATE_PROGRAM", details: "Created Generative AI Course details", createdAt: new Date(now - 3600000) },
-    { id: "3", action: "ISSUE_CERTIFICATE", details: "Issued Cert MA-2026-8942 to Lim Wei Liang", createdAt: new Date(now - 7200000) }
+    { id: "1", action: "CREATE_PROGRAM", details: "Created Wafer Fab training program run", createdAt: new Date(now) },
+    { id: "2", action: "CREATE_FACILITY", details: "Added STC Cleanroom laboratory details", createdAt: new Date(now - 3600000) },
+    { id: "3", action: "UPDATE_ABOUT_SETTINGS", details: "Updated Academy mission/vision statements", createdAt: new Date(now - 7200000) }
   ];
+}
+
+interface LogEntry {
+  id: string;
+  action: string;
+  details: string;
+  createdAt: Date;
+}
+
+interface ProgramWithCategory {
+  id: string;
+  title: string;
+  location: string;
+  duration: string | null;
+  price: string | null;
+  category: {
+    name: string;
+  };
 }
 
 export default async function AdminDashboardOverview() {
   const stats = {
     programs: 0,
-    enrollments: 0,
-    certificates: 0,
+    facilities: 0,
+    news: 0,
   };
 
-  let recentLogs: Array<{ id: string; action: string; details: string; createdAt: Date }> = [];
-  let programStats: Array<{ title: string; count: number }> = [];
+  let recentLogs: LogEntry[] = [];
+  let recentPrograms: ProgramWithCategory[] = [];
 
   try {
-    const [progCount, enrollCount, certCount, logs, programs] = await Promise.all([
+    const [progCount, facCount, newsCount, logs, programs] = await Promise.all([
       prisma.program.count(),
-      prisma.enrollment.count(),
-      prisma.certificate.count(),
+      prisma.facility.count(),
+      prisma.newsArticle.count(),
       prisma.auditLog.findMany({
         take: 5,
         orderBy: { createdAt: "desc" }
       }),
       prisma.program.findMany({
-        include: { _count: { select: { enrollments: true } } }
+        take: 5,
+        orderBy: { createdAt: "desc" },
+        include: { category: true }
       })
     ]);
 
     stats.programs = progCount || mockPrograms.length;
-    stats.enrollments = enrollCount;
-    stats.certificates = certCount;
+    stats.facilities = facCount;
+    stats.news = newsCount;
     recentLogs = logs;
-    programStats = programs.map(p => ({
-      title: p.title,
-      count: p._count.enrollments
-    }));
+    recentPrograms = programs as unknown as ProgramWithCategory[];
   } catch {
     // DB offline fallback
     stats.programs = mockPrograms.length;
-    stats.enrollments = 124; // Mock values
-    stats.certificates = 42;
+    stats.facilities = 4;
+    stats.news = 3;
     recentLogs = getFallbackLogs();
-    programStats = [
-      { title: "Advanced Wafer Fabrication & Lithography", count: 48 },
-      { title: "Generative AI LLM Enterprise Deployment", count: 36 },
-      { title: "IC Design & Layout Verification", count: 24 },
-      { title: "Certified CyberSecurity Defense", count: 16 }
-    ];
+    recentPrograms = mockPrograms.slice(0, 5).map(p => ({
+      id: p.id,
+      title: p.title,
+      location: p.location,
+      duration: p.duration,
+      price: p.price,
+      category: { name: "Applied R&D" }
+    }));
   }
-
-  // Calculate totals for charting percentages
-  const maxCount = Math.max(...programStats.map(p => p.count), 1);
 
   return (
     <div className="space-y-8">
@@ -74,7 +92,7 @@ export default async function AdminDashboardOverview() {
           Command Center Overview
         </h1>
         <p className="text-xs text-slate-500 mt-1">
-          Monitor physical upskilling programs, registration files import status, and certificate lists.
+          Monitor physical upskilling runs, publish bulletins, and manage laboratory facilities.
         </p>
       </div>
 
@@ -92,25 +110,25 @@ export default async function AdminDashboardOverview() {
           </div>
         </div>
 
-        {/* Stat Item: Enrollments */}
+        {/* Stat Item: Facilities */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
           <div className="space-y-1">
-            <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Total Enrollments</span>
-            <span className="text-2xl font-semibold text-foreground block">{stats.enrollments}</span>
+            <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Physical Facilities</span>
+            <span className="text-2xl font-semibold text-foreground block">{stats.facilities}</span>
           </div>
           <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-slate-600">
-            <Users className="h-5 w-5" />
+            <Building2 className="h-5 w-5" />
           </div>
         </div>
 
-        {/* Stat Item: Certificates */}
+        {/* Stat Item: Bulletins (News) */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
           <div className="space-y-1">
-            <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Issued Certificates</span>
-            <span className="text-2xl font-semibold text-foreground block">{stats.certificates}</span>
+            <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Published News</span>
+            <span className="text-2xl font-semibold text-foreground block">{stats.news}</span>
           </div>
           <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-slate-600">
-            <Award className="h-5 w-5" />
+            <Newspaper className="h-5 w-5" />
           </div>
         </div>
 
@@ -119,34 +137,55 @@ export default async function AdminDashboardOverview() {
       {/* Main Analysis Layout */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         
-        {/* Left: Dynamic Course Enrollment Chart */}
+        {/* Left: Recently Published Programs */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2 space-y-6">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <TrendingUp className="h-4.5 w-4.5 text-slate-500" />
+            <BookOpen className="h-4.5 w-4.5 text-slate-500" />
             <h3 className="font-heading text-sm font-semibold text-foreground uppercase tracking-wider">
-              Registrations by Program
+              Recently Added Programs
             </h3>
           </div>
 
-          <div className="space-y-4">
-            {programStats.map((item, idx) => {
-              const pct = (item.count / maxCount) * 100;
-              return (
-                <div key={idx} className="space-y-1.5 text-xs font-semibold text-slate-700">
-                  <div className="flex justify-between">
-                    <span className="truncate pr-4 max-w-xs">{item.title}</span>
-                    <span className="text-slate-500 font-medium">{item.count} registered</span>
-                  </div>
-                  <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
-                    <div 
-                      className="h-full bg-primary rounded-full transition-all duration-500" 
-                      style={{ width: `${pct}%` }} 
-                      title={`${pct.toFixed(0)}%`}
-                    />
-                  </div>
-                </div>
-              );
-            })}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-slate-100 text-slate-400 font-semibold uppercase">
+                  <th className="py-2.5">Title</th>
+                  <th className="py-2.5">Category</th>
+                  <th className="py-2.5">Location</th>
+                  <th className="py-2.5">Duration</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50 font-medium text-slate-700">
+                {recentPrograms.map((prog) => (
+                  <tr key={prog.id} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="py-3 font-semibold text-foreground pr-4 max-w-[220px] truncate" title={prog.title}>
+                      {prog.title}
+                    </td>
+                    <td className="py-3 text-slate-500">
+                      {prog.category?.name || "Uncategorized"}
+                    </td>
+                    <td className="py-3 text-slate-500 flex items-center gap-1">
+                      <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                      <span className="truncate max-w-[120px]">{prog.location}</span>
+                    </td>
+                    <td className="py-3 text-slate-500">
+                      <span className="inline-flex items-center gap-1 rounded bg-slate-50 px-2 py-0.5 border border-slate-100">
+                        <Calendar className="h-3 w-3 text-slate-400" />
+                        {prog.duration || "N/A"}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+                {recentPrograms.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="py-8 text-center text-slate-400 font-normal">
+                      No programs published yet. Go to Manage Programs to create one.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
 

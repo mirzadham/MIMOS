@@ -78,8 +78,8 @@ async function uploadFile(localPath: string, r2Key: string, contentType: string)
 async function main() {
   console.log("=== Start Cloudflare R2 Hero Background Upload ===\n");
   
-  const khtpCdnUrl = await uploadFile('khtp.png', 'hero/khtp.png', 'image/png');
-  const tpmCdnUrl = await uploadFile('tpm.png', 'hero/tpm.png', 'image/png');
+  const khtpCdnUrl = await uploadFile('public/images/khtp.png', 'hero/khtp.png', 'image/png');
+  const tpmCdnUrl = await uploadFile('public/images/tpm.png', 'hero/tpm.png', 'image/png');
   
   console.log("=== Upload Completed Successfully ===");
   console.log("Use the following URLs in your HeroSection.tsx background array:");

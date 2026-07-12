@@ -9,13 +9,13 @@ import { useState, useEffect } from "react";
 
 const backgrounds = [
   {
-    url: "https://pub-133d71eacaef40c39b59eb43e5ded3ce.r2.dev/hero/khtp.png",
-    fallback: "/images/khtp.png",
+    url: "https://pub-133d71eacaef40c39b59eb43e5ded3ce.r2.dev/hero/khtp.webp",
+    fallback: "/images/khtp.webp",
     alt: "Kulim Hi-Tech Park MIMOS Facility",
   },
   {
-    url: "https://pub-133d71eacaef40c39b59eb43e5ded3ce.r2.dev/hero/tpm.png",
-    fallback: "/images/tpm.png",
+    url: "https://pub-133d71eacaef40c39b59eb43e5ded3ce.r2.dev/hero/tpm.webp",
+    fallback: "/images/tpm.webp",
     alt: "Technology Park Malaysia Bukit Jalil MIMOS Facility",
   },
 ];

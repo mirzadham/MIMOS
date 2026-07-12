@@ -19,6 +19,27 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Missing filename or contentType" }, { status: 400 });
   }
 
+  const ALLOWED_CONTENT_TYPES = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+    "image/gif",
+    "image/svg+xml"
+  ];
+
+  if (!ALLOWED_CONTENT_TYPES.includes(contentType.toLowerCase())) {
+    return NextResponse.json(
+      { error: "Invalid contentType. Only image formats (JPEG, PNG, WebP, GIF, SVG) are allowed." },
+      { status: 400 }
+    );
+  }
+
+  const ALLOWED_PREFIXES = ["programs", "partners", "why-choose-us", "team", "news", "facilities"];
+  if (!ALLOWED_PREFIXES.includes(prefix)) {
+    return NextResponse.json({ error: "Invalid upload prefix parameter." }, { status: 400 });
+  }
+
   const uniqueKey = `${prefix}/${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
   const bucketName = process.env.CLOUDFLARE_R2_BUCKET_NAME!;
 

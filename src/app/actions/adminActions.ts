@@ -1,32 +1,61 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath as nextRevalidatePath, revalidateTag } from "next/cache";
+
+function revalidatePath(path: string) {
+  nextRevalidatePath(path);
+  revalidateTag("cms-content", { expire: 0 });
+}
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
 import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles, mockFacilities, setMockFacilities } from "@/lib/db";
-import crypto from "crypto";
+import { headers } from "next/headers";
+
+async function getClientIp(): Promise<string> {
+  try {
+    const headersList = await headers();
+    const forwardedFor = headersList.get("x-forwarded-for");
+    if (forwardedFor) {
+      return forwardedFor.split(",")[0].trim();
+    }
+    const realIp = headersList.get("x-real-ip");
+    if (realIp) {
+      return realIp.trim();
+    }
+  } catch {
+    // Safe fallback for testing environment where next/headers is not present
+  }
+  return "127.0.0.1";
+}
+
+async function createAuditLog(action: string, details: string) {
+  try {
+    const ipAddress = await getClientIp();
+    await prisma.auditLog.create({
+      data: { action, details, ipAddress }
+    });
+  } catch (e) {
+    console.warn("Audit log creation skipped: ", e);
+  }
+}
 
 // 1. Authentication Server Actions
 export async function adminLoginAction(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
+  const isProd = process.env.NODE_ENV === "production";
+  const hasConfiguredCreds = process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD;
+
+  if (isProd && !hasConfiguredCreds) {
+    return { success: false, error: "System configuration error. Admin login is currently disabled on production until credentials are set in the environment variables." };
+  }
+
   const expectedEmail = process.env.ADMIN_EMAIL || "admin@mimos.my";
   const expectedPassword = process.env.ADMIN_PASSWORD || "mimos2026";
 
   if (email === expectedEmail && password === expectedPassword) {
     await loginAdmin(email);
-    // Create Audit Log
-    try {
-      await prisma.auditLog.create({
-        data: {
-          action: "ADMIN_LOGIN",
-          details: `Admin ${email} logged in successfully`,
-          ipAddress: "127.0.0.1"
-        }
-      });
-    } catch (e) {
-      console.warn("Audit log creation skipped: ", e);
-    }
+    await createAuditLog("ADMIN_LOGIN", `Admin ${email} logged in successfully`);
     return { success: true };
   }
 
@@ -36,15 +65,7 @@ export async function adminLoginAction(formData: FormData) {
 export async function adminLogoutAction() {
   const admin = await getSessionAdmin();
   if (admin) {
-    try {
-      await prisma.auditLog.create({
-        data: {
-          action: "ADMIN_LOGOUT",
-          details: `Admin ${admin.email} logged out`,
-          ipAddress: "127.0.0.1"
-        }
-      });
-    } catch {}
+    await createAuditLog("ADMIN_LOGOUT", `Admin ${admin.email} logged out`);
   }
   await logoutAdmin();
 }
@@ -86,12 +107,7 @@ export async function createProgramAction(data: {
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "CREATE_PROGRAM",
-        details: `Created program: ${data.title} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("CREATE_PROGRAM", `Created program: ${data.title} by admin ${admin.email}`);
 
     revalidatePath("/");
     revalidatePath("/programs/" + slug);
@@ -149,12 +165,7 @@ export async function updateProgramAction(
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "UPDATE_PROGRAM",
-        details: `Updated program: ${data.title} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("UPDATE_PROGRAM", `Updated program: ${data.title} by admin ${admin.email}`);
 
     revalidatePath("/");
     revalidatePath("/programs/" + slug);
@@ -178,12 +189,7 @@ export async function deleteProgramAction(id: string) {
       where: { id }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "DELETE_PROGRAM",
-        details: `Deleted program: ${deleted.title} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("DELETE_PROGRAM", `Deleted program: ${deleted.title} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true };
@@ -218,133 +224,6 @@ export async function createCategoryAction(name: string) {
   }
 }
 
-// 4. CSV Enrollment Importer Action
-export async function importEnrollmentsAction(programId: string, rows: Array<{
-  name: string;
-  email: string;
-  company?: string;
-  date?: string;
-}>) {
-  const admin = await getSessionAdmin();
-  if (!admin) throw new Error("Unauthorized");
-
-  let successCount = 0;
-  let skippedCount = 0;
-
-  for (const row of rows) {
-    if (!row.name || !row.email) continue;
-    try {
-      await prisma.enrollment.upsert({
-        where: {
-          email_programId: {
-            email: row.email,
-            programId: programId
-          }
-        },
-        update: {
-          name: row.name,
-          company: row.company || null,
-          registrationDate: row.date ? new Date(row.date) : new Date()
-        },
-        create: {
-          name: row.name,
-          email: row.email,
-          company: row.company || null,
-          registrationDate: row.date ? new Date(row.date) : new Date(),
-          programId: programId,
-          status: "REGISTERED"
-        }
-      });
-      successCount++;
-    } catch (e) {
-      console.warn("Prisma enrollment skip/error, row ignored: ", e);
-      skippedCount++;
-    }
-  }
-
-  try {
-    await prisma.auditLog.create({
-      data: {
-        action: "IMPORT_ENROLLMENTS",
-        details: `Imported ${successCount} registrations for program ID: ${programId} (Skipped/Errors: ${skippedCount}) by admin ${admin.email}`
-      }
-    });
-  } catch {}
-
-  return { success: true, successCount, skippedCount };
-}
-
-// 5. Attendance & Certificate Actions
-export async function updateEnrollmentStatusAction(id: string, status: string) {
-  const admin = await getSessionAdmin();
-  if (!admin) throw new Error("Unauthorized");
-
-  try {
-    await prisma.enrollment.update({
-      where: { id },
-      data: { status }
-    });
-    return { success: true };
-  } catch {
-    return { success: false, error: "Failed to update" };
-  }
-}
-
-export async function issueCertificateAction(enrollmentId: string, studentName: string, studentEmail: string, programId: string, programTitle: string) {
-  const admin = await getSessionAdmin();
-  if (!admin) throw new Error("Unauthorized");
-
-  const year = new Date().getFullYear();
-  const certNumber = `MA-${year}-${Math.floor(1000 + Math.random() * 9000)}`;
-  
-  // Verification Hash
-  const hash = crypto
-    .createHash("sha256")
-    .update(`${certNumber}-${studentName}-${studentEmail}-${programId}-${Date.now()}`)
-    .digest("hex");
-
-  try {
-    const cert = await prisma.certificate.create({
-      data: {
-        certificateNumber: certNumber,
-        studentName,
-        studentEmail,
-        programId,
-        enrollmentId,
-        verifyHash: hash
-      }
-    });
-
-    // Update enrollment status to Certified
-    await prisma.enrollment.update({
-      where: { id: enrollmentId },
-      data: { status: "CERTIFIED" }
-    });
-
-    await prisma.auditLog.create({
-      data: {
-        action: "ISSUE_CERTIFICATE",
-        details: `Issued cert ${certNumber} to ${studentName} for program: ${programTitle} by admin ${admin.email}`
-      }
-    });
-
-    return { success: true, certificate: cert };
-  } catch (e) {
-    console.error(e);
-    return { 
-      success: true, 
-      certificate: { 
-        id: "cert-" + Math.random(), 
-        certificateNumber: certNumber, 
-        studentName, 
-        studentEmail, 
-        verifyHash: hash,
-        issueDate: new Date()
-      } 
-    };
-  }
-}
-
 // 6. Stats CRUD Actions
 export async function createStatAction(data: { number: string; label: string }) {
   const admin = await getSessionAdmin();
@@ -358,12 +237,7 @@ export async function createStatAction(data: { number: string; label: string }) 
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "CREATE_STAT",
-        details: `Created stat: ${data.number} - ${data.label} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("CREATE_STAT", `Created stat: ${data.number} - ${data.label} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true, stat: newStat };
@@ -394,12 +268,7 @@ export async function updateStatAction(id: string, data: { number: string; label
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "UPDATE_STAT",
-        details: `Updated stat: ${data.number} - ${data.label} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("UPDATE_STAT", `Updated stat: ${data.number} - ${data.label} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true, stat: updated };
@@ -423,12 +292,7 @@ export async function deleteStatAction(id: string) {
       where: { id }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "DELETE_STAT",
-        details: `Deleted stat: ${deleted.number} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("DELETE_STAT", `Deleted stat: ${deleted.number} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true };
@@ -456,12 +320,7 @@ export async function createPartnerAction(data: { name: string; logoUrl: string 
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "CREATE_PARTNER",
-        details: `Created partner: ${data.name} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("CREATE_PARTNER", `Created partner: ${data.name} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true, partner: newPartner };
@@ -492,12 +351,7 @@ export async function updatePartnerAction(id: string, data: { name: string; logo
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "UPDATE_PARTNER",
-        details: `Updated partner: ${data.name} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("UPDATE_PARTNER", `Updated partner: ${data.name} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true, partner: updated };
@@ -521,12 +375,7 @@ export async function deletePartnerAction(id: string) {
       where: { id }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "DELETE_PARTNER",
-        details: `Deleted partner: ${deleted.name} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("DELETE_PARTNER", `Deleted partner: ${deleted.name} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true };
@@ -563,12 +412,7 @@ export async function createWhyChooseUsCardAction(data: {
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "CREATE_WHY_CHOOSE_US_CARD",
-        details: `Created WhyChooseUs card: ${data.title} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("CREATE_WHY_CHOOSE_US_CARD", `Created WhyChooseUs card: ${data.title} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true, card: newCard };
@@ -611,12 +455,7 @@ export async function updateWhyChooseUsCardAction(
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "UPDATE_WHY_CHOOSE_US_CARD",
-        details: `Updated WhyChooseUs card: ${data.title} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("UPDATE_WHY_CHOOSE_US_CARD", `Updated WhyChooseUs card: ${data.title} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true, card: updated };
@@ -639,12 +478,7 @@ export async function deleteWhyChooseUsCardAction(id: string) {
       where: { id }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "DELETE_WHY_CHOOSE_US_CARD",
-        details: `Deleted WhyChooseUs card: ${deleted.title} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("DELETE_WHY_CHOOSE_US_CARD", `Deleted WhyChooseUs card: ${deleted.title} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true };
@@ -680,12 +514,7 @@ export async function createTestimonialAction(data: {
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "CREATE_TESTIMONIAL",
-        details: `Created testimonial for: ${data.name} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("CREATE_TESTIMONIAL", `Created testimonial for: ${data.name} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true, testimonial: newTestimonial };
@@ -728,12 +557,7 @@ export async function updateTestimonialAction(
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "UPDATE_TESTIMONIAL",
-        details: `Updated testimonial for: ${data.name} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("UPDATE_TESTIMONIAL", `Updated testimonial for: ${data.name} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true, testimonial: updated };
@@ -756,12 +580,7 @@ export async function deleteTestimonialAction(id: string) {
       where: { id }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "DELETE_TESTIMONIAL",
-        details: `Deleted testimonial for: ${deleted.name} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("DELETE_TESTIMONIAL", `Deleted testimonial for: ${deleted.name} by admin ${admin.email}`);
 
     revalidatePath("/");
     return { success: true };
@@ -818,12 +637,7 @@ export async function createNewsArticleAction(data: {
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "CREATE_NEWS_ARTICLE",
-        details: `Created news article: ${data.title} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("CREATE_NEWS_ARTICLE", `Created news article: ${data.title} by admin ${admin.email}`);
 
     revalidatePath("/");
     revalidatePath("/news");
@@ -891,12 +705,7 @@ export async function updateNewsArticleAction(
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "UPDATE_NEWS_ARTICLE",
-        details: `Updated news article: ${data.title} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("UPDATE_NEWS_ARTICLE", `Updated news article: ${data.title} by admin ${admin.email}`);
 
     revalidatePath("/");
     revalidatePath("/news");
@@ -921,12 +730,7 @@ export async function deleteNewsArticleAction(id: string) {
       where: { id }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "DELETE_NEWS_ARTICLE",
-        details: `Deleted news article: ${deleted.title} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("DELETE_NEWS_ARTICLE", `Deleted news article: ${deleted.title} by admin ${admin.email}`);
 
     revalidatePath("/");
     revalidatePath("/news");
@@ -969,12 +773,7 @@ export async function toggleNewsHighlightAction(id: string, isHighlighted: boole
       data: { isHighlighted }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "TOGGLE_NEWS_HIGHLIGHT",
-        details: `${isHighlighted ? "Highlighted" : "Un-highlighted"} news article ID: ${id} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("TOGGLE_NEWS_HIGHLIGHT", `${isHighlighted ? "Highlighted" : "Un-highlighted"} news article ID: ${id} by admin ${admin.email}`);
 
     revalidatePath("/");
     revalidatePath("/news");
@@ -1016,12 +815,7 @@ export async function createFacilityAction(data: {
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "CREATE_FACILITY",
-        details: `Created facility: ${data.title} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("CREATE_FACILITY", `Created facility: ${data.title} by admin ${admin.email}`);
 
     revalidatePath("/facilities");
     revalidatePath("/");
@@ -1068,12 +862,7 @@ export async function updateFacilityAction(id: string, data: {
       }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "UPDATE_FACILITY",
-        details: `Updated facility: ${data.title} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("UPDATE_FACILITY", `Updated facility: ${data.title} by admin ${admin.email}`);
 
     revalidatePath("/facilities");
     revalidatePath("/");
@@ -1103,12 +892,7 @@ export async function deleteFacilityAction(id: string) {
       where: { id }
     });
 
-    await prisma.auditLog.create({
-      data: {
-        action: "DELETE_FACILITY",
-        details: `Deleted facility: ${deleted.title} by admin ${admin.email}`
-      }
-    });
+    await createAuditLog("DELETE_FACILITY", `Deleted facility: ${deleted.title} by admin ${admin.email}`);
 
     revalidatePath("/facilities");
     revalidatePath("/");

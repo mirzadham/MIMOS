@@ -6,8 +6,6 @@ import {
   GraduationCap, 
   LayoutDashboard, 
   BookOpen, 
-  FileSpreadsheet, 
-  Award, 
   LogOut,
   ChevronRight,
   ShieldCheck,
@@ -41,8 +39,6 @@ export default async function AdminDashboardLayout({
     { name: "Manage Facilities", href: "/admin/facilities", icon: Building2 },
     { name: "Manage Testimonials", href: "/admin/testimonials", icon: MessageSquare },
     { name: "Manage News", href: "/admin/news", icon: Newspaper },
-    { name: "MS Forms Importer", href: "/admin/enrollments", icon: FileSpreadsheet },
-    { name: "Certificate Vault", href: "/admin/certificates", icon: Award },
   ];
 
   return (
