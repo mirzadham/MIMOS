@@ -318,7 +318,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         {/* ── Squeezy Accordion Carousel ── */}
         <div
           ref={containerRef}
-          className="flex flex-row h-[280px] sm:h-[380px] md:h-[460px] w-full items-stretch overflow-hidden select-none"
+          className="flex flex-row h-[250px] sm:h-[340px] md:h-[410px] w-full items-stretch overflow-hidden select-none"
         >
           {programs.map((program, i) => {
             const pos = getDisplayPos(i);
