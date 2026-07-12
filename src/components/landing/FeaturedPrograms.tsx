@@ -30,14 +30,14 @@ interface FeaturedProgramsProps {
  * Matching Stripe "What's happening" proportions
  * ───────────────────────────────────────────────── */
 const DESKTOP = {
-  widths: [128, 80, 48, 8, 8, 8],
+  widths: [176, 112, 64, 12, 12, 12],
   margins: [12, 12, 12, 6, 6, 0],
   activeMargin: 12,
   count: 6,
 };
 
 const TABLET = {
-  widths: [104, 64, 36],
+  widths: [140, 88, 48],
   margins: [12, 12, 0],
   activeMargin: 12,
   count: 3,
@@ -106,6 +106,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
   const [isReady, setIsReady] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -116,6 +117,9 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     setPrevActiveIndex(currentActiveIndex);
     setCurrentActiveIndex(activeIndex);
   }
+
+  const getDisplayPos = (i: number) =>
+    (i - activeIndex + total) % total;
 
   /* Clean up transition timeouts on unmount */
   useEffect(() => {
@@ -210,8 +214,8 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
    * card (using negative order values) so they pull the new active
    * card leftward.
    */
-  const getCardStyle = (programIndex: number): React.CSSProperties => {
-    const pos = (programIndex - activeIndex + total) % total;
+  const getCardStyle = (programIndex: number, isHovered: boolean): React.CSSProperties => {
+    const pos = getDisplayPos(programIndex);
 
     // During transition, skipped cards shrink to 0 on the left and do not wrap to the right
     const isExitingLeft =
@@ -226,11 +230,24 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       width = 0;
       mr = 0;
     } else if (pos === 0) {
-      width = activeW;
+      // Check if the currently hovered card is a preview strip
+      let expansionAmount = 0;
+      if (hoveredIndex !== null && cfg) {
+        const hoveredPos = getDisplayPos(hoveredIndex);
+        if (hoveredPos >= 1 && hoveredPos <= maxVisible) {
+          const pi = hoveredPos - 1;
+          const baseWidth = cfg.widths[pi];
+          expansionAmount = baseWidth <= 12 ? 10 : 20;
+        }
+      }
+      
+      width = activeW - expansionAmount;
       mr = cfg ? cfg.activeMargin : 0;
     } else if (cfg && pos >= 1 && pos <= maxVisible) {
       const pi = pos - 1;
-      width = cfg.widths[pi];
+      const baseWidth = cfg.widths[pi];
+      const expansionAmount = baseWidth <= 12 ? 10 : 20;
+      width = baseWidth + (isHovered ? expansionAmount : 0);
       mr = cfg.margins[pi];
     }
 
@@ -258,17 +275,16 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             `width ${DURATION_MS}ms ${EASING}`,
             `margin-right ${DURATION_MS}ms ${EASING}`,
             `border-width ${DURATION_MS}ms ${EASING}`,
+            `transform 800ms ${EASING}`,
           ].join(", ")
         : "none",
     };
   };
 
-  const getDisplayPos = (i: number) =>
-    (i - activeIndex + total) % total;
 
   return (
     <section className="border-b border-slate-200/60 bg-white">
-      <div className="mx-auto max-w-[1080px] px-6 py-12 sm:px-8 sm:py-16 relative">
+      <div className="mx-auto max-w-7xl px-6 py-12 sm:px-8 sm:py-16 relative">
         {/* ── Section Header ── */}
         <div className="flex flex-row items-end justify-between pb-4 mb-6">
           <div className="space-y-2 max-w-2xl">
@@ -303,7 +319,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
         {/* ── Squeezy Accordion Carousel ── */}
         <div
           ref={containerRef}
-          className="flex flex-row h-[220px] sm:h-[300px] md:h-[370px] w-full items-stretch overflow-hidden select-none"
+          className="flex flex-row h-[250px] sm:h-[340px] md:h-[410px] w-full items-stretch overflow-hidden select-none"
         >
           {programs.map((program, i) => {
             const pos = getDisplayPos(i);
@@ -349,13 +365,25 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             return (
               <div
                 key={program.id}
-                style={getCardStyle(i)}
+                role={isClickable ? "button" : undefined}
+                tabIndex={isClickable ? 0 : undefined}
+                style={getCardStyle(i, hoveredIndex === i)}
                 className={`relative h-full rounded-xl border border-slate-200/80 bg-slate-50 ${
                   isClickable
-                    ? "hover:border-primary cursor-pointer group"
+                    ? "cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                     : ""
                 }`}
                 onClick={isClickable ? () => handleSelect(i) : undefined}
+                onMouseEnter={isClickable ? () => setHoveredIndex(i) : undefined}
+                onMouseLeave={isClickable ? () => setHoveredIndex(null) : undefined}
+                onFocus={isClickable ? () => setHoveredIndex(i) : undefined}
+                onBlur={isClickable ? () => setHoveredIndex(null) : undefined}
+                onKeyDown={isClickable ? (e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleSelect(i);
+                  }
+                } : undefined}
               >
                 {/* IMAGE: Fixed width, dynamically anchored for realistic sliding physics */}
                 {progImage ? (
@@ -363,11 +391,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
                     src={progImage}
                     alt={program.title}
                     style={imgStyle}
-                    className={
-                      isClickable
-                        ? "transition-transform duration-700 ease-out group-hover:scale-105"
-                        : ""
-                    }
+                    className={""}
                   />
                 ) : (
                   <div
