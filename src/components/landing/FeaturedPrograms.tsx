@@ -118,6 +118,9 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     setCurrentActiveIndex(activeIndex);
   }
 
+  const getDisplayPos = (i: number) =>
+    (i - activeIndex + total) % total;
+
   /* Clean up transition timeouts on unmount */
   useEffect(() => {
     return () => {
@@ -212,7 +215,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
    * card leftward.
    */
   const getCardStyle = (programIndex: number, isHovered: boolean): React.CSSProperties => {
-    const pos = (programIndex - activeIndex + total) % total;
+    const pos = getDisplayPos(programIndex);
 
     // During transition, skipped cards shrink to 0 on the left and do not wrap to the right
     const isExitingLeft =
@@ -230,7 +233,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
       // Check if the currently hovered card is a preview strip
       let expansionAmount = 0;
       if (hoveredIndex !== null && cfg) {
-        const hoveredPos = (hoveredIndex - activeIndex + total) % total;
+        const hoveredPos = getDisplayPos(hoveredIndex);
         if (hoveredPos >= 1 && hoveredPos <= maxVisible) {
           const pi = hoveredPos - 1;
           const baseWidth = cfg.widths[pi];
@@ -278,8 +281,6 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     };
   };
 
-  const getDisplayPos = (i: number) =>
-    (i - activeIndex + total) % total;
 
   return (
     <section className="border-b border-slate-200/60 bg-white">
@@ -364,15 +365,25 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
             return (
               <div
                 key={program.id}
+                role={isClickable ? "button" : undefined}
+                tabIndex={isClickable ? 0 : undefined}
                 style={getCardStyle(i, hoveredIndex === i)}
                 className={`relative h-full rounded-xl border border-slate-200/80 bg-slate-50 ${
                   isClickable
-                    ? "cursor-pointer group"
+                    ? "cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                     : ""
                 }`}
                 onClick={isClickable ? () => handleSelect(i) : undefined}
                 onMouseEnter={isClickable ? () => setHoveredIndex(i) : undefined}
                 onMouseLeave={isClickable ? () => setHoveredIndex(null) : undefined}
+                onFocus={isClickable ? () => setHoveredIndex(i) : undefined}
+                onBlur={isClickable ? () => setHoveredIndex(null) : undefined}
+                onKeyDown={isClickable ? (e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleSelect(i);
+                  }
+                } : undefined}
               >
                 {/* IMAGE: Fixed width, dynamically anchored for realistic sliding physics */}
                 {progImage ? (
