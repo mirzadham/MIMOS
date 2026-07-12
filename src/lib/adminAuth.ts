@@ -7,6 +7,14 @@ const ADMIN_COOKIE_NAME = "mimos_admin_session";
 const RUNTIME_SECRET = crypto.randomBytes(32).toString("hex");
 const SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || process.env.AUTH_SECRET || RUNTIME_SECRET;
 
+if (process.env.NODE_ENV === "production" && !process.env.ADMIN_SESSION_SECRET && !process.env.AUTH_SECRET) {
+  console.warn(
+    "\x1b[33m%s\x1b[0m",
+    "WARNING: Neither ADMIN_SESSION_SECRET nor AUTH_SECRET is set in the environment variables. " +
+    "A temporary session secret has been generated at runtime. Administrators will be logged out whenever the application server restarts or clusters."
+  );
+}
+
 /**
  * Sign value with HMAC-SHA256
  */

@@ -12,6 +12,7 @@ import { prisma } from "@/lib/db";
 // Mock next/cache
 vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
+  revalidateTag: vi.fn(),
 }));
 
 // Mock adminAuth

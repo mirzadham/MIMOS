@@ -45,40 +45,8 @@ model Program {
   imageUrls          String[]      @default([]) // Cloudflare R2 public URLs
   categoryId         String
   category           Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  enrollments        Enrollment[]
-  certificates       Certificate[]
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
-}
-
-model Enrollment {
-  id               String        @id @default(uuid())
-  name             String
-  email            String
-  company          String?
-  registrationDate DateTime      @default(now())
-  status           String        @default("REGISTERED") // REGISTERED, ATTENDED, CERTIFIED, CANCELLED
-  programId        String
-  program          Program       @relation(fields: [programId], references: [id], onDelete: Cascade)
-  certificates     Certificate[]
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-
-  @@unique([email, programId])
-}
-
-model Certificate {
-  id                String     @id @default(uuid())
-  certificateNumber String     @unique // e.g. MA-2026-0001
-  studentName       String
-  studentEmail      String
-  issueDate         DateTime   @default(now())
-  programId         String
-  program           Program    @relation(fields: [programId], references: [id])
-  enrollmentId      String
-  enrollment        Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
-  verifyHash        String     @unique // Unique validation hash
-  createdAt         DateTime   @default(now())
 }
 
 model AuditLog {

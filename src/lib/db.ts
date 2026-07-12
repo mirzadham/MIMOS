@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
+import { unstable_cache } from 'next/cache';
 
 let prismaInstance: PrismaClient | null = null;
 
@@ -176,79 +177,97 @@ export const mockPrograms = [
 ];
 
 export async function getSafeCategories() {
-  try {
-    const categories = await prisma.category.findMany({
-      orderBy: { name: 'asc' }
-    });
-    return categories.length > 0 ? categories : mockCategories;
-  } catch (e) {
-    console.warn("Prisma Category Fetch failed, falling back to mock details: ", e);
-    return mockCategories;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const categories = await prisma.category.findMany({
+          orderBy: { name: 'asc' }
+        });
+        return categories.length > 0 ? categories : mockCategories;
+      } catch (e) {
+        console.warn("Prisma Category Fetch failed, falling back to mock details: ", e);
+        return mockCategories;
+      }
+    },
+    ["categories"],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export async function getSafePrograms(categoryId?: string) {
-  try {
-    const programs = await prisma.program.findMany({
-      where: categoryId ? { categoryId } : undefined,
-      include: { category: true },
-      orderBy: { title: 'asc' }
-    });
-    return programs.length > 0 ? programs : (
-      categoryId 
-        ? mockPrograms.filter(p => p.categoryId === categoryId).map(p => ({ ...p, imageUrl: null as string | null, imageUrls: [] as string[] })) 
-        : mockPrograms.map(p => ({
-            ...p,
-            imageUrl: null as string | null,
-            imageUrls: [] as string[],
-            category: mockCategories.find(c => c.id === p.categoryId)
-          }))
-    );
-  } catch (e) {
-    console.warn("Prisma Program Fetch failed, falling back to mock details: ", e);
-    const fallback = categoryId 
-      ? mockPrograms.filter(p => p.categoryId === categoryId) 
-      : mockPrograms;
-    return fallback.map(p => ({
-      ...p,
-      imageUrl: null as string | null,
-      imageUrls: [] as string[],
-      category: mockCategories.find(c => c.id === p.categoryId)
-    }));
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const programs = await prisma.program.findMany({
+          where: categoryId ? { categoryId } : undefined,
+          include: { category: true },
+          orderBy: { title: 'asc' }
+        });
+        return programs.length > 0 ? programs : (
+          categoryId 
+            ? mockPrograms.filter(p => p.categoryId === categoryId).map(p => ({ ...p, imageUrl: null as string | null, imageUrls: [] as string[] })) 
+            : mockPrograms.map(p => ({
+                ...p,
+                imageUrl: null as string | null,
+                imageUrls: [] as string[],
+                category: mockCategories.find(c => c.id === p.categoryId)
+              }))
+        );
+      } catch (e) {
+        console.warn("Prisma Program Fetch failed, falling back to mock details: ", e);
+        const fallback = categoryId 
+          ? mockPrograms.filter(p => p.categoryId === categoryId) 
+          : mockPrograms;
+        return fallback.map(p => ({
+          ...p,
+          imageUrl: null as string | null,
+          imageUrls: [] as string[],
+          category: mockCategories.find(c => c.id === p.categoryId)
+        }));
+      }
+    },
+    ["programs", categoryId || "all"],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export async function getSafeProgramBySlug(slug: string) {
-  try {
-    const program = await prisma.program.findUnique({
-      where: { slug },
-      include: { category: true }
-    });
-    if (program) return program;
-    
-    const mock = mockPrograms.find(p => p.slug === slug);
-    if (mock) {
-      return {
-        ...mock,
-        imageUrl: null as string | null,
-        imageUrls: [] as string[],
-        category: mockCategories.find(c => c.id === mock.categoryId)
-      };
-    }
-    return null;
-  } catch (e) {
-    console.warn(`Prisma Program Fetch for slug ${slug} failed, falling back to mock: `, e);
-    const mock = mockPrograms.find(p => p.slug === slug);
-    if (mock) {
-      return {
-        ...mock,
-        imageUrl: null as string | null,
-        imageUrls: [] as string[],
-        category: mockCategories.find(c => c.id === mock.categoryId)
-      };
-    }
-    return null;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const program = await prisma.program.findUnique({
+          where: { slug },
+          include: { category: true }
+        });
+        if (program) return program;
+        
+        const mock = mockPrograms.find(p => p.slug === slug);
+        if (mock) {
+          return {
+            ...mock,
+            imageUrl: null as string | null,
+            imageUrls: [] as string[],
+            category: mockCategories.find(c => c.id === mock.categoryId)
+          };
+        }
+        return null;
+      } catch (e) {
+        console.warn(`Prisma Program Fetch for slug ${slug} failed, falling back to mock: `, e);
+        const mock = mockPrograms.find(p => p.slug === slug);
+        if (mock) {
+          return {
+            ...mock,
+            imageUrl: null as string | null,
+            imageUrls: [] as string[],
+            category: mockCategories.find(c => c.id === mock.categoryId)
+          };
+        }
+        return null;
+      }
+    },
+    ["program", slug],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export const mockStats = [
@@ -269,27 +288,39 @@ export const mockPartners = [
 ];
 
 export async function getSafeStats() {
-  try {
-    const stats = await prisma.stat.findMany({
-      orderBy: { createdAt: 'asc' }
-    });
-    return stats.length > 0 ? stats : mockStats;
-  } catch (e) {
-    console.warn("Prisma Stat Fetch failed, falling back to mock details: ", e);
-    return mockStats;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const stats = await prisma.stat.findMany({
+          orderBy: { createdAt: 'asc' }
+        });
+        return stats.length > 0 ? stats : mockStats;
+      } catch (e) {
+        console.warn("Prisma Stat Fetch failed, falling back to mock details: ", e);
+        return mockStats;
+      }
+    },
+    ["stats"],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export async function getSafePartners() {
-  try {
-    const partners = await prisma.partner.findMany({
-      orderBy: { createdAt: 'asc' }
-    });
-    return partners.length > 0 ? partners : mockPartners;
-  } catch (e) {
-    console.warn("Prisma Partner Fetch failed, falling back to mock details: ", e);
-    return mockPartners;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const partners = await prisma.partner.findMany({
+          orderBy: { createdAt: 'asc' }
+        });
+        return partners.length > 0 ? partners : mockPartners;
+      } catch (e) {
+        console.warn("Prisma Partner Fetch failed, falling back to mock details: ", e);
+        return mockPartners;
+      }
+    },
+    ["partners"],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export let mockWhyChooseUsCards = [
@@ -328,15 +359,21 @@ export let mockWhyChooseUsCards = [
 ];
 
 export async function getSafeWhyChooseUsCards() {
-  try {
-    const cards = await prisma.whyChooseUsCard.findMany({
-      orderBy: { order: 'asc' }
-    });
-    return cards.length > 0 ? cards : mockWhyChooseUsCards;
-  } catch (e) {
-    console.warn("Prisma WhyChooseUsCard Fetch failed, falling back to mock details: ", e);
-    return mockWhyChooseUsCards;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const cards = await prisma.whyChooseUsCard.findMany({
+          orderBy: { order: 'asc' }
+        });
+        return cards.length > 0 ? cards : mockWhyChooseUsCards;
+      } catch (e) {
+        console.warn("Prisma WhyChooseUsCard Fetch failed, falling back to mock details: ", e);
+        return mockWhyChooseUsCards;
+      }
+    },
+    ["whyChooseUsCards"],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export function setMockWhyChooseUsCards(newCards: typeof mockWhyChooseUsCards) {
@@ -387,15 +424,21 @@ export let mockTestimonials = [
 ];
 
 export async function getSafeTestimonials() {
-  try {
-    const testimonials = await prisma.testimonial.findMany({
-      orderBy: { order: 'asc' }
-    });
-    return testimonials.length > 0 ? testimonials : mockTestimonials;
-  } catch (e) {
-    console.warn("Prisma Testimonial Fetch failed, falling back to mock details: ", e);
-    return mockTestimonials;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const testimonials = await prisma.testimonial.findMany({
+          orderBy: { order: 'asc' }
+        });
+        return testimonials.length > 0 ? testimonials : mockTestimonials;
+      } catch (e) {
+        console.warn("Prisma Testimonial Fetch failed, falling back to mock details: ", e);
+        return mockTestimonials;
+      }
+    },
+    ["testimonials"],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export function setMockTestimonials(newTestimonials: typeof mockTestimonials) {
@@ -424,25 +467,37 @@ export let mockTeamMembers = [
 ];
 
 export async function getSafeAboutSettings() {
-  try {
-    const settings = await prisma.aboutSettings.findFirst();
-    return settings || mockAboutSettings;
-  } catch (e) {
-    console.warn("Prisma AboutSettings Fetch failed, falling back to mock details: ", e);
-    return mockAboutSettings;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const settings = await prisma.aboutSettings.findFirst();
+        return settings || mockAboutSettings;
+      } catch (e) {
+        console.warn("Prisma AboutSettings Fetch failed, falling back to mock details: ", e);
+        return mockAboutSettings;
+      }
+    },
+    ["aboutSettings"],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export async function getSafeTeamMembers() {
-  try {
-    const members = await prisma.teamMember.findMany({
-      orderBy: { order: 'asc' }
-    });
-    return members.length > 0 ? members : mockTeamMembers;
-  } catch (e) {
-    console.warn("Prisma TeamMember Fetch failed, falling back to mock details: ", e);
-    return mockTeamMembers;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const members = await prisma.teamMember.findMany({
+          orderBy: { order: 'asc' }
+        });
+        return members.length > 0 ? members : mockTeamMembers;
+      } catch (e) {
+        console.warn("Prisma TeamMember Fetch failed, falling back to mock details: ", e);
+        return mockTeamMembers;
+      }
+    },
+    ["teamMembers"],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export function setMockAboutSettings(newSettings: typeof mockAboutSettings) {
@@ -523,40 +578,58 @@ export let mockNewsArticles = [
 ];
 
 export async function getSafeNewsArticles() {
-  try {
-    const articles = await prisma.newsArticle.findMany({
-      orderBy: { order: 'asc' }
-    });
-    return articles.length > 0 ? articles : mockNewsArticles;
-  } catch (e) {
-    console.warn("Prisma NewsArticle Fetch failed, falling back to mock details: ", e);
-    return mockNewsArticles;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const articles = await prisma.newsArticle.findMany({
+          orderBy: { order: 'asc' }
+        });
+        return articles.length > 0 ? articles : mockNewsArticles;
+      } catch (e) {
+        console.warn("Prisma NewsArticle Fetch failed, falling back to mock details: ", e);
+        return mockNewsArticles;
+      }
+    },
+    ["newsArticles"],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export async function getSafeHighlightedNews() {
-  try {
-    const highlighted = await prisma.newsArticle.findMany({
-      where: { isHighlighted: true },
-      orderBy: { order: 'asc' }
-    });
-    return highlighted.length > 0 ? highlighted : mockNewsArticles.filter(a => a.isHighlighted);
-  } catch (e) {
-    console.warn("Prisma Highlighted News Fetch failed, falling back to mock details: ", e);
-    return mockNewsArticles.filter(a => a.isHighlighted);
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const highlighted = await prisma.newsArticle.findMany({
+          where: { isHighlighted: true },
+          orderBy: { order: 'asc' }
+        });
+        return highlighted.length > 0 ? highlighted : mockNewsArticles.filter(a => a.isHighlighted);
+      } catch (e) {
+        console.warn("Prisma Highlighted News Fetch failed, falling back to mock details: ", e);
+        return mockNewsArticles.filter(a => a.isHighlighted);
+      }
+    },
+    ["highlightedNews"],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export async function getSafeNewsArticleById(id: string) {
-  try {
-    const article = await prisma.newsArticle.findUnique({
-      where: { id }
-    });
-    return article || mockNewsArticles.find(a => a.id === id) || null;
-  } catch (e) {
-    console.warn("Prisma NewsArticle findUnique failed, falling back to mock: ", e);
-    return mockNewsArticles.find(a => a.id === id) || null;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const article = await prisma.newsArticle.findUnique({
+          where: { id }
+        });
+        return article || mockNewsArticles.find(a => a.id === id) || null;
+      } catch (e) {
+        console.warn("Prisma NewsArticle findUnique failed, falling back to mock: ", e);
+        return mockNewsArticles.find(a => a.id === id) || null;
+      }
+    },
+    ["newsArticle", id],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export function setMockNewsArticles(newArticles: typeof mockNewsArticles) {
@@ -629,15 +702,21 @@ export let mockFacilities = [
 ];
 
 export async function getSafeFacilities() {
-  try {
-    const facilities = await prisma.facility.findMany({
-      orderBy: { order: 'asc' }
-    });
-    return facilities.length > 0 ? facilities : mockFacilities;
-  } catch (e) {
-    console.warn("Prisma Facility Fetch failed, falling back to mock details: ", e);
-    return mockFacilities;
-  }
+  return unstable_cache(
+    async () => {
+      try {
+        const facilities = await prisma.facility.findMany({
+          orderBy: { order: 'asc' }
+        });
+        return facilities.length > 0 ? facilities : mockFacilities;
+      } catch (e) {
+        console.warn("Prisma Facility Fetch failed, falling back to mock details: ", e);
+        return mockFacilities;
+      }
+    },
+    ["facilities"],
+    { tags: ["cms-content"] }
+  )();
 }
 
 export function setMockFacilities(newFacilities: typeof mockFacilities) {

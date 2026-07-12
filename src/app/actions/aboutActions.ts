@@ -1,6 +1,11 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath as nextRevalidatePath, revalidateTag } from "next/cache";
+
+function revalidatePath(path: string) {
+  nextRevalidatePath(path);
+  revalidateTag("cms-content", { expire: 0 });
+}
 import { getSessionAdmin } from "@/lib/adminAuth";
 import { prisma, mockTeamMembers, setMockAboutSettings, setMockTeamMembers } from "@/lib/db";
 
