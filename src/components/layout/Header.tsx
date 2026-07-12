@@ -93,10 +93,10 @@ export default function Header() {
   ];
 
   const socialIconClass = isScrolled
-    ? "p-1.5 text-white hover:text-primary transition-all animate-none"
+    ? "rounded-full p-1.5 text-white hover:text-white/80 transition-all animate-none"
     : pathname === "/"
-      ? "p-1.5 text-white hover:text-primary transition-all animate-none"
-      : "p-1.5 text-black hover:text-primary transition-all animate-none";
+      ? "p-1.5 text-white hover:text-[#ff00cc] transition-all duration-200"
+      : "p-1.5 text-black hover:text-[#ff00cc] transition-all duration-200";
 
   // Motion variants for the outer header inner container
   const headerVariants = {
@@ -207,23 +207,22 @@ export default function Header() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`group relative transition-all duration-250 font-semibold tracking-wide select-none ${
-                  isScrolled ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
-                } ${
-                  isActive
-                    ? "text-primary"
-                    : isScrolled
-                      ? "text-white hover:text-primary"
-                      : pathname === "/"
-                        ? "text-white hover:text-primary"
-                        : "text-black hover:text-primary"
-                }`}
+                className={
+                  isScrolled
+                    ? `relative transition-all duration-250 rounded-lg font-semibold tracking-wide select-none px-3 py-1.5 text-xs text-white hover:text-white/80`
+                    : `relative font-semibold tracking-wide select-none px-4 py-2 text-sm header-nav-link-not-scrolled ${
+                        isActive ? "active" : pathname === "/" ? "inactive on-dark" : "inactive on-light"
+                      }`
+                }
               >
-                <span className="relative z-10 inline-block">
-                  {link.name}
-                  {/* Left-to-right expanding underline on hover */}
-                  <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-primary origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100" />
-                </span>
+                <span className="relative z-10">{link.name}</span>
+                {isActive && isScrolled && (
+                  <motion.div
+                    layoutId="activeNavUnderline"
+                    className="absolute inset-0 rounded-lg border bg-white/10 border-white/10"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}
               </Link>
             );
           })}
