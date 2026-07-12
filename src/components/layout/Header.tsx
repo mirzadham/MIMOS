@@ -210,8 +210,12 @@ export default function Header() {
                 className={
                   isScrolled
                     ? `relative transition-all duration-250 rounded-lg font-semibold tracking-wide select-none px-3 py-1.5 text-xs text-white hover:text-white/80`
-                    : `relative font-semibold tracking-wide select-none px-4 py-2 text-sm header-nav-link-not-scrolled ${
-                        isActive ? "active" : pathname === "/" ? "inactive on-dark" : "inactive on-light"
+                    : `group relative transition-all duration-250 font-semibold tracking-wide select-none px-4 py-2 text-sm ${
+                        isActive
+                          ? "text-[#ff00cc] [text-shadow:0_0_8px_rgba(255,0,204,0.4)]"
+                          : pathname === "/"
+                            ? "text-white hover:text-[#ff00cc]"
+                            : "text-[#0f172a] hover:text-[#ff00cc]"
                       }`
                 }
               >
@@ -222,6 +226,9 @@ export default function Header() {
                     className="absolute inset-0 rounded-lg border bg-white/10 border-white/10"
                     transition={{ type: "spring", stiffness: 350, damping: 30 }}
                   />
+                )}
+                {!isScrolled && (
+                  <span className="absolute bottom-1 left-4 right-4 h-[2px] bg-[#ff00cc] shadow-[0_0_8px_#ff00cc] origin-left scale-x-0 opacity-0 transition-all duration-250 ease-out group-hover:scale-x-100 group-hover:opacity-100" />
                 )}
               </Link>
             );
