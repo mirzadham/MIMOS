@@ -42,8 +42,16 @@ next-env.d.ts
 
 /src/generated/prisma
 
-# training posters (exclude heavy webp files, keep markdown files)
-training-poster/*.webp
+# training posters (exclude whole folder)
+/training-poster/
 
-# local documentation
-aboutus.md
+# local documentation & scratchpads
+/aboutus.md
+/context.md
+/devtools_what_are_the_detailed_style_for_the_footer_section.md
+/font_bold_list.md
+/social-links.md
+/thingstoalter.md
+
+# upload staging folders
+/facility-images-to-upload/
