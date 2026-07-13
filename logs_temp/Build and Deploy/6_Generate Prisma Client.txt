@@ -1,0 +1,15 @@
+﻿2026-07-13T09:29:42.2866166Z ##[group]Run npx prisma generate
+2026-07-13T09:29:42.2866566Z [36;1mnpx prisma generate[0m
+2026-07-13T09:29:42.2902374Z shell: /usr/bin/bash -e {0}
+2026-07-13T09:29:42.2902672Z env:
+2026-07-13T09:29:42.2903256Z   DATABASE_URL: ***localhost:5432/placeholder
+2026-07-13T09:29:42.2903593Z ##[endgroup]
+2026-07-13T09:29:43.3948150Z Loaded Prisma config from prisma.config.ts.
+2026-07-13T09:29:43.3948649Z 
+2026-07-13T09:29:43.4910441Z Prisma schema loaded from prisma/schema.prisma.
+2026-07-13T09:29:43.6908506Z 
+2026-07-13T09:29:43.6910096Z ✔ Generated Prisma Client (v7.8.0) to ./node_modules/@prisma/client in 116ms
+2026-07-13T09:29:43.6910566Z 
+2026-07-13T09:29:43.6911077Z Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2026-07-13T09:29:43.6911612Z 
+2026-07-13T09:29:43.6911654Z 

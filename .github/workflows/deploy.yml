@@ -50,9 +50,10 @@ jobs:
           cp -r prisma .next/standalone/prisma
           cp prisma.config.ts .next/standalone/prisma.config.ts
 
-          # Include dotenv and prisma modules (required by prisma.config.ts)
+          # Include dotenv, prisma, and all @prisma modules (required by prisma.config.ts and the CLI)
           cp -r node_modules/dotenv .next/standalone/node_modules/dotenv
           cp -r node_modules/prisma .next/standalone/node_modules/prisma
+          cp -r node_modules/@prisma .next/standalone/node_modules/@prisma
 
           # Create the deployment archive from the standalone directory
           tar czf deploy.tar.gz -C .next/standalone .
@@ -93,7 +94,7 @@ jobs:
             if [ "${{ github.event.inputs.run_migrations }}" = "yes" ]; then
               echo ""
               echo "Running database migrations..."
-              prisma migrate deploy
+              npx prisma migrate deploy
             fi
 
             echo ""

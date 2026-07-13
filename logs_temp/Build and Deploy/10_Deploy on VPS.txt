@@ -1,0 +1,132 @@
+﻿2026-07-13T09:30:48.6660352Z ##[group]Run appleboy/ssh-action@v1.2.0
+2026-07-13T09:30:48.6660727Z with:
+2026-07-13T09:30:48.6661098Z   host: ***
+2026-07-13T09:30:48.6661337Z   port: 6262
+2026-07-13T09:30:48.6661619Z   username: ***
+2026-07-13T09:30:48.6663418Z   key: ***
+2026-07-13T09:30:48.6665562Z   script: set -e
+echo "========================================="
+echo "  MIMOS Academy - Production Deployment"
+echo "========================================="
+
+cd /var/www/mimos-academy.my
+
+echo ""
+echo "Cleaning previous build..."
+rm -rf .next node_modules ***.js public prisma prisma.config.ts
+
+echo "Extracting new build..."
+tar xzf /tmp/deploy.tar.gz
+rm /tmp/deploy.tar.gz
+
+if [ "yes" = "yes" ]; then
+  echo ""
+  echo "Running database migrations..."
+  prisma migrate deploy
+fi
+
+echo ""
+echo "Restarting application..."
+pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js
+
+echo ""
+echo "Deployment successful!"
+echo ""
+pm2 status
+
+2026-07-13T09:30:48.6667856Z   protocol: tcp
+2026-07-13T09:30:48.6668109Z   timeout: 30s
+2026-07-13T09:30:48.6668391Z   command_timeout: 10m
+2026-07-13T09:30:48.6668653Z   proxy_port: 22
+2026-07-13T09:30:48.6668907Z   proxy_protocol: tcp
+2026-07-13T09:30:48.6669167Z   proxy_timeout: 30s
+2026-07-13T09:30:48.6669424Z ##[endgroup]
+2026-07-13T09:30:48.6755716Z ##[group]Run echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+2026-07-13T09:30:48.6756172Z [36;1mecho "$GITHUB_ACTION_PATH" >> $GITHUB_PATH[0m
+2026-07-13T09:30:48.6793183Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-07-13T09:30:48.6793577Z env:
+2026-07-13T09:30:48.6793968Z   GITHUB_ACTION_PATH: /home/runner/work/_actions/appleboy/ssh-action/v1.2.0
+2026-07-13T09:30:48.6794401Z ##[endgroup]
+2026-07-13T09:30:48.6884300Z ##[group]Run entrypoint.sh
+2026-07-13T09:30:48.6884617Z [36;1mentrypoint.sh[0m
+2026-07-13T09:30:48.6916492Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-07-13T09:30:48.6916886Z env:
+2026-07-13T09:30:48.6917257Z   GITHUB_ACTION_PATH: /home/runner/work/_actions/appleboy/ssh-action/v1.2.0
+2026-07-13T09:30:48.6917810Z   INPUT_HOST: ***
+2026-07-13T09:30:48.6918063Z   INPUT_PORT: 6262
+2026-07-13T09:30:48.6918321Z   INPUT_PROTOCOL: tcp
+2026-07-13T09:30:48.6918603Z   INPUT_USERNAME: ***
+2026-07-13T09:30:48.6918862Z   INPUT_PASSWORD: 
+2026-07-13T09:30:48.6919116Z   INPUT_PASSPHRASE: 
+2026-07-13T09:30:48.6920930Z   INPUT_KEY: ***
+2026-07-13T09:30:48.6921182Z   INPUT_KEY_PATH: 
+2026-07-13T09:30:48.6921439Z   INPUT_FINGERPRINT: 
+2026-07-13T09:30:48.6921700Z   INPUT_PROXY_HOST: 
+2026-07-13T09:30:48.6921955Z   INPUT_PROXY_PORT: 22
+2026-07-13T09:30:48.6922223Z   INPUT_PROXY_USERNAME: 
+2026-07-13T09:30:48.6922488Z   INPUT_PROXY_PASSWORD: 
+2026-07-13T09:30:48.6922759Z   INPUT_PROXY_PASSPHRASE: 
+2026-07-13T09:30:48.6923033Z   INPUT_PROXY_KEY: 
+2026-07-13T09:30:48.6923289Z   INPUT_PROXY_KEY_PATH: 
+2026-07-13T09:30:48.6923557Z   INPUT_PROXY_FINGERPRINT: 
+2026-07-13T09:30:48.6923832Z   INPUT_TIMEOUT: 30s
+2026-07-13T09:30:48.6924087Z   INPUT_PROXY_TIMEOUT: 30s
+2026-07-13T09:30:48.6924359Z   INPUT_COMMAND_TIMEOUT: 10m
+2026-07-13T09:30:48.6926760Z   INPUT_SCRIPT: set -e
+echo "========================================="
+echo "  MIMOS Academy - Production Deployment"
+echo "========================================="
+
+cd /var/www/mimos-academy.my
+
+echo ""
+echo "Cleaning previous build..."
+rm -rf .next node_modules ***.js public prisma prisma.config.ts
+
+echo "Extracting new build..."
+tar xzf /tmp/deploy.tar.gz
+rm /tmp/deploy.tar.gz
+
+if [ "yes" = "yes" ]; then
+  echo ""
+  echo "Running database migrations..."
+  prisma migrate deploy
+fi
+
+echo ""
+echo "Restarting application..."
+pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js
+
+echo ""
+echo "Deployment successful!"
+echo ""
+pm2 status
+
+2026-07-13T09:30:48.6928830Z   INPUT_SCRIPT_FILE: 
+2026-07-13T09:30:48.6929097Z   INPUT_SCRIPT_STOP: 
+2026-07-13T09:30:48.6929350Z   INPUT_ENVS: 
+2026-07-13T09:30:48.6929589Z   INPUT_ENVS_FORMAT: 
+2026-07-13T09:30:48.6929839Z   INPUT_DEBUG: 
+2026-07-13T09:30:48.6930083Z   INPUT_ALL_ENVS: 
+2026-07-13T09:30:48.6930330Z   INPUT_REQUEST_PTY: 
+2026-07-13T09:30:48.6930847Z   INPUT_USE_INSECURE_CIPHER: 
+2026-07-13T09:30:48.6931128Z   INPUT_CIPHER: 
+2026-07-13T09:30:48.6931387Z   INPUT_PROXY_USE_INSECURE_CIPHER: 
+2026-07-13T09:30:48.6931693Z   INPUT_PROXY_CIPHER: 
+2026-07-13T09:30:48.6931945Z   INPUT_SYNC: 
+2026-07-13T09:30:48.6932176Z ##[endgroup]
+2026-07-13T09:30:48.7039225Z Will download drone-ssh-1.8.0-linux-amd64 from https://github.com/appleboy/drone-ssh/releases/download/v1.8.0
+2026-07-13T09:30:48.8272097Z ======= CLI Version =======
+2026-07-13T09:30:48.8298458Z Drone SSH version 1.8.0
+2026-07-13T09:30:48.8302784Z ===========================
+2026-07-13T09:30:51.5518332Z =========================================
+2026-07-13T09:30:51.5518995Z   MIMOS Academy - Production Deployment
+2026-07-13T09:30:51.5519404Z =========================================
+2026-07-13T09:30:51.5519762Z Cleaning previous build...
+2026-07-13T09:30:51.6247549Z Extracting new build...
+2026-07-13T09:30:52.3799506Z Running database migrations...
+2026-07-13T09:30:55.1565667Z Failed to load config file "/var/www/mimos-academy.my" as a TypeScript/JavaScript module. Error: Error: Cannot find module '@prisma/config'
+2026-07-13T09:30:55.1566480Z Require stack:
+2026-07-13T09:30:55.1566893Z - /var/www/mimos-academy.my/node_modules/prisma/config.js
+2026-07-13T09:30:55.2128188Z 2026/07/13 09:30:55 Process exited with status 1
+2026-07-13T09:30:55.2150373Z ##[error]Process completed with exit code 1.

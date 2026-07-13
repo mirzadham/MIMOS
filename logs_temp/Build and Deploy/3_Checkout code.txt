@@ -1,0 +1,73 @@
+﻿2026-07-13T09:29:21.0621720Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-07-13T09:29:21.0632991Z ##[group]Run actions/checkout@v4
+2026-07-13T09:29:21.0634114Z with:
+2026-07-13T09:29:21.0634683Z   repository: mirzadham/MIMOS
+2026-07-13T09:29:21.0638520Z   token: ***
+2026-07-13T09:29:21.0638851Z   ssh-strict: true
+2026-07-13T09:29:21.0639183Z   ssh-user: git
+2026-07-13T09:29:21.0639529Z   persist-credentials: true
+2026-07-13T09:29:21.0639905Z   clean: true
+2026-07-13T09:29:21.0640229Z   sparse-checkout-cone-mode: true
+2026-07-13T09:29:21.0640642Z   fetch-depth: 1
+2026-07-13T09:29:21.0640956Z   fetch-tags: false
+2026-07-13T09:29:21.0641274Z   show-progress: true
+2026-07-13T09:29:21.0641589Z   lfs: false
+2026-07-13T09:29:21.0641890Z   submodules: false
+2026-07-13T09:29:21.0642260Z   set-safe-directory: true
+2026-07-13T09:29:21.0643037Z ##[endgroup]
+2026-07-13T09:29:21.1671403Z Syncing repository: mirzadham/MIMOS
+2026-07-13T09:29:21.1673284Z ##[group]Getting Git version info
+2026-07-13T09:29:21.1674000Z Working directory is '/home/runner/work/MIMOS/MIMOS'
+2026-07-13T09:29:21.1675036Z [command]/usr/bin/git version
+2026-07-13T09:29:21.1675623Z git version 2.54.0
+2026-07-13T09:29:21.1721087Z ##[endgroup]
+2026-07-13T09:29:21.1737167Z Temporarily overriding HOME='/home/runner/work/_temp/c79ca33f-faaa-47c4-ab5f-a93dd996362c' before making global git config changes
+2026-07-13T09:29:21.1743187Z Adding repository directory to the temporary git global config as a safe directory
+2026-07-13T09:29:21.1743999Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/MIMOS/MIMOS
+2026-07-13T09:29:21.1793234Z Deleting the contents of '/home/runner/work/MIMOS/MIMOS'
+2026-07-13T09:29:21.1797635Z ##[group]Initializing the repository
+2026-07-13T09:29:21.1803118Z [command]/usr/bin/git init /home/runner/work/MIMOS/MIMOS
+2026-07-13T09:29:21.1894750Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-07-13T09:29:21.1896390Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-07-13T09:29:21.1897774Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-07-13T09:29:21.1898906Z hint: call:
+2026-07-13T09:29:21.1899593Z hint:
+2026-07-13T09:29:21.1900394Z hint: 	git config --global init.defaultBranch <name>
+2026-07-13T09:29:21.1901284Z hint:
+2026-07-13T09:29:21.1902120Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-07-13T09:29:21.1903351Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-07-13T09:29:21.1904435Z hint:
+2026-07-13T09:29:21.1905100Z hint: 	git branch -m <name>
+2026-07-13T09:29:21.1906031Z hint:
+2026-07-13T09:29:21.1906923Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-07-13T09:29:21.1908321Z Initialized empty Git repository in /home/runner/work/MIMOS/MIMOS/.git/
+2026-07-13T09:29:21.1917803Z [command]/usr/bin/git remote add origin https://github.com/mirzadham/MIMOS
+2026-07-13T09:29:21.1964697Z ##[endgroup]
+2026-07-13T09:29:21.1965930Z ##[group]Disabling automatic garbage collection
+2026-07-13T09:29:21.1970156Z [command]/usr/bin/git config --local gc.auto 0
+2026-07-13T09:29:21.2004574Z ##[endgroup]
+2026-07-13T09:29:21.2005646Z ##[group]Setting up auth
+2026-07-13T09:29:21.2012420Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-07-13T09:29:21.2049690Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-07-13T09:29:21.2398614Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-07-13T09:29:21.2438123Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-07-13T09:29:21.2698947Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-07-13T09:29:21.2737486Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-07-13T09:29:21.2981855Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-07-13T09:29:21.3021576Z ##[endgroup]
+2026-07-13T09:29:21.3022364Z ##[group]Fetching the repository
+2026-07-13T09:29:21.3030917Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b23a7188e5fba7fb7ba587601f8b54dc323930dd:refs/remotes/origin/main
+2026-07-13T09:29:21.8356161Z From https://github.com/mirzadham/MIMOS
+2026-07-13T09:29:21.8356792Z  * [new ref]         b23a7188e5fba7fb7ba587601f8b54dc323930dd -> origin/main
+2026-07-13T09:29:21.8388503Z ##[endgroup]
+2026-07-13T09:29:21.8389175Z ##[group]Determining the checkout info
+2026-07-13T09:29:21.8406746Z ##[endgroup]
+2026-07-13T09:29:21.8407387Z [command]/usr/bin/git sparse-checkout disable
+2026-07-13T09:29:21.8448252Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-07-13T09:29:21.8481404Z ##[group]Checking out the ref
+2026-07-13T09:29:21.8499921Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-07-13T09:29:21.8620273Z Switched to a new branch 'main'
+2026-07-13T09:29:21.8622706Z branch 'main' set up to track 'origin/main'.
+2026-07-13T09:29:21.8628984Z ##[endgroup]
+2026-07-13T09:29:21.8674846Z [command]/usr/bin/git log -1 --format=%H
+2026-07-13T09:29:21.8712631Z b23a7188e5fba7fb7ba587601f8b54dc323930dd
