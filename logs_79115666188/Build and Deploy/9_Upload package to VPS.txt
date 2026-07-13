@@ -1,0 +1,32 @@
+﻿2026-07-13T09:44:51.5991152Z ##[group]Run appleboy/scp-action@v0.1.7
+2026-07-13T09:44:51.5991519Z with:
+2026-07-13T09:44:51.5991794Z   host: ***
+2026-07-13T09:44:51.5992020Z   port: 6262
+2026-07-13T09:44:51.5992253Z   username: ***
+2026-07-13T09:44:51.5994036Z   key: ***
+2026-07-13T09:44:51.5994263Z   source: deploy.tar.gz
+2026-07-13T09:44:51.5994536Z   target: /tmp
+2026-07-13T09:44:51.5994766Z   timeout: 30s
+2026-07-13T09:44:51.5994986Z   command_timeout: 10m
+2026-07-13T09:44:51.5995534Z   use_insecure_cipher: false
+2026-07-13T09:44:51.5995818Z   rm: false
+2026-07-13T09:44:51.5996030Z   debug: false
+2026-07-13T09:44:51.5996262Z   strip_components: 0
+2026-07-13T09:44:51.5996509Z   overwrite: false
+2026-07-13T09:44:51.5996748Z   tar_dereference: false
+2026-07-13T09:44:51.5997004Z   tar_exec: tar
+2026-07-13T09:44:51.5997232Z   proxy_port: 22
+2026-07-13T09:44:51.5997468Z   proxy_timeout: 30s
+2026-07-13T09:44:51.5997724Z   proxy_use_insecure_cipher: false
+2026-07-13T09:44:51.5998012Z ##[endgroup]
+2026-07-13T09:44:51.6111279Z ##[command]/usr/bin/docker run --name b50086a2da058dbff04d568addb184303233f4_084bd2 --label b50086 --workdir /github/workspace --rm -e "INPUT_HOST" -e "INPUT_PORT" -e "INPUT_USERNAME" -e "INPUT_KEY" -e "INPUT_SOURCE" -e "INPUT_TARGET" -e "INPUT_PASSWORD" -e "INPUT_TIMEOUT" -e "INPUT_COMMAND_TIMEOUT" -e "INPUT_KEY_PATH" -e "INPUT_PASSPHRASE" -e "INPUT_FINGERPRINT" -e "INPUT_USE_INSECURE_CIPHER" -e "INPUT_RM" -e "INPUT_DEBUG" -e "INPUT_STRIP_COMPONENTS" -e "INPUT_OVERWRITE" -e "INPUT_TAR_DEREFERENCE" -e "INPUT_TAR_TMP_PATH" -e "INPUT_TAR_EXEC" -e "INPUT_PROXY_HOST" -e "INPUT_PROXY_PORT" -e "INPUT_PROXY_USERNAME" -e "INPUT_PROXY_PASSWORD" -e "INPUT_PROXY_PASSPHRASE" -e "INPUT_PROXY_TIMEOUT" -e "INPUT_PROXY_KEY" -e "INPUT_PROXY_KEY_PATH" -e "INPUT_PROXY_FINGERPRINT" -e "INPUT_PROXY_USE_INSECURE_CIPHER" -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_RESULTS_URL" -e "ACTIONS_ORCHESTRATION_ID" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp":"/github/runner_temp" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/MIMOS/MIMOS":"/github/workspace" b50086:a2da058dbff04d568addb184303233f4
+2026-07-13T09:44:53.3546863Z drone-scp version: v1.6.14
+2026-07-13T09:44:53.3547709Z tar all files into /tmp/vjwvSRZjEw.tar.gz
+2026-07-13T09:44:58.7312730Z remote *** os type is unix
+2026-07-13T09:44:58.7313217Z scp file to ***.
+2026-07-13T09:45:19.0793737Z create folder /tmp
+2026-07-13T09:45:21.1569107Z untar file vjwvSRZjEw.tar.gz
+2026-07-13T09:45:24.7001051Z remove file vjwvSRZjEw.tar.gz
+2026-07-13T09:45:26.8100180Z ===================================================
+2026-07-13T09:45:26.8101052Z ✅ Successfully executed transfer data to all host
+2026-07-13T09:45:26.8101806Z ===================================================
