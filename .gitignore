@@ -55,3 +55,11 @@ next-env.d.ts
 
 # upload staging folders
 /facility-images-to-upload/
+
+# AI Agents & IDE Settings (Do not deploy to production)
+/.vscode/
+/.agent/
+/.agents/
+/.claude/
+/.codex/
+

@@ -1,0 +1,105 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_migrations:
+        description: "Run database migrations after deploy?"
+        required: true
+        default: "no"
+        type: choice
+        options:
+          - "no"
+          - "yes"
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"
+
+      - name: Build Next.js (standalone)
+        run: npm run build
+        env:
+          DATABASE_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"
+
+      - name: Package for deployment
+        run: |
+          # Next.js standalone requires static and public to be copied in manually
+          cp -r .next/static .next/standalone/.next/static
+          cp -r public .next/standalone/public
+
+          # Include Prisma files for database operations on the VPS
+          cp -r prisma .next/standalone/prisma
+          cp prisma.config.ts .next/standalone/prisma.config.ts
+
+          # Include dotenv module (required by prisma.config.ts)
+          cp -r node_modules/dotenv .next/standalone/node_modules/dotenv
+
+          # Create the deployment archive from the standalone directory
+          tar czf deploy.tar.gz -C .next/standalone .
+
+      - name: Upload package to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          port: 6262
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: deploy.tar.gz
+          target: /tmp
+
+      - name: Deploy on VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          port: 6262
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            echo "========================================="
+            echo "  MIMOS Academy - Production Deployment"
+            echo "========================================="
+
+            cd /var/www/mimos-academy.my
+
+            echo ""
+            echo "Cleaning previous build..."
+            rm -rf .next node_modules server.js public prisma prisma.config.ts
+
+            echo "Extracting new build..."
+            tar xzf /tmp/deploy.tar.gz
+            rm /tmp/deploy.tar.gz
+
+            if [ "${{ github.event.inputs.run_migrations }}" = "yes" ]; then
+              echo ""
+              echo "Running database migrations..."
+              prisma migrate deploy
+            fi
+
+            echo ""
+            echo "Restarting application..."
+            pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js
+
+            echo ""
+            echo "Deployment successful!"
+            echo ""
+            pm2 status
