@@ -8,6 +8,7 @@ import {
   Menu,
   X
 } from "lucide-react";
+import IconImage from "@/app/icon.png";
 
 // Safe SVG fallbacks for social icons
 const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -98,79 +99,47 @@ export default function Header() {
       ? "p-1.5 text-white hover:text-[#ff00cc] transition-all duration-200"
       : "p-1.5 text-black hover:text-[#ff00cc] transition-all duration-200";
 
-  // Motion variants for the outer header inner container
+  // Motion variants for the outer header inner container (decorative only, layout handles the rest)
   const headerVariants = {
     top: {
-      width: "100%",
-      maxWidth: "1280px",
-      marginTop: "0px",
-      height: "80px",
       backgroundColor: "rgba(255, 255, 255, 0)",
       borderRadius: "0px",
       borderWidth: "0px 0px 1px 0px",
       borderColor: "rgba(226, 232, 240, 0)", // transparent border
       boxShadow: "none",
-      paddingLeft: isMobile ? "24px" : "32px",
-      paddingRight: isMobile ? "24px" : "32px",
     },
     scrolled: {
-      width: isMobile ? "90%" : "auto",
-      maxWidth: isMobile ? "240px" : "620px", // compact floating bar width
-      marginTop: "12px",
-      height: "44px", // compact floating bar height
       backgroundColor: "#000000cc", // black with 80% opacity
       borderRadius: "12px", // rounded a little bit more
       borderWidth: "1px",
       borderColor: "rgba(51, 65, 85, 0.5)", // slate-800
       boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3)",
-      paddingLeft: isMobile ? "8px" : "12px",
-      paddingRight: isMobile ? "8px" : "12px",
     }
   };
 
-  // Motion variants for logo container clipping (cuts out text on scroll)
-  const logoContainerVariants = {
-    top: {
-      width: "136px",
-      height: "40px",
-      transition: { duration: 0.3, ease: "easeOut" as const }
-    },
-    scrolled: {
-      width: "32px",
-      height: "32px",
-      transition: { duration: 0.3, ease: "easeIn" as const }
-    }
-  };
 
-  // Motion variants for control items fading out
-  const controlsVariants = {
-    top: {
-      width: "auto",
-      opacity: 1,
-      scale: 1,
-      display: "flex",
-      transition: { duration: 0.3, ease: "easeOut" as const }
-    },
-    scrolled: {
-      width: 0,
-      opacity: 0,
-      scale: 0.8,
-      transitionEnd: { display: "none" },
-      transition: { duration: 0.2, ease: "easeIn" as const }
-    }
-  };
+
+
 
   return (
     <header className="fixed top-0 left-0 z-50 w-full pointer-events-none bg-transparent">
       <motion.div
         layout
-        initial="top"
+        initial={false}
         animate={isScrolled ? "scrolled" : "top"}
         variants={headerVariants}
-        transition={{ type: "spring", stiffness: 180, damping: 24 }}
-        className={`mx-auto flex items-center pointer-events-auto border-solid ${isScrolled
-            ? "backdrop-blur-md justify-between md:justify-center md:gap-5"
-            : "justify-between"
+        transition={{ type: "spring", stiffness: 180, damping: 24, mass: 1 }}
+        style={{
+          width: isScrolled ? (isMobile ? "90%" : "fit-content") : "100%",
+          maxWidth: isScrolled ? (isMobile ? "240px" : "620px") : "1280px",
+          marginTop: isScrolled ? "12px" : "0px",
+          height: isScrolled ? "44px" : "80px",
+          paddingLeft: isScrolled ? "24px" : (isMobile ? "24px" : "32px"),
+          paddingRight: isScrolled ? "12px" : (isMobile ? "24px" : "32px"),
+        }}
+        className={`mx-auto flex items-center pointer-events-auto border-solid overflow-hidden ${isScrolled
+          ? "backdrop-blur-md justify-between md:justify-center"
+          : "justify-between"
           }`}
       >
 
@@ -178,22 +147,33 @@ export default function Header() {
         <div className="flex items-center">
           <Link href="/" className="flex items-center group">
             <motion.div
-              variants={logoContainerVariants}
-              className="relative overflow-hidden flex items-center justify-start select-none"
+              layout
+              initial={false}
+              transition={{ type: "spring", stiffness: 180, damping: 24, mass: 1 }}
+              style={{
+                width: isScrolled ? "32px" : "136px",
+                height: isScrolled ? "32px" : "40px",
+              }}
+              className={`relative overflow-hidden flex items-center justify-start select-none ${isScrolled ? 'md:mr-5' : ''}`}
             >
-              {isScrolled && (
-                <div className="absolute inset-[2px] bg-white -z-10" />
-              )}
+              <div
+                className={`absolute left-[2px] top-[2px] bottom-[2px] w-[28px] bg-white rounded-sm -z-10 transition-opacity duration-300 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}
+              />
               <img
                 src="/MIMOS-Academy.png"
                 alt="MIMOS Academy"
                 fetchPriority="high"
-                className="h-full w-auto max-w-none block object-contain object-left relative z-10 transition-all"
+                className={`h-full w-auto max-w-none block object-contain object-left relative z-10 transition-opacity duration-300 ${isScrolled ? 'opacity-0' : 'opacity-100'}`}
                 style={
                   !isScrolled && pathname === "/"
                     ? { filter: "drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.7))" }
                     : undefined
                 }
+              />
+              <img
+                src={IconImage.src}
+                alt="MIMOS Academy Icon"
+                className={`absolute left-0 top-0 h-full w-auto max-w-none block object-contain object-left z-20 transition-opacity duration-300 ${isScrolled ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
               />
             </motion.div>
           </Link>
@@ -209,14 +189,13 @@ export default function Header() {
                 href={link.href}
                 className={
                   isScrolled
-                    ? `relative transition-all duration-250 rounded-lg font-semibold tracking-wide select-none px-3 py-1.5 text-xs text-white hover:text-white/80`
-                    : `group relative transition-all duration-250 font-semibold tracking-wide select-none px-4 py-2 text-sm ${
-                        isActive
-                          ? "text-[#ff00cc] [text-shadow:0_0_8px_rgba(255,0,204,0.4)]"
-                          : pathname === "/"
-                            ? "text-white hover:text-[#ff00cc]"
-                            : "text-[#0f172a] hover:text-[#ff00cc]"
-                      }`
+                    ? `relative transition-all duration-250 rounded-lg font-semibold tracking-wide select-none px-3 py-2.5 text-xs text-white hover:text-white/80`
+                    : `group relative transition-all duration-250 font-semibold tracking-wide select-none px-4 py-2 text-sm ${isActive
+                      ? "text-[#ff00cc] [text-shadow:0_0_8px_rgba(255,0,204,0.4)]"
+                      : pathname === "/"
+                        ? "text-white hover:text-[#ff00cc]"
+                        : "text-[#0f172a] hover:text-[#ff00cc]"
+                    }`
                 }
               >
                 <span className="relative z-10">{link.name}</span>
@@ -237,11 +216,22 @@ export default function Header() {
 
         {/* Controls - Top Right */}
         <motion.div
-          variants={controlsVariants}
+          layout
+          initial={false}
+          animate={{
+            opacity: isScrolled ? 0 : 1,
+            scale: isScrolled ? 0.8 : 1,
+          }}
+          style={{
+            width: isScrolled ? 0 : "auto",
+            pointerEvents: isScrolled ? "none" : "auto",
+            overflow: "hidden"
+          }}
+          transition={{ type: "spring", stiffness: 180, damping: 24, mass: 1 }}
           className="hidden md:flex items-center gap-4"
         >
           {/* Social Icons */}
-          <div className="flex items-center gap-2">
+          <div className={`flex items-center gap-2 ${isScrolled ? '-mr-1.5' : ''}`}>
             <a
               href="https://www.linkedin.com/company/mimosacademy/"
               target="_blank"
@@ -292,14 +282,14 @@ export default function Header() {
         </motion.div>
 
         {/* Mobile Menu Button */}
-        <div className="flex md:hidden items-center">
+        <div className={`flex md:hidden items-center ${isScrolled ? '-mr-2.5' : ''}`}>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className={`rounded-full p-2.5 transition-colors ${isScrolled
+              ? "text-white hover:bg-white/10"
+              : pathname === "/"
                 ? "text-white hover:bg-white/10"
-                : pathname === "/"
-                  ? "text-white hover:bg-white/10"
-                  : "text-slate-600 hover:bg-slate-100"
+                : "text-slate-600 hover:bg-slate-100"
               }`}
             aria-label="Toggle menu"
           >
