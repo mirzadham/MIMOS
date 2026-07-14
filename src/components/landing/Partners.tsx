@@ -17,7 +17,7 @@ export default function Partners({ partners = [] }: PartnersProps) {
   if (!partners || partners.length === 0) return null;
 
   return (
-    <section className="bg-white py-8 border-b border-slate-200/60 relative overflow-hidden select-none">
+    <section className="bg-background py-8 border-b border-slate-200/60 relative overflow-hidden select-none">
       {/* Premium fade borders on sides */}
       <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10" />
       <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10" />

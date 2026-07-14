@@ -283,7 +283,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
 
   return (
-    <section className="border-b border-slate-200/60 bg-white">
+    <section className="border-b border-slate-200/60 bg-background">
       <div className="mx-auto max-w-7xl px-6 py-12 sm:px-8 sm:py-16 relative">
         {/* ── Section Header ── */}
         <div className="flex flex-row items-end justify-between pb-4 mb-6">
