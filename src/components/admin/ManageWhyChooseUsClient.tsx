@@ -123,7 +123,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
   };
 
   const uploadToR2 = async (file: File): Promise<string> => {
-    const res = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}&contentType=${encodeURIComponent(file.type)}&prefix=whychooseus`);
+    const res = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}&contentType=${encodeURIComponent(file.type)}&prefix=why-choose-us`);
     if (!res.ok) {
       throw new Error("Failed to get upload signature");
     }

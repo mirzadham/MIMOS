@@ -3,8 +3,8 @@
 import { revalidatePath as nextRevalidatePath, revalidateTag } from "next/cache";
 
 function revalidatePath(path: string) {
-  nextRevalidatePath(path);
-  revalidateTag("cms-content", { expire: 0 });
+  nextRevalidatePath(path, "layout");
+  revalidateTag("cms-content", { expire: 0 } as any);
 }
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
 import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles, mockFacilities, setMockFacilities } from "@/lib/db";
