@@ -74,7 +74,7 @@ export default function Footer() {
         </div>
 
         {/* Right side: Sleek Columns (No Titles, No Icons) */}
-        <div className="flex flex-col sm:flex-row gap-16 sm:gap-24 lg:gap-28 text-sm text-slate-900 font-semibold self-stretch lg:self-auto justify-end">
+        <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 lg:gap-28 text-sm text-slate-900 font-semibold self-stretch lg:self-auto justify-end">
           {/* Quick Links Column */}
           <ul className="space-y-4">
             <li>

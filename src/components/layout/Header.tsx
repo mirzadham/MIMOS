@@ -285,7 +285,7 @@ export default function Header() {
         <div className={`flex md:hidden items-center ${isScrolled ? '-mr-2.5' : ''}`}>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`rounded-full p-2.5 transition-colors ${isScrolled
+            className={`rounded-full p-3 transition-colors ${isScrolled
               ? "text-white hover:bg-white/10"
               : pathname === "/"
                 ? "text-white hover:bg-white/10"
