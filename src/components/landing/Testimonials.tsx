@@ -101,8 +101,8 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
     <section className="relative overflow-hidden border-b border-slate-200/80 bg-gradient-to-b from-slate-50 via-accent/30 to-slate-100 py-20 sm:py-28">
       {/* Premium subtle orchid glow background */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_50%,rgba(167,33,144,0.15),transparent_60%)] pointer-events-none" />
-      <div className="absolute -left-20 top-0 z-0 h-[600px] w-[600px] rounded-full bg-primary/30 blur-[120px] pointer-events-none animate-[pulse_8s_ease-in-out_infinite]" />
-      <div className="absolute -right-20 bottom-0 z-0 h-[600px] w-[600px] rounded-full bg-slate-400/50 blur-[120px] pointer-events-none animate-[pulse_10s_ease-in-out_infinite_reverse]" />
+      <div className="absolute -left-20 top-0 z-0 h-[600px] w-[600px] rounded-full bg-primary/30 blur-[120px] pointer-events-none animate-[pulse_8s_ease-in-out_infinite] transform-gpu will-change-transform" />
+      <div className="absolute -right-20 bottom-0 z-0 h-[600px] w-[600px] rounded-full bg-slate-400/50 blur-[120px] pointer-events-none animate-[pulse_10s_ease-in-out_infinite_reverse] transform-gpu will-change-transform" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
         
