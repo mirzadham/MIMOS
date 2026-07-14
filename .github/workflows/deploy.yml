@@ -6,16 +6,31 @@ on:
       run_migrations:
         description: "Run database migrations after deploy?"
         required: true
-        default: "no"
+        default: "yes"
         type: choice
         options:
-          - "no"
           - "yes"
+          - "no"
 
 jobs:
   build-and-deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: placeholder
+          POSTGRES_PASSWORD: placeholder
+          POSTGRES_DB: placeholder
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout code
@@ -35,10 +50,19 @@ jobs:
         env:
           DATABASE_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"
 
+      - name: Push Prisma Schema
+        run: npx prisma db push --skip-generate
+        env:
+          DATABASE_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"
+
       - name: Build Next.js (standalone)
         run: npm run build
         env:
           DATABASE_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"
+          CLOUDFLARE_R2_BUCKET_NAME: "dummy-bucket"
+          CLOUDFLARE_R2_PUBLIC_URL: "https://dummy-bucket.r2.dev"
+          ADMIN_SESSION_SECRET: "dummy-build-secret"
+          AUTH_SECRET: "dummy-build-secret"
 
       - name: Package for deployment
         run: |
