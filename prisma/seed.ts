@@ -165,6 +165,13 @@ const programsData = [
 ];
 
 async function main() {
+  // Prevent accidental data wipes in production
+  if (process.env.NODE_ENV === 'production' && process.env.ALLOW_PROD_SEED !== 'true') {
+    console.log('⚠️  Skipping database seed in production to prevent overwriting live admin data.');
+    console.log('💡 To force a seed in production, set the ALLOW_PROD_SEED=true environment variable.');
+    return;
+  }
+
   console.log('Seeding categories...');
   for (const cat of categoriesData) {
     await prisma.category.upsert({
