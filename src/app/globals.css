@@ -62,7 +62,7 @@
 }
 
 :root {
-    --background: #f8fafc; /* Professional Slate 50 backdrop */
+    --background: #f1f5f9; /* Professional Slate 100 backdrop */
     --foreground: #0f172a; /* Premium Dark Slate */
     --card: #ffffff;
     --card-foreground: #0f172a;

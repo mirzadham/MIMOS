@@ -58,7 +58,7 @@ function AnimatedNumber({ value }: { value: string }) {
 
 export default function StatsSection({ stats }: StatsSectionProps) {
   return (
-    <section className="bg-white py-12 border-b border-slate-200/60 relative overflow-hidden">
+    <section className="bg-background py-12 border-b border-slate-200/60 relative overflow-hidden">
       {/* Subtle structural background dot pattern */}
       <div className="absolute inset-0 -z-10 placeholder-image opacity-30" />
       

@@ -63,7 +63,7 @@ export default function UpcomingSection({ articles }: UpcomingSectionProps) {
   };
 
   return (
-    <section className="bg-white py-16 md:py-24 border-b border-slate-200/60 overflow-hidden">
+    <section className="bg-background py-16 md:py-24 border-b border-slate-200/60 overflow-hidden">
       {/* Self-contained style block to hide scrollbars cleanly and set responsive layout paddings */}
       <style dangerouslySetInnerHTML={{
         __html: `

@@ -58,7 +58,7 @@ const MovingDotsRow = ({ rowIndex }: { rowIndex: number }) => {
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-white border-t border-slate-200 text-slate-900 md:h-[580px] flex flex-col justify-between relative font-sans">
+    <footer className="w-full bg-background border-t border-slate-200 text-slate-900 md:h-[580px] flex flex-col justify-between relative font-sans">
       
       {/* Top Spacer: 3rem (48px) */}
       <div className="h-12 w-full block shrink-0" aria-hidden="true" />

@@ -20,7 +20,7 @@ export default function StatsAndFacilities() {
   } as const;
 
   return (
-    <section className="border-b border-slate-200/60 bg-slate-50/50 py-20 sm:py-28">
+    <section className="border-b border-slate-200/60 bg-background py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         
         {/* Centered Section Header */}

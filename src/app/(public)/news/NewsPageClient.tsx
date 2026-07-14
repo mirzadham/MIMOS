@@ -93,7 +93,7 @@ export default function NewsPageClient({ articles, featuredStories }: NewsPageCl
 
   /* ----- render --------------------------------------------------------- */
   return (
-    <div className="relative min-h-screen bg-white overflow-hidden">
+    <div className="relative min-h-screen bg-background overflow-hidden">
       {/* ── Page content container ───────────────────────────────────── */}
       <div className="relative z-10 mx-auto max-w-[1080px] px-6 lg:px-8 pt-24 sm:pt-28">
         {/* ─── Top nav bar: "Newsroom" + tabs ────────────────────────── */}
