@@ -65,7 +65,7 @@ export async function POST(request: Request) {
 
     // Send the email
     const info = await transporter.sendMail({
-      from: `"MIMOS Academy Contact" <${smtpUser}>`,
+      from: `"Website Inquiry Notification" <${smtpUser}>`,
       to: toEmail,
       replyTo: email,
       subject: `New Contact Inquiry from ${safeName}`,
