@@ -636,7 +636,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                       </span>
                     )}
                   </div>
-
+                  
                   <div className="flex-1">
                     <input
                       type="file"
