@@ -63,3 +63,5 @@ next-env.d.ts
 /.claude/
 /.codex/
 
+/ma-team/
+

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useTransition, useRef } from "react";
-import { Plus, Edit2, Trash2, X, Users, AlertCircle, Upload, Save, ArrowUp, ArrowDown } from "lucide-react";
+import { Plus, Edit2, Trash2, X, Users, AlertCircle, Upload, Save, ArrowUp, ArrowDown, GripVertical } from "lucide-react";
 import { 
   updateAboutSettingsAction, 
   createTeamMemberAction, 
@@ -9,6 +9,21 @@ import {
   deleteTeamMemberAction 
 } from "@/app/actions/aboutActions";
 import { Button } from "@/components/ui/button";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface TeamMember {
   id: string;
@@ -50,6 +65,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
   const [memberName, setMemberName] = useState("");
   const [memberRole, setMemberRole] = useState("");
   const [memberInitials, setMemberInitials] = useState("");
+  const [memberOrder, setMemberOrder] = useState<number>(1);
   const [imageUrl, setImageUrl] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -78,6 +94,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
     setMemberName("");
     setMemberRole("");
     setMemberInitials("");
+    setMemberOrder(team.length + 1);
     setImageUrl("");
     setSelectedFile(null);
     setTeamError(null);
@@ -89,6 +106,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
     setMemberName(member.name);
     setMemberRole(member.role);
     setMemberInitials(member.initials);
+    setMemberOrder(member.order + 1);
     setImageUrl(member.imageUrl || "");
     setSelectedFile(null);
     setTeamError(null);
@@ -153,19 +171,37 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
         startTransition(async () => {
           try {
             if (editMember) {
-              const res = await updateTeamMemberAction(editMember.id, {
+              const updatedMember = {
+                id: editMember.id,
                 name: memberName,
                 role: memberRole,
                 imageUrl: finalImageUrl || null,
                 initials: memberInitials,
-                order: editMember.order
-              });
-              if (!res.success) throw new Error("Failed to update team member.");
+                order: editMember.order,
+              };
+
+              const list = team.map(m => m.id === editMember.id ? updatedMember : m);
+              const currentIndex = list.findIndex(m => m.id === editMember.id);
+              const target0Based = memberOrder - 1;
               
-              setTeam(prev => prev.map(m => m.id === editMember.id 
-                ? { ...m, name: memberName, role: memberRole, imageUrl: finalImageUrl || null, initials: memberInitials } 
-                : m
-              ));
+              list.splice(currentIndex, 1);
+              const clampedOrder = Math.max(0, Math.min(target0Based, list.length));
+              list.splice(clampedOrder, 0, updatedMember);
+              
+              const updatedList = list.map((m, idx) => ({ ...m, order: idx }));
+              setTeam(updatedList);
+
+              await Promise.all(
+                updatedList.map((item) =>
+                  updateTeamMemberAction(item.id, {
+                    name: item.name,
+                    role: item.role,
+                    imageUrl: item.imageUrl,
+                    initials: item.initials,
+                    order: item.order,
+                  })
+                )
+              );
             } else {
               const res = await createTeamMemberAction({
                 name: memberName,
@@ -175,7 +211,28 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
               });
               if (!res.success || !res.member) throw new Error("Failed to create team member.");
               
-              setTeam(prev => [...prev, res.member as TeamMember]);
+              const newMember = res.member as TeamMember;
+              const list = [...team, newMember];
+              const target0Based = memberOrder - 1;
+              
+              list.splice(list.length - 1, 1);
+              const clampedOrder = Math.max(0, Math.min(target0Based, list.length));
+              list.splice(clampedOrder, 0, newMember);
+
+              const updatedList = list.map((m, idx) => ({ ...m, order: idx }));
+              setTeam(updatedList);
+
+              await Promise.all(
+                updatedList.map((item) =>
+                  updateTeamMemberAction(item.id, {
+                    name: item.name,
+                    role: item.role,
+                    imageUrl: item.imageUrl,
+                    initials: item.initials,
+                    order: item.order,
+                  })
+                )
+              );
             }
             setIsOpen(false);
           } catch (err) {
@@ -201,7 +258,22 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
       try {
         const res = await deleteTeamMemberAction(id);
         if (!res.success) throw new Error("Failed to delete team member.");
-        setTeam(prev => prev.filter(m => m.id !== id));
+        
+        const filtered = team.filter(m => m.id !== id);
+        const updatedList = filtered.map((m, idx) => ({ ...m, order: idx }));
+        setTeam(updatedList);
+
+        await Promise.all(
+          updatedList.map(item =>
+            updateTeamMemberAction(item.id, {
+              name: item.name,
+              role: item.role,
+              imageUrl: item.imageUrl,
+              initials: item.initials,
+              order: item.order
+            })
+          )
+        );
       } catch (err) {
         alert(err instanceof Error ? err.message : "An error occurred.");
       }
@@ -217,35 +289,100 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
     const swapOrder = team[targetIndex].order;
 
     const list = [...team];
-    const itemAtIdx = { ...list[index], order: originalOrder };
-    const itemAtTargetIdx = { ...list[targetIndex], order: swapOrder };
+    const itemAtIdx = { ...list[index], order: swapOrder };
+    const itemAtTargetIdx = { ...list[targetIndex], order: originalOrder };
 
     list[index] = itemAtTargetIdx;
     list[targetIndex] = itemAtIdx;
 
-    setTeam(list);
+    const updatedList = list.map((m, idx) => ({ ...m, order: idx }));
+    setTeam(updatedList);
 
-    // Persist swaps in background
+    // Persist all updated orders in background
     startTransition(async () => {
       try {
-        await Promise.all([
-          updateTeamMemberAction(list[index].id, {
-            name: list[index].name,
-            role: list[index].role,
-            imageUrl: list[index].imageUrl || "",
-            initials: list[index].initials,
-            order: list[index].order
-          }),
-          updateTeamMemberAction(list[targetIndex].id, {
-            name: list[targetIndex].name,
-            role: list[targetIndex].role,
-            imageUrl: list[targetIndex].imageUrl || "",
-            initials: list[targetIndex].initials,
-            order: list[targetIndex].order
-          })
-        ]);
+        await Promise.all(
+          updatedList.map((item) =>
+            updateTeamMemberAction(item.id, {
+              name: item.name,
+              role: item.role,
+              imageUrl: item.imageUrl,
+              initials: item.initials,
+              order: item.order,
+            })
+          )
+        );
       } catch (e) {
         console.error("Sorting persist failed:", e);
+      }
+    });
+  };
+
+  const handleOrderCommit = (currentIndex: number, targetIndex: number) => {
+    if (targetIndex < 0 || targetIndex >= team.length || currentIndex === targetIndex) return;
+
+    const list = [...team];
+    const [item] = list.splice(currentIndex, 1);
+    list.splice(targetIndex, 0, item);
+
+    const updatedList = list.map((m, idx) => ({ ...m, order: idx }));
+    setTeam(updatedList);
+
+    // Persist to database
+    startTransition(async () => {
+      try {
+        await Promise.all(
+          updatedList.map((item) =>
+            updateTeamMemberAction(item.id, {
+              name: item.name,
+              role: item.role,
+              imageUrl: item.imageUrl,
+              initials: item.initials,
+              order: item.order,
+            })
+          )
+        );
+      } catch (e) {
+        console.error("Order commit persist failed:", e);
+      }
+    });
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = team.findIndex((item) => item.id === active.id);
+    const newIndex = team.findIndex((item) => item.id === over.id);
+
+    const newList = arrayMove(team, oldIndex, newIndex);
+    const updatedList = newList.map((m, idx) => ({ ...m, order: idx }));
+    setTeam(updatedList);
+
+    // Persist all updated orders in background
+    startTransition(async () => {
+      try {
+        await Promise.all(
+          updatedList.map((item) =>
+            updateTeamMemberAction(item.id, {
+              name: item.name,
+              role: item.role,
+              imageUrl: item.imageUrl,
+              initials: item.initials,
+              order: item.order,
+            })
+          )
+        );
+      } catch (e) {
+        console.error("Drag reorder persist failed:", e);
       }
     });
   };
@@ -346,86 +483,44 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-650">
-                <thead>
-                  <tr className="border-b border-slate-150 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-                    <th className="py-2.5 px-3">Avatar</th>
-                    <th className="py-2.5 px-3">Details</th>
-                    <th className="py-2.5 px-3 text-center">Reorder</th>
-                    <th className="py-2.5 px-3 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {team.map((member, index) => (
-                    <tr key={member.id} className="hover:bg-slate-50/50 transition-colors">
-                      {/* Avatar preview */}
-                      <td className="py-3 px-3">
-                        <div className="h-12 w-9 rounded-lg bg-gradient-to-b from-brand-light-start to-brand-light-end border border-primary/5 flex items-center justify-center overflow-hidden">
-                          {member.imageUrl ? (
-                            <img
-                              src={member.imageUrl}
-                              alt={member.name}
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            <span className="font-heading font-semibold text-xs text-[#a72190]/30 select-none">
-                              {member.initials}
-                            </span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* Name & Role */}
-                      <td className="py-3 px-3">
-                        <span className="font-heading font-semibold text-slate-900 block">{member.name}</span>
-                        <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block mt-0.5">{member.role}</span>
-                      </td>
-
-                      {/* Sorting Reorder */}
-                      <td className="py-3 px-3">
-                        <div className="flex items-center justify-center gap-1.5">
-                          <button
-                            onClick={() => handleMove(index, "up")}
-                            disabled={index === 0 || isPending}
-                            className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-500 disabled:opacity-30 disabled:hover:bg-slate-100 cursor-pointer"
-                            title="Move Up"
-                          >
-                            <ArrowUp className="h-3.5 w-3.5" />
-                          </button>
-                          <button
-                            onClick={() => handleMove(index, "down")}
-                            disabled={index === team.length - 1 || isPending}
-                            className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-500 disabled:opacity-30 disabled:hover:bg-slate-100 cursor-pointer"
-                            title="Move Down"
-                          >
-                            <ArrowDown className="h-3.5 w-3.5" />
-                          </button>
-                        </div>
-                      </td>
-
-                      {/* CRUD Actions */}
-                      <td className="py-3 px-3 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <button
-                            onClick={() => handleOpenEdit(member)}
-                            className="p-1.5 text-slate-400 hover:text-primary transition-colors cursor-pointer"
-                            title="Edit Details"
-                          >
-                            <Edit2 className="h-4 w-4" />
-                          </button>
-                          <button
-                            onClick={() => handleTeamDelete(member.id, member.name)}
-                            className="p-1.5 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
-                            title="Delete Member"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </td>
+              <DndContext
+                id="leadership-roster-dnd"
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <table className="w-full text-left text-xs text-slate-650">
+                  <thead>
+                    <tr className="border-b border-slate-150 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                      <th className="py-2.5 px-3 w-10">Drag</th>
+                      <th className="py-2.5 px-3">Avatar</th>
+                      <th className="py-2.5 px-3">Details</th>
+                      <th className="py-2.5 px-3 text-center">Order</th>
+                      <th className="py-2.5 px-3 text-right">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    <SortableContext
+                      items={team.map((m) => m.id)}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      {team.map((member, index) => (
+                        <SortableRow
+                          key={member.id}
+                          member={member}
+                          index={index}
+                          isPending={isPending}
+                          team={team}
+                          handleMove={handleMove}
+                          handleOrderCommit={handleOrderCommit}
+                          handleOpenEdit={handleOpenEdit}
+                          handleTeamDelete={handleTeamDelete}
+                        />
+                      ))}
+                    </SortableContext>
+                  </tbody>
+                </table>
+              </DndContext>
             </div>
           )}
         </div>
@@ -504,16 +599,19 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                   />
                 </div>
 
-                {/* Form Field: Order index (Readonly inside modal) */}
+                {/* Form Field: Order index (Editable) */}
                 <div className="space-y-1">
                   <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
                     Display Order
                   </label>
                   <input
-                    type="text"
-                    value={editMember ? editMember.order : team.length}
-                    className="w-full text-xs p-2.5 border border-slate-200 bg-slate-50 text-slate-400 rounded-lg font-body text-center font-semibold"
-                    disabled
+                    type="number"
+                    min={1}
+                    max={editMember ? team.length : team.length + 1}
+                    value={memberOrder}
+                    onChange={(e) => setMemberOrder(parseInt(e.target.value) || 1)}
+                    className="w-full text-xs p-2.5 border border-slate-200 rounded-lg font-body text-center font-semibold focus:outline-none focus:border-primary"
+                    required
                   />
                 </div>
               </div>
@@ -588,5 +686,181 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
       )}
 
     </div>
+  );
+}
+
+// Sub-component for Order Number editing
+function OrderInput({
+  initialOrder,
+  onOrderCommit,
+  maxOrder,
+}: {
+  initialOrder: number;
+  onOrderCommit: (newOrder: number) => void;
+  maxOrder: number;
+}) {
+  const [value, setValue] = useState((initialOrder + 1).toString());
+
+  React.useEffect(() => {
+    setValue((initialOrder + 1).toString());
+  }, [initialOrder]);
+
+  const commit = () => {
+    let parsed = parseInt(value, 10);
+    if (isNaN(parsed) || parsed < 1) {
+      setValue((initialOrder + 1).toString());
+      return;
+    }
+    if (parsed > maxOrder) {
+      parsed = maxOrder;
+    }
+    setValue(parsed.toString());
+    onOrderCommit(parsed - 1);
+  };
+
+  return (
+    <input
+      type="number"
+      value={value}
+      min={1}
+      max={maxOrder}
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          commit();
+        }
+      }}
+      className="w-12 text-center text-xs p-1 border border-slate-200 rounded font-semibold text-slate-800 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+    />
+  );
+}
+
+// Draggable Sortable Row Component
+function SortableRow({
+  member,
+  index,
+  isPending,
+  team,
+  handleMove,
+  handleOrderCommit,
+  handleOpenEdit,
+  handleTeamDelete,
+}: {
+  member: TeamMember;
+  index: number;
+  isPending: boolean;
+  team: TeamMember[];
+  handleMove: (index: number, direction: "up" | "down") => void;
+  handleOrderCommit: (currentIndex: number, targetIndex: number) => void;
+  handleOpenEdit: (member: TeamMember) => void;
+  handleTeamDelete: (id: string, name: string) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: member.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : undefined,
+    backgroundColor: isDragging ? "#f8fafc" : undefined,
+  };
+
+  return (
+    <tr
+      ref={setNodeRef}
+      style={style}
+      className={`hover:bg-slate-50/50 transition-colors ${isDragging ? "shadow-md relative z-10" : ""}`}
+    >
+      {/* Drag handle */}
+      <td className="py-3 px-3">
+        <div
+          {...attributes}
+          {...listeners}
+          className="cursor-grab active:cursor-grabbing p-1.5 text-slate-400 hover:text-slate-650 rounded hover:bg-slate-100/80 transition-colors inline-block"
+          title="Drag and hold to reorder"
+        >
+          <GripVertical className="h-4 w-4" />
+        </div>
+      </td>
+
+      {/* Avatar preview */}
+      <td className="py-3 px-3">
+        <div className="h-12 w-9 rounded-lg bg-gradient-to-b from-brand-light-start to-brand-light-end border border-primary/5 flex items-center justify-center overflow-hidden">
+          {member.imageUrl ? (
+            <img
+              src={member.imageUrl}
+              alt={member.name}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <span className="font-heading font-semibold text-xs text-[#a72190]/30 select-none">
+              {member.initials}
+            </span>
+          )}
+        </div>
+      </td>
+
+      {/* Details */}
+      <td className="py-3 px-3">
+        <span className="font-heading font-semibold text-slate-900 block">{member.name}</span>
+        <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block mt-0.5">{member.role}</span>
+      </td>
+
+      {/* Reorder: Input & Arrows */}
+      <td className="py-3 px-3">
+        <div className="flex items-center justify-center gap-2">
+          <OrderInput
+            initialOrder={member.order}
+            maxOrder={team.length}
+            onOrderCommit={(newOrder) => handleOrderCommit(index, newOrder)}
+          />
+          <div className="flex flex-col gap-0.5">
+            <button
+              onClick={() => handleMove(index, "up")}
+              disabled={index === 0 || isPending}
+              className="p-0.5 rounded bg-slate-50 hover:bg-slate-150 border border-slate-200 text-slate-500 disabled:opacity-30 disabled:hover:bg-slate-50 cursor-pointer"
+              title="Move Up"
+            >
+              <ArrowUp className="h-3 w-3" />
+            </button>
+            <button
+              onClick={() => handleMove(index, "down")}
+              disabled={index === team.length - 1 || isPending}
+              className="p-0.5 rounded bg-slate-50 hover:bg-slate-150 border border-slate-200 text-slate-500 disabled:opacity-30 disabled:hover:bg-slate-50 cursor-pointer"
+              title="Move Down"
+            >
+              <ArrowDown className="h-3 w-3" />
+            </button>
+          </div>
+        </div>
+      </td>
+
+      {/* Actions */}
+      <td className="py-3 px-3 text-right">
+        <div className="flex items-center justify-end gap-1.5">
+          <button
+            onClick={() => handleOpenEdit(member)}
+            className="p-1.5 text-slate-400 hover:text-primary transition-colors cursor-pointer"
+            title="Edit Details"
+          >
+            <Edit2 className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => handleTeamDelete(member.id, member.name)}
+            className="p-1.5 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
+            title="Delete Member"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
+      </td>
+    </tr>
   );
 }
