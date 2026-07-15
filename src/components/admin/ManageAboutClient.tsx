@@ -689,7 +689,6 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
   );
 }
 
-// Sub-component for Order Number editing
 function OrderInput({
   initialOrder,
   onOrderCommit,
@@ -700,10 +699,6 @@ function OrderInput({
   maxOrder: number;
 }) {
   const [value, setValue] = useState((initialOrder + 1).toString());
-
-  React.useEffect(() => {
-    setValue((initialOrder + 1).toString());
-  }, [initialOrder]);
 
   const commit = () => {
     let parsed = parseInt(value, 10);
@@ -817,6 +812,7 @@ function SortableRow({
       <td className="py-3 px-3">
         <div className="flex items-center justify-center gap-2">
           <OrderInput
+            key={`${member.id}-${member.order}`}
             initialOrder={member.order}
             maxOrder={team.length}
             onOrderCommit={(newOrder) => handleOrderCommit(index, newOrder)}
