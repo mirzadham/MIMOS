@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       },
     });
 
-    const toEmail = process.env.ADMIN_EMAIL || "academy@mimos.my";
+    const toEmail = process.env.CONTACT_FORM_TO_EMAIL || "academy@mimos.my";
 
     // Escape user-provided fields to prevent HTML injection in the email body
     const safeName = escapeHtml(name);
