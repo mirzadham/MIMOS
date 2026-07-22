@@ -1,0 +1,99 @@
+# Instincts generated from https://github.com/mirzadham/MIMOS
+# Generated: 2026-07-22T06:30:38.772Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+
+---
+id: MIMOS-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: https://github.com/mirzadham/MIMOS
+---
+
+# MIMOS Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: feat, fix, refactor
+
+## Evidence
+
+- Detected conventional commit pattern from repository history
+
+---
+id: MIMOS-naming-files
+trigger: "when creating a new file"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/mirzadham/MIMOS
+---
+
+# MIMOS Naming Files
+
+## Action
+
+Use PascalCase naming convention for components
+
+## Evidence
+
+- File naming patterns in repository components
+
+---
+id: MIMOS-import-alias
+trigger: "when importing modules"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/mirzadham/MIMOS
+---
+
+# MIMOS Import Alias
+
+## Action
+
+Use path aliases (@/) instead of relative imports
+
+## Evidence
+
+- Import analysis across Next.js codebase
+
+---
+id: MIMOS-export-style
+trigger: "when exporting from a module"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/mirzadham/MIMOS
+---
+
+# MIMOS Export Style
+
+## Action
+
+Prefer default exports for components and pages
+
+## Evidence
+
+- Component export pattern analysis
+
+---
+id: MIMOS-arch-type-based
+trigger: "when adding new code"
+confidence: 0.8
+domain: architecture
+source: repo-analysis
+source_repo: https://github.com/mirzadham/MIMOS
+---
+
+# MIMOS Arch Type Based
+
+## Action
+
+Place code in appropriate app directory structure (app/, components/, lib/)
+
+## Evidence
+
+- Next.js App Router structure detected
