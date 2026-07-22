@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { adminLoginAction } from "@/app/actions/adminActions";
-import { GraduationCap, ShieldAlert, KeyRound, Mail, ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { ShieldAlert, KeyRound, Mail, ArrowRight } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -32,13 +33,15 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md space-y-8 bg-white border border-slate-200 p-8 rounded-2xl shadow-sm">
         
         {/* Header Branding */}
-        <div className="text-center space-y-2">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-accent text-primary">
-            <GraduationCap className="h-6 w-6" />
-          </div>
-          <h2 className="font-heading text-2xl font-semibold text-foreground leading-none">
-            MIMOS Academy
-          </h2>
+        <div className="text-center space-y-3 flex flex-col items-center">
+          <Image
+            src="/MIMOS-Academy.png"
+            alt="MIMOS Academy Logo"
+            width={200}
+            height={52}
+            className="h-12 w-auto object-contain mx-auto"
+            priority
+          />
           <span className="font-sans text-xs font-semibold tracking-wider text-slate-400 uppercase block">
             Command Center Login
           </span>

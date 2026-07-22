@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { getSessionAdmin } from "@/lib/adminAuth";
 import { adminLogoutAction } from "@/app/actions/adminActions";
 import { 
-  GraduationCap, 
   LayoutDashboard, 
   BookOpen, 
   LogOut,
@@ -48,17 +48,19 @@ export default async function AdminDashboardLayout({
       <aside className="w-64 border-r border-slate-200 bg-white flex flex-col justify-between shrink-0">
         <div>
           {/* Top Brand Branding */}
-          <div className="h-16 border-b border-slate-100 flex items-center px-6 gap-2">
-            <GraduationCap className="h-7 w-7 text-primary" />
-            <div className="flex flex-col">
-              <span className="font-heading text-sm font-semibold tracking-tight text-foreground leading-none">
-                MIMOS
-              </span>
-              <span className="font-sans text-[10px] font-semibold tracking-widest text-primary uppercase">
-                Admin Portal
-              </span>
-            </div>
-          </div>
+          <Link href="/admin" className="h-16 border-b border-slate-100 flex items-center justify-between px-5 hover:opacity-90 transition-opacity">
+            <Image
+              src="/MIMOS-Academy.png"
+              alt="MIMOS Academy"
+              width={140}
+              height={36}
+              className="h-8 w-auto object-contain"
+              priority
+            />
+            <span className="font-sans text-[10px] font-bold tracking-wider text-primary uppercase bg-accent px-2 py-0.5 rounded border border-primary/10">
+              Admin
+            </span>
+          </Link>
 
           {/* Quick Session user banner */}
           <div className="mx-4 my-4 p-3 bg-slate-50 border border-slate-150 rounded-xl flex items-center gap-2">
