@@ -1,4 +1,3 @@
-```markdown
 # MIMOS Development Patterns
 
 > Auto-generated skill from repository analysis
@@ -59,5 +58,3 @@ _No automated workflows detected in this repository._
 | /new-feature | Scaffold a new feature file in PascalCase  |
 | /test-file   | Create a new `.test.ts` file for a module  |
 | /commit      | Generate a conventional commit message     |
-
-```
