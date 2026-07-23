@@ -218,9 +218,9 @@ export default function Footer() {
         {/* Logo on the Bottom Left */}
         <Link href="/" className="flex items-center">
           <Image 
-            src="/MIMOS-Academy.png" 
+            src="/MIMOS-Academy-dark.png" 
             alt="MIMOS Academy Logo" 
-            width={218}
+            width={180}
             height={64}
             className="h-16 w-auto object-contain block"
           />
@@ -228,7 +228,7 @@ export default function Footer() {
 
         {/* Copyright on the Bottom Right */}
         <span className="text-xs font-semibold text-slate-400 select-none">
-          &copy; {new Date().getFullYear()} MIMOS Berhad. All Rights Reserved.
+          &copy; {new Date().getFullYear()} MIMOS Academy. All Rights Reserved.
         </span>
       </div>
 

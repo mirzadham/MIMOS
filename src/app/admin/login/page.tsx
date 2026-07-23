@@ -35,10 +35,10 @@ export default function AdminLoginPage() {
         {/* Header Branding */}
         <div className="text-center space-y-3 flex flex-col items-center">
           <Image
-            src="/MIMOS-Academy.png"
+            src="/MIMOS-Academy-dark.png"
             alt="MIMOS Academy Logo"
-            width={200}
-            height={52}
+            width={135}
+            height={48}
             className="h-12 w-auto object-contain mx-auto"
             priority
           />

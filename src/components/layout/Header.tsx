@@ -151,7 +151,7 @@ export default function Header() {
               initial={false}
               transition={{ type: "spring", stiffness: 180, damping: 24, mass: 1 }}
               style={{
-                width: isScrolled ? "32px" : "136px",
+                width: isScrolled ? "32px" : "113px",
                 height: isScrolled ? "32px" : "40px",
               }}
               className={`relative overflow-hidden flex items-center justify-start select-none ${isScrolled ? 'md:mr-5' : ''}`}
@@ -160,15 +160,10 @@ export default function Header() {
                 className={`absolute left-[2px] top-[2px] bottom-[2px] w-[28px] bg-white rounded-sm -z-10 transition-opacity duration-300 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}
               />
               <img
-                src="/MIMOS-Academy.png"
+                src={!isScrolled && pathname === "/" ? "/MIMOS-Academy-white.png" : "/MIMOS-Academy-dark.png"}
                 alt="MIMOS Academy"
                 fetchPriority="high"
                 className={`h-full w-auto max-w-none block object-contain object-left relative z-10 transition-opacity duration-300 ${isScrolled ? 'opacity-0' : 'opacity-100'}`}
-                style={
-                  !isScrolled && pathname === "/"
-                    ? { filter: "drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.7))" }
-                    : undefined
-                }
               />
               <img
                 src={IconImage.src}
@@ -314,7 +309,7 @@ export default function Header() {
               <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5">
                 <div className="overflow-hidden flex h-10 w-10 items-center justify-center bg-white/10">
                   <img
-                    src="/MIMOS-Academy.png"
+                    src="/MIMOS-Academy-white.png"
                     alt="MIMOS Academy"
                     fetchPriority="high"
                     className="h-10 w-auto max-w-none block object-contain object-left"

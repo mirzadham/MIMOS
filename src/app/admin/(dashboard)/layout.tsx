@@ -50,10 +50,10 @@ export default async function AdminDashboardLayout({
           {/* Top Brand Branding */}
           <Link href="/admin" className="h-16 border-b border-slate-100 flex items-center justify-between px-5 hover:opacity-90 transition-opacity">
             <Image
-              src="/MIMOS-Academy.png"
+              src="/MIMOS-Academy-dark.png"
               alt="MIMOS Academy"
-              width={140}
-              height={36}
+              width={90}
+              height={32}
               className="h-8 w-auto object-contain"
               priority
             />

@@ -28,9 +28,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/MIMOS-Academy.png",
-        width: 1200,
-        height: 630,
+        url: "/MIMOS-Academy-dark.png",
+        width: 620,
+        height: 220,
         alt: "MIMOS Academy Logo",
       },
     ],
