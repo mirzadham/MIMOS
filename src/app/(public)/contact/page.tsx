@@ -192,11 +192,22 @@ export default function ContactPage() {
                 <p className="text-xs text-slate-500 font-body">
                   57000 Kuala Lumpur, Malaysia
                 </p>
+                <div className="pt-1">
+                  <a
+                    href="tel:+60389955000"
+                    className="group/link inline-flex items-center gap-1.5 text-sm font-semibold text-slate-800 hover:text-primary transition-colors font-body"
+                  >
+                    <span className="relative">
+                      +60 3-8995 5000
+                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover/link:w-full transition-all duration-300" />
+                    </span>
+                  </a>
+                </div>
               </motion.div>
 
-              {/* Kulim Office */}
+              {/* Northern Office */}
               <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
-                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-semibold">Kedah Branch</span>
+                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-semibold">Northern Office</span>
                 <a
                   href="https://maps.app.goo.gl/sjTpprYimsJfLyqr7"
                   target="_blank"
@@ -212,6 +223,17 @@ export default function ContactPage() {
                 <p className="text-xs text-slate-500 font-body">
                   09000 Kulim, Kedah, Malaysia
                 </p>
+                <div className="pt-1">
+                  <a
+                    href="tel:+6044080032"
+                    className="group/link inline-flex items-center gap-1.5 text-sm font-semibold text-slate-800 hover:text-primary transition-colors font-body"
+                  >
+                    <span className="relative">
+                      +60 4-4080 032
+                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover/link:w-full transition-all duration-300" />
+                    </span>
+                  </a>
+                </div>
               </motion.div>
 
               {/* Email */}
@@ -232,21 +254,14 @@ export default function ContactPage() {
                 </p>
               </motion.div>
 
-              {/* Phone */}
+              {/* Operating Hours */}
               <motion.div variants={itemVariants} className="border-l border-slate-200 pl-5 space-y-1.5 group">
-                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-semibold">Hotline</span>
-                <a
-                  href="tel:04-40525404"
-                  className="group/link inline-flex items-start gap-1.5 text-sm font-semibold text-slate-800 hover:text-primary transition-colors font-body leading-relaxed"
-                >
-                  <span className="relative">
-                    04-40525404
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover/link:w-full transition-all duration-300" />
-                  </span>
-                  <ExternalLink className="h-3.5 w-3.5 text-slate-400 group-hover/link:text-primary transition-colors shrink-0 mt-1" />
-                </a>
-                <p className="text-[10px] text-slate-400 font-body">
-                  Mon - Fri, 9:00 AM - 5:00 PM (GMT+8)
+                <span className="block text-[10px] tracking-widest text-slate-400 uppercase font-semibold">Operating Hours</span>
+                <p className="text-sm font-semibold text-slate-800 font-body leading-relaxed">
+                  Monday – Friday
+                </p>
+                <p className="text-xs text-slate-500 font-body">
+                  9:00 AM – 5:00 PM (GMT+8)
                 </p>
               </motion.div>
 
@@ -449,59 +464,22 @@ export default function ContactPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="flex flex-col items-center justify-center py-10 text-center space-y-6"
+                    className="flex flex-col items-center justify-center py-16 text-center space-y-6"
                   >
-                    {/* Animated checkmark circle */}
-                    <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      <svg
-                        className="h-8 w-8"
-                        viewBox="0 0 52 52"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <motion.circle
-                          cx="26"
-                          cy="26"
-                          r="23"
-                          stroke="currentColor"
-                          strokeWidth="3.5"
-                          initial={{ pathLength: 0 }}
-                          animate={{ pathLength: 1 }}
-                          transition={{ duration: 0.6, ease: "easeOut" }}
-                        />
-                        <motion.path
-                          d="M16 26l7 7 13-13"
-                          stroke="currentColor"
-                          strokeWidth="3.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          initial={{ pathLength: 0 }}
-                          animate={{ pathLength: 1 }}
-                          transition={{ duration: 0.6, ease: "easeOut" }}
-                        />
-                      </svg>
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.3, duration: 0.3 }}
-                        className="absolute -inset-1 rounded-full border border-primary/30 animate-ping [animation-duration:2s]"
-                      />
+                    <div className="space-y-3 max-w-md">
+                      <h3 className="font-heading text-2xl sm:text-3xl font-light text-slate-900 tracking-tight">
+                        Thank You for Reaching Out.
+                      </h3>
+                      <p className="text-sm sm:text-base text-slate-500 font-body leading-relaxed">
+                        We&apos;ve received your message and will be in touch soon.
+                      </p>
                     </div>
-
-                    <div className="space-y-2">
-                      <h3 className="font-heading text-xl font-semibold text-slate-900">Inquiry Dispatched</h3>
-                      <p className="text-xs font-semibold text-primary uppercase tracking-wider">Thank you, {formData.name}!</p>
-                    </div>
-
-                    <p className="text-xs text-slate-500 leading-relaxed max-w-sm font-body">
-                      We have received your B2B / general academic coordination inquiry. A member of the MIMOS Academy advisory team will get in touch with you shortly at <span className="font-semibold text-slate-700">{formData.email}</span> or <span className="font-semibold text-slate-700">{formData.countryCode} {formData.phone}</span>.
-                    </p>
 
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleReset}
-                      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 px-5 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-slate-600 transition-all cursor-pointer"
+                      className="inline-flex items-center gap-2 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-slate-50 px-5 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-slate-600 transition-all cursor-pointer pt-2"
                     >
                       <span>Submit another inquiry</span>
                       <ArrowRight className="h-3 w-3" />
