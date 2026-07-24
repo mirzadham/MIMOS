@@ -99,7 +99,7 @@ export default async function AdminDashboardLayout({
           <form action={adminLogoutAction}>
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white hover:bg-red-50 hover:text-red-600 hover:border-red-150 py-2.5 text-xs font-semibold text-slate-600 transition-colors"
+              className="w-full flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white hover:bg-red-50 hover:text-red-950 hover:border-red-200 py-2.5 text-xs font-semibold text-red-900 transition-colors"
             >
               <LogOut className="h-4 w-4" />
               <span>Sign Out</span>
