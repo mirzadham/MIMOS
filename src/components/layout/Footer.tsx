@@ -103,7 +103,7 @@ export default function Footer() {
           <div className="space-y-4">
             <p>
               <a 
-                href="https://www.google.com/maps/search/?api=1&query=Technology+Park+Malaysia,+Kuala+Lumpur" 
+                href="https://maps.app.goo.gl/xSVfSpm4y676p2k59" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="hover:text-primary transition-colors footer-hover-line"
@@ -113,7 +113,7 @@ export default function Footer() {
             </p>
             <p>
               <a 
-                href="https://www.google.com/maps/search/?api=1&query=Kulim+Hi-Tech+Park,+Kedah" 
+                href="https://maps.app.goo.gl/sjTpprYimsJfLyqr7" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="hover:text-primary transition-colors footer-hover-line"
@@ -123,10 +123,18 @@ export default function Footer() {
             </p>
             <p>
               <a 
-                href="tel:+6044052540" 
+                href="tel:+60389955000" 
                 className="hover:text-primary transition-colors footer-hover-line"
               >
-                Tel: +604-405 2540
+                KL: +60 3-8995 5000
+              </a>
+            </p>
+            <p>
+              <a 
+                href="tel:+6044080032" 
+                className="hover:text-primary transition-colors footer-hover-line"
+              >
+                Northern: +60 4-4080 032
               </a>
             </p>
             <p>
