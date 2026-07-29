@@ -723,5 +723,156 @@ export function setMockFacilities(newFacilities: typeof mockFacilities) {
   mockFacilities = newFacilities;
 }
 
+export interface UpcomingEvent {
+  id: string;
+  date: string;
+  rawDate?: string;
+  title: string;
+  category: "LAB VISIT" | "TRAINING" | "SEMINAR" | "WORKSHOP";
+  isPast?: boolean;
+  location?: string;
+  description?: string;
+  imageUrl?: string;
+  microsoftFormUrl?: string;
+  agenda?: { time: string; topic: string }[];
+  link?: string;
+}
+
+export let mockUpcomingEvents: UpcomingEvent[] = [
+  {
+    id: "evt-1",
+    date: "OCT 15",
+    rawDate: "2026-10-15",
+    title: "Advanced Cybersecurity Training",
+    category: "TRAINING",
+    isPast: false,
+    location: "MIMOS Berhad, Bukit Jalil",
+    description: "Hands-on advanced cybersecurity protocol and threat response training designed for enterprise and infrastructure defenders.",
+    microsoftFormUrl: "https://forms.office.com/r/mimos-cybersecurity-registration",
+    agenda: [
+      { time: "09:00 AM", topic: "Threat Intelligence & Perimeter Defense" },
+      { time: "11:00 AM", topic: "Zero-Trust Architecture & Identity Management" },
+      { time: "02:00 PM", topic: "Hands-on Incident Response & Penetration Testing Simulation" }
+    ],
+    link: "/programs/advanced-analytical-failure-analysis"
+  },
+  {
+    id: "evt-2",
+    date: "NOV 02",
+    rawDate: "2026-11-02",
+    title: "Applied AI Workshop",
+    category: "WORKSHOP",
+    isPast: false,
+    location: "MIMOS Berhad, Bukit Jalil",
+    description: "Comprehensive practical workshop on implementing generative AI and machine learning architectures in industrial operations.",
+    microsoftFormUrl: "https://forms.office.com/r/mimos-ai-workshop-registration",
+    agenda: [
+      { time: "09:30 AM", topic: "Industrial Large Language Models & RAG Systems" },
+      { time: "01:30 PM", topic: "Edge AI Deployment on Microelectronics Infrastructure" }
+    ],
+    link: "/programs/semiconductor-wafer-fabrication"
+  },
+  {
+    id: "evt-3",
+    date: "AUG 24",
+    rawDate: "2026-08-24",
+    title: "Semiconductor Fabrication Clinic",
+    category: "WORKSHOP",
+    isPast: false,
+    location: "MIMOS Semiconductor Technology Centre (STC), Bukit Jalil",
+    description: "Specialized clinic on wafer fabrication workflows, yield analysis, and physical characterization of microelectronics.",
+    microsoftFormUrl: "https://forms.office.com/r/mimos-wafer-fab-clinic",
+    agenda: [
+      { time: "10:00 AM", topic: "Cleanroom CMOS Manufacturing Protocols" },
+      { time: "02:00 PM", topic: "Failure Analysis & Physical Defect Characterization" }
+    ],
+    link: "/programs/fundamental-cmos-amplifier-design"
+  },
+  {
+    id: "evt-4",
+    date: "SEP 10",
+    rawDate: "2026-09-10",
+    title: "National Cleanroom & STC Lab Visit",
+    category: "LAB VISIT",
+    isPast: false,
+    location: "MIMOS Semiconductor Technology Centre (STC), Bukit Jalil",
+    description: "Exclusive guided technical tour of MIMOS state-of-the-art cleanroom laboratories, wafer probers, and failure analysis equipment.",
+    microsoftFormUrl: "https://forms.office.com/r/mimos-cleanroom-lab-visit",
+    agenda: [
+      { time: "10:00 AM", topic: "Briefing & Gowning Protocol Walkthrough" },
+      { time: "11:00 AM", topic: "Cleanroom & Wafer Fab Line Inspection" }
+    ]
+  },
+  {
+    id: "evt-5",
+    date: "DEC 05",
+    rawDate: "2026-12-05",
+    title: "Microelectronics & Quantum Tech Seminar",
+    category: "SEMINAR",
+    isPast: false,
+    location: "MIMOS Main Auditorium, Bukit Jalil",
+    description: "Keynote presentations by national researchers on quantum computing, silicon photonics, and next-generation chip packaging.",
+    microsoftFormUrl: "https://forms.office.com/r/mimos-quantum-microelectronics-seminar",
+    agenda: [
+      { time: "09:00 AM", topic: "Keynote: Malaysia Microelectronics Roadmap 2030" },
+      { time: "11:30 AM", topic: "Panel Discussion: Talent Upskilling & Industry 4.0" }
+    ]
+  },
+  {
+    id: "evt-6",
+    date: "MAY 12",
+    rawDate: "2026-05-12",
+    title: "Industrial IoT & Sensors Masterclass",
+    category: "TRAINING",
+    isPast: true,
+    location: "MIMOS Berhad, Bukit Jalil",
+    description: "Past technical session focusing on MEMS sensor integration, industrial telemetry, and low-power IoT node architecture.",
+    microsoftFormUrl: "https://forms.office.com/r/mimos-industrial-iot",
+    agenda: [
+      { time: "09:00 AM", topic: "MEMS Sensor Fabrication & Calibration" }
+    ]
+  },
+  {
+    id: "evt-7",
+    date: "APR 04",
+    rawDate: "2026-04-04",
+    title: "Advanced IC Design & EDA Tools Workshop",
+    category: "WORKSHOP",
+    isPast: true,
+    location: "MIMOS Semiconductor Technology Centre (STC), Bukit Jalil",
+    description: "Past hands-on training using Cadence EDA tools for CMOS analog amplifier schematic layout and DRC/LVS verification.",
+    microsoftFormUrl: "https://forms.office.com/r/mimos-ic-design-eda",
+    agenda: [
+      { time: "09:00 AM", topic: "Cadence EDA Layout & Simulation" }
+    ]
+  }
+];
+
+export async function getSafeUpcomingEvents() {
+  return unstable_cache(
+    async () => {
+      try {
+        return mockUpcomingEvents;
+      } catch (e) {
+        console.warn("UpcomingEvents Fetch failed, falling back to mock details: ", e);
+        return mockUpcomingEvents;
+      }
+    },
+    ["upcomingEvents"],
+    { tags: ["cms-content"] }
+  )();
+}
+
+export async function getSafeEventById(id: string) {
+  const events = await getSafeUpcomingEvents();
+  return events.find((e) => e.id === id) || null;
+}
+
+export function setMockUpcomingEvents(newEvents: typeof mockUpcomingEvents) {
+  mockUpcomingEvents = newEvents;
+}
+
+
+
 
 

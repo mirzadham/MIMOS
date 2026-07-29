@@ -7,7 +7,7 @@ function revalidatePath(path: string) {
   revalidateTag("cms-content", { expire: 0 } as any);
 }
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles, mockFacilities, setMockFacilities } from "@/lib/db";
+import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles, mockFacilities, setMockFacilities, mockUpcomingEvents, setMockUpcomingEvents, UpcomingEvent } from "@/lib/db";
 import { headers } from "next/headers";
 
 async function getClientIp(): Promise<string> {
@@ -904,6 +904,63 @@ export async function deleteFacilityAction(id: string) {
     revalidatePath("/");
     return { success: true };
   }
+}
+
+export async function saveUpcomingEventAction(eventData: Partial<UpcomingEvent> & { title: string }) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  const isEdit = Boolean(eventData.id);
+  const id = eventData.id || `evt-${Date.now()}`;
+
+  const updatedItem: UpcomingEvent = {
+    id,
+    title: eventData.title,
+    date: eventData.date || "TBD",
+    rawDate: eventData.rawDate || new Date().toISOString().split("T")[0],
+    category: eventData.category || "SEMINAR",
+    isPast: Boolean(eventData.isPast),
+    location: eventData.location || "MIMOS Berhad, Bukit Jalil",
+    description: eventData.description || "",
+    imageUrl: eventData.imageUrl || "",
+    microsoftFormUrl: eventData.microsoftFormUrl || "",
+    agenda: eventData.agenda || [],
+    link: eventData.link || ""
+  };
+
+  const existingIndex = mockUpcomingEvents.findIndex(e => e.id === id);
+  let newEvents: UpcomingEvent[];
+  if (existingIndex >= 0) {
+    newEvents = [...mockUpcomingEvents];
+    newEvents[existingIndex] = updatedItem;
+  } else {
+    newEvents = [updatedItem, ...mockUpcomingEvents];
+  }
+
+  setMockUpcomingEvents(newEvents);
+  await createAuditLog(
+    isEdit ? "UPDATE_EVENT" : "CREATE_EVENT",
+    `${isEdit ? "Updated" : "Created"} event: ${updatedItem.title} by admin ${admin.email}`
+  );
+
+  revalidatePath("/events");
+  revalidatePath("/admin/events");
+  revalidatePath("/");
+  return { success: true, event: updatedItem };
+}
+
+export async function deleteUpcomingEventAction(id: string) {
+  const admin = await getSessionAdmin();
+  if (!admin) throw new Error("Unauthorized");
+
+  const filtered = mockUpcomingEvents.filter(e => e.id !== id);
+  setMockUpcomingEvents(filtered);
+  await createAuditLog("DELETE_EVENT", `Deleted event ID: ${id} by admin ${admin.email}`);
+
+  revalidatePath("/events");
+  revalidatePath("/admin/events");
+  revalidatePath("/");
+  return { success: true };
 }
 
 

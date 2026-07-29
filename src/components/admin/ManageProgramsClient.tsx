@@ -296,7 +296,7 @@ export default function ManageProgramsClient({
                     </button>
                     <button
                       onClick={() => handleDelete(prog.id)}
-                      className="rounded p-1.5 border border-slate-200 text-slate-500 hover:bg-red-50 hover:text-red-600 hover:border-red-150 transition-colors"
+                      className="rounded p-1.5 border border-slate-200 text-red-900 hover:bg-red-50 hover:text-red-950 hover:border-red-200 transition-colors"
                       title="Delete Course"
                     >
                       <Trash2 className="h-3.5 w-3.5" />

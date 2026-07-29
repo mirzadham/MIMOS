@@ -93,8 +93,18 @@ export default function Footer() {
               </Link>
             </li>
             <li>
+              <Link href="/events" className="hover:text-primary transition-colors footer-hover-line">
+                Events
+              </Link>
+            </li>
+            <li>
               <Link href="/facilities" className="hover:text-primary transition-colors footer-hover-line">
                 Facilities
+              </Link>
+            </li>
+            <li>
+              <Link href="/news" className="hover:text-primary transition-colors footer-hover-line">
+                News
               </Link>
             </li>
           </ul>

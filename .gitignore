@@ -62,6 +62,8 @@ next-env.d.ts
 /.agents/
 /.claude/
 /.codex/
+.github/skills/
+.github/hooks/
 
 /ma-team/
 

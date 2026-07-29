@@ -3,21 +3,23 @@ export const dynamic = "force-dynamic";
 import HeroSection from "@/components/landing/HeroSection";
 import UpcomingSection from "@/components/landing/UpcomingSection";
 import WhyChooseUs from "@/components/landing/WhyChooseUs";
+import UpcomingEvents from "@/components/landing/UpcomingEvents";
 import FeaturedPrograms from "@/components/landing/FeaturedPrograms";
 import Testimonials from "@/components/landing/Testimonials";
 import Partners from "@/components/landing/Partners";
 import StatsSection from "@/components/landing/StatsSection";
 import StatsAndFacilities from "@/components/landing/StatsAndFacilities";
-import { getSafePrograms, getSafeStats, getSafePartners, getSafeWhyChooseUsCards, getSafeTestimonials, getSafeNewsArticles } from "@/lib/db";
+import { getSafePrograms, getSafeStats, getSafePartners, getSafeWhyChooseUsCards, getSafeTestimonials, getSafeNewsArticles, getSafeUpcomingEvents } from "@/lib/db";
 
 export default async function Home() {
-  const [programs, stats, partners, whyChooseUsCards, testimonials, newsArticles] = await Promise.all([
+  const [programs, stats, partners, whyChooseUsCards, testimonials, newsArticles, upcomingEvents] = await Promise.all([
     getSafePrograms(),
     getSafeStats(),
     getSafePartners(),
     getSafeWhyChooseUsCards(),
     getSafeTestimonials(),
-    getSafeNewsArticles()
+    getSafeNewsArticles(),
+    getSafeUpcomingEvents()
   ]);
 
   return (
@@ -35,7 +37,10 @@ export default async function Home() {
       {/* 4. Why Choose Us? Section (Bento Grid Advantage) */}
       <WhyChooseUs cards={whyChooseUsCards} />
 
-      {/* 5. Upcoming Trainings & Events Section */}
+      {/* 5. Upcoming Events Section */}
+      <UpcomingEvents events={upcomingEvents} />
+
+      {/* 6. Upcoming Trainings & News Section */}
       <UpcomingSection articles={newsArticles} />
 
       {/* 6. Featured Programmes Section */}

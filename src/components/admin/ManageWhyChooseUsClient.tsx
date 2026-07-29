@@ -290,7 +290,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
               <button
                 onClick={() => handleDelete(card.id, card.title)}
                 disabled={isPending}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-red-50 hover:border-red-200 text-slate-600 hover:text-red-650 transition-colors"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-red-50 hover:border-red-200 text-red-900 hover:text-red-950 transition-colors"
                 title="Delete Card"
               >
                 <Trash2 className="h-3.5 w-3.5" />
