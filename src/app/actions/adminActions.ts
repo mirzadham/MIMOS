@@ -4,7 +4,7 @@ import { revalidatePath as nextRevalidatePath, revalidateTag } from "next/cache"
 
 function revalidatePath(path: string) {
   nextRevalidatePath(path, "layout");
-  revalidateTag("cms-content");
+  (revalidateTag as unknown as (tag: string) => void)("cms-content");
 }
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
 import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles, mockFacilities, setMockFacilities, mockUpcomingEvents, setMockUpcomingEvents, UpcomingEvent } from "@/lib/db";
