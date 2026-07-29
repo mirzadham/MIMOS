@@ -132,7 +132,7 @@ export default function Header() {
         transition={{ type: "spring", stiffness: 180, damping: 24, mass: 1 }}
         style={{
           width: isScrolled ? (isMobile ? "90%" : "fit-content") : "100%",
-          maxWidth: isScrolled ? (isMobile ? "240px" : "620px") : "1280px",
+          maxWidth: isScrolled ? (isMobile ? "280px" : "840px") : "1280px",
           marginTop: isScrolled ? "12px" : "0px",
           height: isScrolled ? "44px" : "80px",
           paddingLeft: isScrolled ? "24px" : (isMobile ? "24px" : "32px"),
@@ -185,8 +185,8 @@ export default function Header() {
                 href={link.href}
                 className={
                   isScrolled
-                    ? `relative transition-all duration-250 rounded-lg font-semibold tracking-wide select-none px-3 py-2.5 text-xs text-white hover:text-white/80`
-                    : `group relative transition-all duration-250 font-semibold tracking-wide select-none px-4 py-2 text-sm ${isActive
+                    ? `relative transition-all duration-250 rounded-lg font-semibold tracking-wide select-none px-3.5 py-2 text-xs text-white hover:text-white/80 whitespace-nowrap`
+                    : `group relative transition-all duration-250 font-semibold tracking-wide select-none px-4 py-2 text-sm whitespace-nowrap ${isActive
                       ? "text-[#ff00cc] [text-shadow:0_0_8px_rgba(255,0,204,0.4)]"
                       : pathname === "/"
                         ? "text-white hover:text-[#ff00cc]"
