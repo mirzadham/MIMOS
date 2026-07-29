@@ -91,12 +91,12 @@ export default function EventDetailClient({ event }: EventDetailClientProps) {
                 )}
               </div>
 
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-semibold text-slate-900 leading-tight">
+              <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 leading-tight">
                 {event.title}
               </h1>
 
               {event.location && (
-                <div className="flex items-center gap-2 text-sm sm:text-base text-slate-600 font-medium pt-1">
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 font-medium pt-1">
                   <MapPin className="w-4 h-4 text-primary shrink-0" />
                   <span>{event.location}</span>
                 </div>
@@ -105,10 +105,10 @@ export default function EventDetailClient({ event }: EventDetailClientProps) {
 
             {/* Event Description */}
             <div className="space-y-4">
-              <h2 className="font-heading text-xl sm:text-2xl font-semibold text-slate-900">
+              <h2 className="font-heading text-lg sm:text-xl font-semibold text-slate-900">
                 About this Event
               </h2>
-              <p className="text-slate-600 text-base sm:text-lg leading-relaxed font-body">
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-body">
                 {event.description || "Join MIMOS Academy for an immersive technical session led by national applied researchers and industry experts."}
               </p>
             </div>
@@ -116,7 +116,7 @@ export default function EventDetailClient({ event }: EventDetailClientProps) {
             {/* Event Agenda Timeline */}
             {event.agenda && event.agenda.length > 0 && (
               <div className="space-y-6 pt-4">
-                <h2 className="font-heading text-xl sm:text-2xl font-semibold text-slate-900 flex items-center gap-2">
+                <h2 className="font-heading text-lg sm:text-xl font-semibold text-slate-900 flex items-center gap-2">
                   <Clock className="w-5 h-5 text-primary" />
                   <span>Event Agenda</span>
                 </h2>
@@ -127,11 +127,11 @@ export default function EventDetailClient({ event }: EventDetailClientProps) {
                       {/* Circle indicator */}
                       <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-white border-2 border-primary group-hover:bg-primary transition-colors" />
 
-                      <div className="bg-white p-5 rounded-xl border border-slate-200/80 shadow-xs space-y-1">
+                      <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200/80 shadow-xs space-y-1">
                         <span className="text-xs font-semibold text-primary tracking-wider uppercase font-sans">
                           {item.time}
                         </span>
-                        <h3 className="text-base sm:text-lg font-semibold text-slate-900">
+                        <h3 className="text-sm sm:text-base font-semibold text-slate-900">
                           {item.topic}
                         </h3>
                       </div>
@@ -145,24 +145,24 @@ export default function EventDetailClient({ event }: EventDetailClientProps) {
 
           {/* Right Column: Registration Card (Sticky on Scroll) */}
           <div className="lg:col-span-1 space-y-6 sticky top-32 lg:top-36 self-start">
-            <div className="bg-white rounded-2xl border-2 border-slate-200 p-6 sm:p-8 shadow-md space-y-6">
-              <div className="space-y-2">
+            <div className="bg-white rounded-2xl border-2 border-slate-200 p-5 sm:p-7 shadow-md space-y-5">
+              <div className="space-y-1.5">
                 <span className="text-xs font-semibold uppercase tracking-widest text-slate-400">
                   Event Status
                 </span>
-                <div className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+                <div className="text-base font-semibold text-slate-900 flex items-center gap-2">
                   {event.isPast ? (
                     <span className="text-slate-500">Event Completed</span>
                   ) : (
                     <span className="text-emerald-600 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-5 h-5" />
+                      <CheckCircle2 className="w-4 h-4" />
                       Registration Open
                     </span>
                   )}
                 </div>
               </div>
 
-              <div className="divide-y divide-slate-100 text-sm space-y-3 pt-2">
+              <div className="divide-y divide-slate-100 text-xs sm:text-sm space-y-2.5 pt-1">
                 <div className="flex justify-between py-2">
                   <span className="text-slate-500 font-medium">Date</span>
                   <span className="font-semibold text-slate-900">{event.date}</span>
@@ -240,7 +240,13 @@ export default function EventDetailClient({ event }: EventDetailClientProps) {
 
               {submitted ? (
                 <div className="py-8 text-center space-y-3">
-                  <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto animate-bounce" />
+                  <motion.div
+                    initial={{ scale: 0.7, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 22 }}
+                  >
+                    <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
+                  </motion.div>
                   <h3 className="text-xl font-semibold text-slate-900">Registration Received!</h3>
                   <p className="text-xs sm:text-sm text-slate-600">
                     Thank you. A MIMOS Academy representative will contact you with attendance details.
