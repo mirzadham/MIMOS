@@ -15,7 +15,8 @@ import {
   MessageSquare,
   Users,
   Newspaper,
-  Building2
+  Building2,
+  Calendar
 } from "lucide-react";
 
 export default async function AdminDashboardLayout({
@@ -32,6 +33,7 @@ export default async function AdminDashboardLayout({
   const sidebarLinks = [
     { name: "Overview Dashboard", href: "/admin", icon: LayoutDashboard },
     { name: "Manage Programs", href: "/admin/programs", icon: BookOpen },
+    { name: "Manage Events", href: "/admin/events", icon: Calendar },
     { name: "Manage Stats", href: "/admin/stats", icon: BarChart3 },
     { name: "Manage Partners", href: "/admin/partners", icon: Handshake },
     { name: "Why Choose Us", href: "/admin/why-choose-us", icon: Sparkles },

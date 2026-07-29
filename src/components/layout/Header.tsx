@@ -88,6 +88,7 @@ export default function Header() {
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about" },
     { name: "Programmes", href: "/programs" },
+    { name: "Events", href: "/events" },
     { name: "Facilities", href: "/facilities" },
     { name: "News", href: "/news" },
     { name: "Contact", href: "/contact" },
