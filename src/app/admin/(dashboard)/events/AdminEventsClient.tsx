@@ -255,7 +255,9 @@ export default function AdminEventsClient({ initialEvents }: AdminEventsClientPr
             type="button"
             onClick={() => setActiveTab("ALL")}
             className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              activeTab === "ALL" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+              activeTab === "ALL"
+                ? "bg-white text-slate-900 shadow-xs"
+                : "bg-transparent text-slate-700 hover:text-slate-900"
             }`}
           >
             All Events ({totalCount})
@@ -264,7 +266,9 @@ export default function AdminEventsClient({ initialEvents }: AdminEventsClientPr
             type="button"
             onClick={() => setActiveTab("UPCOMING")}
             className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              activeTab === "UPCOMING" ? "bg-emerald-600 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
+              activeTab === "UPCOMING"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "bg-transparent text-slate-700 hover:text-slate-900"
             }`}
           >
             Upcoming ({upcomingCount})
@@ -273,7 +277,9 @@ export default function AdminEventsClient({ initialEvents }: AdminEventsClientPr
             type="button"
             onClick={() => setActiveTab("PAST")}
             className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              activeTab === "PAST" ? "bg-slate-600 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
+              activeTab === "PAST"
+                ? "bg-slate-700 text-white shadow-xs"
+                : "bg-transparent text-slate-700 hover:text-slate-900"
             }`}
           >
             Past ({pastCount})
