@@ -493,7 +493,7 @@ export default function AdminEventsClient({ initialEvents }: AdminEventsClientPr
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Category</label>
                   <select
                     value={editingEvent?.category || "SEMINAR"}
-                    onChange={(e) => setEditingEvent({ ...editingEvent, category: e.target.value as any })}
+                    onChange={(e) => setEditingEvent({ ...editingEvent, category: e.target.value as UpcomingEvent["category"] })}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                   >
                     <option value="LAB VISIT">Lab Visit</option>
