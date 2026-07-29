@@ -13,6 +13,15 @@ interface UpcomingEventsProps {
 export default function UpcomingEvents({ events }: UpcomingEventsProps) {
   const [selectedEvent, setSelectedEvent] = useState<UpcomingEvent | null>(null);
 
+  // Filter for upcoming events (!isPast), sort chronologically by rawDate (closest first), and take top 5
+  const upcomingClosestEvents = (events || [])
+    .filter((event) => !event.isPast)
+    .sort((a, b) => {
+      if (!a.rawDate || !b.rawDate) return 0;
+      return new Date(a.rawDate).getTime() - new Date(b.rawDate).getTime();
+    })
+    .slice(0, 5);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -51,7 +60,7 @@ export default function UpcomingEvents({ events }: UpcomingEventsProps) {
           viewport={{ once: true, margin: "-80px" }}
           className="divide-y-2 divide-slate-200 border-t-2 border-b-2 border-slate-200"
         >
-          {events.map((event) => (
+          {upcomingClosestEvents.map((event) => (
             <motion.div key={event.id} variants={itemVariants}>
               <Link
                 href={`/events/${event.id}`}
