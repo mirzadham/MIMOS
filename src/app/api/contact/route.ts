@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 // Helper function to escape HTML characters to prevent HTML injection in emails
 function escapeHtml(text: string): string {
@@ -33,27 +33,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Input values exceed maximum allowed length" }, { status: 400 });
     }
 
-    const smtpUser = process.env.SMTP_USER;
-    const smtpPass = process.env.SMTP_PASS;
+    const resendApiKey = process.env.RESEND_API_KEY;
 
-    if (!smtpUser || !smtpPass) {
-      console.error("Missing SMTP_USER or SMTP_PASS environment variables");
+    if (!resendApiKey) {
+      console.error("Missing RESEND_API_KEY environment variable");
       return NextResponse.json({ error: "Email configuration error on server" }, { status: 500 });
     }
 
-    // Configure Nodemailer transporter for Gmail SMTP with connection pooling
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      pool: true, // Reuse the SMTP connection
-      auth: {
-        user: smtpUser,
-        pass: smtpPass,
-      },
-    });
-
+    const resend = new Resend(resendApiKey);
     const toEmail = process.env.CONTACT_FORM_TO_EMAIL || "academy@mimos.my";
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "Website Inquiry Notification <noreply@mimos-academy.my>";
 
     // Escape user-provided fields to prevent HTML injection in the email body
     const safeName = escapeHtml(name);
@@ -63,9 +52,9 @@ export async function POST(request: Request) {
     const safeOrganization = escapeHtml(organization || "N/A");
     const safeMessage = escapeHtml(message);
 
-    // Send the email
-    const info = await transporter.sendMail({
-      from: `"Website Inquiry Notification" <${smtpUser}>`,
+    // Send the email using Resend SDK
+    const { data, error } = await resend.emails.send({
+      from: fromEmail,
       to: toEmail,
       replyTo: email,
       subject: `New Contact Inquiry from ${safeName}`,
@@ -84,7 +73,12 @@ export async function POST(request: Request) {
       `,
     });
 
-    return NextResponse.json({ success: true, messageId: info.messageId });
+    if (error) {
+      console.error("Resend email sending failed:", error);
+      return NextResponse.json({ error: error.message || "Failed to send email inquiry" }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true, messageId: data?.id });
   } catch (error) {
     console.error("Email sending failed:", error);
     return NextResponse.json({ error: "Failed to send email inquiry" }, { status: 500 });
