@@ -3,6 +3,8 @@
 import React, { useState, useTransition } from "react";
 import { Plus, Edit2, Trash2, X, BarChart3, AlertCircle } from "lucide-react";
 import { createStatAction, updateStatAction, deleteStatAction } from "@/app/actions/adminActions";
+import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 
 interface Stat {
   id: string;
@@ -19,6 +21,9 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [editStat, setEditStat] = useState<Stat | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const { toast } = useToast();
+  const confirm = useConfirm();
 
   // Form Fields
   const [number, setNumber] = useState("");
@@ -52,28 +57,32 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
         if (editStat) {
           const res = await updateStatAction(editStat.id, { number, label });
           if (!res.success) throw new Error("Failed to update stat.");
+          toast.success("Stat updated.");
         } else {
           const res = await createStatAction({ number, label });
           if (!res.success) throw new Error("Failed to create stat.");
+          toast.success("Stat created.");
         }
         setIsOpen(false);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred.");
+        toast.error(err instanceof Error ? err.message : "An error occurred.");
       }
     });
   };
 
-  const handleDelete = (id: string, label: string) => {
-    if (!confirm(`Are you sure you want to delete the stat: "${label}"?`)) return;
-
-    startTransition(async () => {
-      try {
+  const handleDelete = async (id: string, label: string) => {
+    const confirmed = await confirm({
+      title: "Delete homepage stat?",
+      message: `"${label}" will be permanently removed.`,
+      confirmLabel: "Delete",
+      danger: true,
+      onConfirm: async () => {
         const res = await deleteStatAction(id);
         if (!res.success) throw new Error("Failed to delete stat.");
-      } catch (err) {
-        alert(err instanceof Error ? err.message : "An error occurred.");
-      }
+      },
     });
+    if (!confirmed) return;
+    toast.success("Stat deleted.");
   };
 
   return (

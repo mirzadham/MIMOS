@@ -8,6 +8,8 @@ import {
   createCategoryAction
 } from "@/app/actions/adminActions";
 import { Plus, Edit2, Trash2, X, PlusCircle, ExternalLink, Calendar, MapPin } from "lucide-react";
+import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 import {
   DndContext,
   closestCenter,
@@ -63,6 +65,9 @@ export default function ManageProgramsClient({
   const [isPending, startTransition] = useTransition();
   const [modalOpen, setModalOpen] = useState(false);
   const [editProgram, setEditProgram] = useState<Program | null>(null);
+
+  const { toast } = useToast();
+  const confirm = useConfirm();
 
   // File Upload states
   const [posters, setPosters] = useState<PosterItem[]>([]);
@@ -153,27 +158,42 @@ export default function ManageProgramsClient({
       };
 
       startTransition(async () => {
-        if (editProgram) {
-          await updateProgramAction(editProgram.id, programData);
-        } else {
-          await createProgramAction(programData);
+        try {
+          if (editProgram) {
+            const res = await updateProgramAction(editProgram.id, programData);
+            if (!res.success) throw new Error("Failed to update program.");
+            toast.success("Program updated.");
+          } else {
+            const res = await createProgramAction(programData);
+            if (!res.success) throw new Error("Failed to create program.");
+            toast.success("Program created.");
+          }
+          closeModal();
+        } catch (err) {
+          toast.error(err instanceof Error ? err.message : "An error occurred.");
         }
-        closeModal();
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : "An error occurred during upload.";
-      alert(message);
+      toast.error(message);
     } finally {
       setUploading(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this program?")) {
-      startTransition(async () => {
-        await deleteProgramAction(id);
-      });
-    }
+    const confirmed = await confirm({
+      title: "Delete program?",
+      message: "This training program will be permanently removed from the course catalog.",
+      confirmLabel: "Delete",
+      danger: true,
+      onConfirm: async () => {
+        const res = await deleteProgramAction(id);
+        if (!res.success) throw new Error("Failed to delete program.");
+      },
+    });
+    if (!confirmed) return;
+    toast.success("Program deleted.");
   };
 
   const handleAddCategory = async (e: React.FormEvent) => {
@@ -181,9 +201,15 @@ export default function ManageProgramsClient({
     if (!newCategoryName.trim()) return;
 
     startTransition(async () => {
-      await createCategoryAction(newCategoryName);
-      setNewCategoryName("");
-      setCategoryModalOpen(false);
+      try {
+        const res = await createCategoryAction(newCategoryName);
+        if (!res.success) throw new Error("Failed to create category.");
+        toast.success("Category created.");
+        setNewCategoryName("");
+        setCategoryModalOpen(false);
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "An error occurred.");
+      }
     });
   };
 
@@ -459,12 +485,12 @@ export default function ManageProgramsClient({
                       onChange={(e) => {
                         const files = Array.from(e.target.files || []);
                         if (posters.length + files.length > 5) {
-                          alert("You can only upload up to 5 poster pages in total.");
+                          toast.error("You can only upload up to 5 poster pages in total.");
                           return;
                         }
                         const oversized = files.filter(f => f.size > 5 * 1024 * 1024);
                         if (oversized.length > 0) {
-                          alert(`Error: Some files exceed the 5MB limit and will not be added:\n${oversized.map(f => f.name).join(", ")}`);
+                          toast.error(`Some files exceed the 5MB limit and were not added: ${oversized.map(f => f.name).join(", ")}`);
                         }
                         const validFiles = files.filter(f => f.size <= 5 * 1024 * 1024);
                         const newPosters = validFiles.map((file) => {

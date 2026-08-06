@@ -3,6 +3,8 @@
 import React, { useState, useTransition, useRef } from "react";
 import { Plus, Edit2, Trash2, X, AlertCircle, Upload, Building2, Eye, ListPlus, Trash } from "lucide-react";
 import { createFacilityAction, updateFacilityAction, deleteFacilityAction } from "@/app/actions/adminActions";
+import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 
 interface Facility {
   id: string;
@@ -25,6 +27,9 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
   const [editFacility, setEditFacility] = useState<Facility | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+
+  const { toast } = useToast();
+  const confirm = useConfirm();
 
   // Form Fields
   const [index, setIndex] = useState("");
@@ -92,7 +97,7 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       if (file.size > 5 * 1024 * 1024) {
-        setError("Error: Facility image size exceeds 5MB limit.");
+        toast.error("Facility image size exceeds the 5MB limit.");
         if (e.target) e.target.value = "";
         return;
       }
@@ -182,19 +187,21 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
             if (editFacility) {
               const res = await updateFacilityAction(editFacility.id, dataObj);
               if (!res.success) throw new Error("Failed to update facility.");
+              toast.success("Facility updated.");
             } else {
               const res = await createFacilityAction(dataObj);
               if (!res.success) throw new Error("Failed to create facility.");
+              toast.success("Facility created.");
             }
             handleClose();
           } catch (err) {
-            setError(err instanceof Error ? err.message : "An error occurred.");
+            toast.error(err instanceof Error ? err.message : "An error occurred.");
           } finally {
             setUploading(false);
           }
         });
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Image upload failed.");
+        toast.error(err instanceof Error ? err.message : "Image upload failed.");
         setUploading(false);
       }
     };
@@ -202,17 +209,19 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
     run();
   };
 
-  const handleDelete = (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete the facility: "${name}"?`)) return;
-
-    startTransition(async () => {
-      try {
+  const handleDelete = async (id: string, name: string) => {
+    const confirmed = await confirm({
+      title: "Delete facility?",
+      message: `"${name}" will be permanently removed from the facilities showcase.`,
+      confirmLabel: "Delete",
+      danger: true,
+      onConfirm: async () => {
         const res = await deleteFacilityAction(id);
         if (!res.success) throw new Error("Failed to delete facility.");
-      } catch (err) {
-        alert(err instanceof Error ? err.message : "An error occurred.");
-      }
+      },
     });
+    if (!confirmed) return;
+    toast.success("Facility deleted.");
   };
 
   return (
