@@ -8,6 +8,8 @@ import {
   updateWhyChooseUsCardAction, 
   deleteWhyChooseUsCardAction 
 } from "@/app/actions/adminActions";
+import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 
 interface WhyChooseUsCard {
   id: string;
@@ -57,12 +59,16 @@ const getAlignmentClasses = (order: number) => {
   }
 };
 
-export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClientProps) {
+export default function ManageWhyChooseUsClient({ cards: initialCards }: ManageWhyChooseUsClientProps) {
+  const [cards, setCards] = useState(initialCards);
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const [editCard, setEditCard] = useState<WhyChooseUsCard | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+
+  const { toast } = useToast();
+  const confirm = useConfirm();
 
   // Form Fields
   const [title, setTitle] = useState("");
@@ -173,20 +179,22 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
             if (editCard) {
               const res = await updateWhyChooseUsCardAction(editCard.id, dataPayload);
               if (!res.success) throw new Error("Failed to update card.");
+              toast.success("Card updated.");
             } else {
               const res = await createWhyChooseUsCardAction(dataPayload);
               if (!res.success) throw new Error("Failed to create card.");
+              toast.success("Card created.");
             }
             revokeObjectURL();
             setIsOpen(false);
           } catch (err) {
-            setError(err instanceof Error ? err.message : "An error occurred.");
+            toast.error(err instanceof Error ? err.message : "An error occurred.");
           } finally {
             setUploading(false);
           }
         });
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Image upload failed.");
+        toast.error(err instanceof Error ? err.message : "Image upload failed.");
         setUploading(false);
       }
     };
@@ -194,17 +202,20 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
     run();
   };
 
-  const handleDelete = (id: string, cardTitle: string) => {
-    if (!confirm(`Are you sure you want to delete the card: "${cardTitle}"?`)) return;
-
-    startTransition(async () => {
-      try {
+  const handleDelete = async (id: string, cardTitle: string) => {
+    const confirmed = await confirm({
+      title: "Delete bento card?",
+      message: `"${cardTitle}" will be permanently removed from the homepage grid.`,
+      confirmLabel: "Delete",
+      danger: true,
+      onConfirm: async () => {
         const res = await deleteWhyChooseUsCardAction(id);
         if (!res.success) throw new Error("Failed to delete card.");
-      } catch (err) {
-        alert(err instanceof Error ? err.message : "An error occurred.");
-      }
+      },
     });
+    if (!confirmed) return;
+    setCards((prev) => prev.filter((c) => c.id !== id));
+    toast.success("Card deleted.");
   };
 
   return (

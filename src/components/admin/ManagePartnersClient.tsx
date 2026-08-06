@@ -4,6 +4,8 @@ import React, { useState, useTransition, useRef } from "react";
 import Image from "next/image";
 import { Plus, Edit2, Trash2, X, Handshake, AlertCircle, Upload } from "lucide-react";
 import { createPartnerAction, updatePartnerAction, deletePartnerAction } from "@/app/actions/adminActions";
+import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 
 interface Partner {
   id: string;
@@ -15,12 +17,16 @@ interface ManagePartnersClientProps {
   partners: Partner[];
 }
 
-export default function ManagePartnersClient({ partners }: ManagePartnersClientProps) {
+export default function ManagePartnersClient({ partners: initialPartners }: ManagePartnersClientProps) {
+  const [partners, setPartners] = useState(initialPartners);
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const [editPartner, setEditPartner] = useState<Partner | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+
+  const { toast } = useToast();
+  const confirm = useConfirm();
 
   // Form Fields
   const [name, setName] = useState("");
@@ -50,7 +56,7 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       if (file.size > 5 * 1024 * 1024) {
-        setError("Error: Logo file size exceeds 5MB limit.");
+        toast.error("Logo file size exceeds the 5MB limit.");
         if (e.target) e.target.value = "";
         return;
       }
@@ -107,19 +113,21 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
             if (editPartner) {
               const res = await updatePartnerAction(editPartner.id, { name, logoUrl: finalLogoUrl });
               if (!res.success) throw new Error("Failed to update partner.");
+              toast.success("Partner updated.");
             } else {
               const res = await createPartnerAction({ name, logoUrl: finalLogoUrl });
               if (!res.success) throw new Error("Failed to create partner.");
+              toast.success("Partner created.");
             }
             setIsOpen(false);
           } catch (err) {
-            setError(err instanceof Error ? err.message : "An error occurred.");
+            toast.error(err instanceof Error ? err.message : "An error occurred.");
           } finally {
             setUploading(false);
           }
         });
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Image upload failed.");
+        toast.error(err instanceof Error ? err.message : "Image upload failed.");
         setUploading(false);
       }
     };
@@ -127,17 +135,20 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
     run();
   };
 
-  const handleDelete = (id: string, partnerName: string) => {
-    if (!confirm(`Are you sure you want to delete the partner: "${partnerName}"?`)) return;
-
-    startTransition(async () => {
-      try {
+  const handleDelete = async (id: string, partnerName: string) => {
+    const confirmed = await confirm({
+      title: "Delete partner?",
+      message: `"${partnerName}" will be permanently removed from the homepage marquee.`,
+      confirmLabel: "Delete",
+      danger: true,
+      onConfirm: async () => {
         const res = await deletePartnerAction(id);
         if (!res.success) throw new Error("Failed to delete partner.");
-      } catch (err) {
-        alert(err instanceof Error ? err.message : "An error occurred.");
-      }
+      },
     });
+    if (!confirmed) return;
+    setPartners((prev) => prev.filter((p) => p.id !== id));
+    toast.success("Partner deleted.");
   };
 
   return (

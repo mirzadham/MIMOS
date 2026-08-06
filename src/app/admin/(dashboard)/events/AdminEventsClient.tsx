@@ -4,6 +4,8 @@ import React, { useState, useTransition } from "react";
 import Image from "next/image";
 import { UpcomingEvent } from "@/lib/db";
 import { saveUpcomingEventAction, deleteUpcomingEventAction } from "@/app/actions/adminActions";
+import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 import { 
   Calendar, 
   Plus, 
@@ -32,6 +34,9 @@ export default function AdminEventsClient({ initialEvents }: AdminEventsClientPr
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
   const [isPending, startTransition] = useTransition();
+
+  const { toast } = useToast();
+  const confirm = useConfirm();
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -88,6 +93,8 @@ export default function AdminEventsClient({ initialEvents }: AdminEventsClientPr
     e.preventDefault();
     if (!editingEvent || !editingEvent.title) return;
 
+    const isEdit = Boolean(editingEvent.id);
+
     const payload: Partial<UpcomingEvent> & { title: string } = {
       id: editingEvent.id || undefined,
       title: editingEvent.title,
@@ -115,20 +122,28 @@ export default function AdminEventsClient({ initialEvents }: AdminEventsClientPr
           return [res.event, ...prev];
         });
         handleCloseModal();
+        toast.success(isEdit ? "Event updated." : "Event created.");
+      } else {
+        toast.error("Failed to save event.");
       }
     });
   };
 
   // Delete Event Action
-  const handleDeleteEvent = (id: string, title: string) => {
-    if (!confirm(`Are you sure you want to delete "${title}"?`)) return;
-
-    startTransition(async () => {
-      const res = await deleteUpcomingEventAction(id);
-      if (res.success) {
-        setEvents((prev) => prev.filter((item) => item.id !== id));
-      }
+  const handleDeleteEvent = async (id: string, title: string) => {
+    const confirmed = await confirm({
+      title: "Delete event?",
+      message: `"${title}" will be permanently removed.`,
+      confirmLabel: "Delete",
+      danger: true,
+      onConfirm: async () => {
+        const res = await deleteUpcomingEventAction(id);
+        if (!res.success) throw new Error("Failed to delete event.");
+      },
     });
+    if (!confirmed) return;
+    setEvents((prev) => prev.filter((item) => item.id !== id));
+    toast.success("Event deleted.");
   };
 
   // Agenda list handlers

@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState, useTransition, useRef } from "react";
-import { Plus, Edit2, Trash2, X, Newspaper, AlertCircle, Star, Image as ImageIcon, Upload } from "lucide-react";
+import { Plus, Edit2, Trash2, X, Newspaper, AlertCircle, Star, Image as ImageIcon, Upload, Loader2 } from "lucide-react";
 import {
   createNewsArticleAction,
   updateNewsArticleAction,
   deleteNewsArticleAction,
   toggleNewsHighlightAction
 } from "@/app/actions/adminActions";
+import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 
 interface NewsArticle {
   id: string;
@@ -34,12 +36,16 @@ const CATEGORY_OPTIONS = [
   "Announcements"
 ];
 
-export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
+export default function ManageNewsClient({ articles: initialArticles }: ManageNewsClientProps) {
+  const [articles, setArticles] = useState(initialArticles);
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const [editArticle, setEditArticle] = useState<NewsArticle | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [pendingRow, setPendingRow] = useState<{ id: string; action: "toggle" } | null>(null);
+
+  const { toast } = useToast();
+  const confirm = useConfirm();
 
   // Form Fields
   const [title, setTitle] = useState("");
@@ -58,16 +64,11 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
   const highlightedArticles = articles.filter(a => a.isHighlighted);
   const highlightedCount = highlightedArticles.length;
 
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 4000);
-  };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       if (file.size > 5 * 1024 * 1024) {
-        showToast("Error: Image file size exceeds 5MB limit.");
+        toast.error("Image file size exceeds the 5MB limit.");
         if (e.target) e.target.value = "";
         return;
       }
@@ -175,25 +176,27 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
             if (editArticle) {
               const res = await updateNewsArticleAction(editArticle.id, payload);
               if (!res.success) {
-                setError(res.error || "Failed to update article.");
+                toast.error("Failed to update article.");
                 return;
               }
+              toast.success("Article updated.");
             } else {
               const res = await createNewsArticleAction(payload);
               if (!res.success) {
-                setError(res.error || "Failed to create article.");
+                toast.error("Failed to create article.");
                 return;
               }
+              toast.success("Article created.");
             }
             setIsOpen(false);
           } catch (err) {
-            setError(err instanceof Error ? err.message : "An error occurred.");
+            toast.error(err instanceof Error ? err.message : "An error occurred.");
           } finally {
             setUploading(false);
           }
         });
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Image upload failed.");
+        toast.error(err instanceof Error ? err.message : "Image upload failed.");
         setUploading(false);
       }
     };
@@ -201,50 +204,44 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
     run();
   };
 
-  const handleDelete = (id: string, articleTitle: string) => {
-    if (!confirm(`Are you sure you want to delete the article: "${articleTitle}"?`)) return;
-
-    startTransition(async () => {
-      try {
+  const handleDelete = async (id: string, articleTitle: string) => {
+    const confirmed = await confirm({
+      title: "Delete news article?",
+      message: `"${articleTitle}" will be permanently removed.`,
+      confirmLabel: "Delete",
+      danger: true,
+      onConfirm: async () => {
         const res = await deleteNewsArticleAction(id);
         if (!res.success) throw new Error("Failed to delete article.");
-      } catch (err) {
-        alert(err instanceof Error ? err.message : "An error occurred.");
-      }
+      },
     });
+    if (!confirmed) return;
+    setArticles((prev) => prev.filter((a) => a.id !== id));
+    toast.success("Article deleted.");
   };
 
   const handleToggleHighlight = (id: string, currentState: boolean) => {
     const newState = !currentState;
+    setPendingRow({ id, action: "toggle" });
 
     startTransition(async () => {
       try {
         const res = await toggleNewsHighlightAction(id, newState);
         if (!res.success) {
-          showToast(res.error || "Failed to toggle highlight.");
+          toast.error((res as { error?: string }).error || "Failed to toggle highlight.");
           return;
         }
+        toast.success(newState ? "Article highlighted." : "Article unhighlighted.");
       } catch (err) {
-        showToast(err instanceof Error ? err.message : "An error occurred.");
+        toast.error(err instanceof Error ? err.message : "An error occurred.");
+      } finally {
+        setPendingRow(null);
       }
     });
   };
 
   return (
     <div className="space-y-6">
-
-      {/* Toast notification */}
-      {toastMessage && (
-        <div className="fixed top-6 right-6 z-[100] max-w-sm animate-in slide-in-from-top-2 fade-in duration-300">
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 text-xs font-semibold">
-            <AlertCircle className="h-4 w-4 shrink-0" />
-            <span>{toastMessage}</span>
-            <button onClick={() => setToastMessage(null)} className="ml-auto text-red-400 hover:text-red-600 cursor-pointer">
-              <X className="h-3.5 w-3.5" />
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Header Row */}
       <div className="flex items-center justify-between">
@@ -320,10 +317,14 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
                 {/* Un-highlight button */}
                 <button
                   onClick={() => handleToggleHighlight(article.id, article.isHighlighted)}
-                  disabled={isPending}
-                  className="mt-auto text-[10px] font-semibold text-amber-600 hover:text-red-600 transition-colors cursor-pointer flex items-center gap-1"
+                  disabled={pendingRow?.id === article.id}
+                  className="mt-auto inline-flex items-center gap-1 text-[10px] font-semibold text-amber-600 hover:text-red-600 transition-colors cursor-pointer disabled:opacity-50"
                 >
-                  <Star className="h-3 w-3 fill-amber-500" />
+                  {pendingRow?.id === article.id ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <Star className="h-3 w-3 fill-amber-500" />
+                  )}
                   <span>Remove highlight</span>
                 </button>
               </div>
@@ -368,15 +369,19 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
                   <td className="px-5 py-3.5 text-center">
                     <button
                       onClick={() => handleToggleHighlight(article.id, article.isHighlighted)}
-                      disabled={isPending}
-                      className="cursor-pointer transition-colors hover:scale-110 transform"
+                      disabled={pendingRow?.id === article.id}
+                      className="cursor-pointer transition-transform hover:scale-110 transform disabled:opacity-50"
                       title={article.isHighlighted ? "Remove from highlights" : "Add to highlights"}
                     >
-                      <Star className={`h-4 w-4 ${
-                        article.isHighlighted
-                          ? "text-amber-500 fill-amber-500"
-                          : "text-slate-300 hover:text-amber-400"
-                      }`} />
+                      {pendingRow?.id === article.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
+                      ) : (
+                        <Star className={`h-4 w-4 ${
+                          article.isHighlighted
+                            ? "text-amber-500 fill-amber-500"
+                            : "text-slate-300 hover:text-amber-400"
+                        }`} />
+                      )}
                     </button>
                   </td>
                   <td className="px-5 py-3.5">

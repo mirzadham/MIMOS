@@ -7,6 +7,8 @@ import {
   updateTestimonialAction, 
   deleteTestimonialAction 
 } from "@/app/actions/adminActions";
+import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 
 interface Testimonial {
   id: string;
@@ -21,11 +23,15 @@ interface ManageTestimonialsClientProps {
   testimonials: Testimonial[];
 }
 
-export default function ManageTestimonialsClient({ testimonials }: ManageTestimonialsClientProps) {
+export default function ManageTestimonialsClient({ testimonials: initialTestimonials }: ManageTestimonialsClientProps) {
+  const [testimonials, setTestimonials] = useState(initialTestimonials);
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const [editTestimonial, setEditTestimonial] = useState<Testimonial | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const { toast } = useToast();
+  const confirm = useConfirm();
 
   // Form Fields
   const [quote, setQuote] = useState("");
@@ -76,6 +82,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
             order: Number(order)
           });
           if (!res.success) throw new Error("Failed to update testimonial.");
+          toast.success("Testimonial updated.");
         } else {
           const res = await createTestimonialAction({
             quote,
@@ -85,25 +92,29 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
             order: Number(order)
           });
           if (!res.success) throw new Error("Failed to create testimonial.");
+          toast.success("Testimonial created.");
         }
         setIsOpen(false);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred.");
+        toast.error(err instanceof Error ? err.message : "An error occurred.");
       }
     });
   };
 
-  const handleDelete = (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete the testimonial from: "${name}"?`)) return;
-
-    startTransition(async () => {
-      try {
+  const handleDelete = async (id: string, name: string) => {
+    const confirmed = await confirm({
+      title: "Delete testimonial?",
+      message: `The testimonial from "${name}" will be permanently removed.`,
+      confirmLabel: "Delete",
+      danger: true,
+      onConfirm: async () => {
         const res = await deleteTestimonialAction(id);
         if (!res.success) throw new Error("Failed to delete testimonial.");
-      } catch (err) {
-        alert(err instanceof Error ? err.message : "An error occurred.");
-      }
+      },
     });
+    if (!confirmed) return;
+    setTestimonials((prev) => prev.filter((t) => t.id !== id));
+    toast.success("Testimonial deleted.");
   };
 
   return (

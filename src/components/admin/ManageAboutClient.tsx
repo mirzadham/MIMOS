@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState, useTransition, useRef } from "react";
-import { Plus, Edit2, Trash2, X, Users, AlertCircle, Upload, Save, ArrowUp, ArrowDown, GripVertical } from "lucide-react";
+import { Plus, Edit2, Trash2, X, Users, AlertCircle, Upload, ArrowUp, ArrowDown, GripVertical } from "lucide-react";
 import { 
   updateAboutSettingsAction, 
   createTeamMemberAction, 
   updateTeamMemberAction, 
   deleteTeamMemberAction 
 } from "@/app/actions/aboutActions";
+import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DndContext,
@@ -52,8 +54,9 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
   // Settings Form State
   const [mission, setMission] = useState(settings.mission);
   const [vision, setVision] = useState(settings.vision);
-  const [settingsSuccess, setSettingsSuccess] = useState(false);
-  const [settingsError, setSettingsError] = useState<string | null>(null);
+
+  const { toast } = useToast();
+  const confirm = useConfirm();
 
   // Team Modal State
   const [isOpen, setIsOpen] = useState(false);
@@ -73,17 +76,15 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
   // 1. Settings Submit handler
   const handleSettingsSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSettingsSuccess(false);
-    setSettingsError(null);
 
     startTransition(async () => {
       try {
         const res = await updateAboutSettingsAction({ mission, vision });
         if (!res.success) throw new Error("Failed to update about settings.");
         setSettings({ mission, vision });
-        setSettingsSuccess(true);
+        toast.success("About statements saved.");
       } catch (err) {
-        setSettingsError(err instanceof Error ? err.message : "An error occurred.");
+        toast.error(err instanceof Error ? err.message : "An error occurred.");
       }
     });
   };
@@ -235,14 +236,15 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
               );
             }
             setIsOpen(false);
+            toast.success(editMember ? "Team member updated." : "Team member added.");
           } catch (err) {
-            setTeamError(err instanceof Error ? err.message : "An error occurred.");
+            toast.error(err instanceof Error ? err.message : "An error occurred.");
           } finally {
             setUploading(false);
           }
         });
       } catch (err) {
-        setTeamError(err instanceof Error ? err.message : "Image upload failed.");
+        toast.error(err instanceof Error ? err.message : "Image upload failed.");
         setUploading(false);
       }
     };
@@ -251,14 +253,16 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
   };
 
   // 5. Team delete handler
-  const handleTeamDelete = (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to remove "${name}" from the leadership directory?`)) return;
-
-    startTransition(async () => {
-      try {
+  const handleTeamDelete = async (id: string, name: string) => {
+    const confirmed = await confirm({
+      title: "Remove team member?",
+      message: `"${name}" will be removed from the leadership directory.`,
+      confirmLabel: "Remove",
+      danger: true,
+      onConfirm: async () => {
         const res = await deleteTeamMemberAction(id);
         if (!res.success) throw new Error("Failed to delete team member.");
-        
+
         const filtered = team.filter(m => m.id !== id);
         const updatedList = filtered.map((m, idx) => ({ ...m, order: idx }));
         setTeam(updatedList);
@@ -274,10 +278,10 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
             })
           )
         );
-      } catch (err) {
-        alert(err instanceof Error ? err.message : "An error occurred.");
-      }
+      },
     });
+    if (!confirmed) return;
+    toast.success("Team member removed.");
   };
 
   // 6. Custom sorting handlers
@@ -410,20 +414,6 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
           <h2 className="font-heading text-sm font-semibold text-slate-900 border-b border-slate-100 pb-3">
             Company Core Statements
           </h2>
-
-          {settingsSuccess && (
-            <div className="rounded-lg bg-green-50 border border-green-200 p-3 text-xs text-green-700 flex items-center gap-2">
-              <Save className="h-4 w-4 shrink-0" />
-              <span>Statements saved successfully.</span>
-            </div>
-          )}
-
-          {settingsError && (
-            <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-xs text-red-700 flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{settingsError}</span>
-            </div>
-          )}
 
           <div className="space-y-1.5">
             <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
