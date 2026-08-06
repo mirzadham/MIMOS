@@ -23,7 +23,8 @@ interface ManageTestimonialsClientProps {
   testimonials: Testimonial[];
 }
 
-export default function ManageTestimonialsClient({ testimonials }: ManageTestimonialsClientProps) {
+export default function ManageTestimonialsClient({ testimonials: initialTestimonials }: ManageTestimonialsClientProps) {
+  const [testimonials, setTestimonials] = useState(initialTestimonials);
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const [editTestimonial, setEditTestimonial] = useState<Testimonial | null>(null);
@@ -112,6 +113,7 @@ export default function ManageTestimonialsClient({ testimonials }: ManageTestimo
       },
     });
     if (!confirmed) return;
+    setTestimonials((prev) => prev.filter((t) => t.id !== id));
     toast.success("Testimonial deleted.");
   };
 

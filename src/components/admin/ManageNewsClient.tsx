@@ -36,7 +36,8 @@ const CATEGORY_OPTIONS = [
   "Announcements"
 ];
 
-export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
+export default function ManageNewsClient({ articles: initialArticles }: ManageNewsClientProps) {
+  const [articles, setArticles] = useState(initialArticles);
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const [editArticle, setEditArticle] = useState<NewsArticle | null>(null);
@@ -215,6 +216,7 @@ export default function ManageNewsClient({ articles }: ManageNewsClientProps) {
       },
     });
     if (!confirmed) return;
+    setArticles((prev) => prev.filter((a) => a.id !== id));
     toast.success("Article deleted.");
   };
 

@@ -21,7 +21,8 @@ interface ManageFacilitiesClientProps {
   facilities: Facility[];
 }
 
-export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesClientProps) {
+export default function ManageFacilitiesClient({ facilities: initialFacilities }: ManageFacilitiesClientProps) {
+  const [facilities, setFacilities] = useState(initialFacilities);
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const [editFacility, setEditFacility] = useState<Facility | null>(null);
@@ -221,6 +222,7 @@ export default function ManageFacilitiesClient({ facilities }: ManageFacilitiesC
       },
     });
     if (!confirmed) return;
+    setFacilities((prev) => prev.filter((f) => f.id !== id));
     toast.success("Facility deleted.");
   };
 

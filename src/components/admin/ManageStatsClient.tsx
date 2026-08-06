@@ -16,7 +16,8 @@ interface ManageStatsClientProps {
   stats: Stat[];
 }
 
-export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
+export default function ManageStatsClient({ stats: initialStats }: ManageStatsClientProps) {
+  const [stats, setStats] = useState(initialStats);
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const [editStat, setEditStat] = useState<Stat | null>(null);
@@ -82,6 +83,7 @@ export default function ManageStatsClient({ stats }: ManageStatsClientProps) {
       },
     });
     if (!confirmed) return;
+    setStats((prev) => prev.filter((s) => s.id !== id));
     toast.success("Stat deleted.");
   };
 

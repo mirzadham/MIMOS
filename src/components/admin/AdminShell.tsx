@@ -1,12 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import AdminSidebar from "./AdminSidebar";
 
 const SIDEBAR_STORAGE_KEY = "mimos:admin:sidebar-collapsed";
+const SIDEBAR_CHANGE_EVENT = "mimos:admin:sidebar-change";
+
+function subscribeSidebarCollapsed(callback: () => void) {
+  window.addEventListener(SIDEBAR_CHANGE_EVENT, callback);
+  return () => window.removeEventListener(SIDEBAR_CHANGE_EVENT, callback);
+}
+
+function getSidebarCollapsedSnapshot(): boolean {
+  try {
+    return localStorage.getItem(SIDEBAR_STORAGE_KEY) === "1";
+  } catch {
+    // storage unavailable — keep default
+    return false;
+  }
+}
+
+/** Server/hydration snapshot: sidebar always starts expanded, then syncs post-hydration. */
+const getSidebarCollapsedServerSnapshot = () => false;
 
 interface AdminShellProps {
   adminEmail: string;
@@ -18,32 +36,31 @@ interface AdminShellProps {
  * mobile top bar, and the scrollable content column.
  */
 export default function AdminShell({ adminEmail, children }: AdminShellProps) {
-  const [collapsed, setCollapsed] = useState(false);
-  const [collapsedInitialized, setCollapsedInitialized] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const collapsed = useSyncExternalStore(
+    subscribeSidebarCollapsed,
+    getSidebarCollapsedSnapshot,
+    getSidebarCollapsedServerSnapshot
+  );
 
+  // Lock body scroll while the mobile drawer is open.
   useEffect(() => {
-    let stored = false;
-    try {
-      stored = localStorage.getItem(SIDEBAR_STORAGE_KEY) === "1";
-    } catch {
-      // storage unavailable — keep default
-    }
-    const timer = setTimeout(() => {
-      setCollapsed(stored);
-      setCollapsedInitialized(true);
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
+    if (!mobileOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileOpen]);
 
   const toggleCollapse = () => {
     const next = !collapsed;
-    setCollapsed(next);
     try {
       localStorage.setItem(SIDEBAR_STORAGE_KEY, next ? "1" : "0");
     } catch {
       // storage unavailable — state still updates for this session
     }
+    window.dispatchEvent(new Event(SIDEBAR_CHANGE_EVENT));
   };
 
   return (
@@ -84,7 +101,7 @@ export default function AdminShell({ adminEmail, children }: AdminShellProps) {
       <div className="flex">
         <AdminSidebar
           adminEmail={adminEmail}
-          collapsed={collapsedInitialized ? collapsed : false}
+          collapsed={collapsed}
           onToggleCollapse={toggleCollapse}
           mobileOpen={mobileOpen}
           onCloseMobile={() => setMobileOpen(false)}

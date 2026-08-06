@@ -25,6 +25,13 @@ type ConfirmFn = (options: ConfirmOptions) => Promise<boolean>;
 const ConfirmContext = React.createContext<ConfirmFn>(() => Promise.resolve(false));
 
 /**
+ * Duration of the popup exit transition; the promise resolver waits this
+ * long before settling so the close animation can complete. Must stay in
+ * sync with the CSS `duration-200` on AlertDialog.Popup.
+ */
+const CLOSE_TRANSITION_MS = 200;
+
+/**
  * Promise-based confirmation dialogs built on Base UI's AlertDialog.
  * Mount once near the app root; consume via `useConfirm()`.
  */
@@ -37,6 +44,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
   const resolverRef = React.useRef<((value: boolean) => void) | null>(null);
   const resultRef = React.useRef(false);
   const closeTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const busyRef = React.useRef(false);
 
   const confirm = React.useCallback<ConfirmFn>((opts) => {
     return new Promise<boolean>((resolve) => {
@@ -56,6 +64,10 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const handleOpenChange = React.useCallback((next: boolean) => {
+    // While the confirm action is running, Esc/backdrop dismissal is ignored
+    // so the result is never reported as "cancelled" mid-flight.
+    if (!next && busyRef.current) return;
+
     setOpen(next);
     if (!next) {
       // Wait for the exit transition before unmounting + resolving.
@@ -70,7 +82,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
         setOptions(null);
         setBusy(false);
         setError(null);
-      }, 200);
+      }, CLOSE_TRANSITION_MS);
     }
   }, []);
 
@@ -83,13 +95,16 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
     if (!options) return;
 
     if (options.onConfirm) {
+      busyRef.current = true;
       setBusy(true);
       setError(null);
       try {
         await options.onConfirm();
         resultRef.current = true;
+        busyRef.current = false;
         setOpen(false);
       } catch (err) {
+        busyRef.current = false;
         setError(err instanceof Error ? err.message : "An error occurred.");
         setBusy(false);
       }

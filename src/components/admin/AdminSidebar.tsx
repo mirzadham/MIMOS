@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -55,9 +56,49 @@ export default function AdminSidebar({
   onCloseMobile,
 }: AdminSidebarProps) {
   const pathname = usePathname();
+  const drawerRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  // Mobile drawer: focus the close button on open, close on Escape, and
+  // trap Tab focus inside the drawer while it is open.
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onCloseMobile();
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const focusable = drawerRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable || focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [mobileOpen, onCloseMobile]);
 
   return (
     <aside
+      ref={drawerRef}
+      {...(mobileOpen
+        ? { role: "dialog", "aria-modal": true, "aria-label": "Admin navigation" }
+        : {})}
       className={cn(
         "flex w-64 flex-col border-r border-slate-200 bg-white",
         // Mobile: off-canvas drawer. Desktop: sticky full-height rail.
@@ -71,6 +112,7 @@ export default function AdminSidebar({
         <Link
           href="/admin"
           title="MIMOS Academy Admin"
+          onClick={onCloseMobile}
           className="flex min-w-0 items-center gap-2.5 transition-opacity hover:opacity-90"
         >
           <Image
@@ -104,6 +146,7 @@ export default function AdminSidebar({
           </button>
           {/* Mobile drawer close */}
           <button
+            ref={closeButtonRef}
             type="button"
             onClick={onCloseMobile}
             aria-label="Close navigation"
@@ -144,6 +187,7 @@ export default function AdminSidebar({
               <li key={link.href}>
                 <Link
                   href={link.href}
+                  onClick={onCloseMobile}
                   aria-current={active ? "page" : undefined}
                   title={collapsed ? link.name : undefined}
                   className={cn(

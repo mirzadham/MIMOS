@@ -17,7 +17,8 @@ interface ManagePartnersClientProps {
   partners: Partner[];
 }
 
-export default function ManagePartnersClient({ partners }: ManagePartnersClientProps) {
+export default function ManagePartnersClient({ partners: initialPartners }: ManagePartnersClientProps) {
+  const [partners, setPartners] = useState(initialPartners);
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const [editPartner, setEditPartner] = useState<Partner | null>(null);
@@ -146,6 +147,7 @@ export default function ManagePartnersClient({ partners }: ManagePartnersClientP
       },
     });
     if (!confirmed) return;
+    setPartners((prev) => prev.filter((p) => p.id !== id));
     toast.success("Partner deleted.");
   };
 

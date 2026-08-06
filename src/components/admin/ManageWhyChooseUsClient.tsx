@@ -59,7 +59,8 @@ const getAlignmentClasses = (order: number) => {
   }
 };
 
-export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClientProps) {
+export default function ManageWhyChooseUsClient({ cards: initialCards }: ManageWhyChooseUsClientProps) {
+  const [cards, setCards] = useState(initialCards);
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const [editCard, setEditCard] = useState<WhyChooseUsCard | null>(null);
@@ -213,6 +214,7 @@ export default function ManageWhyChooseUsClient({ cards }: ManageWhyChooseUsClie
       },
     });
     if (!confirmed) return;
+    setCards((prev) => prev.filter((c) => c.id !== id));
     toast.success("Card deleted.");
   };
 
