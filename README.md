@@ -19,6 +19,9 @@ A modern web application and Content Management System (CMS) for **MIMOS Academy
 
 ## 🚀 Getting Started
 
+> 📖 **Cloning this repo for local machine setup?** Follow our step-by-step [Local Setup Guide](LOCAL_SETUP_GUIDE.md)!  
+> 🤖 **AI Coding Agent handoff & context?** Read our comprehensive [AI Agent Handoff & Architecture Context](AI_AGENT_HANDOFF.md)!
+
 ### 1. Prerequisites
 
 Ensure you have the following installed on your local development machine:
