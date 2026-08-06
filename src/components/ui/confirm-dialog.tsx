@@ -22,7 +22,7 @@ export interface ConfirmOptions {
 
 type ConfirmFn = (options: ConfirmOptions) => Promise<boolean>;
 
-const ConfirmContext = React.createContext<ConfirmFn>(() => Promise.resolve(false));
+const ConfirmContext = React.createContext<ConfirmFn | null>(null);
 
 /**
  * Duration of the popup exit transition; the promise resolver waits this
@@ -45,6 +45,14 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
   const resultRef = React.useRef(false);
   const closeTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const busyRef = React.useRef(false);
+
+  // Clear any pending close timer if the provider unmounts mid-transition
+  // (e.g. navigating away while the exit animation is still running).
+  React.useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    };
+  }, []);
 
   const confirm = React.useCallback<ConfirmFn>((opts) => {
     return new Promise<boolean>((resolve) => {

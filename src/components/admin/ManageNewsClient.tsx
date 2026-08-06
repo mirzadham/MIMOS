@@ -317,7 +317,7 @@ export default function ManageNewsClient({ articles: initialArticles }: ManageNe
                 {/* Un-highlight button */}
                 <button
                   onClick={() => handleToggleHighlight(article.id, article.isHighlighted)}
-                  disabled={isPending || pendingRow?.id === article.id}
+                  disabled={pendingRow?.id === article.id}
                   className="mt-auto inline-flex items-center gap-1 text-[10px] font-semibold text-amber-600 hover:text-red-600 transition-colors cursor-pointer disabled:opacity-50"
                 >
                   {pendingRow?.id === article.id ? (
@@ -369,7 +369,7 @@ export default function ManageNewsClient({ articles: initialArticles }: ManageNe
                   <td className="px-5 py-3.5 text-center">
                     <button
                       onClick={() => handleToggleHighlight(article.id, article.isHighlighted)}
-                      disabled={isPending || pendingRow?.id === article.id}
+                      disabled={pendingRow?.id === article.id}
                       className="cursor-pointer transition-transform hover:scale-110 transform disabled:opacity-50"
                       title={article.isHighlighted ? "Remove from highlights" : "Add to highlights"}
                     >
