@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import type { Event as PrismaEvent } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { unstable_cache } from 'next/cache';
@@ -853,19 +854,73 @@ export let mockUpcomingEvents: UpcomingEvent[] = [
   }
 ];
 
+export const EVENT_CATEGORIES = ["LAB VISIT", "TRAINING", "SEMINAR", "WORKSHOP"] as const;
+
+// Runtime guards for values crossing the DB boundary (defense-in-depth against
+// invalid data written outside the admin UI's constrained select).
+export function sanitizeEventCategory(value: string | null | undefined): UpcomingEvent["category"] {
+  return EVENT_CATEGORIES.includes(value as UpcomingEvent["category"])
+    ? (value as UpcomingEvent["category"])
+    : "SEMINAR";
+}
+
+export function sanitizeEventAgenda(value: unknown): { time: string; topic: string }[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter(
+    (item): item is { time: string; topic: string } =>
+      typeof item === "object" &&
+      item !== null &&
+      typeof (item as { time?: unknown }).time === "string" &&
+      typeof (item as { topic?: unknown }).topic === "string"
+  );
+}
+
+// Fetches events from the DB. Returns [] when the table is empty (so an empty
+// production site shows no events until admins create them) and null when the
+// DB is unavailable (callers may fall back to mock details in that case).
+// The Prisma client is injectable for testing.
+export async function fetchEventsFromDb(
+  client: Pick<PrismaClient, "event"> = prisma
+): Promise<UpcomingEvent[] | null> {
+  try {
+    const events = await client.event.findMany({
+      orderBy: [{ isPast: 'asc' }, { rawDate: 'asc' }],
+    });
+    return events.map(dbEventToUpcomingEvent);
+  } catch (e) {
+    console.warn("Prisma Event Fetch failed, falling back to mock details: ", e);
+    return null;
+  }
+}
+
 export async function getSafeUpcomingEvents() {
   return unstable_cache(
     async () => {
-      try {
-        return mockUpcomingEvents;
-      } catch (e) {
-        console.warn("UpcomingEvents Fetch failed, falling back to mock details: ", e);
-        return mockUpcomingEvents;
-      }
+      const events = await fetchEventsFromDb();
+      if (events !== null) return events; // rows, or [] when the table is empty
+      // DB unavailable (not empty) — show mock details so the site stays usable.
+      return mockUpcomingEvents;
     },
     ["upcomingEvents"],
     { tags: ["cms-content"] }
   )();
+}
+
+export function dbEventToUpcomingEvent(e: PrismaEvent): UpcomingEvent {
+  return {
+    id: e.id,
+    date: e.date,
+    rawDate: e.rawDate ?? undefined,
+    title: e.title,
+    category: sanitizeEventCategory(e.category),
+    isPast: e.isPast,
+    location: e.location ?? undefined,
+    description: e.description ?? undefined,
+    imageUrl: e.imageUrl ?? undefined,
+    microsoftFormUrl: e.microsoftFormUrl ?? undefined,
+    agenda: sanitizeEventAgenda(e.agenda),
+    link: e.link ?? undefined,
+  };
 }
 
 export async function getSafeEventById(id: string) {

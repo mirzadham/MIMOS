@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useTransition, useRef } from "react";
+import Image from "next/image";
 import { Plus, Edit2, Trash2, X, AlertCircle, Upload, Building2, Eye, ListPlus, Trash } from "lucide-react";
 import { createFacilityAction, updateFacilityAction, deleteFacilityAction } from "@/app/actions/adminActions";
 import { useToast } from "@/components/ui/toast";
@@ -278,9 +279,11 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="relative h-12 w-20 rounded-md overflow-hidden bg-slate-100 border border-slate-200">
                       {fac.imageUrl ? (
-                        <img
+                        <Image
                           src={fac.imageUrl}
                           alt={fac.title}
+                          fill
+                          sizes="80px"
                           className="object-cover w-full h-full"
                         />
                       ) : (
@@ -418,9 +421,11 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
                 <div className="flex gap-4 items-center">
                   <div className="relative h-20 w-32 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
                     {imageUrl ? (
-                      <img
+                      <Image
                         src={imageUrl}
                         alt="Preview"
+                        fill
+                        sizes="128px"
                         className="h-full w-full object-cover"
                       />
                     ) : (

@@ -7,7 +7,7 @@ function revalidatePath(path: string) {
   (revalidateTag as unknown as (tag: string) => void)("cms-content");
 }
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles, mockFacilities, setMockFacilities, mockUpcomingEvents, setMockUpcomingEvents, UpcomingEvent } from "@/lib/db";
+import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles, mockFacilities, setMockFacilities, mockUpcomingEvents, setMockUpcomingEvents, sanitizeEventAgenda, UpcomingEvent } from "@/lib/db";
 import { headers } from "next/headers";
 
 async function getClientIp(): Promise<string> {
@@ -906,7 +906,11 @@ export async function deleteFacilityAction(id: string) {
   }
 }
 
-export async function saveUpcomingEventAction(eventData: Partial<UpcomingEvent> & { title: string }) {
+export type SaveUpcomingEventResult =
+  | { success: true; event: UpcomingEvent }
+  | { success: false; error: string };
+
+export async function saveUpcomingEventAction(eventData: Partial<UpcomingEvent> & { title: string }): Promise<SaveUpcomingEventResult> {
   const admin = await getSessionAdmin();
   if (!admin) throw new Error("Unauthorized");
 
@@ -928,16 +932,54 @@ export async function saveUpcomingEventAction(eventData: Partial<UpcomingEvent> 
     link: eventData.link || ""
   };
 
-  const existingIndex = mockUpcomingEvents.findIndex(e => e.id === id);
-  let newEvents: UpcomingEvent[];
-  if (existingIndex >= 0) {
-    newEvents = [...mockUpcomingEvents];
-    newEvents[existingIndex] = updatedItem;
-  } else {
-    newEvents = [updatedItem, ...mockUpcomingEvents];
+  try {
+    await prisma.event.upsert({
+      where: { id },
+      update: {
+        date: updatedItem.date,
+        rawDate: updatedItem.rawDate ?? null,
+        title: updatedItem.title,
+        category: updatedItem.category,
+        isPast: updatedItem.isPast,
+        location: updatedItem.location ?? null,
+        description: updatedItem.description ?? "",
+        imageUrl: updatedItem.imageUrl ?? null,
+        microsoftFormUrl: updatedItem.microsoftFormUrl ?? null,
+        agenda: sanitizeEventAgenda(updatedItem.agenda),
+        link: updatedItem.link ?? null,
+      },
+      create: {
+        id,
+        date: updatedItem.date,
+        rawDate: updatedItem.rawDate ?? null,
+        title: updatedItem.title,
+        category: updatedItem.category,
+        isPast: updatedItem.isPast,
+        location: updatedItem.location ?? null,
+        description: updatedItem.description ?? "",
+        imageUrl: updatedItem.imageUrl ?? null,
+        microsoftFormUrl: updatedItem.microsoftFormUrl ?? null,
+        agenda: sanitizeEventAgenda(updatedItem.agenda),
+        link: updatedItem.link ?? null,
+      },
+    });
+  } catch (e) {
+    console.error("Prisma Event save error: ", e);
+    if (process.env.NODE_ENV === "production") {
+      return { success: false, error: "Failed to save event. Please try again." };
+    }
+    // Local dev without a DB: keep the in-memory mock fallback so the app stays usable.
+    const existingIndex = mockUpcomingEvents.findIndex(e => e.id === id);
+    let newEvents: UpcomingEvent[];
+    if (existingIndex >= 0) {
+      newEvents = [...mockUpcomingEvents];
+      newEvents[existingIndex] = updatedItem;
+    } else {
+      newEvents = [updatedItem, ...mockUpcomingEvents];
+    }
+    setMockUpcomingEvents(newEvents);
   }
 
-  setMockUpcomingEvents(newEvents);
   await createAuditLog(
     isEdit ? "UPDATE_EVENT" : "CREATE_EVENT",
     `${isEdit ? "Updated" : "Created"} event: ${updatedItem.title} by admin ${admin.email}`
@@ -949,12 +991,28 @@ export async function saveUpcomingEventAction(eventData: Partial<UpcomingEvent> 
   return { success: true, event: updatedItem };
 }
 
-export async function deleteUpcomingEventAction(id: string) {
+export type DeleteUpcomingEventResult =
+  | { success: true }
+  | { success: false; error: string };
+
+export async function deleteUpcomingEventAction(id: string): Promise<DeleteUpcomingEventResult> {
   const admin = await getSessionAdmin();
   if (!admin) throw new Error("Unauthorized");
 
-  const filtered = mockUpcomingEvents.filter(e => e.id !== id);
-  setMockUpcomingEvents(filtered);
+  try {
+    await prisma.event.delete({
+      where: { id }
+    });
+  } catch (e) {
+    console.error("Prisma Event delete error: ", e);
+    if (process.env.NODE_ENV === "production") {
+      return { success: false, error: "Failed to delete event. Please try again." };
+    }
+    // Local dev without a DB: keep the in-memory mock fallback so the app stays usable.
+    const filtered = mockUpcomingEvents.filter(e => e.id !== id);
+    setMockUpcomingEvents(filtered);
+  }
+
   await createAuditLog("DELETE_EVENT", `Deleted event ID: ${id} by admin ${admin.email}`);
 
   revalidatePath("/events");

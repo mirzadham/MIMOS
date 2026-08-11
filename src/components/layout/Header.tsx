@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -161,15 +162,19 @@ export default function Header() {
               <div
                 className={`absolute left-[2px] top-[2px] bottom-[2px] w-[28px] bg-white rounded-sm -z-10 transition-opacity duration-300 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}
               />
-              <img
+              <Image
                 src={!isScrolled && pathname === "/" ? "/MIMOS-Academy-white.png" : "/MIMOS-Academy-dark.png"}
                 alt="MIMOS Academy"
-                fetchPriority="high"
+                priority
+                width={620}
+                height={220}
                 className={`h-full w-auto max-w-none block object-contain object-left relative z-10 transition-opacity duration-300 ${isScrolled ? 'opacity-0' : 'opacity-100'}`}
               />
-              <img
-                src={IconImage.src}
+              <Image
+                src={IconImage}
                 alt="MIMOS Academy Icon"
+                width={IconImage.width}
+                height={IconImage.height}
                 className={`absolute left-0 top-0 h-full w-auto max-w-none block object-contain object-left z-20 transition-opacity duration-300 ${isScrolled ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
               />
             </motion.div>
@@ -310,10 +315,12 @@ export default function Header() {
             <div className="flex items-center justify-between">
               <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5">
                 <div className="overflow-hidden flex h-10 w-10 items-center justify-center bg-white/10">
-                  <img
+                  <Image
                     src="/MIMOS-Academy-white.png"
                     alt="MIMOS Academy"
-                    fetchPriority="high"
+                    priority
+                    width={620}
+                    height={220}
                     className="h-10 w-auto max-w-none block object-contain object-left"
                   />
                 </div>

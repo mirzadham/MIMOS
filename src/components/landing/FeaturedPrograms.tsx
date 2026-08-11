@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, ChevronLeft, ChevronRight, GraduationCap } from "lucide-react";
 
 
@@ -388,11 +389,13 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
               >
                 {/* IMAGE: Fixed width, dynamically anchored for realistic sliding physics */}
                 {progImage ? (
-                  <img
+                  <Image
                     src={progImage}
                     alt={program.title}
                     style={imgStyle}
-                    className={""}
+                    width={800}
+                    height={600}
+                    className=""
                   />
                 ) : (
                   <div

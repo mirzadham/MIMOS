@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useTransition, useRef } from "react";
+import Image from "next/image";
 import { Plus, Edit2, Trash2, X, Users, AlertCircle, Upload, ArrowUp, ArrowDown, GripVertical } from "lucide-react";
 import { 
   updateAboutSettingsAction, 
@@ -613,11 +614,13 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                 </label>
                 
                 <div className="flex items-center gap-3">
-                  <div className="h-16 w-12 rounded-lg bg-gradient-to-b from-brand-light-start to-brand-light-end border border-primary/5 flex items-center justify-center overflow-hidden shrink-0">
+                  <div className="h-16 w-12 relative rounded-lg bg-gradient-to-b from-brand-light-start to-brand-light-end border border-primary/5 flex items-center justify-center overflow-hidden shrink-0">
                     {imageUrl ? (
-                      <img
+                      <Image
                         src={imageUrl}
                         alt="Preview"
+                        fill
+                        sizes="64px"
                         className="h-full w-full object-cover"
                       />
                     ) : (
@@ -777,11 +780,13 @@ function SortableRow({
 
       {/* Avatar preview */}
       <td className="py-3 px-3">
-        <div className="h-12 w-9 rounded-lg bg-gradient-to-b from-brand-light-start to-brand-light-end border border-primary/5 flex items-center justify-center overflow-hidden">
+        <div className="h-12 w-9 relative rounded-lg bg-gradient-to-b from-brand-light-start to-brand-light-end border border-primary/5 flex items-center justify-center overflow-hidden">
           {member.imageUrl ? (
-            <img
+            <Image
               src={member.imageUrl}
               alt={member.name}
+              fill
+              sizes="48px"
               className="h-full w-full object-cover"
             />
           ) : (

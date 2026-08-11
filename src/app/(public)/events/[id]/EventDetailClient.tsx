@@ -11,11 +11,8 @@ import {
   MapPin, 
   CheckCircle2, 
   Clock, 
-  Share2, 
   ArrowUpRight, 
-  X, 
-  UserCheck, 
-  Building2 
+  X 
 } from "lucide-react";
 
 interface EventDetailClientProps {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Image from "next/image";
 import { 
   createProgramAction, 
   updateProgramAction, 
@@ -262,9 +263,11 @@ export default function ManageProgramsClient({
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
                     {((prog.imageUrls && prog.imageUrls.length > 0) ? prog.imageUrls[0] : prog.imageUrl) && (
-                      <img
+                      <Image
                         src={(prog.imageUrls && prog.imageUrls.length > 0) ? prog.imageUrls[0]! : prog.imageUrl!}
                         alt={prog.title}
+                        width={40}
+                        height={40}
                         className="w-10 h-10 rounded object-cover object-top border border-slate-100 shrink-0"
                       />
                     )}
@@ -656,9 +659,11 @@ function SortablePosterCard({ poster, index, onRemove }: SortablePosterCardProps
         {...listeners} 
         className="w-full aspect-[4/3] bg-slate-100 relative overflow-hidden"
       >
-        <img 
+        <Image 
           src={poster.url} 
           alt={`Poster Page ${index + 1}`} 
+          fill
+          sizes="600px"
           className="w-full h-full object-cover object-top pointer-events-none" 
         />
         <div className="absolute top-2 left-2 bg-slate-900/75 backdrop-blur-md text-white text-[9px] font-semibold px-1.5 py-0.5 rounded uppercase font-sans">
