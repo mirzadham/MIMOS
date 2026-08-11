@@ -7,7 +7,7 @@ function revalidatePath(path: string) {
   (revalidateTag as unknown as (tag: string) => void)("cms-content");
 }
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles, mockFacilities, setMockFacilities, mockUpcomingEvents, setMockUpcomingEvents, UpcomingEvent } from "@/lib/db";
+import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles, mockFacilities, setMockFacilities, mockUpcomingEvents, setMockUpcomingEvents, sanitizeEventAgenda, UpcomingEvent } from "@/lib/db";
 import { headers } from "next/headers";
 
 async function getClientIp(): Promise<string> {
@@ -928,16 +928,50 @@ export async function saveUpcomingEventAction(eventData: Partial<UpcomingEvent> 
     link: eventData.link || ""
   };
 
-  const existingIndex = mockUpcomingEvents.findIndex(e => e.id === id);
-  let newEvents: UpcomingEvent[];
-  if (existingIndex >= 0) {
-    newEvents = [...mockUpcomingEvents];
-    newEvents[existingIndex] = updatedItem;
-  } else {
-    newEvents = [updatedItem, ...mockUpcomingEvents];
+  try {
+    await prisma.event.upsert({
+      where: { id },
+      update: {
+        date: updatedItem.date,
+        rawDate: updatedItem.rawDate ?? null,
+        title: updatedItem.title,
+        category: updatedItem.category,
+        isPast: updatedItem.isPast,
+        location: updatedItem.location ?? null,
+        description: updatedItem.description ?? "",
+        imageUrl: updatedItem.imageUrl ?? null,
+        microsoftFormUrl: updatedItem.microsoftFormUrl ?? null,
+        agenda: sanitizeEventAgenda(updatedItem.agenda),
+        link: updatedItem.link ?? null,
+      },
+      create: {
+        id,
+        date: updatedItem.date,
+        rawDate: updatedItem.rawDate ?? null,
+        title: updatedItem.title,
+        category: updatedItem.category,
+        isPast: updatedItem.isPast,
+        location: updatedItem.location ?? null,
+        description: updatedItem.description ?? "",
+        imageUrl: updatedItem.imageUrl ?? null,
+        microsoftFormUrl: updatedItem.microsoftFormUrl ?? null,
+        agenda: sanitizeEventAgenda(updatedItem.agenda),
+        link: updatedItem.link ?? null,
+      },
+    });
+  } catch (e) {
+    console.error("Prisma Event save error, falling back to mock: ", e);
+    const existingIndex = mockUpcomingEvents.findIndex(e => e.id === id);
+    let newEvents: UpcomingEvent[];
+    if (existingIndex >= 0) {
+      newEvents = [...mockUpcomingEvents];
+      newEvents[existingIndex] = updatedItem;
+    } else {
+      newEvents = [updatedItem, ...mockUpcomingEvents];
+    }
+    setMockUpcomingEvents(newEvents);
   }
 
-  setMockUpcomingEvents(newEvents);
   await createAuditLog(
     isEdit ? "UPDATE_EVENT" : "CREATE_EVENT",
     `${isEdit ? "Updated" : "Created"} event: ${updatedItem.title} by admin ${admin.email}`
@@ -953,8 +987,16 @@ export async function deleteUpcomingEventAction(id: string) {
   const admin = await getSessionAdmin();
   if (!admin) throw new Error("Unauthorized");
 
-  const filtered = mockUpcomingEvents.filter(e => e.id !== id);
-  setMockUpcomingEvents(filtered);
+  try {
+    await prisma.event.delete({
+      where: { id }
+    });
+  } catch (e) {
+    console.error("Prisma Event delete error, falling back to mock: ", e);
+    const filtered = mockUpcomingEvents.filter(e => e.id !== id);
+    setMockUpcomingEvents(filtered);
+  }
+
   await createAuditLog("DELETE_EVENT", `Deleted event ID: ${id} by admin ${admin.email}`);
 
   revalidatePath("/events");

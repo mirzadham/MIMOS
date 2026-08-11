@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useTransition, useRef } from "react";
+import Image from "next/image";
 import { Plus, Edit2, Trash2, X, Newspaper, AlertCircle, Star, Image as ImageIcon, Upload, Loader2 } from "lucide-react";
 import {
   createNewsArticleAction,
@@ -296,10 +297,12 @@ export default function ManageNewsClient({ articles: initialArticles }: ManageNe
 
                 {/* Image preview */}
                 {article.imageUrl ? (
-                  <div className="aspect-[16/9] w-full overflow-hidden rounded-lg bg-slate-100">
-                    <img
+                  <div className="aspect-[16/9] w-full relative overflow-hidden rounded-lg bg-slate-100">
+                    <Image
                       src={article.imageUrl}
                       alt={article.title}
+                      fill
+                      sizes="400px"
                       className="h-full w-full object-cover"
                     />
                   </div>
@@ -402,10 +405,12 @@ export default function ManageNewsClient({ articles: initialArticles }: ManageNe
                   </td>
                   <td className="px-5 py-3.5">
                     {article.imageUrl ? (
-                      <div className="h-8 w-12 overflow-hidden rounded bg-slate-100">
-                        <img
+                      <div className="h-8 w-12 relative overflow-hidden rounded bg-slate-100">
+                        <Image
                           src={article.imageUrl}
                           alt=""
+                          fill
+                          sizes="48px"
                           className="h-full w-full object-cover"
                         />
                       </div>
@@ -571,11 +576,13 @@ export default function ManageNewsClient({ articles: initialArticles }: ManageNe
 
                   {imageUrl && (
                     <div className="h-16 w-24 relative bg-slate-50 border border-slate-200 shrink-0 overflow-hidden rounded-lg">
-                      <img
+                      <Image
                         src={imageUrl}
                         alt="Preview"
+                        fill
+                        sizes="96px"
                         className="h-full w-full object-cover"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
                       />
                     </div>
                   )}

@@ -185,5 +185,25 @@ model CareerOption {
   @@index([kind, order])
 }
 
+model Event {
+  id               String   @id @default(uuid())
+  date             String   // Display date e.g. "OCT 15"
+  rawDate          String?  // Sortable ISO date e.g. "2026-10-15"
+  title            String
+  category         String   // e.g. "LAB VISIT", "TRAINING", "SEMINAR", "WORKSHOP"
+  isPast           Boolean  @default(false)
+  location         String?
+  description      String   @default("")
+  imageUrl         String?
+  microsoftFormUrl String?
+  agenda           Json?    // [{ time, topic }]
+  link             String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([rawDate])
+  @@index([isPast])
+}
+
 
 

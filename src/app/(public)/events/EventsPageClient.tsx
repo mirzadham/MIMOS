@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { UpcomingEvent } from "@/lib/db";
-import { ChevronDown, ChevronUp, RotateCcw, ArrowUpRight, Calendar, MapPin } from "lucide-react";
+import { ChevronDown, ChevronUp, RotateCcw, ArrowUpRight, Calendar } from "lucide-react";
 
 interface EventsPageClientProps {
   events: UpcomingEvent[];
@@ -76,11 +76,6 @@ export default function EventsPageClient({ events }: EventsPageClientProps) {
       opacity: 1,
       transition: { staggerChildren: 0.08 },
     },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 15 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const } },
   };
 
   return (

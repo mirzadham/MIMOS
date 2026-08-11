@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { 
-  createNewsArticleAction, 
+import {
+  createNewsArticleAction,
   updateNewsArticleAction,
   deleteNewsArticleAction,
   createFacilityAction,
   updateFacilityAction,
   deleteFacilityAction,
+  saveUpcomingEventAction,
+  deleteUpcomingEventAction,
 } from "./adminActions";
 import { getSessionAdmin } from "@/lib/adminAuth";
-import { prisma } from "@/lib/db";
+import { prisma, setMockUpcomingEvents } from "@/lib/db";
 
 // Mock next/cache
 vi.mock("next/cache", () => ({
@@ -36,6 +38,10 @@ vi.mock("@/lib/db", () => {
       update: vi.fn(),
       delete: vi.fn(),
     },
+    event: {
+      upsert: vi.fn(),
+      delete: vi.fn(),
+    },
     auditLog: {
       create: vi.fn(),
     },
@@ -53,6 +59,11 @@ vi.mock("@/lib/db", () => {
       { id: "mock-fac-1", title: "Facility 1", specs: [] },
     ],
     setMockFacilities: vi.fn(),
+    mockUpcomingEvents: [
+      { id: "mock-evt-1", title: "Mock Event 1", category: "SEMINAR", date: "JAN 01" },
+    ],
+    setMockUpcomingEvents: vi.fn(),
+    sanitizeEventAgenda: (v: unknown) => Array.isArray(v) ? v : [],
   };
 });
 
@@ -310,6 +321,84 @@ describe("Admin News Server Actions Tests", () => {
           where: { id: "mock-fac-1" }
         })
       );
+    });
+  });
+
+  describe("saveUpcomingEventAction", () => {
+    it("should throw an error if unauthorized", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(null);
+      await expect(
+        saveUpcomingEventAction({ title: "New Event" })
+      ).rejects.toThrow("Unauthorized");
+    });
+
+    it("should upsert event in DB if authorized", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
+      const eventData = {
+        id: "evt-123",
+        title: "New Event",
+        category: "WORKSHOP" as const,
+        date: "JAN 10",
+        rawDate: "2027-01-10",
+        agenda: [{ time: "09:00 AM", topic: "Intro" }],
+      };
+      vi.mocked(prisma.event.upsert).mockResolvedValue({ ...eventData } as any);
+
+      const res = await saveUpcomingEventAction(eventData as any);
+
+      expect(res.success).toBe(true);
+      expect(res.event?.title).toBe("New Event");
+      expect(prisma.event.upsert).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: "evt-123" },
+          create: expect.objectContaining({
+            title: "New Event",
+            category: "WORKSHOP",
+            agenda: [{ time: "09:00 AM", topic: "Intro" }],
+          })
+        })
+      );
+    });
+
+    it("should fall back to mock when DB save fails", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
+      vi.mocked(prisma.event.upsert).mockRejectedValue(new Error("DB down"));
+
+      const res = await saveUpcomingEventAction({ title: "Fallback Event" });
+
+      expect(res.success).toBe(true);
+      expect(setMockUpcomingEvents).toHaveBeenCalled();
+    });
+  });
+
+  describe("deleteUpcomingEventAction", () => {
+    it("should throw an error if unauthorized", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(null);
+      await expect(deleteUpcomingEventAction("evt-123")).rejects.toThrow("Unauthorized");
+    });
+
+    it("should delete event from DB if authorized", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
+      vi.mocked(prisma.event.delete).mockResolvedValue({ id: "evt-123" } as any);
+
+      const res = await deleteUpcomingEventAction("evt-123");
+
+      expect(res.success).toBe(true);
+      expect(prisma.event.delete).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: "evt-123" }
+        })
+      );
+    });
+
+    it("should fall back to mock when DB delete fails", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
+      vi.mocked(prisma.event.delete).mockRejectedValue(new Error("DB down"));
+
+      const res = await deleteUpcomingEventAction("mock-evt-1");
+
+      expect(res.success).toBe(true);
+      expect(setMockUpcomingEvents).toHaveBeenCalled();
     });
   });
 });

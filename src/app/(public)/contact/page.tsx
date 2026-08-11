@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { Send, ArrowRight, Loader2, ExternalLink } from "lucide-react";
+import { ArrowRight, Loader2, ExternalLink } from "lucide-react";
 
 // Animation settings for the staggered columns fade-in
 const containerVariants: Variants = {
