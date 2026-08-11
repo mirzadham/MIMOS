@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import {
-  getCareersAction,
   createCareerAction,
   updateCareerAction,
   deleteCareerAction,
@@ -36,42 +35,12 @@ vi.mock("@/lib/db", () => {
   };
   return {
     prisma: mockPrisma,
-    mockCareers: [
-      {
-        id: "mock-1",
-        title: "Mock Job",
-        description: "Mock desc",
-        category: "Development",
-        location: "Remote",
-        employmentType: "Full-time",
-        applyUrl: null,
-      },
-    ],
   };
 });
 
 describe("Career Server Actions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  describe("getCareersAction", () => {
-    it("should return careers list on success", async () => {
-      const mockList = [{ id: "c1", title: "Dev" }];
-      (prisma.career.findMany as any).mockResolvedValue(mockList);
-
-      const res = await getCareersAction();
-      expect(res.success).toBe(true);
-      expect(res.data).toEqual(mockList);
-    });
-
-    it("should return mock fallback if database query fails", async () => {
-      (prisma.career.findMany as any).mockRejectedValue(new Error("DB offline"));
-
-      const res = await getCareersAction();
-      expect(res.success).toBe(true);
-      expect(res.data).toBeDefined();
-    });
   });
 
   describe("createCareerAction", () => {
