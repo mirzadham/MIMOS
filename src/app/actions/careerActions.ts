@@ -2,7 +2,7 @@
 
 import { revalidatePath as nextRevalidatePath, revalidateTag } from "next/cache";
 import { getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockCareers } from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { headers } from "next/headers";
 import { CAREER_CATEGORIES } from "@/data/careersData";
 
@@ -79,19 +79,6 @@ function validateCareerData(data: CareerInput): { error: string } | { value: Req
 
   return { value: { title, description, category, location, employmentType, applyUrl } };
 }
-
-export async function getCareersAction() {
-  try {
-    const careers = await prisma.career.findMany({
-      orderBy: { order: "asc" },
-    });
-    return { success: true, data: careers };
-  } catch (e) {
-    console.warn("Prisma query failed, falling back to mock careers: ", e);
-    return { success: true, data: mockCareers };
-  }
-}
-
 export async function createCareerAction(data: CareerInput) {
   const admin = await getSessionAdmin();
   if (!admin) return { success: false, error: "Unauthorized access" };

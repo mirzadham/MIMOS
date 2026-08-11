@@ -112,6 +112,11 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
 
   const [prevActiveIndex, setPrevActiveIndex] = useState(0);
 
+  // Synchronous mirror of `activeIndex` (updated inside startTransition)
+  // so that rapid successive clicks always read the latest index instead of
+  // a possibly-stale value captured from the render closure.
+  const activeIndexRef = useRef(0);
+
   const getDisplayPos = (i: number) =>
     (i - activeIndex + total) % total;
 
@@ -156,7 +161,8 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     if (transitionTimeoutRef.current) {
       clearTimeout(transitionTimeoutRef.current);
     }
-    setPrevActiveIndex(activeIndex);
+    setPrevActiveIndex(activeIndexRef.current);
+    activeIndexRef.current = newIndex;
     setDirection(dir);
     setIsTransitioning(true);
     setActiveIndex(newIndex);
