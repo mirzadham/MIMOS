@@ -875,24 +875,33 @@ export function sanitizeEventAgenda(value: unknown): { time: string; topic: stri
   );
 }
 
+// Fetches events from the DB. Returns null when the table is empty or the DB
+// is unavailable so the caller can fall back to mock details.
+// The Prisma client is injectable for testing.
+export async function fetchEventsFromDb(
+  client: Pick<PrismaClient, "event"> = prisma
+): Promise<UpcomingEvent[] | null> {
+  try {
+    const events = await client.event.findMany({
+      orderBy: [{ isPast: 'asc' }, { rawDate: 'asc' }],
+    });
+    if (events.length === 0) return null;
+    return events.map(dbEventToUpcomingEvent);
+  } catch (e) {
+    console.warn("Prisma Event Fetch failed, falling back to mock details: ", e);
+    return null;
+  }
+}
+
 export async function getSafeUpcomingEvents() {
   return unstable_cache(
     async () => {
-      try {
-        const events = await prisma.event.findMany({
-          orderBy: [{ isPast: 'asc' }, { rawDate: 'asc' }],
-        });
-        if (events.length > 0) {
-          return events.map(dbEventToUpcomingEvent);
-        }
-        // No DB entries yet (e.g. fresh install) — show mock details.
-        // NOTE: once the first real event is saved to the DB, DB rows win and
-        // mock entries stop displaying (same pattern as programs/facilities).
-        return mockUpcomingEvents;
-      } catch (e) {
-        console.warn("Prisma Event Fetch failed, falling back to mock details: ", e);
-        return mockUpcomingEvents;
-      }
+      const events = await fetchEventsFromDb();
+      if (events) return events;
+      // No DB entries or DB error — show mock details.
+      // NOTE: once the first real event is saved to the DB, DB rows win and
+      // mock entries stop displaying (same pattern as programs/facilities).
+      return mockUpcomingEvents;
     },
     ["upcomingEvents"],
     { tags: ["cms-content"] }

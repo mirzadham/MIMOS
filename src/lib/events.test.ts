@@ -1,11 +1,60 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   dbEventToUpcomingEvent,
+  fetchEventsFromDb,
   sanitizeEventCategory,
   sanitizeEventAgenda,
   EVENT_CATEGORIES,
 } from "./db";
+
+describe("fetchEventsFromDb", () => {
+  it("returns mapped events when the DB has rows", async () => {
+    const fakeClient = { event: { findMany: vi.fn() } };
+    const rows = [
+      {
+        id: "evt-1",
+        date: "JAN 01",
+        rawDate: "2027-01-01",
+        title: "DB Event",
+        category: "WORKSHOP",
+        isPast: false,
+        location: "MIMOS",
+        description: "",
+        imageUrl: null,
+        microsoftFormUrl: null,
+        agenda: null,
+        link: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+    vi.mocked(fakeClient.event.findMany).mockResolvedValue(rows as any);
+
+    const events = await fetchEventsFromDb(fakeClient as any);
+
+    expect(events).toHaveLength(1);
+    expect(events?.[0].title).toBe("DB Event");
+    expect(events?.[0].category).toBe("WORKSHOP");
+    expect(fakeClient.event.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ orderBy: [{ isPast: 'asc' }, { rawDate: 'asc' }] })
+    );
+  });
+
+  it("returns null when the table is empty", async () => {
+    const fakeClient = { event: { findMany: vi.fn() } };
+    vi.mocked(fakeClient.event.findMany).mockResolvedValue([]);
+
+    expect(await fetchEventsFromDb(fakeClient as any)).toBeNull();
+  });
+
+  it("returns null when the DB errors", async () => {
+    const fakeClient = { event: { findMany: vi.fn() } };
+    vi.mocked(fakeClient.event.findMany).mockRejectedValue(new Error("connection refused"));
+
+    expect(await fetchEventsFromDb(fakeClient as any)).toBeNull();
+  });
+});
 
 describe("dbEventToUpcomingEvent", () => {
   it("maps all fields from a DB row", () => {

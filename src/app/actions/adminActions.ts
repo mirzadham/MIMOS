@@ -906,7 +906,11 @@ export async function deleteFacilityAction(id: string) {
   }
 }
 
-export async function saveUpcomingEventAction(eventData: Partial<UpcomingEvent> & { title: string }) {
+export type SaveUpcomingEventResult =
+  | { success: true; event: UpcomingEvent }
+  | { success: false; error: string };
+
+export async function saveUpcomingEventAction(eventData: Partial<UpcomingEvent> & { title: string }): Promise<SaveUpcomingEventResult> {
   const admin = await getSessionAdmin();
   if (!admin) throw new Error("Unauthorized");
 
@@ -960,7 +964,11 @@ export async function saveUpcomingEventAction(eventData: Partial<UpcomingEvent> 
       },
     });
   } catch (e) {
-    console.error("Prisma Event save error, falling back to mock: ", e);
+    console.error("Prisma Event save error: ", e);
+    if (process.env.NODE_ENV === "production") {
+      return { success: false, error: "Failed to save event. Please try again." };
+    }
+    // Local dev without a DB: keep the in-memory mock fallback so the app stays usable.
     const existingIndex = mockUpcomingEvents.findIndex(e => e.id === id);
     let newEvents: UpcomingEvent[];
     if (existingIndex >= 0) {
@@ -983,7 +991,11 @@ export async function saveUpcomingEventAction(eventData: Partial<UpcomingEvent> 
   return { success: true, event: updatedItem };
 }
 
-export async function deleteUpcomingEventAction(id: string) {
+export type DeleteUpcomingEventResult =
+  | { success: true }
+  | { success: false; error: string };
+
+export async function deleteUpcomingEventAction(id: string): Promise<DeleteUpcomingEventResult> {
   const admin = await getSessionAdmin();
   if (!admin) throw new Error("Unauthorized");
 
@@ -992,7 +1004,11 @@ export async function deleteUpcomingEventAction(id: string) {
       where: { id }
     });
   } catch (e) {
-    console.error("Prisma Event delete error, falling back to mock: ", e);
+    console.error("Prisma Event delete error: ", e);
+    if (process.env.NODE_ENV === "production") {
+      return { success: false, error: "Failed to delete event. Please try again." };
+    }
+    // Local dev without a DB: keep the in-memory mock fallback so the app stays usable.
     const filtered = mockUpcomingEvents.filter(e => e.id !== id);
     setMockUpcomingEvents(filtered);
   }

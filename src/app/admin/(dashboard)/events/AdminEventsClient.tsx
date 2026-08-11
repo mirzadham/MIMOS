@@ -124,7 +124,7 @@ export default function AdminEventsClient({ initialEvents }: AdminEventsClientPr
         handleCloseModal();
         toast.success(isEdit ? "Event updated." : "Event created.");
       } else {
-        toast.error("Failed to save event.");
+        toast.error("error" in res ? res.error : "Failed to save event.");
       }
     });
   };

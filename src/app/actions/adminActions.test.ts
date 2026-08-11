@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   createNewsArticleAction,
   updateNewsArticleAction,
@@ -72,6 +72,10 @@ describe("Admin News Server Actions Tests", () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   describe("createNewsArticleAction", () => {
@@ -347,7 +351,7 @@ describe("Admin News Server Actions Tests", () => {
       const res = await saveUpcomingEventAction(eventData as any);
 
       expect(res.success).toBe(true);
-      expect(res.event?.title).toBe("New Event");
+      expect("event" in res ? res.event.title : null).toBe("New Event");
       expect(prisma.event.upsert).toHaveBeenCalledWith(
         expect.objectContaining({
           where: { id: "evt-123" },
@@ -368,6 +372,18 @@ describe("Admin News Server Actions Tests", () => {
 
       expect(res.success).toBe(true);
       expect(setMockUpcomingEvents).toHaveBeenCalled();
+    });
+
+    it("should return an error in production when DB save fails (no mock fallback)", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
+      vi.mocked(prisma.event.upsert).mockRejectedValue(new Error("DB down"));
+      vi.stubEnv("NODE_ENV", "production");
+
+      const res = await saveUpcomingEventAction({ title: "Prod Event" });
+
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+      expect(setMockUpcomingEvents).not.toHaveBeenCalled();
     });
   });
 
@@ -399,6 +415,18 @@ describe("Admin News Server Actions Tests", () => {
 
       expect(res.success).toBe(true);
       expect(setMockUpcomingEvents).toHaveBeenCalled();
+    });
+
+    it("should return an error in production when DB delete fails (no mock fallback)", async () => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
+      vi.mocked(prisma.event.delete).mockRejectedValue(new Error("DB down"));
+      vi.stubEnv("NODE_ENV", "production");
+
+      const res = await deleteUpcomingEventAction("evt-123");
+
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+      expect(setMockUpcomingEvents).not.toHaveBeenCalled();
     });
   });
 });
