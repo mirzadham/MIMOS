@@ -875,8 +875,9 @@ export function sanitizeEventAgenda(value: unknown): { time: string; topic: stri
   );
 }
 
-// Fetches events from the DB. Returns null when the table is empty or the DB
-// is unavailable so the caller can fall back to mock details.
+// Fetches events from the DB. Returns [] when the table is empty (so an empty
+// production site shows no events until admins create them) and null when the
+// DB is unavailable (callers may fall back to mock details in that case).
 // The Prisma client is injectable for testing.
 export async function fetchEventsFromDb(
   client: Pick<PrismaClient, "event"> = prisma
@@ -885,7 +886,6 @@ export async function fetchEventsFromDb(
     const events = await client.event.findMany({
       orderBy: [{ isPast: 'asc' }, { rawDate: 'asc' }],
     });
-    if (events.length === 0) return null;
     return events.map(dbEventToUpcomingEvent);
   } catch (e) {
     console.warn("Prisma Event Fetch failed, falling back to mock details: ", e);
@@ -897,10 +897,8 @@ export async function getSafeUpcomingEvents() {
   return unstable_cache(
     async () => {
       const events = await fetchEventsFromDb();
-      if (events) return events;
-      // No DB entries or DB error — show mock details.
-      // NOTE: once the first real event is saved to the DB, DB rows win and
-      // mock entries stop displaying (same pattern as programs/facilities).
+      if (events !== null) return events; // rows, or [] when the table is empty
+      // DB unavailable (not empty) — show mock details so the site stays usable.
       return mockUpcomingEvents;
     },
     ["upcomingEvents"],

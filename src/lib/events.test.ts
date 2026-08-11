@@ -41,14 +41,14 @@ describe("fetchEventsFromDb", () => {
     );
   });
 
-  it("returns null when the table is empty", async () => {
+  it("returns an empty array when the table is empty (no mock fallback)", async () => {
     const fakeClient = { event: { findMany: vi.fn() } };
     vi.mocked(fakeClient.event.findMany).mockResolvedValue([]);
 
-    expect(await fetchEventsFromDb(fakeClient as any)).toBeNull();
+    expect(await fetchEventsFromDb(fakeClient as any)).toEqual([]);
   });
 
-  it("returns null when the DB errors", async () => {
+  it("returns null only when the DB errors", async () => {
     const fakeClient = { event: { findMany: vi.fn() } };
     vi.mocked(fakeClient.event.findMany).mockRejectedValue(new Error("connection refused"));
 
