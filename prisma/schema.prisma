@@ -151,4 +151,20 @@ model Facility {
   @@index([order])
 }
 
+model Career {
+  id             String   @id @default(uuid())
+  title          String
+  description    String
+  category       String   // e.g. "Development", "Design", "Marketing", "Customer Service", "Operations", "Finance", "Management"
+  location       String   // e.g. "100% remote", "Kuala Lumpur, Malaysia"
+  employmentType String   // e.g. "Full-time", "Part-time"
+  applyUrl       String?  // Form redirect URL or mailto link
+  order          Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([order])
+}
+
+
 

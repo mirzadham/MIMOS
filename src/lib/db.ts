@@ -872,6 +872,165 @@ export function setMockUpcomingEvents(newEvents: typeof mockUpcomingEvents) {
   mockUpcomingEvents = newEvents;
 }
 
+export interface MockCareerItem {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  location: string;
+  employmentType: string;
+  applyUrl?: string | null;
+  order: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export let mockCareers: MockCareerItem[] = [
+  {
+    id: "job-1",
+    title: "Product Designer",
+    description: "We're looking for a mid-level product designer to join our team.",
+    category: "Design",
+    location: "100% remote",
+    employmentType: "Full-time",
+    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Product%20Designer",
+    order: 0,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "job-2",
+    title: "Engineering Manager",
+    description: "We're looking for an experienced engineering manager to join our team.",
+    category: "Development",
+    location: "100% remote",
+    employmentType: "Full-time",
+    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Engineering%20Manager",
+    order: 1,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "job-3",
+    title: "Customer Success Manager",
+    description: "We're looking for a customer success manager to join our team.",
+    category: "Customer Service",
+    location: "100% remote",
+    employmentType: "Full-time",
+    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Customer%20Success%20Manager",
+    order: 2,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "job-4",
+    title: "Senior Full Stack Engineer",
+    description: "We're looking for a senior full stack developer passionate about scalable web applications.",
+    category: "Development",
+    location: "Kuala Lumpur, Malaysia",
+    employmentType: "Full-time",
+    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Senior%20Full%20Stack%20Engineer",
+    order: 3,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "job-5",
+    title: "Growth Marketing Specialist",
+    description: "We're looking for a data-driven growth marketer to scale our educational program reach.",
+    category: "Marketing",
+    location: "100% remote",
+    employmentType: "Full-time",
+    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Growth%20Marketing%20Specialist",
+    order: 4,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "job-6",
+    title: "Operations & HR Lead",
+    description: "We're looking for an operations lead to streamline internal workflows and talent onboarding.",
+    category: "Operations",
+    location: "Kuala Lumpur, Malaysia",
+    employmentType: "Full-time",
+    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Operations%20%26%20HR%20Lead",
+    order: 5,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "job-7",
+    title: "Financial Analyst",
+    description: "We're looking for a detail-oriented financial analyst to manage budgeting and strategic planning.",
+    category: "Finance",
+    location: "Kulim, Kedah",
+    employmentType: "Full-time",
+    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Financial%20Analyst",
+    order: 6,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "job-8",
+    title: "Director of Product Strategy",
+    description: "We're looking for a visionary product leader to define the roadmap for MIMOS Academy platforms.",
+    category: "Management",
+    location: "100% remote",
+    employmentType: "Full-time",
+    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Director%20of%20Product%20Strategy",
+    order: 7,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "job-9",
+    title: "UX Researcher",
+    description: "We're looking for a UX researcher to conduct qualitative user testing and field studies.",
+    category: "Design",
+    location: "100% remote",
+    employmentType: "Part-time",
+    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20UX%20Researcher",
+    order: 8,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: "job-10",
+    title: "Support Operations Specialist",
+    description: "We're looking for a dedicated specialist to support participant inquiries and portal access.",
+    category: "Customer Service",
+    location: "100% remote",
+    employmentType: "Full-time",
+    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Support%20Operations%20Specialist",
+    order: 9,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
+
+export async function getSafeCareers() {
+  return unstable_cache(
+    async () => {
+      try {
+        const careers = await prisma.career.findMany({
+          orderBy: { order: "asc" },
+        });
+        return careers.length > 0 ? careers : mockCareers;
+      } catch (e) {
+        console.warn("Careers Fetch failed, falling back to mock details: ", e);
+        return mockCareers;
+      }
+    },
+    ["careers"],
+    { tags: ["cms-content"] }
+  )();
+}
+
+export function setMockCareers(newCareers: typeof mockCareers) {
+  mockCareers = newCareers;
+}
+
+
 
 
 

@@ -107,6 +107,11 @@ export default function Footer() {
                 News
               </Link>
             </li>
+            <li>
+              <Link href="/careers" className="hover:text-primary transition-colors footer-hover-line">
+                Careers
+              </Link>
+            </li>
           </ul>
 
           {/* Contact Details Column */}
