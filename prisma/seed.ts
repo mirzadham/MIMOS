@@ -438,6 +438,34 @@ async function main() {
     await prisma.facility.create({ data: fac });
   }
 
+  // Career options (categories / employment types / location modes) — idempotent upserts.
+  // Mirrors the defaults seeded inside migrations/<ts>_add_career_options/migration.sql.
+  const careerOptionsData = [
+    { id: 'cat-development', kind: 'CATEGORY' as const, name: 'Development', order: 0 },
+    { id: 'cat-design', kind: 'CATEGORY' as const, name: 'Design', order: 1 },
+    { id: 'cat-marketing', kind: 'CATEGORY' as const, name: 'Marketing', order: 2 },
+    { id: 'cat-customer-service', kind: 'CATEGORY' as const, name: 'Customer Service', order: 3 },
+    { id: 'cat-operations', kind: 'CATEGORY' as const, name: 'Operations', order: 4 },
+    { id: 'cat-finance', kind: 'CATEGORY' as const, name: 'Finance', order: 5 },
+    { id: 'cat-management', kind: 'CATEGORY' as const, name: 'Management', order: 6 },
+    { id: 'et-full-time', kind: 'EMPLOYMENT_TYPE' as const, name: 'Full-time', order: 0 },
+    { id: 'et-part-time', kind: 'EMPLOYMENT_TYPE' as const, name: 'Part-time', order: 1 },
+    { id: 'et-contract', kind: 'EMPLOYMENT_TYPE' as const, name: 'Contract', order: 2 },
+    { id: 'et-internship', kind: 'EMPLOYMENT_TYPE' as const, name: 'Internship', order: 3 },
+    { id: 'et-freelance', kind: 'EMPLOYMENT_TYPE' as const, name: 'Freelance', order: 4 },
+    { id: 'lm-remote', kind: 'LOCATION_MODE' as const, name: 'Remote', order: 0 },
+    { id: 'lm-on-site', kind: 'LOCATION_MODE' as const, name: 'On-site', order: 1 },
+    { id: 'lm-hybrid', kind: 'LOCATION_MODE' as const, name: 'Hybrid', order: 2 },
+  ];
+
+  for (const opt of careerOptionsData) {
+    await prisma.careerOption.upsert({
+      where: { kind_name: { kind: opt.kind, name: opt.name } },
+      update: { order: opt.order },
+      create: opt,
+    });
+  }
+
   console.log('Seeding completed successfully.');
 }
 

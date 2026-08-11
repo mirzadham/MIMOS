@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useCallback, useRef } from "react";
-import { CAREER_CATEGORIES, CategoryFilter } from "@/data/careersData";
 
 interface JobFiltersProps {
-  activeCategory: CategoryFilter;
-  onSelectCategory: (category: CategoryFilter) => void;
+  /** Category tabs including the leading "View all" pseudo-tab. */
+  categories: readonly string[];
+  activeCategory: string;
+  onSelectCategory: (category: string) => void;
 }
 
 /**
@@ -17,45 +18,44 @@ interface JobFiltersProps {
  * - Home / End jump to the first / last tab
  */
 export default function JobFilters({
+  categories,
   activeCategory,
   onSelectCategory,
 }: JobFiltersProps) {
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const selectTab = useCallback(
-    (category: CategoryFilter) => {
+    (category: string) => {
       onSelectCategory(category);
       tabRefs.current[category]?.focus();
     },
     [onSelectCategory]
   );
 
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLButtonElement>,
-    category: CategoryFilter
-  ) => {
-    const currentIndex = CAREER_CATEGORIES.indexOf(category);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, category: string) => {
+    const currentIndex = categories.indexOf(category);
+    if (currentIndex === -1) return;
     let nextIndex: number | null = null;
 
     switch (e.key) {
       case "ArrowRight":
-        nextIndex = (currentIndex + 1) % CAREER_CATEGORIES.length;
+        nextIndex = (currentIndex + 1) % categories.length;
         break;
       case "ArrowLeft":
-        nextIndex = (currentIndex - 1 + CAREER_CATEGORIES.length) % CAREER_CATEGORIES.length;
+        nextIndex = (currentIndex - 1 + categories.length) % categories.length;
         break;
       case "Home":
         nextIndex = 0;
         break;
       case "End":
-        nextIndex = CAREER_CATEGORIES.length - 1;
+        nextIndex = categories.length - 1;
         break;
       default:
         return;
     }
 
     e.preventDefault();
-    const next = CAREER_CATEGORIES[nextIndex];
+    const next = categories[nextIndex];
     onSelectCategory(next);
     tabRefs.current[next]?.focus();
   };
@@ -66,7 +66,7 @@ export default function JobFilters({
       role="tablist"
       aria-label="Filter job listings by category"
     >
-      {CAREER_CATEGORIES.map((category) => {
+      {categories.map((category) => {
         const isActive = activeCategory === category;
         return (
           <button

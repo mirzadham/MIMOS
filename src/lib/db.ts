@@ -2,6 +2,11 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { unstable_cache } from 'next/cache';
+import {
+  DEFAULT_CATEGORIES,
+  DEFAULT_EMPLOYMENT_TYPES,
+  DEFAULT_LOCATION_MODES,
+} from '@/data/careersData';
 
 let prismaInstance: PrismaClient | null = null;
 
@@ -891,9 +896,9 @@ export let mockCareers: MockCareerItem[] = [
     title: "Product Designer",
     description: "We're looking for a mid-level product designer to join our team.",
     category: "Design",
-    location: "100% remote",
+    location: "Remote",
     employmentType: "Full-time",
-    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Product%20Designer",
+    applyUrl: "https://forms.office.com/r/MIMOS01",
     order: 0,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -903,9 +908,9 @@ export let mockCareers: MockCareerItem[] = [
     title: "Engineering Manager",
     description: "We're looking for an experienced engineering manager to join our team.",
     category: "Development",
-    location: "100% remote",
+    location: "Remote",
     employmentType: "Full-time",
-    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Engineering%20Manager",
+    applyUrl: "https://forms.office.com/r/MIMOS02",
     order: 1,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -915,9 +920,9 @@ export let mockCareers: MockCareerItem[] = [
     title: "Customer Success Manager",
     description: "We're looking for a customer success manager to join our team.",
     category: "Customer Service",
-    location: "100% remote",
+    location: "Remote",
     employmentType: "Full-time",
-    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Customer%20Success%20Manager",
+    applyUrl: "https://forms.office.com/r/MIMOS03",
     order: 2,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -927,9 +932,9 @@ export let mockCareers: MockCareerItem[] = [
     title: "Senior Full Stack Engineer",
     description: "We're looking for a senior full stack developer passionate about scalable web applications.",
     category: "Development",
-    location: "Kuala Lumpur, Malaysia",
+    location: "On-site",
     employmentType: "Full-time",
-    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Senior%20Full%20Stack%20Engineer",
+    applyUrl: "https://forms.office.com/r/MIMOS04",
     order: 3,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -939,9 +944,9 @@ export let mockCareers: MockCareerItem[] = [
     title: "Growth Marketing Specialist",
     description: "We're looking for a data-driven growth marketer to scale our educational program reach.",
     category: "Marketing",
-    location: "100% remote",
+    location: "Remote",
     employmentType: "Full-time",
-    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Growth%20Marketing%20Specialist",
+    applyUrl: "https://forms.office.com/r/MIMOS05",
     order: 4,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -951,9 +956,9 @@ export let mockCareers: MockCareerItem[] = [
     title: "Operations & HR Lead",
     description: "We're looking for an operations lead to streamline internal workflows and talent onboarding.",
     category: "Operations",
-    location: "Kuala Lumpur, Malaysia",
+    location: "On-site",
     employmentType: "Full-time",
-    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Operations%20%26%20HR%20Lead",
+    applyUrl: "https://forms.office.com/r/MIMOS06",
     order: 5,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -963,9 +968,9 @@ export let mockCareers: MockCareerItem[] = [
     title: "Financial Analyst",
     description: "We're looking for a detail-oriented financial analyst to manage budgeting and strategic planning.",
     category: "Finance",
-    location: "Kulim, Kedah",
+    location: "On-site",
     employmentType: "Full-time",
-    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Financial%20Analyst",
+    applyUrl: "https://forms.office.com/r/MIMOS07",
     order: 6,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -975,9 +980,9 @@ export let mockCareers: MockCareerItem[] = [
     title: "Director of Product Strategy",
     description: "We're looking for a visionary product leader to define the roadmap for MIMOS Academy platforms.",
     category: "Management",
-    location: "100% remote",
+    location: "Remote",
     employmentType: "Full-time",
-    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Director%20of%20Product%20Strategy",
+    applyUrl: "https://forms.office.com/r/MIMOS08",
     order: 7,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -987,9 +992,9 @@ export let mockCareers: MockCareerItem[] = [
     title: "UX Researcher",
     description: "We're looking for a UX researcher to conduct qualitative user testing and field studies.",
     category: "Design",
-    location: "100% remote",
+    location: "Remote",
     employmentType: "Part-time",
-    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20UX%20Researcher",
+    applyUrl: "https://forms.office.com/r/MIMOS09",
     order: 8,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -999,9 +1004,9 @@ export let mockCareers: MockCareerItem[] = [
     title: "Support Operations Specialist",
     description: "We're looking for a dedicated specialist to support participant inquiries and portal access.",
     category: "Customer Service",
-    location: "100% remote",
+    location: "Remote",
     employmentType: "Full-time",
-    applyUrl: "mailto:careers@mimos.my?subject=Application%20for%20Support%20Operations%20Specialist",
+    applyUrl: "https://forms.office.com/r/MIMOS10",
     order: 9,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -1030,6 +1035,71 @@ export async function getSafeCareers() {
 
 export function setMockCareers(newCareers: typeof mockCareers) {
   mockCareers = newCareers;
+}
+
+// ---------------------------------------------------------------------------
+// Career options (categories / employment types / location modes)
+// ---------------------------------------------------------------------------
+
+export type CareerOptionKind = "CATEGORY" | "EMPLOYMENT_TYPE" | "LOCATION_MODE";
+
+export interface CareerOptionItem {
+  id: string;
+  kind: CareerOptionKind;
+  name: string;
+  order: number;
+}
+
+/** Default option rows used when the database is unreachable (mirrors migration seeds). */
+export const DEFAULT_CAREER_OPTIONS: CareerOptionItem[] = [
+  ...DEFAULT_CATEGORIES.map((name, order) => ({
+    id: `default-cat-${order}`,
+    kind: "CATEGORY" as const,
+    name,
+    order,
+  })),
+  ...DEFAULT_EMPLOYMENT_TYPES.map((name, order) => ({
+    id: `default-et-${order}`,
+    kind: "EMPLOYMENT_TYPE" as const,
+    name,
+    order,
+  })),
+  ...DEFAULT_LOCATION_MODES.map((name, order) => ({
+    id: `default-lm-${order}`,
+    kind: "LOCATION_MODE" as const,
+    name,
+    order,
+  })),
+];
+
+/**
+ * Fetch the managed career option lists (categories, employment types,
+ * location modes), ordered by kind + order. Falls back to the default
+ * option lists when the database is unreachable OR the table is empty
+ * (e.g. a database that predates the career_options migration), so admin
+ * forms and public filters always have a usable option set.
+ */
+export function getSafeCareerOptions(kind?: CareerOptionKind) {
+  const fallback = kind
+    ? DEFAULT_CAREER_OPTIONS.filter((o) => o.kind === kind)
+    : DEFAULT_CAREER_OPTIONS;
+  return unstable_cache(
+    async () => {
+      try {
+        const options = await prisma.careerOption.findMany({
+          where: kind ? { kind } : undefined,
+          orderBy: [{ kind: "asc" }, { order: "asc" }],
+        });
+        if (options.length === 0) return fallback;
+        return options;
+      } catch (e) {
+        console.warn("Career options fetch failed, falling back to defaults: ", e);
+        return fallback;
+      }
+    },
+    kind ? [`career-options-${kind.toLowerCase()}`] : ["career-options"],
+    { tags: ["cms-content"] }
+  )();
 }
 
 

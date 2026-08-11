@@ -1,4 +1,4 @@
-import { getSafeCareers } from "@/lib/db";
+import { getSafeCareers, getSafeCareerOptions } from "@/lib/db";
 import ManageCareersClient from "@/components/admin/ManageCareersClient";
 
 export const metadata = {
@@ -6,7 +6,10 @@ export const metadata = {
 };
 
 export default async function AdminManageCareersPage() {
-  const rawCareers = await getSafeCareers();
+  const [rawCareers, options] = await Promise.all([
+    getSafeCareers(),
+    getSafeCareerOptions(),
+  ]);
 
   const careers = rawCareers.map((c) => ({
     id: c.id,
@@ -18,5 +21,5 @@ export default async function AdminManageCareersPage() {
     applyUrl: c.applyUrl,
   }));
 
-  return <ManageCareersClient initialCareers={careers} />;
+  return <ManageCareersClient initialCareers={careers} initialOptions={options} />;
 }
