@@ -2,41 +2,12 @@
 
 import { revalidatePath as nextRevalidatePath, revalidateTag } from "next/cache";
 import { getSessionAdmin } from "@/lib/adminAuth";
-import { prisma } from "@/lib/db";
-import { headers } from "next/headers";
-import { CAREER_CATEGORIES } from "@/data/careersData";
+import { prisma, getSafeCareerOptions } from "@/lib/db";
+import { createAuditLog } from "@/lib/auditLog";
 
 function revalidatePath(path: string) {
   nextRevalidatePath(path, "layout");
   revalidateTag("cms-content", { expire: 0 });
-}
-
-async function getClientIp(): Promise<string> {
-  try {
-    const headersList = await headers();
-    const forwardedFor = headersList.get("x-forwarded-for");
-    if (forwardedFor) {
-      return forwardedFor.split(",")[0].trim();
-    }
-    const realIp = headersList.get("x-real-ip");
-    if (realIp) {
-      return realIp.trim();
-    }
-  } catch {
-    // Safe fallback for test environment
-  }
-  return "127.0.0.1";
-}
-
-async function createAuditLog(action: string, details: string) {
-  try {
-    const ipAddress = await getClientIp();
-    await prisma.auditLog.create({
-      data: { action, details, ipAddress },
-    });
-  } catch (e) {
-    console.warn("Audit log creation skipped: ", e);
-  }
 }
 
 interface CareerInput {
@@ -45,18 +16,17 @@ interface CareerInput {
   category: string;
   location: string;
   employmentType: string;
-  applyUrl?: string;
+  applyUrl: string; // Microsoft Form URL (redirection link), e.g. https://forms.office.com/r/...
 }
-
-const ALLOWED_CATEGORIES = CAREER_CATEGORIES.filter(
-  (c) => c !== "View all"
-) as readonly string[];
 
 /**
  * Server-side validation shared by create/update. Returns an error message
  * or null when the payload is acceptable. Values are returned trimmed.
+ * Category, employment type and location are validated against the managed
+ * CareerOption lists (with a defaults fallback when the DB is unreachable).
+ * The apply link is required and must be a Microsoft Form URL.
  */
-function validateCareerData(data: CareerInput): { error: string } | { value: Required<Pick<CareerInput, "title" | "description" | "category" | "location" | "employmentType">> & Pick<CareerInput, "applyUrl"> } {
+async function validateCareerData(data: CareerInput): Promise<{ error: string } | { value: Required<Pick<CareerInput, "title" | "description" | "category" | "location" | "employmentType">> & Pick<CareerInput, "applyUrl"> }> {
   const title = data.title?.trim() ?? "";
   const description = data.description?.trim() ?? "";
   const category = data.category?.trim() ?? "";
@@ -68,22 +38,44 @@ function validateCareerData(data: CareerInput): { error: string } | { value: Req
   if (title.length > 150) return { error: "Job title must be 150 characters or fewer." };
   if (!description) return { error: "Job description is required." };
   if (description.length > 5000) return { error: "Job description must be 5000 characters or fewer." };
-  if (!ALLOWED_CATEGORIES.includes(category)) return { error: "Invalid category." };
   if (!location) return { error: "Location is required." };
   if (location.length > 100) return { error: "Location must be 100 characters or fewer." };
   if (!employmentType) return { error: "Employment type is required." };
   if (employmentType.length > 50) return { error: "Employment type must be 50 characters or fewer." };
-  if (applyUrl && !/^(https?:\/\/|mailto:)/i.test(applyUrl)) {
-    return { error: "Apply link must be an http(s) or mailto URL." };
+  if (!applyUrl) return { error: "Microsoft Form link is required." };
+  if (!/^https:\/\/forms\.office\.com(\/|$)/i.test(applyUrl)) {
+    return { error: "Microsoft Form link must be a valid https://forms.office.com URL." };
+  }
+
+  try {
+    const [categories, employmentTypes, locationModes] = await Promise.all([
+      getSafeCareerOptions("CATEGORY"),
+      getSafeCareerOptions("EMPLOYMENT_TYPE"),
+      getSafeCareerOptions("LOCATION_MODE"),
+    ]);
+
+    if (!categories.some((o) => o.name === category)) {
+      return { error: "Invalid category." };
+    }
+    if (!employmentTypes.some((o) => o.name === employmentType)) {
+      return { error: "Invalid employment type." };
+    }
+    if (!locationModes.some((o) => o.name === location)) {
+      return { error: "Invalid location mode." };
+    }
+  } catch (e) {
+    console.error("Career option validation failed: ", e);
+    return { error: "Invalid category." };
   }
 
   return { value: { title, description, category, location, employmentType, applyUrl } };
 }
+
 export async function createCareerAction(data: CareerInput) {
   const admin = await getSessionAdmin();
   if (!admin) return { success: false, error: "Unauthorized access" };
 
-  const validated = validateCareerData(data);
+  const validated = await validateCareerData(data);
   if ("error" in validated) return { success: false, error: validated.error };
 
   try {
@@ -123,7 +115,7 @@ export async function updateCareerAction(id: string, data: CareerInput) {
   const admin = await getSessionAdmin();
   if (!admin) return { success: false, error: "Unauthorized access" };
 
-  const validated = validateCareerData(data);
+  const validated = await validateCareerData(data);
   if ("error" in validated) return { success: false, error: validated.error };
 
   try {
@@ -161,7 +153,6 @@ export async function updateCareerAction(id: string, data: CareerInput) {
 export async function deleteCareerAction(id: string) {
   const admin = await getSessionAdmin();
   if (!admin) return { success: false, error: "Unauthorized access" };
-
   try {
     await prisma.career.delete({
       where: { id },

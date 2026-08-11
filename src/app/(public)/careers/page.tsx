@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import CareerHero from "@/components/careers/CareerHero";
 import CareersContent from "@/components/careers/CareersContent";
-import { getSafeCareers } from "@/lib/db";
+import { getSafeCareers, getSafeCareerOptions } from "@/lib/db";
 import { JobListing } from "@/data/careersData";
 
 // Careers are managed live by admins; always render against the current
@@ -16,7 +16,12 @@ export const metadata: Metadata = {
 };
 
 export default async function CareersPage() {
-  const rawCareers = await getSafeCareers();
+  const [rawCareers, options] = await Promise.all([
+    getSafeCareers(),
+    getSafeCareerOptions("CATEGORY"),
+  ]);
+
+  const categories = options.map((o) => o.name);
 
   const careers: JobListing[] = rawCareers.map((c) => ({
     id: c.id,
@@ -31,7 +36,7 @@ export default async function CareersPage() {
   return (
     <div className="w-full">
       <CareerHero />
-      <CareersContent initialJobs={careers} />
+      <CareersContent initialJobs={careers} categories={categories} />
     </div>
   );
 }

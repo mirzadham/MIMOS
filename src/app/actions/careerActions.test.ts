@@ -20,7 +20,20 @@ vi.mock("@/lib/adminAuth", () => ({
 }));
 
 // Mock DB layer
-vi.mock("@/lib/db", () => {
+const mocks = vi.hoisted(() => {
+  const optionLists: Record<string, string[]> = {
+    CATEGORY: [
+      "Development",
+      "Design",
+      "Marketing",
+      "Customer Service",
+      "Operations",
+      "Finance",
+      "Management",
+    ],
+    EMPLOYMENT_TYPE: ["Full-time", "Part-time", "Contract", "Internship", "Freelance"],
+    LOCATION_MODE: ["Remote", "On-site", "Hybrid"],
+  };
   const mockPrisma = {
     career: {
       findMany: vi.fn(),
@@ -33,10 +46,27 @@ vi.mock("@/lib/db", () => {
       create: vi.fn(),
     },
   };
-  return {
-    prisma: mockPrisma,
-  };
+  return { optionLists, mockPrisma };
 });
+
+vi.mock("@/lib/db", () => ({
+  prisma: mocks.mockPrisma,
+  getSafeCareerOptions: vi.fn(async (kind?: string) => {
+    if (kind) {
+      return (
+        mocks.optionLists[kind]?.map((name, order) => ({
+          id: `opt-${order}`,
+          kind,
+          name,
+          order,
+        })) ?? []
+      );
+    }
+    return Object.entries(mocks.optionLists).flatMap(([kind, names]) =>
+      names.map((name, order) => ({ id: `opt-${order}`, kind, name, order }))
+    );
+  }),
+}));
 
 describe("Career Server Actions", () => {
   beforeEach(() => {
@@ -53,6 +83,7 @@ describe("Career Server Actions", () => {
         category: "Development",
         location: "Remote",
         employmentType: "Full-time",
+        applyUrl: "https://forms.office.com/r/abc123",
       });
 
       expect(res.success).toBe(false);
@@ -68,13 +99,14 @@ describe("Career Server Actions", () => {
         category: "Development",
         location: "Remote",
         employmentType: "Full-time",
+        applyUrl: "https://forms.office.com/r/abc123",
       });
 
       expect(res.success).toBe(false);
       expect(prisma.career.create).not.toHaveBeenCalled();
     });
 
-    it("should reject a non-http(s)/mailto apply URL", async () => {
+    it("should reject a non-Microsoft-Form apply URL", async () => {
       (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
 
       const res = await createCareerAction({
@@ -83,11 +115,45 @@ describe("Career Server Actions", () => {
         category: "Development",
         location: "Remote",
         employmentType: "Full-time",
-        applyUrl: "javascript:alert(1)",
+        applyUrl: "https://example.com/jobs",
       });
 
       expect(res.success).toBe(false);
-      expect(res.error).toMatch(/http\(s\) or mailto/);
+      expect(res.error).toMatch(/Microsoft Form link/);
+      expect(prisma.career.create).not.toHaveBeenCalled();
+    });
+
+    it("should reject a mailto apply URL", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+
+      const res = await createCareerAction({
+        title: "Software Engineer",
+        description: "Develop web apps",
+        category: "Development",
+        location: "Remote",
+        employmentType: "Full-time",
+        applyUrl: "mailto:careers@mimos.my",
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.error).toMatch(/Microsoft Form link/);
+      expect(prisma.career.create).not.toHaveBeenCalled();
+    });
+
+    it("should require a Microsoft Form link", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+
+      const res = await createCareerAction({
+        title: "Software Engineer",
+        description: "Develop web apps",
+        category: "Development",
+        location: "Remote",
+        employmentType: "Full-time",
+        applyUrl: "",
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.error).toBe("Microsoft Form link is required.");
       expect(prisma.career.create).not.toHaveBeenCalled();
     });
 
@@ -100,10 +166,43 @@ describe("Career Server Actions", () => {
         category: "Not-A-Real-Category",
         location: "Remote",
         employmentType: "Full-time",
+        applyUrl: "https://forms.office.com/r/abc123",
       });
 
       expect(res.success).toBe(false);
       expect(res.error).toBe("Invalid category.");
+    });
+
+    it("should reject an unknown employment type", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+
+      const res = await createCareerAction({
+        title: "Software Engineer",
+        description: "Develop web apps",
+        category: "Development",
+        location: "Remote",
+        employmentType: "On call",
+        applyUrl: "https://forms.office.com/r/abc123",
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.error).toBe("Invalid employment type.");
+    });
+
+    it("should reject an unknown location mode", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+
+      const res = await createCareerAction({
+        title: "Software Engineer",
+        description: "Develop web apps",
+        category: "Development",
+        location: "Kuala Lumpur, Malaysia",
+        employmentType: "Full-time",
+        applyUrl: "https://forms.office.com/r/abc123",
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.error).toBe("Invalid location mode.");
     });
 
     it("should return failure when the database write fails", async () => {
@@ -116,6 +215,7 @@ describe("Career Server Actions", () => {
         category: "Development",
         location: "Remote",
         employmentType: "Full-time",
+        applyUrl: "https://forms.office.com/r/abc123",
       });
 
       expect(res.success).toBe(false);
@@ -132,6 +232,7 @@ describe("Career Server Actions", () => {
         category: "Development",
         location: "Remote",
         employmentType: "Full-time",
+        applyUrl: "https://forms.office.com/r/abc123",
       });
 
       const res = await createCareerAction({
@@ -140,6 +241,7 @@ describe("Career Server Actions", () => {
         category: "Development",
         location: "Remote",
         employmentType: "Full-time",
+        applyUrl: "https://forms.office.com/r/abc123",
       });
 
       expect(res.success).toBe(true);
@@ -155,8 +257,9 @@ describe("Career Server Actions", () => {
         title: "Updated Title",
         description: "Updated desc",
         category: "Design",
-        location: "Kuala Lumpur",
+        location: "On-site",
         employmentType: "Full-time",
+        applyUrl: "https://forms.office.com/r/abc123",
       });
 
       expect(res.success).toBe(false);
@@ -171,8 +274,9 @@ describe("Career Server Actions", () => {
         title: "Updated Title",
         description: "Updated desc",
         category: "Design",
-        location: "Kuala Lumpur",
+        location: "On-site",
         employmentType: "Full-time",
+        applyUrl: "https://forms.office.com/r/abc123",
       });
 
       expect(res.success).toBe(false);
@@ -190,8 +294,9 @@ describe("Career Server Actions", () => {
         title: "Updated Title",
         description: "Updated desc",
         category: "Design",
-        location: "Kuala Lumpur",
+        location: "On-site",
         employmentType: "Full-time",
+        applyUrl: "https://forms.office.com/r/abc123",
       });
 
       expect(res.success).toBe(true);
