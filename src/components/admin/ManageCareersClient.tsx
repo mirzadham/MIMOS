@@ -7,6 +7,8 @@ import {
   deleteCareerAction,
 } from "@/app/actions/careerActions";
 import { CAREER_CATEGORIES } from "@/data/careersData";
+import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 import {
   Plus,
   Edit2,
@@ -43,14 +45,10 @@ export default function ManageCareersClient({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCareer, setEditingCareer] = useState<CareerItem | null>(null);
 
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deletingCareerId, setDeletingCareerId] = useState<string | null>(null);
-
   const [isPending, startTransition] = useTransition();
-  const [statusMessage, setStatusMessage] = useState<{
-    type: "success" | "error";
-    text: string;
-  } | null>(null);
+
+  const { toast } = useToast();
+  const confirm = useConfirm();
 
   // Form State
   const [formData, setFormData] = useState({
@@ -98,20 +96,11 @@ export default function ManageCareersClient({
     setIsModalOpen(true);
   };
 
-  const openDeleteModal = (id: string) => {
-    setDeletingCareerId(id);
-    setIsDeleteModalOpen(true);
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setStatusMessage(null);
 
     if (!formData.title || !formData.description) {
-      setStatusMessage({
-        type: "error",
-        text: "Please fill in all required fields.",
-      });
+      toast.error("Missing required fields", "Please fill in job title and description.");
       return;
     }
 
@@ -127,16 +116,10 @@ export default function ManageCareersClient({
                 : item
             )
           );
-          setStatusMessage({
-            type: "success",
-            text: "Career listing updated successfully!",
-          });
+          toast.success("Career listing updated.");
           setIsModalOpen(false);
         } else {
-          setStatusMessage({
-            type: "error",
-            text: res.error || "Failed to update career listing.",
-          });
+          toast.error("Failed to update career listing.", res.error);
         }
       } else {
         // Create Action
@@ -154,41 +137,29 @@ export default function ManageCareersClient({
             },
             ...prev,
           ]);
-          setStatusMessage({
-            type: "success",
-            text: "New career position created successfully!",
-          });
+          toast.success("Career position created.");
           setIsModalOpen(false);
         } else {
-          setStatusMessage({
-            type: "error",
-            text: res.error || "Failed to create career position.",
-          });
+          toast.error("Failed to create career position.", res.error);
         }
       }
     });
   };
 
-  const handleDelete = () => {
-    if (!deletingCareerId) return;
-
-    startTransition(async () => {
-      const res = await deleteCareerAction(deletingCareerId);
-      if (res.success) {
-        setCareers((prev) => prev.filter((item) => item.id !== deletingCareerId));
-        setStatusMessage({
-          type: "success",
-          text: "Career position deleted successfully.",
-        });
-        setIsDeleteModalOpen(false);
-        setDeletingCareerId(null);
-      } else {
-        setStatusMessage({
-          type: "error",
-          text: res.error || "Failed to delete career position.",
-        });
-      }
+  const handleDelete = async (career: CareerItem) => {
+    const confirmed = await confirm({
+      title: "Delete career position?",
+      message: `"${career.title}" will be permanently removed from the careers page.`,
+      confirmLabel: "Delete",
+      danger: true,
+      onConfirm: async () => {
+        const res = await deleteCareerAction(career.id);
+        if (!res.success) throw new Error(res.error || "Failed to delete career position.");
+      },
     });
+    if (!confirmed) return;
+    setCareers((prev) => prev.filter((item) => item.id !== career.id));
+    toast.success("Career position deleted.");
   };
 
   return (
@@ -213,25 +184,6 @@ export default function ManageCareersClient({
           <span>Add New Position</span>
         </button>
       </div>
-
-      {/* Status Feedback Notification */}
-      {statusMessage && (
-        <div
-          className={`p-4 rounded-xl text-sm font-medium border flex items-center justify-between ${
-            statusMessage.type === "success"
-              ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-              : "bg-rose-50 text-rose-800 border-rose-200"
-          }`}
-        >
-          <span>{statusMessage.text}</span>
-          <button
-            onClick={() => setStatusMessage(null)}
-            className="text-slate-500 hover:text-slate-700"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-      )}
 
       {/* Filters & Search Row */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
@@ -323,8 +275,9 @@ export default function ManageCareersClient({
                   </button>
 
                   <button
-                    onClick={() => openDeleteModal(career.id)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50/50 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-100 transition-colors cursor-pointer"
+                    onClick={() => handleDelete(career)}
+                    disabled={isPending}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50/50 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-100 transition-colors cursor-pointer disabled:opacity-50"
                   >
                     <Trash2 className="h-3.5 w-3.5 text-rose-600" />
                     Delete
@@ -479,37 +432,6 @@ export default function ManageCareersClient({
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {isDeleteModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl space-y-4">
-            <h3 className="font-heading text-lg font-bold text-slate-900">
-              Confirm Deletion
-            </h3>
-            <p className="text-xs text-slate-600 font-sans leading-relaxed">
-              Are you sure you want to delete this career position? This action cannot be undone.
-            </p>
-            <div className="flex items-center justify-end gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => setIsDeleteModalOpen(false)}
-                className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                disabled={isPending}
-                onClick={handleDelete}
-                className="rounded-xl bg-rose-600 px-4 py-2 text-xs font-semibold text-white hover:bg-rose-700 transition-all disabled:opacity-50 cursor-pointer"
-              >
-                {isPending ? "Deleting..." : "Delete Position"}
-              </button>
-            </div>
           </div>
         </div>
       )}

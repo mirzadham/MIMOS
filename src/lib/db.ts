@@ -1015,7 +1015,9 @@ export async function getSafeCareers() {
         const careers = await prisma.career.findMany({
           orderBy: { order: "asc" },
         });
-        return careers.length > 0 ? careers : mockCareers;
+        // Only fall back to mocks when the database itself is unreachable —
+        // an empty table is legitimate and must render as "no openings".
+        return careers;
       } catch (e) {
         console.warn("Careers Fetch failed, falling back to mock details: ", e);
         return mockCareers;

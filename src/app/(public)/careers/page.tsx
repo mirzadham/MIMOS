@@ -4,6 +4,11 @@ import CareersContent from "@/components/careers/CareersContent";
 import { getSafeCareers } from "@/lib/db";
 import { JobListing } from "@/data/careersData";
 
+// Careers are managed live by admins; always render against the current
+// database instead of baking a build-time snapshot (mock fallback) into
+// static HTML.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Careers | MIMOS Academy",
   description:

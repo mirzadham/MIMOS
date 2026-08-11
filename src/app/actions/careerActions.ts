@@ -2,12 +2,13 @@
 
 import { revalidatePath as nextRevalidatePath, revalidateTag } from "next/cache";
 import { getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockCareers, setMockCareers } from "@/lib/db";
+import { prisma, mockCareers } from "@/lib/db";
 import { headers } from "next/headers";
+import { CAREER_CATEGORIES } from "@/data/careersData";
 
 function revalidatePath(path: string) {
   nextRevalidatePath(path, "layout");
-  (revalidateTag as unknown as (tag: string) => void)("cms-content");
+  revalidateTag("cms-content", { expire: 0 });
 }
 
 async function getClientIp(): Promise<string> {
@@ -38,46 +39,83 @@ async function createAuditLog(action: string, details: string) {
   }
 }
 
-export async function getCareersAction() {
-  try {
-    const careers = await prisma.career.findMany({
-      orderBy: { order: "asc" },
-    });
-    return { success: true, data: careers.length > 0 ? careers : mockCareers };
-  } catch (e) {
-    console.warn("Prisma query failed, falling back to mock careers: ", e);
-    return { success: true, data: mockCareers };
-  }
-}
-
-export async function createCareerAction(data: {
+interface CareerInput {
   title: string;
   description: string;
   category: string;
   location: string;
   employmentType: string;
   applyUrl?: string;
-}) {
+}
+
+const ALLOWED_CATEGORIES = CAREER_CATEGORIES.filter(
+  (c) => c !== "View all"
+) as readonly string[];
+
+/**
+ * Server-side validation shared by create/update. Returns an error message
+ * or null when the payload is acceptable. Values are returned trimmed.
+ */
+function validateCareerData(data: CareerInput): { error: string } | { value: Required<Pick<CareerInput, "title" | "description" | "category" | "location" | "employmentType">> & Pick<CareerInput, "applyUrl"> } {
+  const title = data.title?.trim() ?? "";
+  const description = data.description?.trim() ?? "";
+  const category = data.category?.trim() ?? "";
+  const location = data.location?.trim() ?? "";
+  const employmentType = data.employmentType?.trim() ?? "";
+  const applyUrl = data.applyUrl?.trim() ?? "";
+
+  if (!title) return { error: "Job title is required." };
+  if (title.length > 150) return { error: "Job title must be 150 characters or fewer." };
+  if (!description) return { error: "Job description is required." };
+  if (description.length > 5000) return { error: "Job description must be 5000 characters or fewer." };
+  if (!ALLOWED_CATEGORIES.includes(category)) return { error: "Invalid category." };
+  if (!location) return { error: "Location is required." };
+  if (location.length > 100) return { error: "Location must be 100 characters or fewer." };
+  if (!employmentType) return { error: "Employment type is required." };
+  if (employmentType.length > 50) return { error: "Employment type must be 50 characters or fewer." };
+  if (applyUrl && !/^(https?:\/\/|mailto:)/i.test(applyUrl)) {
+    return { error: "Apply link must be an http(s) or mailto URL." };
+  }
+
+  return { value: { title, description, category, location, employmentType, applyUrl } };
+}
+
+export async function getCareersAction() {
+  try {
+    const careers = await prisma.career.findMany({
+      orderBy: { order: "asc" },
+    });
+    return { success: true, data: careers };
+  } catch (e) {
+    console.warn("Prisma query failed, falling back to mock careers: ", e);
+    return { success: true, data: mockCareers };
+  }
+}
+
+export async function createCareerAction(data: CareerInput) {
   const admin = await getSessionAdmin();
   if (!admin) return { success: false, error: "Unauthorized access" };
 
+  const validated = validateCareerData(data);
+  if ("error" in validated) return { success: false, error: validated.error };
+
   try {
-    const count = await prisma.career.count().catch(() => mockCareers.length);
+    const count = await prisma.career.count();
     const newCareer = await prisma.career.create({
       data: {
-        title: data.title,
-        description: data.description,
-        category: data.category,
-        location: data.location,
-        employmentType: data.employmentType,
-        applyUrl: data.applyUrl || null,
+        title: validated.value.title,
+        description: validated.value.description,
+        category: validated.value.category,
+        location: validated.value.location,
+        employmentType: validated.value.employmentType,
+        applyUrl: validated.value.applyUrl || null,
         order: count,
       },
     });
 
     await createAuditLog(
       "CREATE_CAREER",
-      `Created career listing '${data.title}' in category ${data.category}`
+      `Created career listing '${validated.value.title}' in category ${validated.value.category}`
     );
 
     revalidatePath("/careers");
@@ -86,59 +124,37 @@ export async function createCareerAction(data: {
 
     return { success: true, data: newCareer };
   } catch (e) {
-    console.warn("Prisma create failed, falling back to mock state update: ", e);
-    const mockItem = {
-      id: `job-${Date.now()}`,
-      title: data.title,
-      description: data.description,
-      category: data.category,
-      location: data.location,
-      employmentType: data.employmentType,
-      applyUrl: data.applyUrl || null,
-      order: mockCareers.length,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    console.error("Prisma create failed: ", e);
+    return {
+      success: false,
+      error: "Failed to save career listing. Please try again.",
     };
-    setMockCareers([mockItem, ...mockCareers]);
-
-    revalidatePath("/careers");
-    revalidatePath("/admin/careers");
-    revalidatePath("/");
-
-    return { success: true, data: mockItem };
   }
 }
 
-export async function updateCareerAction(
-  id: string,
-  data: {
-    title: string;
-    description: string;
-    category: string;
-    location: string;
-    employmentType: string;
-    applyUrl?: string;
-  }
-) {
+export async function updateCareerAction(id: string, data: CareerInput) {
   const admin = await getSessionAdmin();
   if (!admin) return { success: false, error: "Unauthorized access" };
+
+  const validated = validateCareerData(data);
+  if ("error" in validated) return { success: false, error: validated.error };
 
   try {
     const updated = await prisma.career.update({
       where: { id },
       data: {
-        title: data.title,
-        description: data.description,
-        category: data.category,
-        location: data.location,
-        employmentType: data.employmentType,
-        applyUrl: data.applyUrl || null,
+        title: validated.value.title,
+        description: validated.value.description,
+        category: validated.value.category,
+        location: validated.value.location,
+        employmentType: validated.value.employmentType,
+        applyUrl: validated.value.applyUrl || null,
       },
     });
 
     await createAuditLog(
       "UPDATE_CAREER",
-      `Updated career listing '${data.title}' (ID: ${id})`
+      `Updated career listing '${validated.value.title}' (ID: ${id})`
     );
 
     revalidatePath("/careers");
@@ -147,30 +163,10 @@ export async function updateCareerAction(
 
     return { success: true, data: updated };
   } catch (e) {
-    console.warn("Prisma update failed, updating mock state: ", e);
-    const updatedMock = mockCareers.map((item) =>
-      item.id === id
-        ? {
-            ...item,
-            title: data.title,
-            description: data.description,
-            category: data.category,
-            location: data.location,
-            employmentType: data.employmentType,
-            applyUrl: data.applyUrl || null,
-            updatedAt: new Date(),
-          }
-        : item
-    );
-    setMockCareers(updatedMock);
-
-    revalidatePath("/careers");
-    revalidatePath("/admin/careers");
-    revalidatePath("/");
-
+    console.error("Prisma update failed: ", e);
     return {
-      success: true,
-      data: updatedMock.find((item) => item.id === id),
+      success: false,
+      error: "Failed to update career listing. Please try again.",
     };
   }
 }
@@ -192,13 +188,10 @@ export async function deleteCareerAction(id: string) {
 
     return { success: true };
   } catch (e) {
-    console.warn("Prisma delete failed, updating mock state: ", e);
-    setMockCareers(mockCareers.filter((item) => item.id !== id));
-
-    revalidatePath("/careers");
-    revalidatePath("/admin/careers");
-    revalidatePath("/");
-
-    return { success: true };
+    console.error("Prisma delete failed: ", e);
+    return {
+      success: false,
+      error: "Failed to delete career listing. Please try again.",
+    };
   }
 }

@@ -148,17 +148,6 @@ export default async function AdminDashboardOverview() {
           </div>
         </div>
 
-        {/* Stat Item: Bulletins (News) */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Published News</span>
-            <span className="text-2xl font-semibold text-foreground block">{stats.news}</span>
-          </div>
-          <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-slate-600">
-            <Newspaper className="h-5 w-5" />
-          </div>
-        </div>
-
       </div>
 
       {/* Main Analysis Layout */}

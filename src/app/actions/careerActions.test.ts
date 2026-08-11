@@ -47,7 +47,6 @@ vi.mock("@/lib/db", () => {
         applyUrl: null,
       },
     ],
-    setMockCareers: vi.fn(),
   };
 });
 
@@ -91,6 +90,69 @@ describe("Career Server Actions", () => {
       expect(res.error).toBe("Unauthorized access");
     });
 
+    it("should reject invalid payload without calling prisma", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+
+      const res = await createCareerAction({
+        title: "",
+        description: "Develop web apps",
+        category: "Development",
+        location: "Remote",
+        employmentType: "Full-time",
+      });
+
+      expect(res.success).toBe(false);
+      expect(prisma.career.create).not.toHaveBeenCalled();
+    });
+
+    it("should reject a non-http(s)/mailto apply URL", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+
+      const res = await createCareerAction({
+        title: "Software Engineer",
+        description: "Develop web apps",
+        category: "Development",
+        location: "Remote",
+        employmentType: "Full-time",
+        applyUrl: "javascript:alert(1)",
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.error).toMatch(/http\(s\) or mailto/);
+      expect(prisma.career.create).not.toHaveBeenCalled();
+    });
+
+    it("should reject an unknown category", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+
+      const res = await createCareerAction({
+        title: "Software Engineer",
+        description: "Develop web apps",
+        category: "Not-A-Real-Category",
+        location: "Remote",
+        employmentType: "Full-time",
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.error).toBe("Invalid category.");
+    });
+
+    it("should return failure when the database write fails", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+      (prisma.career.create as any).mockRejectedValue(new Error("DB offline"));
+
+      const res = await createCareerAction({
+        title: "Software Engineer",
+        description: "Develop web apps",
+        category: "Development",
+        location: "Remote",
+        employmentType: "Full-time",
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.error).toBeDefined();
+    });
+
     it("should create career listing when authenticated", async () => {
       (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
       (prisma.career.count as any).mockResolvedValue(2);
@@ -132,6 +194,22 @@ describe("Career Server Actions", () => {
       expect(res.error).toBe("Unauthorized access");
     });
 
+    it("should return failure when the database update fails", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+      (prisma.career.update as any).mockRejectedValue(new Error("DB offline"));
+
+      const res = await updateCareerAction("c-123", {
+        title: "Updated Title",
+        description: "Updated desc",
+        category: "Design",
+        location: "Kuala Lumpur",
+        employmentType: "Full-time",
+      });
+
+      expect(res.success).toBe(false);
+      expect(res.error).toBeDefined();
+    });
+
     it("should update career listing when authenticated", async () => {
       (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
       (prisma.career.update as any).mockResolvedValue({
@@ -159,6 +237,15 @@ describe("Career Server Actions", () => {
       const res = await deleteCareerAction("c-123");
       expect(res.success).toBe(false);
       expect(res.error).toBe("Unauthorized access");
+    });
+
+    it("should return failure when the database delete fails", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+      (prisma.career.delete as any).mockRejectedValue(new Error("DB offline"));
+
+      const res = await deleteCareerAction("c-123");
+      expect(res.success).toBe(false);
+      expect(res.error).toBeDefined();
     });
 
     it("should delete career listing when authenticated", async () => {

@@ -38,6 +38,8 @@ export default function JobRow({ job }: JobRowProps) {
         <div className="pt-2 md:pt-0 shrink-0">
           <a
             href={job.applyUrl || "#"}
+            target={job.applyUrl ? "_blank" : undefined}
+            rel={job.applyUrl ? "noreferrer" : undefined}
             aria-label={`Apply for ${job.title}`}
             className="inline-flex items-center gap-1.5 text-base sm:text-lg font-semibold text-slate-900 hover:text-primary transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-900"
           >
