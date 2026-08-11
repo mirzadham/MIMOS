@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useRef, useTransition } from "react";
 import {
   createCareerAction,
   updateCareerAction,
@@ -75,6 +75,7 @@ export default function ManageCareersClient({
   const [newOptionName, setNewOptionName] = useState("");
   const [editingOptionId, setEditingOptionId] = useState<string | null>(null);
   const [editingOptionName, setEditingOptionName] = useState("");
+  const optionTabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   // Hint shown when a legacy free-text value is replaced by a managed option
   const [legacyReplacedHint, setLegacyReplacedHint] = useState<string | null>(null);
@@ -163,7 +164,9 @@ export default function ManageCareersClient({
       locationModeNames[0] ?? "Remote"
     );
     setLegacyReplacedHint(
-      normalizedLocation.replacedFrom
+      normalizedCategory.replacedFrom
+        ? `Category "${normalizedCategory.replacedFrom}" is not in the managed categories; it will be saved as "${normalizedCategory.value}".`
+        : normalizedLocation.replacedFrom
         ? `Location "${normalizedLocation.replacedFrom}" is not in the managed location modes; it will be saved as "${normalizedLocation.value}".`
         : normalizedEmployment.replacedFrom
         ? `Employment type "${normalizedEmployment.replacedFrom}" is not in the managed list; it will be saved as "${normalizedEmployment.value}".`
@@ -250,6 +253,38 @@ export default function ManageCareersClient({
 
   const activeTab = KIND_TABS.find((t) => t.kind === activeOptionTab) ?? KIND_TABS[0];
 
+  // WAI-ARIA tabs keyboard support for the option-kind tabs (mirrors the
+  // pattern used by the public JobFilters component).
+  const handleOptionTabKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    kind: CareerOptionKind
+  ) => {
+    const index = KIND_TABS.findIndex((t) => t.kind === kind);
+    if (index === -1) return;
+    let nextIndex: number | null = null;
+    switch (e.key) {
+      case "ArrowRight":
+        nextIndex = (index + 1) % KIND_TABS.length;
+        break;
+      case "ArrowLeft":
+        nextIndex = (index - 1 + KIND_TABS.length) % KIND_TABS.length;
+        break;
+      case "Home":
+        nextIndex = 0;
+        break;
+      case "End":
+        nextIndex = KIND_TABS.length - 1;
+        break;
+      default:
+        return;
+    }
+    e.preventDefault();
+    const next = KIND_TABS[nextIndex];
+    setActiveOptionTab(next.kind);
+    cancelRename();
+    optionTabRefs.current[next.kind]?.focus();
+  };
+
   const usageCount = (option: CareerOptionItem) => {
     if (option.kind === "CATEGORY") {
       return careers.filter((c) => c.category === option.name).length;
@@ -261,6 +296,7 @@ export default function ManageCareersClient({
   };
 
   const handleAddOption = () => {
+    if (isOptionPending) return;
     const name = newOptionName.trim();
     if (!name) {
       toast.error("Missing name", "Please enter an option name.");
@@ -390,14 +426,25 @@ export default function ManageCareersClient({
         </div>
 
         {/* Option Kind Tabs */}
-        <div className="flex gap-1 px-5 pt-3 border-b border-slate-100 overflow-x-auto">
+        <div
+          className="flex gap-1 px-5 pt-3 border-b border-slate-100 overflow-x-auto"
+          role="tablist"
+          aria-label="Career option type"
+        >
           {KIND_TABS.map((tab) => (
             <button
               key={tab.kind}
+              ref={(el) => {
+                optionTabRefs.current[tab.kind] = el;
+              }}
               onClick={() => {
                 setActiveOptionTab(tab.kind);
                 cancelRename();
               }}
+              onKeyDown={(e) => handleOptionTabKeyDown(e, tab.kind)}
+              role="tab"
+              aria-selected={activeOptionTab === tab.kind}
+              tabIndex={activeOptionTab === tab.kind ? 0 : -1}
               className={`inline-flex items-center gap-1.5 rounded-t-lg px-3.5 py-2 text-xs font-semibold transition-colors cursor-pointer border-b-2 ${
                 activeOptionTab === tab.kind
                   ? "border-primary text-slate-900"

@@ -20,11 +20,12 @@ interface CareerInput {
 }
 
 /**
- * Server-side validation shared by create/update. Returns an error message
- * or null when the payload is acceptable. Values are returned trimmed.
- * Category, employment type and location are validated against the managed
- * CareerOption lists (with a defaults fallback when the DB is unreachable).
- * The apply link is required and must be a Microsoft Form URL.
+ * Server-side validation shared by create/update. Returns an error message or
+ * the validated value object when the payload is acceptable. Values are
+ * returned trimmed. Category, employment type and location are validated
+ * against the managed CareerOption lists (with a defaults fallback when the
+ * DB is unreachable). The apply link is required and must be a Microsoft
+ * Form URL.
  */
 async function validateCareerData(data: CareerInput): Promise<{ error: string } | { value: Required<Pick<CareerInput, "title" | "description" | "category" | "location" | "employmentType">> & Pick<CareerInput, "applyUrl"> }> {
   const title = data.title?.trim() ?? "";
@@ -64,8 +65,11 @@ async function validateCareerData(data: CareerInput): Promise<{ error: string } 
       return { error: "Invalid location mode." };
     }
   } catch (e) {
+    // getSafeCareerOptions swallows its own errors (defaults fallback), so
+    // this only fires on unexpected failures — report honestly instead of
+    // blaming the submitted category.
     console.error("Career option validation failed: ", e);
-    return { error: "Invalid category." };
+    return { error: "Failed to validate career options. Please try again." };
   }
 
   return { value: { title, description, category, location, employmentType, applyUrl } };

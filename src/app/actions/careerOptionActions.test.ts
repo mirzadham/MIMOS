@@ -96,6 +96,26 @@ describe("Career Option Server Actions", () => {
       expect(prisma.careerOption.create).not.toHaveBeenCalled();
     });
 
+    it("should reject the reserved 'View all' name", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+
+      const res = await createCareerOptionAction("CATEGORY", "View all");
+      expect(res.success).toBe(false);
+      expect(res.error).toBe('"View all" is reserved and cannot be used as an option name.');
+      expect(prisma.careerOption.create).not.toHaveBeenCalled();
+    });
+
+    it("should surface a friendly error when a concurrent duplicate hits the unique constraint", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+      (prisma.careerOption.findUnique as any).mockResolvedValue(null);
+      (prisma.careerOption.count as any).mockResolvedValue(7);
+      (prisma.careerOption.create as any).mockRejectedValue({ code: "P2002" });
+
+      const res = await createCareerOptionAction("CATEGORY", "QA");
+      expect(res.success).toBe(false);
+      expect(res.error).toBe('"QA" already exists.');
+    });
+
     it("should create an option when authenticated", async () => {
       (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
       (prisma.careerOption.findUnique as any).mockResolvedValue(null);
@@ -146,6 +166,27 @@ describe("Career Option Server Actions", () => {
       expect(res.success).toBe(false);
       expect(res.error).toBe('"Design" already exists.');
       expect(prisma.$transaction).not.toHaveBeenCalled();
+    });
+
+    it("should reject renaming to the reserved 'View all' name", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+
+      const res = await updateCareerOptionAction("opt-1", "View all");
+      expect(res.success).toBe(false);
+      expect(res.error).toBe('"View all" is reserved and cannot be used as an option name.');
+      expect(prisma.careerOption.findUnique).not.toHaveBeenCalled();
+    });
+
+    it("should surface a friendly error when a concurrent rename hits the unique constraint", async () => {
+      (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
+      (prisma.careerOption.findUnique as any)
+        .mockResolvedValueOnce(existingOption) // the option being renamed
+        .mockResolvedValueOnce(null); // duplicate check
+      (prisma.$transaction as any).mockRejectedValue({ code: "P2002" });
+
+      const res = await updateCareerOptionAction("opt-1", "Software");
+      expect(res.success).toBe(false);
+      expect(res.error).toBe('"Software" already exists.');
     });
 
     it("should treat a same-name rename as a no-op success", async () => {
@@ -217,6 +258,7 @@ describe("Career Option Server Actions", () => {
       const res = await deleteCareerOptionAction("opt-1");
       expect(res.success).toBe(false);
       expect(res.error).toBe("At least one category is required.");
+      expect(prisma.$transaction).not.toHaveBeenCalled();
       expect(prisma.careerOption.delete).not.toHaveBeenCalled();
     });
 
@@ -224,7 +266,12 @@ describe("Career Option Server Actions", () => {
       (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
       (prisma.careerOption.findUnique as any).mockResolvedValue(existingOption);
       (prisma.careerOption.count as any).mockResolvedValue(7);
-      (prisma.career.count as any).mockResolvedValue(2);
+      (prisma.$transaction as any).mockImplementation(async (fn: any) =>
+        fn({
+          career: { count: vi.fn().mockResolvedValue(2) },
+          careerOption: { delete: vi.fn() },
+        })
+      );
 
       const res = await deleteCareerOptionAction("opt-1");
       expect(res.success).toBe(false);
@@ -236,11 +283,20 @@ describe("Career Option Server Actions", () => {
       (getSessionAdmin as any).mockResolvedValue({ email: "admin@mimos.my" });
       (prisma.careerOption.findUnique as any).mockResolvedValue(existingOption);
       (prisma.careerOption.count as any).mockResolvedValue(7);
-      (prisma.career.count as any).mockResolvedValue(0);
+      (prisma.$transaction as any).mockImplementation(async (fn: any) =>
+        fn({
+          career: { count: vi.fn().mockResolvedValue(0) },
+          careerOption: { delete: prisma.careerOption.delete },
+        })
+      );
       (prisma.careerOption.delete as any).mockResolvedValue(existingOption);
 
       const res = await deleteCareerOptionAction("opt-1");
       expect(res.success).toBe(true);
+      expect(prisma.$transaction).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.objectContaining({ isolationLevel: "Serializable" })
+      );
       expect(prisma.careerOption.delete).toHaveBeenCalledWith({ where: { id: "opt-1" } });
       expect(prisma.auditLog.create).toHaveBeenCalled();
       expect(revalidateTag).toHaveBeenCalled();

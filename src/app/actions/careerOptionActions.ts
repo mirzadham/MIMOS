@@ -4,6 +4,7 @@ import { revalidatePath as nextRevalidatePath, revalidateTag } from "next/cache"
 import { getSessionAdmin } from "@/lib/adminAuth";
 import { prisma } from "@/lib/db";
 import { createAuditLog } from "@/lib/auditLog";
+import { Prisma } from "@prisma/client";
 import type { CareerOptionKind } from "@/lib/db";
 
 function revalidatePath(path: string) {
@@ -40,7 +41,29 @@ function cleanOptionName(name: string): { error: string } | { name: string } {
   const trimmed = name?.trim() ?? "";
   if (!trimmed) return { error: "Option name is required." };
   if (trimmed.length > 50) return { error: "Option name must be 50 characters or fewer." };
+  // "View all" is the pseudo-tab used by the filter UI — storing it as an
+  // option would produce duplicate tabs and break category filtering.
+  if (trimmed.toLowerCase() === "view all") {
+    return { error: '"View all" is reserved and cannot be used as an option name.' };
+  }
   return { name: trimmed };
+}
+
+/** True when a Prisma error is a unique-constraint violation (P2002). */
+function isPrismaUniqueViolation(e: unknown): boolean {
+  return (
+    typeof e === "object" && e !== null && (e as { code?: string }).code === "P2002"
+  );
+}
+
+/** Thrown inside the delete transaction when a career still uses the option. */
+class CareerOptionInUseError extends Error {
+  constructor(name: string, usage: number) {
+    super(
+      `Cannot delete "${name}": ${usage} position(s) currently use it. Edit those positions first.`
+    );
+    this.name = "CareerOptionInUseError";
+  }
 }
 
 /** Typed where-filter for the Career column that stores a given option kind. */
@@ -90,6 +113,10 @@ export async function createCareerOptionAction(kind: string, name: string) {
 
     return { success: true, data: option };
   } catch (e) {
+    if (isPrismaUniqueViolation(e)) {
+      // Lost a race with a concurrent create of the same name.
+      return { success: false, error: `"${cleaned.name}" already exists.` };
+    }
     console.error("Prisma career option create failed: ", e);
     return {
       success: false,
@@ -145,6 +172,10 @@ export async function updateCareerOptionAction(id: string, name: string) {
 
     return { success: true, data: { ...option, name: cleaned.name } };
   } catch (e) {
+    if (isPrismaUniqueViolation(e)) {
+      // Lost a race with a concurrent rename to the same name.
+      return { success: false, error: `"${cleaned.name}" already exists.` };
+    }
     console.error("Prisma career option update failed: ", e);
     return {
       success: false,
@@ -171,17 +202,21 @@ export async function deleteCareerOptionAction(id: string) {
     }
 
     const field = CAREER_FIELD_BY_KIND[option.kind];
-    const usage = await prisma.career.count({
-      where: careerFieldFilter(field, option.name),
-    });
-    if (usage > 0) {
-      return {
-        success: false,
-        error: `Cannot delete "${option.name}": ${usage} position(s) currently use it. Edit those positions first.`,
-      };
-    }
 
-    await prisma.careerOption.delete({ where: { id } });
+    // Re-check usage and delete atomically under serializable isolation, so a
+    // career created between the check and the delete cannot reference a
+    // removed option (a concurrent writer would abort one of the two
+    // transactions instead).
+    await prisma.$transaction(
+      async (tx) => {
+        const usage = await tx.career.count({
+          where: careerFieldFilter(field, option.name),
+        });
+        if (usage > 0) throw new CareerOptionInUseError(option.name, usage);
+        await tx.careerOption.delete({ where: { id } });
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable }
+    );
 
     await createAuditLog(
       "DELETE_CAREER_OPTION",
@@ -193,6 +228,9 @@ export async function deleteCareerOptionAction(id: string) {
 
     return { success: true };
   } catch (e) {
+    if (e instanceof CareerOptionInUseError) {
+      return { success: false, error: e.message };
+    }
     console.error("Prisma career option delete failed: ", e);
     return {
       success: false,
