@@ -8,6 +8,7 @@ import { adminLogoutAction } from "@/app/actions/adminActions";
 import {
   BarChart3,
   BookOpen,
+  Briefcase,
   Building2,
   Calendar,
   ChevronRight,
@@ -29,6 +30,7 @@ const SIDEBAR_LINKS = [
   { name: "Overview Dashboard", href: "/admin", icon: LayoutDashboard },
   { name: "Manage Programs", href: "/admin/programs", icon: BookOpen },
   { name: "Manage Events", href: "/admin/events", icon: Calendar },
+  { name: "Manage Careers", href: "/admin/careers", icon: Briefcase },
   { name: "Manage Stats", href: "/admin/stats", icon: BarChart3 },
   { name: "Manage Partners", href: "/admin/partners", icon: Handshake },
   { name: "Why Choose Us", href: "/admin/why-choose-us", icon: Sparkles },

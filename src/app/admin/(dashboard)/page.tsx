@@ -1,4 +1,4 @@
-import { prisma, mockPrograms } from "@/lib/db";
+import { prisma, mockPrograms, mockCareers } from "@/lib/db";
 import { 
   GraduationCap, 
   Building2, 
@@ -6,7 +6,8 @@ import {
   Terminal,
   BookOpen,
   MapPin,
-  Calendar
+  Calendar,
+  Briefcase
 } from "lucide-react";
 
 function getFallbackLogs() {
@@ -41,16 +42,18 @@ export default async function AdminDashboardOverview() {
     programs: 0,
     facilities: 0,
     news: 0,
+    careers: 0,
   };
 
   let recentLogs: LogEntry[] = [];
   let recentPrograms: ProgramWithCategory[] = [];
 
   try {
-    const [progCount, facCount, newsCount, logs, programs] = await Promise.all([
+    const [progCount, facCount, newsCount, careerCount, logs, programs] = await Promise.all([
       prisma.program.count(),
       prisma.facility.count(),
       prisma.newsArticle.count(),
+      prisma.career.count().catch(() => mockCareers.length),
       prisma.auditLog.findMany({
         take: 5,
         orderBy: { createdAt: "desc" }
@@ -65,6 +68,7 @@ export default async function AdminDashboardOverview() {
     stats.programs = progCount || mockPrograms.length;
     stats.facilities = facCount;
     stats.news = newsCount;
+    stats.careers = careerCount || mockCareers.length;
     recentLogs = logs;
     recentPrograms = programs as unknown as ProgramWithCategory[];
   } catch {
@@ -72,6 +76,7 @@ export default async function AdminDashboardOverview() {
     stats.programs = mockPrograms.length;
     stats.facilities = 4;
     stats.news = 3;
+    stats.careers = mockCareers.length;
     recentLogs = getFallbackLogs();
     recentPrograms = mockPrograms.slice(0, 5).map(p => ({
       id: p.id,
@@ -97,7 +102,7 @@ export default async function AdminDashboardOverview() {
       </div>
 
       {/* Stats Counter Grid */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         
         {/* Stat Item: Programs */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
@@ -121,7 +126,7 @@ export default async function AdminDashboardOverview() {
           </div>
         </div>
 
-        {/* Stat Item: Bulletins (News) */}
+        {/* Stat Item: News Articles */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
           <div className="space-y-1">
             <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Published News</span>
@@ -129,6 +134,17 @@ export default async function AdminDashboardOverview() {
           </div>
           <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-slate-600">
             <Newspaper className="h-5 w-5" />
+          </div>
+        </div>
+
+        {/* Stat Item: Careers */}
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
+          <div className="space-y-1">
+            <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Career Openings</span>
+            <span className="text-2xl font-semibold text-foreground block">{stats.careers}</span>
+          </div>
+          <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-slate-600">
+            <Briefcase className="h-5 w-5" />
           </div>
         </div>
 

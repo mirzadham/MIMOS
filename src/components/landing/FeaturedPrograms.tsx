@@ -110,13 +110,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [prevActiveIndex, setPrevActiveIndex] = useState(activeIndex);
-  const [currentActiveIndex, setCurrentActiveIndex] = useState(activeIndex);
-
-  if (activeIndex !== currentActiveIndex) {
-    setPrevActiveIndex(currentActiveIndex);
-    setCurrentActiveIndex(activeIndex);
-  }
+  const [prevActiveIndex, setPrevActiveIndex] = useState(0);
 
   const getDisplayPos = (i: number) =>
     (i - activeIndex + total) % total;
@@ -162,6 +156,7 @@ export default function FeaturedPrograms({ programs }: FeaturedProgramsProps) {
     if (transitionTimeoutRef.current) {
       clearTimeout(transitionTimeoutRef.current);
     }
+    setPrevActiveIndex(activeIndex);
     setDirection(dir);
     setIsTransitioning(true);
     setActiveIndex(newIndex);

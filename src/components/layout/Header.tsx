@@ -91,6 +91,7 @@ export default function Header() {
     { name: "Events", href: "/events" },
     { name: "Facilities", href: "/facilities" },
     { name: "News", href: "/news" },
+    { name: "Careers", href: "/careers" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -181,7 +182,7 @@ export default function Header() {
             const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
             return (
               <Link
-                key={link.name}
+                key={link.href}
                 href={link.href}
                 className={
                   isScrolled
@@ -339,7 +340,7 @@ export default function Header() {
                 const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
                 return (
                   <motion.div
-                    key={link.name}
+                    key={link.href}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.04 }}
