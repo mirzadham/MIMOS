@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminNewsPage() {
   const articles = await getSafeNewsArticles();
 
-  const typedArticles = articles.map(a => ({
+  const typedArticles = (articles ?? []).map(a => ({
     id: a.id,
     title: a.title,
     category: a.category,

@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminTestimonialsPage() {
   const testimonials = await getSafeTestimonials();
 
-  const typedTestimonials = testimonials.map(t => ({
+  const typedTestimonials = (testimonials ?? []).map(t => ({
     id: t.id,
     quote: t.quote,
     name: t.name,

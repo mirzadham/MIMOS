@@ -1,9 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
+  createProgramAction,
+  updateProgramAction,
+  deleteProgramAction,
+  createCategoryAction,
+  createStatAction,
+  updateStatAction,
+  deleteStatAction,
+  createPartnerAction,
+  updatePartnerAction,
+  deletePartnerAction,
+  createWhyChooseUsCardAction,
+  updateWhyChooseUsCardAction,
+  deleteWhyChooseUsCardAction,
+  createTestimonialAction,
+  updateTestimonialAction,
+  deleteTestimonialAction,
   createNewsArticleAction,
   updateNewsArticleAction,
   deleteNewsArticleAction,
+  toggleNewsHighlightAction,
   createFacilityAction,
   updateFacilityAction,
   deleteFacilityAction,
@@ -11,7 +28,7 @@ import {
   deleteUpcomingEventAction,
 } from "./adminActions";
 import { getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, setMockUpcomingEvents } from "@/lib/db";
+import { prisma } from "@/lib/db";
 
 // Mock next/cache
 vi.mock("next/cache", () => ({
@@ -27,6 +44,34 @@ vi.mock("@/lib/adminAuth", () => ({
 // Mock DB layer
 vi.mock("@/lib/db", () => {
   const mockPrisma = {
+    program: {
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+    },
+    category: {
+      create: vi.fn(),
+    },
+    stat: {
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+    },
+    partner: {
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+    },
+    whyChooseUsCard: {
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+    },
+    testimonial: {
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+    },
     newsArticle: {
       count: vi.fn(),
       create: vi.fn(),
@@ -48,21 +93,6 @@ vi.mock("@/lib/db", () => {
   };
   return {
     prisma: mockPrisma,
-    mockNewsArticles: [
-      { id: "mock-1", title: "Article 1", isHighlighted: true },
-      { id: "mock-2", title: "Article 2", isHighlighted: true },
-      { id: "mock-3", title: "Article 3", isHighlighted: true },
-      { id: "mock-4", title: "Article 4", isHighlighted: true },
-    ],
-    setMockNewsArticles: vi.fn(),
-    mockFacilities: [
-      { id: "mock-fac-1", title: "Facility 1", specs: [] },
-    ],
-    setMockFacilities: vi.fn(),
-    mockUpcomingEvents: [
-      { id: "mock-evt-1", title: "Mock Event 1", category: "SEMINAR", date: "JAN 01" },
-    ],
-    setMockUpcomingEvents: vi.fn(),
     sanitizeEventAgenda: (v: unknown) => Array.isArray(v) ? v : [],
   };
 });
@@ -364,14 +394,14 @@ describe("Admin News Server Actions Tests", () => {
       );
     });
 
-    it("should fall back to mock when DB save fails", async () => {
+    it("should return an error when DB save fails (no mock fallback)", async () => {
       vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
       vi.mocked(prisma.event.upsert).mockRejectedValue(new Error("DB down"));
 
       const res = await saveUpcomingEventAction({ title: "Fallback Event" });
 
-      expect(res.success).toBe(true);
-      expect(setMockUpcomingEvents).toHaveBeenCalled();
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
     });
 
     it("should return an error in production when DB save fails (no mock fallback)", async () => {
@@ -383,7 +413,6 @@ describe("Admin News Server Actions Tests", () => {
 
       expect(res.success).toBe(false);
       expect("error" in res && res.error).toBeTruthy();
-      expect(setMockUpcomingEvents).not.toHaveBeenCalled();
     });
   });
 
@@ -407,14 +436,14 @@ describe("Admin News Server Actions Tests", () => {
       );
     });
 
-    it("should fall back to mock when DB delete fails", async () => {
+    it("should return an error when DB delete fails (no mock fallback)", async () => {
       vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
       vi.mocked(prisma.event.delete).mockRejectedValue(new Error("DB down"));
 
       const res = await deleteUpcomingEventAction("mock-evt-1");
 
-      expect(res.success).toBe(true);
-      expect(setMockUpcomingEvents).toHaveBeenCalled();
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
     });
 
     it("should return an error in production when DB delete fails (no mock fallback)", async () => {
@@ -426,7 +455,204 @@ describe("Admin News Server Actions Tests", () => {
 
       expect(res.success).toBe(false);
       expect("error" in res && res.error).toBeTruthy();
-      expect(setMockUpcomingEvents).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("DB failure returns error (no mock fallback)", () => {
+    const programData = {
+      title: "Program",
+      description: "Desc",
+      syllabus: "Syllabus",
+      location: "KL",
+      price: "RM100",
+      duration: "3 days",
+      dates: "JAN",
+      microsoftFormUrl: "https://example.com",
+      categoryId: "cat-1",
+    };
+    const cardData = { title: "Card", description: "Desc", imageUrl: null, colspan: 1, order: 0 };
+    const testimonialData = { quote: "Q", name: "N", role: "R", company: "C", order: 0 };
+
+    beforeEach(() => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
+    });
+
+    it("createProgramAction", async () => {
+      vi.mocked(prisma.program.create).mockRejectedValue(new Error("DB down"));
+      const res = await createProgramAction(programData);
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("updateProgramAction", async () => {
+      vi.mocked(prisma.program.update).mockRejectedValue(new Error("DB down"));
+      const res = await updateProgramAction("prog-1", programData);
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("deleteProgramAction", async () => {
+      vi.mocked(prisma.program.delete).mockRejectedValue(new Error("DB down"));
+      const res = await deleteProgramAction("prog-1");
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("createCategoryAction", async () => {
+      vi.mocked(prisma.category.create).mockRejectedValue(new Error("DB down"));
+      const res = await createCategoryAction("New Category");
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("createStatAction", async () => {
+      vi.mocked(prisma.stat.create).mockRejectedValue(new Error("DB down"));
+      const res = await createStatAction({ number: "100", label: "Students" });
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("updateStatAction", async () => {
+      vi.mocked(prisma.stat.update).mockRejectedValue(new Error("DB down"));
+      const res = await updateStatAction("stat-1", { number: "100", label: "Students" });
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("deleteStatAction", async () => {
+      vi.mocked(prisma.stat.delete).mockRejectedValue(new Error("DB down"));
+      const res = await deleteStatAction("stat-1");
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("createPartnerAction", async () => {
+      vi.mocked(prisma.partner.create).mockRejectedValue(new Error("DB down"));
+      const res = await createPartnerAction({ name: "Partner", logoUrl: "/logo.svg" });
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("updatePartnerAction", async () => {
+      vi.mocked(prisma.partner.update).mockRejectedValue(new Error("DB down"));
+      const res = await updatePartnerAction("partner-1", { name: "Partner", logoUrl: "/logo.svg" });
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("deletePartnerAction", async () => {
+      vi.mocked(prisma.partner.delete).mockRejectedValue(new Error("DB down"));
+      const res = await deletePartnerAction("partner-1");
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("createWhyChooseUsCardAction", async () => {
+      vi.mocked(prisma.whyChooseUsCard.create).mockRejectedValue(new Error("DB down"));
+      const res = await createWhyChooseUsCardAction(cardData);
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("updateWhyChooseUsCardAction", async () => {
+      vi.mocked(prisma.whyChooseUsCard.update).mockRejectedValue(new Error("DB down"));
+      const res = await updateWhyChooseUsCardAction("card-1", cardData);
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("deleteWhyChooseUsCardAction", async () => {
+      vi.mocked(prisma.whyChooseUsCard.delete).mockRejectedValue(new Error("DB down"));
+      const res = await deleteWhyChooseUsCardAction("card-1");
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("createTestimonialAction", async () => {
+      vi.mocked(prisma.testimonial.create).mockRejectedValue(new Error("DB down"));
+      const res = await createTestimonialAction(testimonialData);
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("updateTestimonialAction", async () => {
+      vi.mocked(prisma.testimonial.update).mockRejectedValue(new Error("DB down"));
+      const res = await updateTestimonialAction("t-1", testimonialData);
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("deleteTestimonialAction", async () => {
+      vi.mocked(prisma.testimonial.delete).mockRejectedValue(new Error("DB down"));
+      const res = await deleteTestimonialAction("t-1");
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("createNewsArticleAction", async () => {
+      vi.mocked(prisma.newsArticle.create).mockRejectedValue(new Error("DB down"));
+      const res = await createNewsArticleAction({
+        title: "T", category: "Administration", date: "JAN 01",
+        description: "D", content: "C", imageUrl: null, isHighlighted: false, order: 0
+      });
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("updateNewsArticleAction", async () => {
+      vi.mocked(prisma.newsArticle.update).mockRejectedValue(new Error("DB down"));
+      const res = await updateNewsArticleAction("news-1", {
+        title: "T", category: "Administration", date: "JAN 01",
+        description: "D", content: "C", imageUrl: null, isHighlighted: false, order: 0
+      });
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("deleteNewsArticleAction", async () => {
+      vi.mocked(prisma.newsArticle.delete).mockRejectedValue(new Error("DB down"));
+      const res = await deleteNewsArticleAction("news-1");
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("toggleNewsHighlightAction", async () => {
+      vi.mocked(prisma.newsArticle.count).mockResolvedValue(0);
+      vi.mocked(prisma.newsArticle.update).mockRejectedValue(new Error("DB down"));
+      const res = await toggleNewsHighlightAction("news-1", true);
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("news actions return error when highlight count check fails", async () => {
+      vi.mocked(prisma.newsArticle.count).mockRejectedValue(new Error("DB down"));
+      const res = await createNewsArticleAction({
+        title: "T", category: "Administration", date: "JAN 01",
+        description: "D", content: "C", imageUrl: null, isHighlighted: true, order: 0
+      });
+      expect(res.success).toBe(false);
+      expect(res.error).toContain("highlighted article count");
+    });
+
+    it("createFacilityAction", async () => {
+      vi.mocked(prisma.facility.create).mockRejectedValue(new Error("DB down"));
+      const res = await createFacilityAction({ index: "01", title: "F", subtitle: "S", imageUrl: null, desc: "D", specs: [], order: 0 });
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("updateFacilityAction", async () => {
+      vi.mocked(prisma.facility.update).mockRejectedValue(new Error("DB down"));
+      const res = await updateFacilityAction("fac-1", { index: "01", title: "F", subtitle: "S", imageUrl: null, desc: "D", specs: [], order: 0 });
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("deleteFacilityAction", async () => {
+      vi.mocked(prisma.facility.delete).mockRejectedValue(new Error("DB down"));
+      const res = await deleteFacilityAction("fac-1");
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
     });
   });
 });

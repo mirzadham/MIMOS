@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminFacilitiesPage() {
   const facilities = await getSafeFacilities();
 
-  const typedFacilities = facilities.map((f) => ({
+  const typedFacilities = (facilities ?? []).map((f) => ({
     id: f.id,
     index: f.index,
     title: f.title,

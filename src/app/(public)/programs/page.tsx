@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Catalog from "@/components/landing/Catalog";
+import ContentUnavailableNotice from "@/components/ui/ContentUnavailableNotice";
 import { getSafeCategories, getSafePrograms } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,8 @@ export default async function ProgramsPage() {
     getSafeCategories(),
     getSafePrograms()
   ]);
+
+  const unavailable = categories === null || programs === null;
 
   return (
     <div className="bg-background min-h-screen pt-28 pb-16 sm:pt-36 sm:pb-24 relative overflow-hidden">
@@ -40,8 +43,13 @@ export default async function ProgramsPage() {
         </div>
 
         {/* Catalog List */}
+        {unavailable && (
+          <div className="pt-2">
+            <ContentUnavailableNotice />
+          </div>
+        )}
         <div>
-          <Catalog categories={categories} programs={programs} hideHeader={true} />
+          <Catalog categories={categories ?? []} programs={programs ?? []} hideHeader={true} />
         </div>
 
       </div>

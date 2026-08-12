@@ -1,4 +1,5 @@
 import { getSafeNewsArticles, getSafeHighlightedNews } from "@/lib/db";
+import ContentUnavailableNotice from "@/components/ui/ContentUnavailableNotice";
 import NewsPageClient from "./NewsPageClient";
 
 export const dynamic = "force-dynamic";
@@ -9,7 +10,9 @@ export default async function NewsPage() {
     getSafeHighlightedNews()
   ]);
 
-  const articles = allArticles.map((a) => ({
+  const unavailable = allArticles === null || highlightedArticles === null;
+
+  const articles = (allArticles ?? []).map((a) => ({
     id: a.id,
     title: a.title,
     category: a.category,
@@ -18,7 +21,7 @@ export default async function NewsPage() {
     image: a.imageUrl || "/semiconductor_cleanroom.png",
   }));
 
-  const featured = highlightedArticles.map((a) => ({
+  const featured = (highlightedArticles ?? []).map((a) => ({
     id: a.id,
     category: a.category,
     title: a.title,
@@ -35,5 +38,14 @@ export default async function NewsPage() {
     f.barColor = barGradients[i % barGradients.length];
   });
 
-  return <NewsPageClient articles={articles} featuredStories={featured} />;
+  return (
+    <>
+      {unavailable && (
+        <div className="pt-24 sm:pt-28">
+          <ContentUnavailableNotice />
+        </div>
+      )}
+      <NewsPageClient articles={articles} featuredStories={featured} />
+    </>
+  );
 }

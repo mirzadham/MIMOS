@@ -10,13 +10,13 @@ export default async function AdminProgramsPage() {
   ]);
 
   // Adapt database objects to fit the type contract of Client component
-  const typedCategories = categories.map(cat => ({
+  const typedCategories = (categories ?? []).map(cat => ({
     id: cat.id,
     name: cat.name,
     slug: cat.slug
   }));
 
-  const typedPrograms = (programs as Array<{
+  const typedPrograms = ((programs ?? []) as Array<{
     id: string;
     title: string;
     slug: string;

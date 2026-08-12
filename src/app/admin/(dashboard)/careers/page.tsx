@@ -11,7 +11,7 @@ export default async function AdminManageCareersPage() {
     getSafeCareerOptions(),
   ]);
 
-  const careers = rawCareers.map((c) => ({
+  const careers = (rawCareers ?? []).map((c) => ({
     id: c.id,
     title: c.title,
     description: c.description,

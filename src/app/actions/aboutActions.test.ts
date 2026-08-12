@@ -214,4 +214,43 @@ describe("About and Team Server Actions Tests", () => {
       });
     });
   });
+
+  describe("DB failure returns error (no mock fallback)", () => {
+    beforeEach(() => {
+      vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
+    });
+
+    it("updateAboutSettingsAction", async () => {
+      vi.mocked(prisma.aboutSettings.findFirst).mockRejectedValue(new Error("DB down"));
+      const res = await updateAboutSettingsAction({ mission: "M", vision: "V" });
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("createTeamMemberAction", async () => {
+      vi.mocked(prisma.teamMember.count).mockResolvedValue(0);
+      vi.mocked(prisma.teamMember.create).mockRejectedValue(new Error("DB down"));
+      const res = await createTeamMemberAction({
+        name: "Name", role: "Role", imageUrl: null, initials: "NN",
+      });
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("updateTeamMemberAction", async () => {
+      vi.mocked(prisma.teamMember.update).mockRejectedValue(new Error("DB down"));
+      const res = await updateTeamMemberAction("tm-1", {
+        name: "Name", role: "Role", imageUrl: null, initials: "NN", order: 1,
+      });
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+
+    it("deleteTeamMemberAction", async () => {
+      vi.mocked(prisma.teamMember.delete).mockRejectedValue(new Error("DB down"));
+      const res = await deleteTeamMemberAction("tm-1");
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
+    });
+  });
 });

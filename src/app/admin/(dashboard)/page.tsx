@@ -1,4 +1,4 @@
-import { prisma, mockPrograms, mockCareers } from "@/lib/db";
+import { prisma } from "@/lib/db";
 import { 
   GraduationCap, 
   Building2, 
@@ -9,15 +9,6 @@ import {
   Calendar,
   Briefcase
 } from "lucide-react";
-
-function getFallbackLogs() {
-  const now = Date.now();
-  return [
-    { id: "1", action: "CREATE_PROGRAM", details: "Created Wafer Fab training program run", createdAt: new Date(now) },
-    { id: "2", action: "CREATE_FACILITY", details: "Added STC Cleanroom laboratory details", createdAt: new Date(now - 3600000) },
-    { id: "3", action: "UPDATE_ABOUT_SETTINGS", details: "Updated Academy mission/vision statements", createdAt: new Date(now - 7200000) }
-  ];
-}
 
 interface LogEntry {
   id: string;
@@ -47,13 +38,17 @@ export default async function AdminDashboardOverview() {
 
   let recentLogs: LogEntry[] = [];
   let recentPrograms: ProgramWithCategory[] = [];
+  let dbUnavailable = false;
 
   try {
     const [progCount, facCount, newsCount, careerCount, logs, programs] = await Promise.all([
       prisma.program.count(),
       prisma.facility.count(),
       prisma.newsArticle.count(),
-      prisma.career.count().catch(() => mockCareers.length),
+      prisma.career.count().catch((e) => {
+        console.error("career count failed: ", e);
+        return 0;
+      }),
       prisma.auditLog.findMany({
         take: 5,
         orderBy: { createdAt: "desc" }
@@ -65,31 +60,28 @@ export default async function AdminDashboardOverview() {
       })
     ]);
 
-    stats.programs = progCount || mockPrograms.length;
+    stats.programs = progCount;
     stats.facilities = facCount;
     stats.news = newsCount;
-    stats.careers = careerCount || mockCareers.length;
+    stats.careers = careerCount;
     recentLogs = logs;
     recentPrograms = programs as unknown as ProgramWithCategory[];
-  } catch {
-    // DB offline fallback
-    stats.programs = mockPrograms.length;
-    stats.facilities = 4;
-    stats.news = 3;
-    stats.careers = mockCareers.length;
-    recentLogs = getFallbackLogs();
-    recentPrograms = mockPrograms.slice(0, 5).map(p => ({
-      id: p.id,
-      title: p.title,
-      location: p.location,
-      duration: p.duration,
-      price: p.price,
-      category: { name: "Applied R&D" }
-    }));
+  } catch (e) {
+    // DB unavailable — show zeroed stats rather than fabricated data.
+    console.error("Admin dashboard fetch failed: ", e);
+    dbUnavailable = true;
+    recentLogs = [];
+    recentPrograms = [];
   }
 
   return (
     <div className="space-y-8">
+      {/* DB Unavailable warning */}
+      {dbUnavailable && (
+        <div className="rounded-xl border border-amber-300 bg-amber-50 px-5 py-4 text-sm font-semibold text-amber-800">
+          Database unreachable — dashboard counts may be incomplete. Check the server logs.
+        </div>
+      )}
       
       {/* Page Header */}
       <div>

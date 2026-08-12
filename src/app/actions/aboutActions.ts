@@ -7,7 +7,7 @@ function revalidatePath(path: string) {
   revalidateTag("cms-content", { expire: 0 });
 }
 import { getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockTeamMembers, setMockAboutSettings, setMockTeamMembers } from "@/lib/db";
+import { prisma } from "@/lib/db";
 
 // About Settings and Team Management Actions
 export async function updateAboutSettingsAction(data: { mission: string; vision: string }) {
@@ -45,9 +45,7 @@ export async function updateAboutSettingsAction(data: { mission: string; vision:
     return { success: true, settings: updated };
   } catch (e) {
     console.error("Prisma write error for about settings: ", e);
-    setMockAboutSettings(data);
-    revalidatePath("/about");
-    return { success: true };
+    return { success: false, error: "Failed to save about settings to the database. Please try again." };
   }
 }
 
@@ -83,17 +81,7 @@ export async function createTeamMemberAction(data: {
     return { success: true, member: newMember };
   } catch (e) {
     console.error("Prisma write error for team member: ", e);
-    const newMock = {
-      id: "mock-tm-" + Math.random().toString(36).substr(2, 9),
-      name: data.name,
-      role: data.role,
-      imageUrl: data.imageUrl || null,
-      initials: data.initials,
-      order: mockTeamMembers.length,
-    };
-    setMockTeamMembers([...mockTeamMembers, newMock]);
-    revalidatePath("/about");
-    return { success: true, member: newMock };
+    return { success: false, error: "Failed to save the team member to the database. Please try again." };
   }
 }
 
@@ -133,11 +121,7 @@ export async function updateTeamMemberAction(
     return { success: true, member: updated };
   } catch (e) {
     console.error("Prisma update error for team member: ", e);
-    setMockTeamMembers(
-      mockTeamMembers.map((m) => (m.id === id ? { ...m, ...data } : m))
-    );
-    revalidatePath("/about");
-    return { success: true };
+    return { success: false, error: "Failed to update the team member in the database. Please try again." };
   }
 }
 
@@ -161,8 +145,6 @@ export async function deleteTeamMemberAction(id: string) {
     return { success: true };
   } catch (e) {
     console.error("Prisma delete error for team member: ", e);
-    setMockTeamMembers(mockTeamMembers.filter((m) => m.id !== id));
-    revalidatePath("/about");
-    return { success: true };
+    return { success: false, error: "Failed to delete the team member from the database. Please try again." };
   }
 }

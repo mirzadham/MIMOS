@@ -9,5 +9,5 @@ export const metadata = {
 export default async function AdminEventsPage() {
   const events = await getSafeUpcomingEvents();
 
-  return <AdminEventsClient initialEvents={events} />;
+  return <AdminEventsClient initialEvents={events ?? []} />;
 }

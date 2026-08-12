@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { getSafeUpcomingEvents } from "@/lib/db";
+import ContentUnavailableNotice from "@/components/ui/ContentUnavailableNotice";
 import EventsPageClient from "./EventsPageClient";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +12,16 @@ export const metadata: Metadata = {
 
 export default async function EventsPage() {
   const events = await getSafeUpcomingEvents();
+  const unavailable = events === null;
 
-  return <EventsPageClient events={events} />;
+  return (
+    <>
+      {unavailable && (
+        <div className="pt-28 sm:pt-36">
+          <ContentUnavailableNotice />
+        </div>
+      )}
+      <EventsPageClient events={events ?? []} />
+    </>
+  );
 }

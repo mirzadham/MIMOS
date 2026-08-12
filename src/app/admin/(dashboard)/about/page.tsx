@@ -11,8 +11,8 @@ export default async function AdminAboutPage() {
 
   return (
     <ManageAboutClient 
-      initialSettings={settings} 
-      initialTeam={teamMembers} 
+      initialSettings={settings ?? { mission: "", vision: "" }} 
+      initialTeam={teamMembers ?? []} 
     />
   );
 }
