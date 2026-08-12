@@ -379,6 +379,7 @@ async function main() {
       title: "Semiconductor Technology Centre (STC)",
       subtitle: "Wafer Fabrication & Microelectronics R&D",
       imageUrl: "/semiconductor_cleanroom.png",
+      type: "LAB",
       featured: true,
       desc: "Malaysia's premier shared R&D fabrication center. Providing hands-on practical training space for engineering cohorts inside advanced cleanroom environments.",
       specs: [
@@ -395,7 +396,8 @@ async function main() {
       title: "5G & AI Innovation Hub",
       subtitle: "Enterprise Workloads & Generative Modeling",
       imageUrl: "/ai_5g_hub.png",
-      featured: true,
+      type: "LAB",
+      featured: false,
       desc: "A cooperative facility simulating enterprise workloads. Students train and deploy generative models and verify networking latency in real-world scenarios.",
       specs: [
         "AI Compute: NVIDIA H100 GPU nodes with NVMe SAN storage",
@@ -410,6 +412,8 @@ async function main() {
       title: "Cyber Security Range",
       subtitle: "Threat Simulation & Incident Response",
       imageUrl: "/cyber_security_range.png",
+      type: "LAB",
+      featured: false,
       desc: "Designed to train cybersecurity groups. The lab runs physical simulations of high-level threat profiles, privilege escalation, and active logging analytics.",
       specs: [
         "Cyber-Range: Active threat simulation and response testing",
@@ -424,6 +428,8 @@ async function main() {
       title: "Training & Seminar Rooms",
       subtitle: "Technical Lecture & Seminars",
       imageUrl: "/training_seminar_room.png",
+      type: "TRAINING_ROOM",
+      featured: true,
       desc: "Premium multi-functional spaces tailored for technical training cohorts and executive presentations with state-of-the-art visual hardware.",
       specs: [
         "AV Systems: Interactive smart displays & dual-projector arrays",

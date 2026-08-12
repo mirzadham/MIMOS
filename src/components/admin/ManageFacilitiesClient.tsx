@@ -4,7 +4,8 @@ import React, { useState, useTransition, useRef } from "react";
 import Image from "next/image";
 import { Plus, Edit2, Trash2, X, AlertCircle, Upload, Building2, Eye, ListPlus, Trash } from "lucide-react";
 import { createFacilityAction, updateFacilityAction, deleteFacilityAction } from "@/app/actions/adminActions";
-import { MAX_FEATURED_FACILITIES } from "@/lib/facilities";
+import { SHOWCASE_SLOT_LABELS } from "@/lib/facilities";
+import type { FacilityType } from "@prisma/client";
 import { useToast } from "@/components/ui/toast";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 
@@ -18,6 +19,7 @@ interface Facility {
   specs: string[];
   order: number;
   featured: boolean;
+  type: FacilityType;
 }
 
 interface ManageFacilitiesClientProps {
@@ -45,6 +47,7 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
   const [order, setOrder] = useState(0);
   const [featured, setFeatured] = useState(false);
   const [featuredWarning, setFeaturedWarning] = useState<string | null>(null);
+  const [type, setType] = useState<FacilityType>("LAB");
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -83,6 +86,7 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
     setOrder(facilities.length);
     setFeatured(false);
     setFeaturedWarning(null);
+    setType("LAB");
     setSelectedFile(null);
     setError(null);
     setIsOpen(true);
@@ -99,6 +103,7 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
     setOrder(fac.order);
     setFeatured(fac.featured);
     setFeaturedWarning(null);
+    setType(fac.type);
     setSelectedFile(null);
     setError(null);
     setIsOpen(true);
@@ -121,15 +126,18 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
     }
   };
 
-  // The homepage layout supports MAX_FEATURED_FACILITIES showcase panes.
-  const featuredCount = facilities.filter((f) => f.featured).length;
+  // The homepage has one fixed slot per type: a Lab (left) and a Training Room (right).
+  const featuredCountByType = (t: FacilityType) =>
+    facilities.filter((f) => f.featured && f.type === t).length;
 
   const handleFeaturedToggle = (checked: boolean) => {
-    // The facility being edited already occupies a slot when it is currently featured.
-    const occupiedSlots = featuredCount - (editFacility?.featured ? 1 : 0);
-    if (checked && !featured && occupiedSlots >= MAX_FEATURED_FACILITIES) {
+    // The facility being edited already occupies its slot when it is currently featured.
+    const occupiedSlots =
+      featuredCountByType(type) - (editFacility?.featured && editFacility.type === type ? 1 : 0);
+    if (checked && !featured && occupiedSlots >= 1) {
+      const label = SHOWCASE_SLOT_LABELS[type];
       setFeaturedWarning(
-        `Only ${MAX_FEATURED_FACILITIES} facilities can be featured at a time. Uncheck one first.`
+        `Only one ${label} can be featured at a time — it fills the ${label} pane on the homepage. Uncheck the current one first.`
       );
       return;
     }
@@ -209,7 +217,8 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
               desc,
               specs: formattedSpecs,
               order,
-              featured
+              featured,
+              type
             };
 
             if (editFacility) {
@@ -286,6 +295,7 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
               <th className="px-6 py-3 w-28">Image</th>
               <th className="px-6 py-3">Facility Title / Subtitle</th>
               <th className="px-6 py-3">Specs Count</th>
+              <th className="px-6 py-3">Type</th>
               <th className="px-6 py-3">Homepage</th>
               <th className="px-6 py-3 text-right">Actions</th>
             </tr>
@@ -293,7 +303,7 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
           <tbody className="divide-y divide-slate-200 bg-white">
             {facilities.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-10 text-center text-slate-400 font-medium font-body">
+                <td colSpan={7} className="px-6 py-10 text-center text-slate-400 font-medium font-body">
                   No facilities configured yet. Click &quot;Add New Facility&quot; to begin.
                 </td>
               </tr>
@@ -326,6 +336,17 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
                   </td>
                   <td className="px-6 py-4 text-slate-500 font-body font-medium">
                     {fac.specs.length} specs
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                        fac.type === "LAB"
+                          ? "bg-slate-100 text-slate-600"
+                          : "bg-primary/10 text-primary"
+                      }`}
+                    >
+                      {SHOWCASE_SLOT_LABELS[fac.type]}
+                    </span>
                   </td>
                   <td className="px-6 py-4">
                     {fac.featured ? (
@@ -419,6 +440,24 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
                 </div>
               </div>
 
+              {/* Facility Type Select */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                  Facility Type
+                </label>
+                <select
+                  value={type}
+                  onChange={(e) => setType(e.target.value as FacilityType)}
+                  className="w-full border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 focus:border-primary focus:outline-none font-heading font-semibold rounded-lg"
+                >
+                  <option value="LAB">Lab</option>
+                  <option value="TRAINING_ROOM">Training Room</option>
+                </select>
+                <p className="text-[10px] leading-relaxed text-slate-400">
+                  Determines which homepage pane this facility fills when featured: Lab (left) or Training Room (right).
+                </p>
+              </div>
+
               {/* Title Input */}
               <div className="space-y-1.5">
                 <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
@@ -464,7 +503,7 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
                       Featured on Homepage
                     </span>
                     <span className="block text-[10px] leading-relaxed text-slate-400 mt-0.5">
-                      Show this facility in the homepage &quot;Our Facilities&quot; showcase (max {MAX_FEATURED_FACILITIES}, ordered by Display Order).
+                      One Lab and one Training Room fill the two homepage panes (left = Lab, right = Training Room).
                     </span>
                   </label>
                   {featuredWarning && (

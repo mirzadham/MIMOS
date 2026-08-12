@@ -1,24 +1,37 @@
-import type { Facility } from "@prisma/client";
+import type { Facility, FacilityType } from "@prisma/client";
 
 /** Facilities eligible for the homepage "Our Facilities" showcase. */
 export type FeaturedFacility = Pick<
   Facility,
-  "id" | "title" | "imageUrl" | "featured" | "order"
+  "id" | "title" | "imageUrl" | "featured" | "order" | "type"
 >;
 
-/** The homepage split-pane layout supports exactly this many showcase panes. */
-export const MAX_FEATURED_FACILITIES = 2;
+/** The homepage showcase is a fixed two-slot layout: Lab (left) and Training Room (right). */
+export const SHOWCASE_SLOT_LABELS: Record<FacilityType, string> = {
+  LAB: "Lab",
+  TRAINING_ROOM: "Training Room",
+};
+
+export interface ShowcaseSelection {
+  lab: FeaturedFacility | null;
+  trainingRoom: FeaturedFacility | null;
+}
 
 /**
- * Selects the facilities to showcase on the homepage: featured only, ordered by
- * display order, capped at MAX_FEATURED_FACILITIES. Returns an empty array when
- * none are featured — the caller decides the fallback. Never mutates the input.
+ * Selects the facilities for the homepage showcase: the featured facility of
+ * each type, prioritized by display order — one Lab for the left pane and one
+ * Training Room for the right pane. Returns null per slot when none are
+ * featured, so the caller can fall back. Never mutates the input.
  */
-export function selectFeaturedFacilities(
+export function selectShowcaseFacilities(
   facilities: FeaturedFacility[]
-): FeaturedFacility[] {
-  return [...facilities]
+): ShowcaseSelection {
+  const featured = [...facilities]
     .filter((f) => f.featured)
-    .sort((a, b) => a.order - b.order)
-    .slice(0, MAX_FEATURED_FACILITIES);
+    .sort((a, b) => a.order - b.order);
+
+  return {
+    lab: featured.find((f) => f.type === "LAB") ?? null,
+    trainingRoom: featured.find((f) => f.type === "TRAINING_ROOM") ?? null,
+  };
 }

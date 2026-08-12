@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
-  MAX_FEATURED_FACILITIES,
-  selectFeaturedFacilities,
+  selectShowcaseFacilities,
+  SHOWCASE_SLOT_LABELS,
   type FeaturedFacility,
 } from "./facilities";
 
@@ -12,54 +12,73 @@ function fac(overrides: Partial<FeaturedFacility> = {}): FeaturedFacility {
     imageUrl: null,
     featured: true,
     order: 0,
+    type: "LAB",
     ...overrides,
   };
 }
 
-describe("selectFeaturedFacilities", () => {
-  it("returns only featured facilities", () => {
+describe("selectShowcaseFacilities", () => {
+  it("picks one featured lab and one featured training room", () => {
     const input = [
-      fac({ id: "a", featured: false }),
-      fac({ id: "b", featured: true }),
-      fac({ id: "c", featured: false }),
+      fac({ id: "lab", type: "LAB" }),
+      fac({ id: "room", type: "TRAINING_ROOM" }),
+      fac({ id: "unfeatured-lab", type: "LAB", featured: false }),
     ];
-    expect(selectFeaturedFacilities(input).map((f) => f.id)).toEqual(["b"]);
+    const result = selectShowcaseFacilities(input);
+    expect(result.lab?.id).toBe("lab");
+    expect(result.trainingRoom?.id).toBe("room");
   });
 
-  it("orders by display order ascending and caps at the layout limit", () => {
+  it("prioritizes by display order within each type", () => {
     const input = [
-      fac({ id: "a", order: 3 }),
-      fac({ id: "b", order: 0 }),
-      fac({ id: "c", order: 1 }),
+      fac({ id: "lab2", type: "LAB", order: 2 }),
+      fac({ id: "lab1", type: "LAB", order: 0 }),
+      fac({ id: "room1", type: "TRAINING_ROOM", order: 5 }),
     ];
-    expect(selectFeaturedFacilities(input).map((f) => f.id)).toEqual(["b", "c"]);
+    const result = selectShowcaseFacilities(input);
+    expect(result.lab?.id).toBe("lab1");
+    expect(result.trainingRoom?.id).toBe("room1");
   });
 
-  it(`caps at ${MAX_FEATURED_FACILITIES} facilities`, () => {
-    const input = [0, 1, 2, 3].map((order) => fac({ id: `f${order}`, order }));
-    const result = selectFeaturedFacilities(input);
-    expect(result).toHaveLength(MAX_FEATURED_FACILITIES);
-    expect(result.map((f) => f.id)).toEqual(["f0", "f1"]);
+  it("ignores facilities that are not featured", () => {
+    const input = [
+      fac({ id: "lab", type: "LAB", featured: false }),
+      fac({ id: "room", type: "TRAINING_ROOM", featured: false }),
+    ];
+    expect(selectShowcaseFacilities(input)).toEqual({
+      lab: null,
+      trainingRoom: null,
+    });
   });
 
-  it("returns an empty array when nothing is featured", () => {
-    const input = [fac({ id: "a", featured: false }), fac({ id: "b", featured: false })];
-    expect(selectFeaturedFacilities(input)).toEqual([]);
+  it("returns null per slot when that type has no featured facility", () => {
+    const input = [fac({ id: "lab", type: "LAB" })];
+    const result = selectShowcaseFacilities(input);
+    expect(result.lab?.id).toBe("lab");
+    expect(result.trainingRoom).toBeNull();
   });
 
-  it("returns an empty array for empty input", () => {
-    expect(selectFeaturedFacilities([])).toEqual([]);
+  it("returns null slots for empty input", () => {
+    expect(selectShowcaseFacilities([])).toEqual({
+      lab: null,
+      trainingRoom: null,
+    });
   });
 
   it("does not mutate the input array or its order", () => {
     const input = [
       fac({ id: "a", order: 2 }),
       fac({ id: "b", order: 0 }),
-      fac({ id: "c", order: 1 }),
+      fac({ id: "c", type: "TRAINING_ROOM", order: 1 }),
     ];
     const snapshot = input.map((f) => f.id);
-    selectFeaturedFacilities(input);
+    selectShowcaseFacilities(input);
     expect(input.map((f) => f.id)).toEqual(snapshot);
     expect(input[0].order).toBe(2);
+  });
+
+  it("exposes fixed human labels for both slots", () => {
+    expect(SHOWCASE_SLOT_LABELS.LAB).toBe("Lab");
+    expect(SHOWCASE_SLOT_LABELS.TRAINING_ROOM).toBe("Training Room");
   });
 });

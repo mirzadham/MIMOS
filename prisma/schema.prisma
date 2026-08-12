@@ -136,18 +136,24 @@ model NewsArticle {
   @@index([order])
 }
 
+enum FacilityType {
+  LAB
+  TRAINING_ROOM
+}
+
 model Facility {
-  id        String   @id @default(uuid())
+  id        String       @id @default(uuid())
   index     String
   title     String
   subtitle  String
   imageUrl  String?
   desc      String
-  specs     String[] @default([])
-  order     Int      @default(0)
-  featured  Boolean  @default(false) // Shown in the homepage "Our Facilities" showcase
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  specs     String[]     @default([])
+  order     Int          @default(0)
+  type      FacilityType @default(LAB) // Homepage slot category: LAB (left pane) or TRAINING_ROOM (right pane)
+  featured  Boolean      @default(false) // Shown in the homepage "Our Facilities" showcase
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 
   @@index([order])
 }

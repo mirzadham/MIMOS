@@ -8,6 +8,7 @@ function revalidatePath(path: string) {
 }
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
 import { prisma, sanitizeEventAgenda, UpcomingEvent } from "@/lib/db";
+import type { FacilityType } from "@prisma/client";
 import { headers } from "next/headers";
 
 async function getClientIp(): Promise<string> {
@@ -683,6 +684,7 @@ export async function createFacilityAction(data: {
   specs: string[];
   order: number;
   featured: boolean;
+  type: FacilityType;
 }) {
   const admin = await getSessionAdmin();
   if (!admin) throw new Error("Unauthorized");
@@ -698,6 +700,7 @@ export async function createFacilityAction(data: {
         specs: data.specs,
         order: data.order,
         featured: data.featured,
+        type: data.type,
       }
     });
 
@@ -721,6 +724,7 @@ export async function updateFacilityAction(id: string, data: {
   specs: string[];
   order: number;
   featured: boolean;
+  type: FacilityType;
 }) {
   const admin = await getSessionAdmin();
   if (!admin) throw new Error("Unauthorized");
@@ -737,6 +741,7 @@ export async function updateFacilityAction(id: string, data: {
         specs: data.specs,
         order: data.order,
         featured: data.featured,
+        type: data.type,
       }
     });
 
