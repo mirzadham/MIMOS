@@ -10,17 +10,18 @@ import Partners from "@/components/landing/Partners";
 import StatsSection from "@/components/landing/StatsSection";
 import StatsAndFacilities from "@/components/landing/StatsAndFacilities";
 import ContentUnavailableNotice from "@/components/ui/ContentUnavailableNotice";
-import { getSafePrograms, getSafeStats, getSafePartners, getSafeWhyChooseUsCards, getSafeTestimonials, getSafeNewsArticles, getSafeUpcomingEvents } from "@/lib/db";
+import { getSafePrograms, getSafeStats, getSafePartners, getSafeWhyChooseUsCards, getSafeTestimonials, getSafeNewsArticles, getSafeUpcomingEvents, getSafeFacilities } from "@/lib/db";
 
 export default async function Home() {
-  const [programs, stats, partners, whyChooseUsCards, testimonials, newsArticles, upcomingEvents] = await Promise.all([
+  const [programs, stats, partners, whyChooseUsCards, testimonials, newsArticles, upcomingEvents, facilities] = await Promise.all([
     getSafePrograms(),
     getSafeStats(),
     getSafePartners(),
     getSafeWhyChooseUsCards(),
     getSafeTestimonials(),
     getSafeNewsArticles(),
-    getSafeUpcomingEvents()
+    getSafeUpcomingEvents(),
+    getSafeFacilities()
   ]);
 
   const unavailable =
@@ -65,7 +66,7 @@ export default async function Home() {
       </section>
 
       {/* 7. Our Facilities Section */}
-      <StatsAndFacilities />
+      <StatsAndFacilities facilities={facilities ?? []} />
 
       {/* 8. Testimonials (Alumni Reviews) Section */}
       <Testimonials testimonials={testimonials ?? []} />
