@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import FacilityFeatureRow, { Facility } from "@/components/facilities/FacilityFeatureRow";
-import FacilityImageCard from "@/components/facilities/FacilityImageCard";
 import FacilityLightboxModal from "@/components/facilities/FacilityLightboxModal";
 
 interface FacilitiesClientPageProps {
@@ -69,23 +68,6 @@ export default function FacilitiesClientPage({ facilities }: FacilitiesClientPag
           </p>
         </motion.div>
 
-        {/* Hero Visual Card with 3D Tilt & Lightbox Modal Preview */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full max-w-5xl mt-12"
-        >
-          <FacilityImageCard
-            src="/semiconductor_cleanroom.png"
-            alt="MIMOS Applied R&D Facilities & Cleanrooms"
-            title="Semiconductor Cleanroom Facilities"
-            subtitle="BUKIT JALIL // HEADQUARTERS"
-            aspectRatio="aspect-[16/10] sm:aspect-[16/9]"
-            priority
-            onImageClick={handleOpenLightbox}
-          />
-        </motion.div>
       </section>
 
       {/* Alternating Feature Showcase Rows with Staggered Specs & 3D Tilt */}
