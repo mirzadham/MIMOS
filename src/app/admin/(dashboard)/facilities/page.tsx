@@ -15,6 +15,7 @@ export default async function AdminFacilitiesPage() {
     desc: f.desc,
     specs: f.specs,
     order: f.order,
+    featured: f.featured,
   }));
 
   return (

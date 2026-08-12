@@ -682,6 +682,7 @@ export async function createFacilityAction(data: {
   desc: string;
   specs: string[];
   order: number;
+  featured: boolean;
 }) {
   const admin = await getSessionAdmin();
   if (!admin) throw new Error("Unauthorized");
@@ -696,6 +697,7 @@ export async function createFacilityAction(data: {
         desc: data.desc,
         specs: data.specs,
         order: data.order,
+        featured: data.featured,
       }
     });
 
@@ -718,6 +720,7 @@ export async function updateFacilityAction(id: string, data: {
   desc: string;
   specs: string[];
   order: number;
+  featured: boolean;
 }) {
   const admin = await getSessionAdmin();
   if (!admin) throw new Error("Unauthorized");
@@ -733,6 +736,7 @@ export async function updateFacilityAction(id: string, data: {
         desc: data.desc,
         specs: data.specs,
         order: data.order,
+        featured: data.featured,
       }
     });
 
