@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminStatsPage() {
   const stats = await getSafeStats();
 
-  const typedStats = stats.map(s => ({
+  const typedStats = (stats ?? []).map(s => ({
     id: s.id,
     number: s.number,
     label: s.label

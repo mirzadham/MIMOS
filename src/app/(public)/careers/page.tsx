@@ -3,6 +3,7 @@ import CareerHero from "@/components/careers/CareerHero";
 import CareersContent from "@/components/careers/CareersContent";
 import { getSafeCareers, getSafeCareerOptions } from "@/lib/db";
 import { JobListing } from "@/data/careersData";
+import ContentUnavailableNotice from "@/components/ui/ContentUnavailableNotice";
 
 // Careers are managed live by admins; always render against the current
 // database instead of baking a build-time snapshot into static HTML.
@@ -22,7 +23,7 @@ export default async function CareersPage() {
 
   const categories = options.map((o) => o.name);
 
-  const careers: JobListing[] = rawCareers.map((c) => ({
+  const careers: JobListing[] = (rawCareers ?? []).map((c) => ({
     id: c.id,
     title: c.title,
     description: c.description,
@@ -35,6 +36,11 @@ export default async function CareersPage() {
   return (
     <div className="w-full">
       <CareerHero />
+      {rawCareers === null && (
+        <div className="py-4">
+          <ContentUnavailableNotice />
+        </div>
+      )}
       <CareersContent initialJobs={careers} categories={categories} />
     </div>
   );

@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getSafeAboutSettings, getSafeTeamMembers } from "@/lib/db";
+import ContentUnavailableNotice from "@/components/ui/ContentUnavailableNotice";
 import TeamMemberCardClient from "@/components/about/TeamMemberCardClient";
 
 export const dynamic = "force-dynamic";
@@ -13,11 +14,21 @@ export default async function AboutPage() {
     getSafeTeamMembers()
   ]);
 
+  const unavailable = settings === null || teamMembers === null;
+  const safeSettings = settings ?? { mission: "", vision: "" };
+  const safeTeamMembers = teamMembers ?? [];
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-background pt-28 pb-16 sm:pt-36 sm:pb-24">
       {/* Delicate background ambient highlights */}
       <div className="absolute right-0 top-0 -z-10 h-96 w-96 bg-primary/3 blur-[120px] pointer-events-none" />
       <div className="absolute left-0 bottom-1/3 -z-10 h-96 w-96 bg-primary/2 blur-[140px] pointer-events-none" />
+
+      {unavailable && (
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 pb-8">
+          <ContentUnavailableNotice />
+        </div>
+      )}
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8 space-y-24">
 
@@ -58,7 +69,7 @@ export default async function AboutPage() {
                 “
               </span>
               <p className="font-heading text-2xl font-semibold text-slate-900 md:text-4xl lg:text-5xl tracking-tight leading-tight relative z-10 pl-6 border-l-2 border-primary/20">
-                {settings.mission}
+                {safeSettings.mission}
               </p>
             </div>
           </div>
@@ -73,7 +84,7 @@ export default async function AboutPage() {
                 “
               </span>
               <p className="font-heading text-2xl font-semibold text-slate-900 md:text-4xl lg:text-5xl tracking-tight leading-tight relative z-10 pl-6 border-l-2 border-primary/20">
-                {settings.vision}
+                {safeSettings.vision}
               </p>
             </div>
           </div>
@@ -88,7 +99,7 @@ export default async function AboutPage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-12">
-            {teamMembers.map((member: { id: string; name: string; role: string; imageUrl: string | null; initials: string }) => (
+            {safeTeamMembers.map((member: { id: string; name: string; role: string; imageUrl: string | null; initials: string }) => (
               <TeamMemberCardClient key={member.id} member={member} />
             ))}
           </div>

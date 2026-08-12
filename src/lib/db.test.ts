@@ -72,7 +72,7 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafeCategories()).toEqual([]);
 
     vi.mocked(prisma.category.findMany).mockRejectedValue(dbError());
-    expect(await getSafeCategories()).toEqual([]);
+    expect(await getSafeCategories()).toBeNull();
   });
 
   it("getSafePrograms returns [] when table is empty and on error", async () => {
@@ -80,7 +80,7 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafePrograms()).toEqual([]);
 
     vi.mocked(prisma.program.findMany).mockRejectedValue(dbError());
-    expect(await getSafePrograms()).toEqual([]);
+    expect(await getSafePrograms()).toBeNull();
   });
 
   it("getSafeProgramBySlug returns DB row, null when missing, null on error", async () => {
@@ -100,7 +100,7 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafeStats()).toEqual([]);
 
     vi.mocked(prisma.stat.findMany).mockRejectedValue(dbError());
-    expect(await getSafeStats()).toEqual([]);
+    expect(await getSafeStats()).toBeNull();
   });
 
   it("getSafePartners returns [] when table is empty and on error", async () => {
@@ -108,7 +108,7 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafePartners()).toEqual([]);
 
     vi.mocked(prisma.partner.findMany).mockRejectedValue(dbError());
-    expect(await getSafePartners()).toEqual([]);
+    expect(await getSafePartners()).toBeNull();
   });
 
   it("getSafeWhyChooseUsCards returns [] when table is empty and on error", async () => {
@@ -116,7 +116,7 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafeWhyChooseUsCards()).toEqual([]);
 
     vi.mocked(prisma.whyChooseUsCard.findMany).mockRejectedValue(dbError());
-    expect(await getSafeWhyChooseUsCards()).toEqual([]);
+    expect(await getSafeWhyChooseUsCards()).toBeNull();
   });
 
   it("getSafeTestimonials returns [] when table is empty and on error", async () => {
@@ -124,7 +124,7 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafeTestimonials()).toEqual([]);
 
     vi.mocked(prisma.testimonial.findMany).mockRejectedValue(dbError());
-    expect(await getSafeTestimonials()).toEqual([]);
+    expect(await getSafeTestimonials()).toBeNull();
   });
 
   it("getSafeAboutSettings returns DB settings, empty settings when missing/error", async () => {
@@ -136,7 +136,7 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafeAboutSettings()).toEqual({ mission: "", vision: "" });
 
     vi.mocked(prisma.aboutSettings.findFirst).mockRejectedValue(dbError());
-    expect(await getSafeAboutSettings()).toEqual({ mission: "", vision: "" });
+    expect(await getSafeAboutSettings()).toBeNull();
   });
 
   it("getSafeTeamMembers returns [] when table is empty and on error", async () => {
@@ -144,7 +144,7 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafeTeamMembers()).toEqual([]);
 
     vi.mocked(prisma.teamMember.findMany).mockRejectedValue(dbError());
-    expect(await getSafeTeamMembers()).toEqual([]);
+    expect(await getSafeTeamMembers()).toBeNull();
   });
 
   it("getSafeNewsArticles returns [] when table is empty and on error", async () => {
@@ -152,7 +152,7 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafeNewsArticles()).toEqual([]);
 
     vi.mocked(prisma.newsArticle.findMany).mockRejectedValue(dbError());
-    expect(await getSafeNewsArticles()).toEqual([]);
+    expect(await getSafeNewsArticles()).toBeNull();
   });
 
   it("getSafeHighlightedNews returns [] when no highlights and on error", async () => {
@@ -160,7 +160,7 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafeHighlightedNews()).toEqual([]);
 
     vi.mocked(prisma.newsArticle.findMany).mockRejectedValue(dbError());
-    expect(await getSafeHighlightedNews()).toEqual([]);
+    expect(await getSafeHighlightedNews()).toBeNull();
   });
 
   it("getSafeNewsArticleById returns DB row, null when missing, null on error", async () => {
@@ -180,7 +180,7 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafeFacilities()).toEqual([]);
 
     vi.mocked(prisma.facility.findMany).mockRejectedValue(dbError());
-    expect(await getSafeFacilities()).toEqual([]);
+    expect(await getSafeFacilities()).toBeNull();
   });
 
   it("getSafeUpcomingEvents returns rows, [] when empty, [] on error", async () => {
@@ -192,7 +192,7 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafeUpcomingEvents()).toEqual([]);
 
     vi.mocked(prisma.event.findMany).mockRejectedValue(dbError());
-    expect(await getSafeUpcomingEvents()).toEqual([]);
+    expect(await getSafeUpcomingEvents()).toBeNull();
   });
 
   it("getSafeEventById returns matching event, null when missing, null on error", async () => {
@@ -214,6 +214,6 @@ describe("getters return only DB data (no mock fallback)", () => {
     expect(await getSafeCareers()).toEqual([]);
 
     vi.mocked(prisma.career.findMany).mockRejectedValue(dbError());
-    expect(await getSafeCareers()).toEqual([]);
+    expect(await getSafeCareers()).toBeNull();
   });
 });

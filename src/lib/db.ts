@@ -36,7 +36,7 @@ export async function getSafeCategories() {
         });
       } catch (e) {
         console.error("Prisma Category Fetch failed: ", e);
-        return [];
+        return null;
       }
     },
     ["categories"],
@@ -55,7 +55,7 @@ export async function getSafePrograms(categoryId?: string) {
         });
       } catch (e) {
         console.error("Prisma Program Fetch failed: ", e);
-        return [];
+        return null;
       }
     },
     ["programs", categoryId || "all"],
@@ -90,7 +90,7 @@ export async function getSafeStats() {
         });
       } catch (e) {
         console.error("Prisma Stat Fetch failed: ", e);
-        return [];
+        return null;
       }
     },
     ["stats"],
@@ -107,7 +107,7 @@ export async function getSafePartners() {
         });
       } catch (e) {
         console.error("Prisma Partner Fetch failed: ", e);
-        return [];
+        return null;
       }
     },
     ["partners"],
@@ -124,7 +124,7 @@ export async function getSafeWhyChooseUsCards() {
         });
       } catch (e) {
         console.error("Prisma WhyChooseUsCard Fetch failed: ", e);
-        return [];
+        return null;
       }
     },
     ["whyChooseUsCards"],
@@ -141,7 +141,7 @@ export async function getSafeTestimonials() {
         });
       } catch (e) {
         console.error("Prisma Testimonial Fetch failed: ", e);
-        return [];
+        return null;
       }
     },
     ["testimonials"],
@@ -154,7 +154,7 @@ export interface AboutSettingsView {
   vision: string;
 }
 
-export async function getSafeAboutSettings(): Promise<AboutSettingsView> {
+export async function getSafeAboutSettings(): Promise<AboutSettingsView | null> {
   return unstable_cache(
     async () => {
       try {
@@ -162,7 +162,7 @@ export async function getSafeAboutSettings(): Promise<AboutSettingsView> {
         return settings || { mission: "", vision: "" };
       } catch (e) {
         console.error("Prisma AboutSettings Fetch failed: ", e);
-        return { mission: "", vision: "" };
+        return null;
       }
     },
     ["aboutSettings"],
@@ -179,7 +179,7 @@ export async function getSafeTeamMembers() {
         });
       } catch (e) {
         console.error("Prisma TeamMember Fetch failed: ", e);
-        return [];
+        return null;
       }
     },
     ["teamMembers"],
@@ -196,7 +196,7 @@ export async function getSafeNewsArticles() {
         });
       } catch (e) {
         console.error("Prisma NewsArticle Fetch failed: ", e);
-        return [];
+        return null;
       }
     },
     ["newsArticles"],
@@ -214,7 +214,7 @@ export async function getSafeHighlightedNews() {
         });
       } catch (e) {
         console.error("Prisma Highlighted News Fetch failed: ", e);
-        return [];
+        return null;
       }
     },
     ["highlightedNews"],
@@ -248,7 +248,7 @@ export async function getSafeFacilities() {
         });
       } catch (e) {
         console.error("Prisma Facility Fetch failed: ", e);
-        return [];
+        return null;
       }
     },
     ["facilities"],
@@ -294,7 +294,7 @@ export function sanitizeEventAgenda(value: unknown): { time: string; topic: stri
 
 // Fetches events from the DB. Returns [] when the table is empty (so an empty
 // production site shows no events until admins create them) and null when the
-// DB is unavailable (callers render an empty list in that case).
+// DB is unavailable (callers render an unavailable notice in that case).
 // The Prisma client is injectable for testing.
 export async function fetchEventsFromDb(
   client: Pick<PrismaClient, "event"> = prisma
@@ -315,8 +315,8 @@ export async function getSafeUpcomingEvents() {
     async () => {
       const events = await fetchEventsFromDb();
       if (events !== null) return events; // rows, or [] when the table is empty
-      // DB unavailable — render an empty list rather than fabricated data.
-      return [];
+      // DB unavailable — null signals callers to show an unavailable state.
+      return null;
     },
     ["upcomingEvents"],
     { tags: ["cms-content"] }
@@ -342,7 +342,7 @@ export function dbEventToUpcomingEvent(e: PrismaEvent): UpcomingEvent {
 
 export async function getSafeEventById(id: string) {
   const events = await getSafeUpcomingEvents();
-  return events.find((e) => e.id === id) || null;
+  return events?.find((e) => e.id === id) || null;
 }
 
 export async function getSafeCareers() {
@@ -354,7 +354,7 @@ export async function getSafeCareers() {
         });
       } catch (e) {
         console.error("Careers Fetch failed: ", e);
-        return [];
+        return null;
       }
     },
     ["careers"],

@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminWhyChooseUsPage() {
   const cards = await getSafeWhyChooseUsCards();
 
-  const typedCards = cards.map(c => ({
+  const typedCards = (cards ?? []).map(c => ({
     id: c.id,
     title: c.title,
     description: c.description,
