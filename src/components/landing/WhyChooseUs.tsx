@@ -79,13 +79,10 @@ export default function WhyChooseUs({ cards }: WhyChooseUsProps) {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         
         {/* Header - Aligned to Left */}
-        <div className="text-left space-y-4 max-w-3xl">
+        <div className="text-left">
           <h2 className="font-heading text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-            Bridging Education and Industry Excellence
+            Why Choose MIMOS Academy
           </h2>
-          <p className="text-sm sm:text-md text-slate-600 leading-relaxed font-body">
-            MIMOS Academy integrates state-of-the-art laboratory infrastructure with national applied researchers to offer talent upskilling tracks that stand out globally.
-          </p>
         </div>
 
         {/* Bento Grid */}
