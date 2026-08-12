@@ -38,13 +38,17 @@ export default async function AdminDashboardOverview() {
 
   let recentLogs: LogEntry[] = [];
   let recentPrograms: ProgramWithCategory[] = [];
+  let dbUnavailable = false;
 
   try {
     const [progCount, facCount, newsCount, careerCount, logs, programs] = await Promise.all([
       prisma.program.count(),
       prisma.facility.count(),
       prisma.newsArticle.count(),
-      prisma.career.count().catch(() => 0),
+      prisma.career.count().catch((e) => {
+        console.error("career count failed: ", e);
+        return 0;
+      }),
       prisma.auditLog.findMany({
         take: 5,
         orderBy: { createdAt: "desc" }
@@ -65,12 +69,19 @@ export default async function AdminDashboardOverview() {
   } catch (e) {
     // DB unavailable — show zeroed stats rather than fabricated data.
     console.error("Admin dashboard fetch failed: ", e);
+    dbUnavailable = true;
     recentLogs = [];
     recentPrograms = [];
   }
 
   return (
     <div className="space-y-8">
+      {/* DB Unavailable warning */}
+      {dbUnavailable && (
+        <div className="rounded-xl border border-amber-300 bg-amber-50 px-5 py-4 text-sm font-semibold text-amber-800">
+          Database unreachable — dashboard counts may be incomplete. Check the server logs.
+        </div>
+      )}
       
       {/* Page Header */}
       <div>

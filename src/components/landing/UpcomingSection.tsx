@@ -62,6 +62,9 @@ export default function UpcomingSection({ articles }: UpcomingSectionProps) {
     });
   };
 
+  // Empty state: hide the whole band when there are no articles.
+  if (displayArticles.length === 0) return null;
+
   return (
     <section className="bg-background py-16 md:py-24 border-b border-slate-200/60 overflow-hidden">
       {/* Self-contained style block to hide scrollbars cleanly and set responsive layout paddings */}

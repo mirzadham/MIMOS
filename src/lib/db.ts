@@ -149,7 +149,12 @@ export async function getSafeTestimonials() {
   )();
 }
 
-export async function getSafeAboutSettings() {
+export interface AboutSettingsView {
+  mission: string;
+  vision: string;
+}
+
+export async function getSafeAboutSettings(): Promise<AboutSettingsView> {
   return unstable_cache(
     async () => {
       try {
@@ -300,7 +305,7 @@ export async function fetchEventsFromDb(
     });
     return events.map(dbEventToUpcomingEvent);
   } catch (e) {
-    console.warn("Prisma Event Fetch failed: ", e);
+    console.error("Prisma Event Fetch failed: ", e);
     return null;
   }
 }
