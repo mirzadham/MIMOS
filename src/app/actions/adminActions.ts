@@ -7,7 +7,7 @@ function revalidatePath(path: string) {
   (revalidateTag as unknown as (tag: string) => void)("cms-content");
 }
 import { loginAdmin, logoutAdmin, getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, mockPrograms, mockCategories, mockStats, mockPartners, mockWhyChooseUsCards, mockTestimonials, setMockWhyChooseUsCards, setMockTestimonials, mockNewsArticles, setMockNewsArticles, mockFacilities, setMockFacilities, mockUpcomingEvents, setMockUpcomingEvents, sanitizeEventAgenda, UpcomingEvent } from "@/lib/db";
+import { prisma, sanitizeEventAgenda, UpcomingEvent } from "@/lib/db";
 import { headers } from "next/headers";
 
 async function getClientIp(): Promise<string> {
@@ -113,16 +113,8 @@ export async function createProgramAction(data: {
     revalidatePath("/programs/" + slug);
     return { success: true, program: newProgram };
   } catch (e) {
-    console.error("Prisma write error, saving to mock data array: ", e);
-    // Mock save fallback
-    const mockNew = {
-      id: "mock-" + Math.random().toString(36).substr(2, 9),
-      ...data,
-      slug
-    };
-    mockPrograms.push(mockNew);
-    revalidatePath("/");
-    return { success: true, program: mockNew };
+    console.error("Prisma program create error: ", e);
+    return { success: false, error: "Failed to save the program to the database. Please try again." };
   }
 }
 
@@ -170,13 +162,9 @@ export async function updateProgramAction(
     revalidatePath("/");
     revalidatePath("/programs/" + slug);
     return { success: true, program: updated };
-  } catch {
-    const idx = mockPrograms.findIndex(p => p.id === id);
-    if (idx !== -1) {
-      mockPrograms[idx] = { id, ...data, slug };
-    }
-    revalidatePath("/");
-    return { success: true };
+  } catch (e) {
+    console.error("Prisma program update error: ", e);
+    return { success: false, error: "Failed to update the program in the database. Please try again." };
   }
 }
 
@@ -193,13 +181,9 @@ export async function deleteProgramAction(id: string) {
 
     revalidatePath("/");
     return { success: true };
-  } catch {
-    const idx = mockPrograms.findIndex(p => p.id === id);
-    if (idx !== -1) {
-      mockPrograms.splice(idx, 1);
-    }
-    revalidatePath("/");
-    return { success: true };
+  } catch (e) {
+    console.error("Prisma program delete error: ", e);
+    return { success: false, error: "Failed to delete the program from the database. Please try again." };
   }
 }
 
@@ -216,11 +200,9 @@ export async function createCategoryAction(name: string) {
     });
     revalidatePath("/");
     return { success: true, category };
-  } catch {
-    const category = { id: "cat-" + Math.random().toString(), name, slug };
-    mockCategories.push(category);
-    revalidatePath("/");
-    return { success: true, category };
+  } catch (e) {
+    console.error("Prisma category create error: ", e);
+    return { success: false, error: "Failed to save the category to the database. Please try again." };
   }
 }
 
@@ -242,16 +224,8 @@ export async function createStatAction(data: { number: string; label: string }) 
     revalidatePath("/");
     return { success: true, stat: newStat };
   } catch (e) {
-    console.error("Prisma write error, saving to mock stats: ", e);
-    const mockNew = {
-      id: "mock-" + Math.random().toString(36).substr(2, 9),
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    mockStats.push(mockNew);
-    revalidatePath("/");
-    return { success: true, stat: mockNew };
+    console.error("Prisma stat create error: ", e);
+    return { success: false, error: "Failed to save the stat to the database. Please try again." };
   }
 }
 
@@ -273,13 +247,8 @@ export async function updateStatAction(id: string, data: { number: string; label
     revalidatePath("/");
     return { success: true, stat: updated };
   } catch (e) {
-    console.error("Prisma update error: ", e);
-    const idx = mockStats.findIndex(s => s.id === id);
-    if (idx !== -1) {
-      mockStats[idx] = { id, ...data };
-    }
-    revalidatePath("/");
-    return { success: true };
+    console.error("Prisma stat update error: ", e);
+    return { success: false, error: "Failed to update the stat in the database. Please try again." };
   }
 }
 
@@ -297,13 +266,8 @@ export async function deleteStatAction(id: string) {
     revalidatePath("/");
     return { success: true };
   } catch (e) {
-    console.error("Prisma delete error: ", e);
-    const idx = mockStats.findIndex(s => s.id === id);
-    if (idx !== -1) {
-      mockStats.splice(idx, 1);
-    }
-    revalidatePath("/");
-    return { success: true };
+    console.error("Prisma stat delete error: ", e);
+    return { success: false, error: "Failed to delete the stat from the database. Please try again." };
   }
 }
 
@@ -325,16 +289,8 @@ export async function createPartnerAction(data: { name: string; logoUrl: string 
     revalidatePath("/");
     return { success: true, partner: newPartner };
   } catch (e) {
-    console.error("Prisma write error, saving to mock partners: ", e);
-    const mockNew = {
-      id: "mock-" + Math.random().toString(36).substr(2, 9),
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    mockPartners.push(mockNew);
-    revalidatePath("/");
-    return { success: true, partner: mockNew };
+    console.error("Prisma partner create error: ", e);
+    return { success: false, error: "Failed to save the partner to the database. Please try again." };
   }
 }
 
@@ -356,13 +312,8 @@ export async function updatePartnerAction(id: string, data: { name: string; logo
     revalidatePath("/");
     return { success: true, partner: updated };
   } catch (e) {
-    console.error("Prisma update error: ", e);
-    const idx = mockPartners.findIndex(p => p.id === id);
-    if (idx !== -1) {
-      mockPartners[idx] = { id, ...data };
-    }
-    revalidatePath("/");
-    return { success: true };
+    console.error("Prisma partner update error: ", e);
+    return { success: false, error: "Failed to update the partner in the database. Please try again." };
   }
 }
 
@@ -380,13 +331,8 @@ export async function deletePartnerAction(id: string) {
     revalidatePath("/");
     return { success: true };
   } catch (e) {
-    console.error("Prisma delete error: ", e);
-    const idx = mockPartners.findIndex(p => p.id === id);
-    if (idx !== -1) {
-      mockPartners.splice(idx, 1);
-    }
-    revalidatePath("/");
-    return { success: true };
+    console.error("Prisma partner delete error: ", e);
+    return { success: false, error: "Failed to delete the partner from the database. Please try again." };
   }
 }
 
@@ -417,16 +363,8 @@ export async function createWhyChooseUsCardAction(data: {
     revalidatePath("/");
     return { success: true, card: newCard };
   } catch (e) {
-    console.error("Prisma write error, saving to mock whychooseus cards: ", e);
-    const mockNew = {
-      id: "mock-" + Math.random().toString(36).substr(2, 9),
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    setMockWhyChooseUsCards([...mockWhyChooseUsCards, mockNew]);
-    revalidatePath("/");
-    return { success: true, card: mockNew };
+    console.error("Prisma WhyChooseUs card create error: ", e);
+    return { success: false, error: "Failed to save the card to the database. Please try again." };
   }
 }
 
@@ -460,12 +398,8 @@ export async function updateWhyChooseUsCardAction(
     revalidatePath("/");
     return { success: true, card: updated };
   } catch (e) {
-    console.error("Prisma update error: ", e);
-    setMockWhyChooseUsCards(
-      mockWhyChooseUsCards.map(p => p.id === id ? { ...p, ...data } : p)
-    );
-    revalidatePath("/");
-    return { success: true };
+    console.error("Prisma WhyChooseUs card update error: ", e);
+    return { success: false, error: "Failed to update the card in the database. Please try again." };
   }
 }
 
@@ -483,12 +417,8 @@ export async function deleteWhyChooseUsCardAction(id: string) {
     revalidatePath("/");
     return { success: true };
   } catch (e) {
-    console.error("Prisma delete error: ", e);
-    setMockWhyChooseUsCards(
-      mockWhyChooseUsCards.filter(p => p.id !== id)
-    );
-    revalidatePath("/");
-    return { success: true };
+    console.error("Prisma WhyChooseUs card delete error: ", e);
+    return { success: false, error: "Failed to delete the card from the database. Please try again." };
   }
 }
 
@@ -519,16 +449,8 @@ export async function createTestimonialAction(data: {
     revalidatePath("/");
     return { success: true, testimonial: newTestimonial };
   } catch (e) {
-    console.error("Prisma write error, saving to mock testimonials: ", e);
-    const mockNew = {
-      id: "mock-" + Math.random().toString(36).substr(2, 9),
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    setMockTestimonials([...mockTestimonials, mockNew]);
-    revalidatePath("/");
-    return { success: true, testimonial: mockNew };
+    console.error("Prisma testimonial create error: ", e);
+    return { success: false, error: "Failed to save the testimonial to the database. Please try again." };
   }
 }
 
@@ -562,12 +484,8 @@ export async function updateTestimonialAction(
     revalidatePath("/");
     return { success: true, testimonial: updated };
   } catch (e) {
-    console.error("Prisma update error: ", e);
-    setMockTestimonials(
-      mockTestimonials.map(p => p.id === id ? { ...p, ...data } : p)
-    );
-    revalidatePath("/");
-    return { success: true };
+    console.error("Prisma testimonial update error: ", e);
+    return { success: false, error: "Failed to update the testimonial in the database. Please try again." };
   }
 }
 
@@ -585,12 +503,8 @@ export async function deleteTestimonialAction(id: string) {
     revalidatePath("/");
     return { success: true };
   } catch (e) {
-    console.error("Prisma delete error: ", e);
-    setMockTestimonials(
-      mockTestimonials.filter(p => p.id !== id)
-    );
-    revalidatePath("/");
-    return { success: true };
+    console.error("Prisma testimonial delete error: ", e);
+    return { success: false, error: "Failed to delete the testimonial from the database. Please try again." };
   }
 }
 
@@ -615,11 +529,9 @@ export async function createNewsArticleAction(data: {
       if (highlightedCount >= 4) {
         return { success: false, error: "Maximum 4 highlighted articles allowed. Please un-highlight another article first." };
       }
-    } catch {
-      const mockHighlightedCount = mockNewsArticles.filter(a => a.isHighlighted).length;
-      if (mockHighlightedCount >= 4) {
-        return { success: false, error: "Maximum 4 highlighted articles allowed. Please un-highlight another article first." };
-      }
+    } catch (e) {
+      console.error("Prisma highlighted count failed: ", e);
+      return { success: false, error: "Unable to verify highlighted article count. Please try again." };
     }
   }
 
@@ -643,17 +555,8 @@ export async function createNewsArticleAction(data: {
     revalidatePath("/news");
     return { success: true, article: newArticle };
   } catch (e) {
-    console.error("Prisma write error, saving to mock news articles: ", e);
-    const mockNew = {
-      id: "mock-" + Math.random().toString(36).substr(2, 9),
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    setMockNewsArticles([...mockNewsArticles, mockNew]);
-    revalidatePath("/");
-    revalidatePath("/news");
-    return { success: true, article: mockNew };
+    console.error("Prisma news create error: ", e);
+    return { success: false, error: "Failed to save the article to the database. Please try again." };
   }
 }
 
@@ -682,11 +585,9 @@ export async function updateNewsArticleAction(
       if (highlightedCount >= 4) {
         return { success: false, error: "Maximum 4 highlighted articles allowed. Please un-highlight another article first." };
       }
-    } catch {
-      const mockHighlightedCount = mockNewsArticles.filter(a => a.isHighlighted && a.id !== id).length;
-      if (mockHighlightedCount >= 4) {
-        return { success: false, error: "Maximum 4 highlighted articles allowed. Please un-highlight another article first." };
-      }
+    } catch (e) {
+      console.error("Prisma highlighted count failed: ", e);
+      return { success: false, error: "Unable to verify highlighted article count. Please try again." };
     }
   }
 
@@ -711,13 +612,8 @@ export async function updateNewsArticleAction(
     revalidatePath("/news");
     return { success: true, article: updated };
   } catch (e) {
-    console.error("Prisma update error: ", e);
-    setMockNewsArticles(
-      mockNewsArticles.map(p => p.id === id ? { ...p, ...data } : p)
-    );
-    revalidatePath("/");
-    revalidatePath("/news");
-    return { success: true };
+    console.error("Prisma news update error: ", e);
+    return { success: false, error: "Failed to update the article in the database. Please try again." };
   }
 }
 
@@ -736,13 +632,8 @@ export async function deleteNewsArticleAction(id: string) {
     revalidatePath("/news");
     return { success: true };
   } catch (e) {
-    console.error("Prisma delete error: ", e);
-    setMockNewsArticles(
-      mockNewsArticles.filter(p => p.id !== id)
-    );
-    revalidatePath("/");
-    revalidatePath("/news");
-    return { success: true };
+    console.error("Prisma news delete error: ", e);
+    return { success: false, error: "Failed to delete the article from the database. Please try again." };
   }
 }
 
@@ -759,11 +650,9 @@ export async function toggleNewsHighlightAction(id: string, isHighlighted: boole
       if (highlightedCount >= 4) {
         return { success: false, error: "Maximum 4 highlighted articles allowed. Please un-highlight another article first." };
       }
-    } catch {
-      const mockHighlightedCount = mockNewsArticles.filter(a => a.isHighlighted && a.id !== id).length;
-      if (mockHighlightedCount >= 4) {
-        return { success: false, error: "Maximum 4 highlighted articles allowed. Please un-highlight another article first." };
-      }
+    } catch (e) {
+      console.error("Prisma highlighted count failed: ", e);
+      return { success: false, error: "Unable to verify highlighted article count. Please try again." };
     }
   }
 
@@ -779,13 +668,8 @@ export async function toggleNewsHighlightAction(id: string, isHighlighted: boole
     revalidatePath("/news");
     return { success: true };
   } catch (e) {
-    console.error("Prisma update error: ", e);
-    setMockNewsArticles(
-      mockNewsArticles.map(a => a.id === id ? { ...a, isHighlighted } : a)
-    );
-    revalidatePath("/");
-    revalidatePath("/news");
-    return { success: true };
+    console.error("Prisma news highlight toggle error: ", e);
+    return { success: false, error: "Failed to update highlight status in the database. Please try again." };
   }
 }
 
@@ -821,18 +705,8 @@ export async function createFacilityAction(data: {
     revalidatePath("/");
     return { success: true, facility: newFacility };
   } catch (e) {
-    console.error("Prisma write error, saving to mock facilities: ", e);
-    const mockNew = {
-      id: "mock-" + Math.random().toString(36).substr(2, 9),
-      ...data,
-      imageUrl: data.imageUrl || null,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    setMockFacilities([...mockFacilities, mockNew]);
-    revalidatePath("/facilities");
-    revalidatePath("/");
-    return { success: true, facility: mockNew };
+    console.error("Prisma facility create error: ", e);
+    return { success: false, error: "Failed to save the facility to the database. Please try again." };
   }
 }
 
@@ -868,18 +742,8 @@ export async function updateFacilityAction(id: string, data: {
     revalidatePath("/");
     return { success: true, facility: updated };
   } catch (e) {
-    console.error("Prisma update error: ", e);
-    const updatedMock = {
-      id,
-      ...data,
-      imageUrl: data.imageUrl || null,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    setMockFacilities(mockFacilities.map(f => f.id === id ? updatedMock : f));
-    revalidatePath("/facilities");
-    revalidatePath("/");
-    return { success: true, facility: updatedMock };
+    console.error("Prisma facility update error: ", e);
+    return { success: false, error: "Failed to update the facility in the database. Please try again." };
   }
 }
 
@@ -898,11 +762,8 @@ export async function deleteFacilityAction(id: string) {
     revalidatePath("/");
     return { success: true };
   } catch (e) {
-    console.error("Prisma delete error: ", e);
-    setMockFacilities(mockFacilities.filter(f => f.id !== id));
-    revalidatePath("/facilities");
-    revalidatePath("/");
-    return { success: true };
+    console.error("Prisma facility delete error: ", e);
+    return { success: false, error: "Failed to delete the facility from the database. Please try again." };
   }
 }
 
@@ -965,19 +826,7 @@ export async function saveUpcomingEventAction(eventData: Partial<UpcomingEvent> 
     });
   } catch (e) {
     console.error("Prisma Event save error: ", e);
-    if (process.env.NODE_ENV === "production") {
-      return { success: false, error: "Failed to save event. Please try again." };
-    }
-    // Local dev without a DB: keep the in-memory mock fallback so the app stays usable.
-    const existingIndex = mockUpcomingEvents.findIndex(e => e.id === id);
-    let newEvents: UpcomingEvent[];
-    if (existingIndex >= 0) {
-      newEvents = [...mockUpcomingEvents];
-      newEvents[existingIndex] = updatedItem;
-    } else {
-      newEvents = [updatedItem, ...mockUpcomingEvents];
-    }
-    setMockUpcomingEvents(newEvents);
+    return { success: false, error: "Failed to save event. Please try again." };
   }
 
   await createAuditLog(
@@ -1005,12 +854,7 @@ export async function deleteUpcomingEventAction(id: string): Promise<DeleteUpcom
     });
   } catch (e) {
     console.error("Prisma Event delete error: ", e);
-    if (process.env.NODE_ENV === "production") {
-      return { success: false, error: "Failed to delete event. Please try again." };
-    }
-    // Local dev without a DB: keep the in-memory mock fallback so the app stays usable.
-    const filtered = mockUpcomingEvents.filter(e => e.id !== id);
-    setMockUpcomingEvents(filtered);
+    return { success: false, error: "Failed to delete event. Please try again." };
   }
 
   await createAuditLog("DELETE_EVENT", `Deleted event ID: ${id} by admin ${admin.email}`);

@@ -11,7 +11,7 @@ import {
   deleteUpcomingEventAction,
 } from "./adminActions";
 import { getSessionAdmin } from "@/lib/adminAuth";
-import { prisma, setMockUpcomingEvents } from "@/lib/db";
+import { prisma } from "@/lib/db";
 
 // Mock next/cache
 vi.mock("next/cache", () => ({
@@ -62,7 +62,6 @@ vi.mock("@/lib/db", () => {
     mockUpcomingEvents: [
       { id: "mock-evt-1", title: "Mock Event 1", category: "SEMINAR", date: "JAN 01" },
     ],
-    setMockUpcomingEvents: vi.fn(),
     sanitizeEventAgenda: (v: unknown) => Array.isArray(v) ? v : [],
   };
 });
@@ -364,14 +363,14 @@ describe("Admin News Server Actions Tests", () => {
       );
     });
 
-    it("should fall back to mock when DB save fails", async () => {
+    it("should return an error when DB save fails (no mock fallback)", async () => {
       vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
       vi.mocked(prisma.event.upsert).mockRejectedValue(new Error("DB down"));
 
       const res = await saveUpcomingEventAction({ title: "Fallback Event" });
 
-      expect(res.success).toBe(true);
-      expect(setMockUpcomingEvents).toHaveBeenCalled();
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
     });
 
     it("should return an error in production when DB save fails (no mock fallback)", async () => {
@@ -383,7 +382,6 @@ describe("Admin News Server Actions Tests", () => {
 
       expect(res.success).toBe(false);
       expect("error" in res && res.error).toBeTruthy();
-      expect(setMockUpcomingEvents).not.toHaveBeenCalled();
     });
   });
 
@@ -407,14 +405,14 @@ describe("Admin News Server Actions Tests", () => {
       );
     });
 
-    it("should fall back to mock when DB delete fails", async () => {
+    it("should return an error when DB delete fails (no mock fallback)", async () => {
       vi.mocked(getSessionAdmin).mockResolvedValue(mockAdmin);
       vi.mocked(prisma.event.delete).mockRejectedValue(new Error("DB down"));
 
       const res = await deleteUpcomingEventAction("mock-evt-1");
 
-      expect(res.success).toBe(true);
-      expect(setMockUpcomingEvents).toHaveBeenCalled();
+      expect(res.success).toBe(false);
+      expect("error" in res && res.error).toBeTruthy();
     });
 
     it("should return an error in production when DB delete fails (no mock fallback)", async () => {
@@ -426,7 +424,6 @@ describe("Admin News Server Actions Tests", () => {
 
       expect(res.success).toBe(false);
       expect("error" in res && res.error).toBeTruthy();
-      expect(setMockUpcomingEvents).not.toHaveBeenCalled();
     });
   });
 });
