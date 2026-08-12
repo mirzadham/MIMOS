@@ -256,7 +256,8 @@ describe("Admin News Server Actions Tests", () => {
           imageUrl: null,
           desc: "Desc",
           specs: [],
-          order: 0
+          order: 0,
+          featured: false
         })
       ).rejects.toThrow("Unauthorized");
     });
@@ -270,7 +271,8 @@ describe("Admin News Server Actions Tests", () => {
         imageUrl: null,
         desc: "Desc",
         specs: ["Spec 1: Val"],
-        order: 0
+        order: 0,
+        featured: true
       };
 
       const createdFacility = { id: "new-fac-id", ...facilityData };
@@ -284,7 +286,8 @@ describe("Admin News Server Actions Tests", () => {
         expect.objectContaining({
           data: expect.objectContaining({
             title: "STC",
-            specs: expect.arrayContaining(["Spec 1: Val"])
+            specs: expect.arrayContaining(["Spec 1: Val"]),
+            featured: true
           })
         })
       );
@@ -302,7 +305,8 @@ describe("Admin News Server Actions Tests", () => {
           imageUrl: null,
           desc: "Desc",
           specs: [],
-          order: 0
+          order: 0,
+          featured: false
         })
       ).rejects.toThrow("Unauthorized");
     });
@@ -316,7 +320,8 @@ describe("Admin News Server Actions Tests", () => {
         imageUrl: null,
         desc: "Desc",
         specs: [],
-        order: 0
+        order: 0,
+        featured: true
       };
 
       const updatedFacility = { id: "mock-fac-1", ...facilityData };
@@ -329,7 +334,8 @@ describe("Admin News Server Actions Tests", () => {
         expect.objectContaining({
           where: { id: "mock-fac-1" },
           data: expect.objectContaining({
-            title: "STC Updated"
+            title: "STC Updated",
+            featured: true
           })
         })
       );
@@ -636,14 +642,14 @@ describe("Admin News Server Actions Tests", () => {
 
     it("createFacilityAction", async () => {
       vi.mocked(prisma.facility.create).mockRejectedValue(new Error("DB down"));
-      const res = await createFacilityAction({ index: "01", title: "F", subtitle: "S", imageUrl: null, desc: "D", specs: [], order: 0 });
+      const res = await createFacilityAction({ index: "01", title: "F", subtitle: "S", imageUrl: null, desc: "D", specs: [], order: 0, featured: false });
       expect(res.success).toBe(false);
       expect("error" in res && res.error).toBeTruthy();
     });
 
     it("updateFacilityAction", async () => {
       vi.mocked(prisma.facility.update).mockRejectedValue(new Error("DB down"));
-      const res = await updateFacilityAction("fac-1", { index: "01", title: "F", subtitle: "S", imageUrl: null, desc: "D", specs: [], order: 0 });
+      const res = await updateFacilityAction("fac-1", { index: "01", title: "F", subtitle: "S", imageUrl: null, desc: "D", specs: [], order: 0, featured: false });
       expect(res.success).toBe(false);
       expect("error" in res && res.error).toBeTruthy();
     });

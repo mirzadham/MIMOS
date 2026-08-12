@@ -379,6 +379,7 @@ async function main() {
       title: "Semiconductor Technology Centre (STC)",
       subtitle: "Wafer Fabrication & Microelectronics R&D",
       imageUrl: "/semiconductor_cleanroom.png",
+      featured: true,
       desc: "Malaysia's premier shared R&D fabrication center. Providing hands-on practical training space for engineering cohorts inside advanced cleanroom environments.",
       specs: [
         "Wafer Fabrication: Complete 6-inch wafer processing line",
@@ -394,6 +395,7 @@ async function main() {
       title: "5G & AI Innovation Hub",
       subtitle: "Enterprise Workloads & Generative Modeling",
       imageUrl: "/ai_5g_hub.png",
+      featured: true,
       desc: "A cooperative facility simulating enterprise workloads. Students train and deploy generative models and verify networking latency in real-world scenarios.",
       specs: [
         "AI Compute: NVIDIA H100 GPU nodes with NVMe SAN storage",

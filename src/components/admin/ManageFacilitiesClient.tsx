@@ -4,6 +4,7 @@ import React, { useState, useTransition, useRef } from "react";
 import Image from "next/image";
 import { Plus, Edit2, Trash2, X, AlertCircle, Upload, Building2, Eye, ListPlus, Trash } from "lucide-react";
 import { createFacilityAction, updateFacilityAction, deleteFacilityAction } from "@/app/actions/adminActions";
+import { MAX_FEATURED_FACILITIES } from "@/lib/facilities";
 import { useToast } from "@/components/ui/toast";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 
@@ -16,6 +17,7 @@ interface Facility {
   desc: string;
   specs: string[];
   order: number;
+  featured: boolean;
 }
 
 interface ManageFacilitiesClientProps {
@@ -41,6 +43,8 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
   const [imageUrl, setImageUrl] = useState("");
   const [specs, setSpecs] = useState<{ label: string; content: string }[]>([{ label: "", content: "" }]);
   const [order, setOrder] = useState(0);
+  const [featured, setFeatured] = useState(false);
+  const [featuredWarning, setFeaturedWarning] = useState<string | null>(null);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -64,6 +68,7 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
     if (imageUrl && imageUrl.startsWith("blob:")) {
       URL.revokeObjectURL(imageUrl);
     }
+    setFeaturedWarning(null);
     setIsOpen(false);
   };
 
@@ -76,6 +81,8 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
     setImageUrl("");
     setSpecs([{ label: "", content: "" }]);
     setOrder(facilities.length);
+    setFeatured(false);
+    setFeaturedWarning(null);
     setSelectedFile(null);
     setError(null);
     setIsOpen(true);
@@ -90,6 +97,8 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
     setImageUrl(fac.imageUrl || "");
     setSpecs(parseSpecs(fac.specs));
     setOrder(fac.order);
+    setFeatured(fac.featured);
+    setFeaturedWarning(null);
     setSelectedFile(null);
     setError(null);
     setIsOpen(true);
@@ -110,6 +119,22 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
       }
       setImageUrl(URL.createObjectURL(file));
     }
+  };
+
+  // The homepage layout supports MAX_FEATURED_FACILITIES showcase panes.
+  const featuredCount = facilities.filter((f) => f.featured).length;
+
+  const handleFeaturedToggle = (checked: boolean) => {
+    // The facility being edited already occupies a slot when it is currently featured.
+    const occupiedSlots = featuredCount - (editFacility?.featured ? 1 : 0);
+    if (checked && !featured && occupiedSlots >= MAX_FEATURED_FACILITIES) {
+      setFeaturedWarning(
+        `Only ${MAX_FEATURED_FACILITIES} facilities can be featured at a time. Uncheck one first.`
+      );
+      return;
+    }
+    setFeaturedWarning(null);
+    setFeatured(checked);
   };
 
   const handleAddSpecRow = () => {
@@ -183,7 +208,8 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
               imageUrl: finalImageUrl || null,
               desc,
               specs: formattedSpecs,
-              order
+              order,
+              featured
             };
 
             if (editFacility) {
@@ -260,13 +286,14 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
               <th className="px-6 py-3 w-28">Image</th>
               <th className="px-6 py-3">Facility Title / Subtitle</th>
               <th className="px-6 py-3">Specs Count</th>
+              <th className="px-6 py-3">Homepage</th>
               <th className="px-6 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200 bg-white">
             {facilities.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-10 text-center text-slate-400 font-medium font-body">
+                <td colSpan={6} className="px-6 py-10 text-center text-slate-400 font-medium font-body">
                   No facilities configured yet. Click &quot;Add New Facility&quot; to begin.
                 </td>
               </tr>
@@ -299,6 +326,15 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
                   </td>
                   <td className="px-6 py-4 text-slate-500 font-body font-medium">
                     {fac.specs.length} specs
+                  </td>
+                  <td className="px-6 py-4">
+                    {fac.featured ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                        Featured
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-medium text-slate-300">—</span>
+                    )}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-right space-x-2">
                     <button
@@ -411,6 +447,33 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
                   onChange={(e) => setSubtitle(e.target.value)}
                   className="w-full border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 focus:border-primary focus:outline-none placeholder-slate-300 font-body font-medium rounded-lg"
                 />
+              </div>
+
+              {/* Featured on Homepage Toggle */}
+              <div className="flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50/50 px-3.5 py-3">
+                <input
+                  type="checkbox"
+                  id="facility-featured"
+                  checked={featured}
+                  onChange={(e) => handleFeaturedToggle(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-primary cursor-pointer"
+                />
+                <div className="min-w-0">
+                  <label htmlFor="facility-featured" className="cursor-pointer select-none">
+                    <span className="block text-xs font-semibold text-slate-700">
+                      Featured on Homepage
+                    </span>
+                    <span className="block text-[10px] leading-relaxed text-slate-400 mt-0.5">
+                      Show this facility in the homepage &quot;Our Facilities&quot; showcase (max {MAX_FEATURED_FACILITIES}, ordered by Display Order).
+                    </span>
+                  </label>
+                  {featuredWarning && (
+                    <p className="mt-1.5 flex items-start gap-1.5 text-[10px] font-medium text-amber-600">
+                      <AlertCircle className="h-3 w-3 shrink-0 mt-px" />
+                      <span>{featuredWarning}</span>
+                    </p>
+                  )}
+                </div>
               </div>
 
               {/* Image Input (File Selection) */}
