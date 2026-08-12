@@ -5,36 +5,33 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
-
-export interface StatsFacility {
-  id: string;
-  title: string;
-  subtitle: string;
-  imageUrl: string | null;
-  featured: boolean;
-  order: number;
-}
+import { selectFeaturedFacilities, type FeaturedFacility } from "@/lib/facilities";
 
 interface Pane {
+  id: string;
   href: string;
   imageUrl: string | null;
   alt: string;
   title: string;
 }
 
-// Fallback panes keep the homepage intact when no facilities are marked featured yet.
+// Fallback panes mirror the canonical showcase facilities (the same pair the migration
+// backfills); they render only when nothing is featured or the DB fetch fails, so the
+// homepage can never render broken.
 const FALLBACK_PANES: Pane[] = [
   {
+    id: "fallback-stc",
     href: "/facilities",
     imageUrl: "/semiconductor_cleanroom.png",
-    alt: "Lab",
-    title: "Lab",
+    alt: "Semiconductor Technology Centre (STC)",
+    title: "Semiconductor Technology Centre (STC)",
   },
   {
+    id: "fallback-5g-hub",
     href: "/facilities",
     imageUrl: "/ai_5g_hub.png",
-    alt: "Training Room",
-    title: "Training Room",
+    alt: "5G & AI Innovation Hub",
+    title: "5G & AI Innovation Hub",
   },
 ];
 
@@ -77,7 +74,7 @@ function FacilityPane({ pane, isSingle }: { pane: Pane; isSingle: boolean }) {
   );
 }
 
-export default function StatsAndFacilities({ facilities = [] }: { facilities?: StatsFacility[] }) {
+export default function StatsAndFacilities({ facilities = [] }: { facilities?: FeaturedFacility[] }) {
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     show: {
@@ -91,16 +88,14 @@ export default function StatsAndFacilities({ facilities = [] }: { facilities?: S
   } as const;
 
   // Homepage showcases the featured facilities, ordered by Display Order, max 2 (layout supports two panes).
-  const featuredPanes: Pane[] = facilities
-    .filter((f) => f.featured)
-    .sort((a, b) => a.order - b.order)
-    .slice(0, 2)
-    .map((f) => ({
-      href: "/facilities",
-      imageUrl: f.imageUrl,
-      alt: f.title,
-      title: f.title,
-    }));
+  const selected = selectFeaturedFacilities(facilities);
+  const featuredPanes: Pane[] = selected.map((f) => ({
+    id: f.id,
+    href: "/facilities",
+    imageUrl: f.imageUrl,
+    alt: f.title,
+    title: f.title,
+  }));
 
   const panes = featuredPanes.length > 0 ? featuredPanes : FALLBACK_PANES;
 
@@ -123,8 +118,8 @@ export default function StatsAndFacilities({ facilities = [] }: { facilities?: S
           viewport={{ once: true, margin: "-100px" }}
           className="group flex flex-col lg:flex-row w-full h-auto lg:h-[480px] overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm"
         >
-          {panes.map((pane, i) => (
-            <FacilityPane key={i} pane={pane} isSingle={panes.length === 1} />
+          {panes.map((pane) => (
+            <FacilityPane key={pane.id} pane={pane} isSingle={panes.length === 1} />
           ))}
         </motion.div>
 

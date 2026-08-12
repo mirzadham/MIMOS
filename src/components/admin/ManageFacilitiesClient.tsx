@@ -4,6 +4,7 @@ import React, { useState, useTransition, useRef } from "react";
 import Image from "next/image";
 import { Plus, Edit2, Trash2, X, AlertCircle, Upload, Building2, Eye, ListPlus, Trash } from "lucide-react";
 import { createFacilityAction, updateFacilityAction, deleteFacilityAction } from "@/app/actions/adminActions";
+import { MAX_FEATURED_FACILITIES } from "@/lib/facilities";
 import { useToast } from "@/components/ui/toast";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 
@@ -43,6 +44,7 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
   const [specs, setSpecs] = useState<{ label: string; content: string }[]>([{ label: "", content: "" }]);
   const [order, setOrder] = useState(0);
   const [featured, setFeatured] = useState(false);
+  const [featuredWarning, setFeaturedWarning] = useState<string | null>(null);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -66,6 +68,7 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
     if (imageUrl && imageUrl.startsWith("blob:")) {
       URL.revokeObjectURL(imageUrl);
     }
+    setFeaturedWarning(null);
     setIsOpen(false);
   };
 
@@ -79,6 +82,7 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
     setSpecs([{ label: "", content: "" }]);
     setOrder(facilities.length);
     setFeatured(false);
+    setFeaturedWarning(null);
     setSelectedFile(null);
     setError(null);
     setIsOpen(true);
@@ -94,6 +98,7 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
     setSpecs(parseSpecs(fac.specs));
     setOrder(fac.order);
     setFeatured(fac.featured);
+    setFeaturedWarning(null);
     setSelectedFile(null);
     setError(null);
     setIsOpen(true);
@@ -114,6 +119,22 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
       }
       setImageUrl(URL.createObjectURL(file));
     }
+  };
+
+  // The homepage layout supports MAX_FEATURED_FACILITIES showcase panes.
+  const featuredCount = facilities.filter((f) => f.featured).length;
+
+  const handleFeaturedToggle = (checked: boolean) => {
+    // The facility being edited already occupies a slot when it is currently featured.
+    const occupiedSlots = featuredCount - (editFacility?.featured ? 1 : 0);
+    if (checked && !featured && occupiedSlots >= MAX_FEATURED_FACILITIES) {
+      setFeaturedWarning(
+        `Only ${MAX_FEATURED_FACILITIES} facilities can be featured at a time. Uncheck one first.`
+      );
+      return;
+    }
+    setFeaturedWarning(null);
+    setFeatured(checked);
   };
 
   const handleAddSpecRow = () => {
@@ -434,17 +455,25 @@ export default function ManageFacilitiesClient({ facilities: initialFacilities }
                   type="checkbox"
                   id="facility-featured"
                   checked={featured}
-                  onChange={(e) => setFeatured(e.target.checked)}
+                  onChange={(e) => handleFeaturedToggle(e.target.checked)}
                   className="mt-0.5 h-4 w-4 shrink-0 accent-primary cursor-pointer"
                 />
-                <label htmlFor="facility-featured" className="cursor-pointer select-none">
-                  <span className="block text-xs font-semibold text-slate-700">
-                    Featured on Homepage
-                  </span>
-                  <span className="block text-[10px] leading-relaxed text-slate-400 mt-0.5">
-                    Show this facility in the homepage &quot;Our Facilities&quot; showcase (max 2, ordered by Display Order).
-                  </span>
-                </label>
+                <div className="min-w-0">
+                  <label htmlFor="facility-featured" className="cursor-pointer select-none">
+                    <span className="block text-xs font-semibold text-slate-700">
+                      Featured on Homepage
+                    </span>
+                    <span className="block text-[10px] leading-relaxed text-slate-400 mt-0.5">
+                      Show this facility in the homepage &quot;Our Facilities&quot; showcase (max {MAX_FEATURED_FACILITIES}, ordered by Display Order).
+                    </span>
+                  </label>
+                  {featuredWarning && (
+                    <p className="mt-1.5 flex items-start gap-1.5 text-[10px] font-medium text-amber-600">
+                      <AlertCircle className="h-3 w-3 shrink-0 mt-px" />
+                      <span>{featuredWarning}</span>
+                    </p>
+                  )}
+                </div>
               </div>
 
               {/* Image Input (File Selection) */}

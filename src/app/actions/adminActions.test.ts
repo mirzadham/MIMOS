@@ -334,7 +334,8 @@ describe("Admin News Server Actions Tests", () => {
         expect.objectContaining({
           where: { id: "mock-fac-1" },
           data: expect.objectContaining({
-            title: "STC Updated"
+            title: "STC Updated",
+            featured: true
           })
         })
       );
