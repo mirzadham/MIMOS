@@ -5,41 +5,40 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { selectFeaturedFacilities, type FeaturedFacility } from "@/lib/facilities";
+import { selectShowcaseFacilities, type FeaturedFacility } from "@/lib/facilities";
 
 interface Pane {
   id: string;
   href: string;
+  label: string; // Fixed slot label ("Lab" / "Training Room") — never changes
   imageUrl: string | null;
   alt: string;
-  title: string;
 }
 
-// Fallback panes mirror the canonical showcase facilities (the same pair the migration
-// backfills); they render only when nothing is featured or the DB fetch fails, so the
-// homepage can never render broken.
+// Fallback panes render when a slot has no featured facility (or the DB fetch
+// fails): the label stays, only the photo is a placeholder. Same pair the
+// migration backfills, so the homepage can never render broken.
 const FALLBACK_PANES: Pane[] = [
   {
-    id: "fallback-stc",
+    id: "fallback-lab",
     href: "/facilities",
+    label: "Lab",
     imageUrl: "/semiconductor_cleanroom.png",
-    alt: "Semiconductor Technology Centre (STC)",
-    title: "Semiconductor Technology Centre (STC)",
+    alt: "Lab",
   },
   {
-    id: "fallback-5g-hub",
+    id: "fallback-training-room",
     href: "/facilities",
+    label: "Training Room",
     imageUrl: "/ai_5g_hub.png",
-    alt: "5G & AI Innovation Hub",
-    title: "5G & AI Innovation Hub",
+    alt: "Training Room",
   },
 ];
 
-function FacilityPane({ pane, isSingle }: { pane: Pane; isSingle: boolean }) {
-  // Two panes get the 70/30 hover interplay; a single pane fills the row.
-  const paneWidthClasses = isSingle
-    ? "lg:w-full"
-    : "lg:w-1/2 lg:group-hover:w-[30%] lg:group-focus-within:w-[30%] lg:hover:!w-[70%] lg:focus-within:!w-[70%]";
+function FacilityPane({ pane }: { pane: Pane }) {
+  // Two panes: the 70/30 hover interplay expands the hovered pane.
+  const paneWidthClasses =
+    "lg:w-1/2 lg:group-hover:w-[30%] lg:group-focus-within:w-[30%] lg:hover:!w-[70%] lg:focus-within:!w-[70%]";
 
   return (
     <Link
@@ -51,7 +50,7 @@ function FacilityPane({ pane, isSingle }: { pane: Pane; isSingle: boolean }) {
           src={pane.imageUrl}
           alt={pane.alt}
           fill
-          sizes={isSingle ? "100vw" : "(max-width: 1024px) 100vw, 50vw"}
+          sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover transition-transform duration-700 lg:group-hover/pane:scale-105"
         />
       ) : (
@@ -63,7 +62,7 @@ function FacilityPane({ pane, isSingle }: { pane: Pane; isSingle: boolean }) {
       {/* Centered Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 opacity-100 lg:opacity-0 lg:group-hover/pane:opacity-100 lg:group-focus-within/pane:opacity-100 transition-opacity duration-500">
         <h4 className="font-heading text-2xl sm:text-3xl font-semibold text-white tracking-tight drop-shadow-sm mb-3">
-          {pane.title}
+          {pane.label}
         </h4>
         <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-primary transition-colors hover:text-primary-hover hover:underline">
           <span>Click for details</span>
@@ -87,17 +86,24 @@ export default function StatsAndFacilities({ facilities = [] }: { facilities?: F
     },
   } as const;
 
-  // Homepage showcases the featured facilities, ordered by Display Order, max 2 (layout supports two panes).
-  const selected = selectFeaturedFacilities(facilities);
-  const featuredPanes: Pane[] = selected.map((f) => ({
-    id: f.id,
-    href: "/facilities",
-    imageUrl: f.imageUrl,
-    alt: f.title,
-    title: f.title,
-  }));
+  // Fixed two-slot showcase: left pane is the featured Lab, right pane is the
+  // featured Training Room. Each slot falls back independently.
+  const { lab, trainingRoom } = selectShowcaseFacilities(facilities);
 
-  const panes = featuredPanes.length > 0 ? featuredPanes : FALLBACK_PANES;
+  const panes: Pane[] = [
+    lab
+      ? { id: lab.id, href: "/facilities", label: "Lab", imageUrl: lab.imageUrl, alt: lab.title }
+      : FALLBACK_PANES[0],
+    trainingRoom
+      ? {
+          id: trainingRoom.id,
+          href: "/facilities",
+          label: "Training Room",
+          imageUrl: trainingRoom.imageUrl,
+          alt: trainingRoom.title,
+        }
+      : FALLBACK_PANES[1],
+  ];
 
   return (
     <section className="border-b border-slate-200/60 bg-background py-20 sm:py-28">
@@ -119,7 +125,7 @@ export default function StatsAndFacilities({ facilities = [] }: { facilities?: F
           className="group flex flex-col lg:flex-row w-full h-auto lg:h-[480px] overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm"
         >
           {panes.map((pane) => (
-            <FacilityPane key={pane.id} pane={pane} isSingle={panes.length === 1} />
+            <FacilityPane key={pane.id} pane={pane} />
           ))}
         </motion.div>
 
