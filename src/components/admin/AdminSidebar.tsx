@@ -125,14 +125,6 @@ export default function AdminSidebar({
             priority
             className={cn("h-8 w-auto object-contain", collapsed && "lg:hidden")}
           />
-          {collapsed && (
-            <span className="hidden h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent text-primary lg:flex">
-              <ShieldCheck className="h-4 w-4" />
-            </span>
-          )}
-          <span className={cn("rounded border border-primary/10 bg-accent px-2 py-0.5 font-sans text-[10px] font-bold uppercase tracking-wider text-primary", collapsed && "lg:hidden")}>
-            Admin
-          </span>
         </Link>
 
         <div className="flex items-center gap-1">
