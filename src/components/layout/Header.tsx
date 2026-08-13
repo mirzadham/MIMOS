@@ -52,6 +52,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mobileLogoFailed, setMobileLogoFailed] = useState(false);
 
   // Track scroll position for threshold (10% viewport height)
   useEffect(() => {
@@ -313,25 +314,27 @@ export default function Header() {
           >
             {/* Header row */}
             <div className="flex items-center justify-between">
-              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5">
-                <div className="overflow-hidden flex h-10 w-10 items-center justify-center bg-white/10">
+              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center">
+                {mobileLogoFailed ? (
+                  <div className="flex flex-col select-none">
+                    <span className="font-heading text-xl font-semibold tracking-tight text-white leading-none">
+                      MIMOS
+                    </span>
+                    <span className="font-sans text-[10px] font-semibold tracking-widest text-primary uppercase mt-0.5">
+                      Academy
+                    </span>
+                  </div>
+                ) : (
                   <Image
                     src="/MIMOS-Academy-white.png"
                     alt="MIMOS Academy"
-                    priority
                     width={620}
                     height={220}
-                    className="h-10 w-auto max-w-none block object-contain object-left"
+                    loading="lazy"
+                    onError={() => setMobileLogoFailed(true)}
+                    className="h-9 w-auto object-contain block"
                   />
-                </div>
-                <div className="flex flex-col select-none">
-                  <span className="font-heading text-xl font-semibold tracking-tight text-white leading-none">
-                    MIMOS
-                  </span>
-                  <span className="font-sans text-[10px] font-semibold tracking-widest text-primary uppercase mt-0.5">
-                    Academy
-                  </span>
-                </div>
+                )}
               </Link>
               <button
                 onClick={() => setMobileMenuOpen(false)}
