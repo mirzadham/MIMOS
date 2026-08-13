@@ -52,6 +52,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mobileLogoFailed, setMobileLogoFailed] = useState(false);
 
   // Track scroll position for threshold (10% viewport height)
   useEffect(() => {
@@ -314,14 +315,26 @@ export default function Header() {
             {/* Header row */}
             <div className="flex items-center justify-between">
               <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center">
-                <Image
-                  src="/MIMOS-Academy-white.png"
-                  alt="MIMOS Academy"
-                  priority
-                  width={160}
-                  height={44}
-                  className="h-9 w-auto object-contain block"
-                />
+                {mobileLogoFailed ? (
+                  <div className="flex flex-col select-none">
+                    <span className="font-heading text-xl font-semibold tracking-tight text-white leading-none">
+                      MIMOS
+                    </span>
+                    <span className="font-sans text-[10px] font-semibold tracking-widest text-primary uppercase mt-0.5">
+                      Academy
+                    </span>
+                  </div>
+                ) : (
+                  <Image
+                    src="/MIMOS-Academy-white.png"
+                    alt="MIMOS Academy"
+                    width={620}
+                    height={220}
+                    loading="lazy"
+                    onError={() => setMobileLogoFailed(true)}
+                    className="h-9 w-auto object-contain block"
+                  />
+                )}
               </Link>
               <button
                 onClick={() => setMobileMenuOpen(false)}
