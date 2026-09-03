@@ -117,6 +117,7 @@ describe("About and Team Server Actions Tests", () => {
         role: "Test Role",
         imageUrl: null,
         initials: "TN",
+        level: 1,
         order: 5,
       };
       vi.mocked(prisma.teamMember.create).mockResolvedValue(createdMember as any);
@@ -126,6 +127,7 @@ describe("About and Team Server Actions Tests", () => {
         role: "Test Role",
         imageUrl: null,
         initials: "TN",
+        level: 1,
       });
 
       expect(res.success).toBe(true);
@@ -138,6 +140,7 @@ describe("About and Team Server Actions Tests", () => {
             role: "Test Role",
             imageUrl: null,
             initials: "TN",
+            level: 1,
             order: 5,
           },
         })

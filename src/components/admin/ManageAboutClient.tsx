@@ -34,6 +34,7 @@ interface TeamMember {
   role: string;
   imageUrl: string | null;
   initials: string;
+  level: number;
   order: number;
 }
 
@@ -69,6 +70,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
   const [memberName, setMemberName] = useState("");
   const [memberRole, setMemberRole] = useState("");
   const [memberInitials, setMemberInitials] = useState("");
+  const [memberLevel, setMemberLevel] = useState<number>(1);
   const [memberOrder, setMemberOrder] = useState<number>(1);
   const [imageUrl, setImageUrl] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -96,6 +98,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
     setMemberName("");
     setMemberRole("");
     setMemberInitials("");
+    setMemberLevel(1);
     setMemberOrder(team.length + 1);
     setImageUrl("");
     setSelectedFile(null);
@@ -108,6 +111,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
     setMemberName(member.name);
     setMemberRole(member.role);
     setMemberInitials(member.initials);
+    setMemberLevel(member.level || 1);
     setMemberOrder(member.order + 1);
     setImageUrl(member.imageUrl || "");
     setSelectedFile(null);
@@ -173,12 +177,13 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
         startTransition(async () => {
           try {
             if (editMember) {
-              const updatedMember = {
+              const updatedMember: TeamMember = {
                 id: editMember.id,
                 name: memberName,
                 role: memberRole,
                 imageUrl: finalImageUrl || null,
                 initials: memberInitials,
+                level: memberLevel,
                 order: editMember.order,
               };
 
@@ -200,6 +205,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                     role: item.role,
                     imageUrl: item.imageUrl,
                     initials: item.initials,
+                    level: item.level,
                     order: item.order,
                   })
                 )
@@ -209,7 +215,8 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                 name: memberName,
                 role: memberRole,
                 imageUrl: finalImageUrl || null,
-                initials: memberInitials
+                initials: memberInitials,
+                level: memberLevel,
               });
               if (!res.success || !res.member) throw new Error("Failed to create team member.");
               
@@ -231,6 +238,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                     role: item.role,
                     imageUrl: item.imageUrl,
                     initials: item.initials,
+                    level: item.level,
                     order: item.order,
                   })
                 )
@@ -313,6 +321,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
               role: item.role,
               imageUrl: item.imageUrl,
               initials: item.initials,
+              level: item.level,
               order: item.order,
             })
           )
@@ -343,6 +352,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
               role: item.role,
               imageUrl: item.imageUrl,
               initials: item.initials,
+              level: item.level,
               order: item.order,
             })
           )
@@ -382,6 +392,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
               role: item.role,
               imageUrl: item.imageUrl,
               initials: item.initials,
+              level: item.level,
               order: item.order,
             })
           )
@@ -486,6 +497,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                       <th className="py-2.5 px-3 w-10">Drag</th>
                       <th className="py-2.5 px-3">Avatar</th>
                       <th className="py-2.5 px-3">Details</th>
+                      <th className="py-2.5 px-3 text-center">Hierarchy Tier</th>
                       <th className="py-2.5 px-3 text-center">Order</th>
                       <th className="py-2.5 px-3 text-right">Actions</th>
                     </tr>
@@ -571,6 +583,26 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                   placeholder="e.g. CEO-Designate"
                   required
                 />
+              </div>
+
+              {/* Form Field: Hierarchy Level */}
+              <div className="space-y-1">
+                <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
+                  Hierarchy Level (Visual Tier)
+                </label>
+                <select
+                  value={memberLevel}
+                  onChange={(e) => setMemberLevel(parseInt(e.target.value) || 1)}
+                  className="w-full text-xs p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body bg-white"
+                >
+                  <option value={1}>Level 1: Executive Leadership (Top Leader / C-Suite)</option>
+                  <option value={2}>Level 2: Senior Leadership (Heads of Department)</option>
+                  <option value={3}>Level 3: Operational Leaders & Specialists</option>
+                  <option value={4}>Level 4: Additional Support & Associates</option>
+                </select>
+                <p className="text-[10px] text-slate-400">
+                  Lower numbers appear higher in the organization chart (Level 1 sits at the very top).
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -801,6 +833,21 @@ function SortableRow({
       <td className="py-3 px-3">
         <span className="font-heading font-semibold text-slate-900 block">{member.name}</span>
         <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block mt-0.5">{member.role}</span>
+      </td>
+
+      {/* Hierarchy Level Badge */}
+      <td className="py-3 px-3 text-center">
+        <span
+          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide ${
+            member.level === 1
+              ? "bg-amber-50 text-amber-700 border border-amber-200/80"
+              : member.level === 2
+              ? "bg-primary/10 text-primary border border-primary/20"
+              : "bg-slate-100 text-slate-600 border border-slate-200"
+          }`}
+        >
+          Level {member.level || 1}
+        </span>
       </td>
 
       {/* Reorder: Input & Arrows */}

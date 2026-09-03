@@ -175,7 +175,10 @@ export async function getSafeTeamMembers() {
     async () => {
       try {
         return await prisma.teamMember.findMany({
-          orderBy: { order: 'asc' }
+          orderBy: [
+            { level: 'asc' },
+            { order: 'asc' }
+          ]
         });
       } catch (e) {
         console.error("Prisma TeamMember Fetch failed: ", e);

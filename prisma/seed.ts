@@ -344,30 +344,36 @@ async function main() {
 
   console.log('Seeding team members...');
   const teamMembersData = [
-    { name: "Ir. Dr. Ahmad Nizar", role: "CEO-Designate", image: "/images/team/nizar.jpg", initials: "AN" },
-    { name: "Fatin Firzana", role: "Office Administrator", image: "/images/team/fatin.jpg", initials: "FF" },
-    { name: "Siti Sarah Ramli", role: "Head of Governance & Operation", image: "/images/team/sarah.jpg", initials: "SR" },
-    { name: "Zalina Sayuti", role: "TPM Operation & L&D Management", image: "/images/team/zalina.jpg", initials: "ZS" },
-    { name: "Abu Said", role: "KHTP Operation & Facilities Management", image: "/images/team/abu.jpg", initials: "AS" },
-    { name: "Saidatul Farrah", role: "Head of Business Development", image: "/images/team/farrah.jpg", initials: "SF" },
-    { name: "Adilah", role: "Business Development Executive", image: "/images/team/adilah.jpg", initials: "AD" },
-    { name: "Fuziah", role: "Business Development Executive", image: "/images/team/fuziah.jpg", initials: "FZ" },
-    { name: "Sholihin", role: "Business Development Executive", image: "/images/team/sholihin.jpg", initials: "SH" },
-    { name: "Mohd Suhairi", role: "Head of Program Development & Delivery", image: "/images/team/suhairi.jpg", initials: "MS" },
-    { name: "Omar", role: "Program Development Specialist", image: "/images/team/omar.jpg", initials: "OM" },
-    { name: "Dr. Afiq", role: "Program Development Specialist", image: "/images/team/afiq.jpg", initials: "AF" },
-    { name: "Ainur", role: "Program Development Specialist", image: "/images/team/ainur.jpg", initials: "AI" }
+    // Level 1: Executive / Top Leadership
+    { name: "Ir. Dr. Ahmad Nizar", role: "CEO-Designate", image: "/images/team/nizar.jpg", initials: "AN", level: 1, order: 0 },
+
+    // Level 2: Senior Leadership / Heads of Department
+    { name: "Siti Sarah Ramli", role: "Head of Governance & Operation", image: "/images/team/sarah.jpg", initials: "SR", level: 2, order: 0 },
+    { name: "Saidatul Farrah", role: "Head of Business Development", image: "/images/team/farrah.jpg", initials: "SF", level: 2, order: 1 },
+    { name: "Mohd Suhairi", role: "Head of Program Development & Delivery", image: "/images/team/suhairi.jpg", initials: "MS", level: 2, order: 2 },
+
+    // Level 3: Operational Leaders & Specialists
+    { name: "Fatin Firzana", role: "Office Administrator", image: "/images/team/fatin.jpg", initials: "FF", level: 3, order: 0 },
+    { name: "Zalina Sayuti", role: "TPM Operation & L&D Management", image: "/images/team/zalina.jpg", initials: "ZS", level: 3, order: 1 },
+    { name: "Abu Said", role: "KHTP Operation & Facilities Management", image: "/images/team/abu.jpg", initials: "AS", level: 3, order: 2 },
+    { name: "Adilah", role: "Business Development Executive", image: "/images/team/adilah.jpg", initials: "AD", level: 3, order: 3 },
+    { name: "Fuziah", role: "Business Development Executive", image: "/images/team/fuziah.jpg", initials: "FZ", level: 3, order: 4 },
+    { name: "Sholihin", role: "Business Development Executive", image: "/images/team/sholihin.jpg", initials: "SH", level: 3, order: 5 },
+    { name: "Omar", role: "Program Development Specialist", image: "/images/team/omar.jpg", initials: "OM", level: 3, order: 6 },
+    { name: "Dr. Afiq", role: "Program Development Specialist", image: "/images/team/afiq.jpg", initials: "AF", level: 3, order: 7 },
+    { name: "Ainur", role: "Program Development Specialist", image: "/images/team/ainur.jpg", initials: "AI", level: 3, order: 8 }
   ];
 
-  for (let i = 0; i < teamMembersData.length; i++) {
-    const member = teamMembersData[i];
+  await prisma.teamMember.deleteMany({});
+  for (const member of teamMembersData) {
     await prisma.teamMember.create({
       data: {
         name: member.name,
         role: member.role,
         imageUrl: member.image,
         initials: member.initials,
-        order: i
+        level: member.level,
+        order: member.order
       }
     });
   }
