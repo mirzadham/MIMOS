@@ -4,7 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getSafeAboutSettings, getSafeTeamMembers } from "@/lib/db";
 import ContentUnavailableNotice from "@/components/ui/ContentUnavailableNotice";
-import TeamMemberCardClient from "@/components/about/TeamMemberCardClient";
+import LeadershipHierarchy from "@/components/about/LeadershipHierarchy";
 
 export const dynamic = "force-dynamic";
 
@@ -90,19 +90,18 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        {/* 5. TEAM DIRECTORY (Simple 4-column Grid matching the Reference Design) */}
+        {/* 5. TEAM DIRECTORY (Org-Chart Hierarchy Layout) */}
         <section className="space-y-12 border-t border-slate-200 pt-20">
           <div className="max-w-2xl">
             <h2 className="font-heading text-3xl font-semibold text-slate-900 tracking-tight sm:text-4xl">
               Leadership Team
             </h2>
+            <p className="mt-3 text-sm text-slate-500 font-body">
+              Experienced leaders and specialists dedicated to driving strategic technology capability development across Malaysia.
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-12">
-            {safeTeamMembers.map((member: { id: string; name: string; role: string; imageUrl: string | null; initials: string }) => (
-              <TeamMemberCardClient key={member.id} member={member} />
-            ))}
-          </div>
+          <LeadershipHierarchy members={safeTeamMembers} />
         </section>
 
         {/* 6. DOUBLE CTA SECTION (Enterprise B2B / Talent B2C) */}

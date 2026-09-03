@@ -142,6 +142,9 @@ describe("getters return only DB data (no mock fallback)", () => {
   it("getSafeTeamMembers returns [] when table is empty and on error", async () => {
     vi.mocked(prisma.teamMember.findMany).mockResolvedValue([] as any);
     expect(await getSafeTeamMembers()).toEqual([]);
+    expect(prisma.teamMember.findMany).toHaveBeenCalledWith({
+      orderBy: [{ level: "asc" }, { order: "asc" }],
+    });
 
     vi.mocked(prisma.teamMember.findMany).mockRejectedValue(dbError());
     expect(await getSafeTeamMembers()).toBeNull();

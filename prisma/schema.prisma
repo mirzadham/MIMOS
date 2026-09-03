@@ -112,11 +112,13 @@ model TeamMember {
   role      String
   imageUrl  String?  // Cloudflare R2 / S3 public upload link
   initials  String
-  order     Int      @default(0) // For custom drag-and-drop ordering
+  level     Int      @default(1) // Hierarchy tier: 1 = Top Leader/Executive, 2 = Senior Leader/Head, 3 = Specialist/Executive
+  order     Int      @default(0) // Custom ordering within the same level
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([order])
+  @@index([level, order])
 }
 
 model NewsArticle {

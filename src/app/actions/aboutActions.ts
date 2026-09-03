@@ -54,26 +54,35 @@ export async function createTeamMemberAction(data: {
   role: string;
   imageUrl: string | null;
   initials: string;
+  level?: number;
+  order?: number;
 }) {
   const admin = await getSessionAdmin();
   if (!admin) throw new Error("Unauthorized");
 
+  const levelVal = Math.max(1, Math.min(10, Math.floor(Number(data.level) || 1)));
+
   try {
-    const count = await prisma.teamMember.count();
+    const count = await prisma.teamMember.count({
+      where: { level: levelVal }
+    });
+    const orderVal = typeof data.order === "number" && !isNaN(data.order) ? data.order : count;
+
     const newMember = await prisma.teamMember.create({
       data: {
-        name: data.name,
-        role: data.role,
+        name: data.name.trim(),
+        role: data.role.trim(),
         imageUrl: data.imageUrl || null,
-        initials: data.initials,
-        order: count,
+        initials: data.initials.trim(),
+        level: levelVal,
+        order: orderVal,
       },
     });
 
     await prisma.auditLog.create({
       data: {
         action: "CREATE_TEAM_MEMBER",
-        details: `Created team member: ${data.name} by admin ${admin.email}`,
+        details: `Created team member: ${data.name} (Level ${levelVal}) by admin ${admin.email}`,
       },
     });
 
@@ -92,20 +101,26 @@ export async function updateTeamMemberAction(
     role: string;
     imageUrl: string | null;
     initials: string;
+    level?: number;
     order: number;
   }
 ) {
   const admin = await getSessionAdmin();
   if (!admin) throw new Error("Unauthorized");
 
+  const levelVal = typeof data.level !== "undefined"
+    ? Math.max(1, Math.min(10, Math.floor(Number(data.level) || 1)))
+    : undefined;
+
   try {
     const updated = await prisma.teamMember.update({
       where: { id },
       data: {
-        name: data.name,
-        role: data.role,
+        name: data.name.trim(),
+        role: data.role.trim(),
         imageUrl: data.imageUrl || null,
-        initials: data.initials,
+        initials: data.initials.trim(),
+        ...(levelVal ? { level: levelVal } : {}),
         order: data.order,
       },
     });
@@ -113,7 +128,7 @@ export async function updateTeamMemberAction(
     await prisma.auditLog.create({
       data: {
         action: "UPDATE_TEAM_MEMBER",
-        details: `Updated team member: ${data.name} by admin ${admin.email}`,
+        details: `Updated team member: ${data.name}${levelVal ? ` (Level ${levelVal})` : ""} by admin ${admin.email}`,
       },
     });
 
