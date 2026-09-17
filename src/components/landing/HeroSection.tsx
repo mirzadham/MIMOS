@@ -64,7 +64,9 @@ export default function HeroSection() {
               fill
               priority={idx === 0}
               sizes="100vw"
-              className="object-cover object-right"
+              className={`object-cover ${
+                idx === 0 ? "object-[70%_center] lg:object-right" : "object-right"
+              }`}
               onError={() => {
                 setImageSources((prev) => {
                   const next = [...prev];
