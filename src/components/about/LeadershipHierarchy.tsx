@@ -20,16 +20,26 @@ interface LeadershipHierarchyProps {
 
 const TIER_META: Record<number, { title: string; subtitle: string; icon: React.ComponentType<{ className?: string }> }> = {
   1: {
+    title: "Chairman",
+    subtitle: "Board Leadership & Strategic Governance",
+    icon: Award,
+  },
+  2: {
+    title: "Board Members",
+    subtitle: "Governance, Strategic Oversight & Advisory",
+    icon: Users,
+  },
+  3: {
     title: "Executive Leadership",
     subtitle: "Strategic Direction & Organizational Vision",
     icon: Award,
   },
-  2: {
+  4: {
     title: "Senior Leadership & Operations",
     subtitle: "Divisional Leadership & Program Operations",
     icon: Layers,
   },
-  3: {
+  5: {
     title: "Program Specialists & Development",
     subtitle: "Talent Development, Partnerships & Technical Execution",
     icon: Users,
@@ -64,7 +74,8 @@ export default function LeadershipHierarchy({ members }: LeadershipHierarchyProp
           icon: Users,
         };
         const TierIcon = meta.icon;
-        const isTopTier = lvl === 1;
+        // Levels 1 (Chairman) and 3 (CEO) are prominent centered single-leader cards when containing 1 member
+        const isSingleLeaderTier = (lvl === 1 || lvl === 3) && levelMembers.length === 1;
 
         return (
           <div key={lvl} className="relative flex flex-col items-center">
@@ -90,15 +101,15 @@ export default function LeadershipHierarchy({ members }: LeadershipHierarchyProp
             </div>
 
             {/* Members Cards Container */}
-            {isTopTier ? (
-              // Level 1: Prominently centered with subtle highlight frame
+            {isSingleLeaderTier ? (
+              // Prominently centered with subtle highlight frame (matches original CEO card design)
               <div className="w-full flex justify-center px-4">
                 <div className="w-full max-w-[280px] sm:max-w-[320px] p-4 sm:p-5 rounded-3xl bg-gradient-to-b from-primary/[0.04] to-transparent border border-primary/15 shadow-xs transition-all hover:border-primary/25 hover:shadow-md">
                   <TeamMemberCardClient member={levelMembers[0]} />
                 </div>
               </div>
             ) : (
-              // Levels 2+: Responsive grid centered with comfortable spacing
+              // Multi-member Tiers: Responsive grid centered with comfortable spacing
               <div className="w-full">
                 {/* Horizontal branch line for multi-member tiers on desktop */}
                 {levelMembers.length > 1 && (
@@ -119,13 +130,15 @@ export default function LeadershipHierarchy({ members }: LeadershipHierarchyProp
                       ? "grid-cols-1 sm:grid-cols-2 max-w-2xl"
                       : levelMembers.length === 3
                       ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 max-w-4xl"
+                      : lvl === 2
+                      ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-6xl"
                       : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 max-w-6xl"
                   }`}
                 >
                   {levelMembers.map((member) => (
                     <div
                       key={member.id}
-                      className="transition-transform duration-200 hover:-translate-y-1"
+                      className="transition-transform duration-200 hover:-translate-y-1 w-full max-w-[280px] mx-auto"
                     >
                       <TeamMemberCardClient member={member} />
                     </div>

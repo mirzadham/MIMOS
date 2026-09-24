@@ -43,6 +43,15 @@ interface AboutSettings {
   vision: string;
 }
 
+export const TIER_CONFIG: Record<number, { label: string; badge: string; roleHint: string; nameHint: string }> = {
+  1: { label: "Chairman", badge: "bg-purple-50 text-purple-700 border-purple-200", roleHint: "e.g. Chairman / Executive Chairman", nameHint: "e.g. Tan Sri Dato'..." },
+  2: { label: "Board Member", badge: "bg-sky-50 text-sky-700 border-sky-200", roleHint: "e.g. Non-Executive Director / Board Member", nameHint: "e.g. Dato'..." },
+  3: { label: "CEO (Executive Leadership)", badge: "bg-amber-50 text-amber-700 border-amber-200", roleHint: "e.g. Chief Executive Officer", nameHint: "e.g. Ir. Dr. Ahmad Nizar" },
+  4: { label: "Senior Leadership & Operations", badge: "bg-primary/10 text-primary border-primary/20", roleHint: "e.g. Head of Operations", nameHint: "e.g. Siti Sarah Ramli" },
+  5: { label: "Program Specialists & Development", badge: "bg-slate-100 text-slate-600 border-slate-200", roleHint: "e.g. Program Specialist", nameHint: "e.g. Mohd Omar" },
+  6: { label: "Operational Support & Associates", badge: "bg-slate-50 text-slate-500 border-slate-200", roleHint: "e.g. Associate", nameHint: "e.g. Ahmad" },
+};
+
 interface ManageAboutClientProps {
   initialSettings: AboutSettings;
   initialTeam: TeamMember[];
@@ -52,6 +61,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
   const [isPending, startTransition] = useTransition();
   const [settings, setSettings] = useState<AboutSettings>(initialSettings);
   const [team, setTeam] = useState<TeamMember[]>(initialTeam);
+  const [filterTier, setFilterTier] = useState<number | "ALL">("ALL");
   
   // Settings Form State
   const [mission, setMission] = useState(settings.mission);
@@ -98,7 +108,11 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
     setMemberName("");
     setMemberRole("");
     setMemberInitials("");
-    setMemberLevel(1);
+    // Default tier: if user is on a tier filter, use that tier; otherwise Level 1 if no Chairman exists, or Level 2
+    const defaultTier = filterTier !== "ALL" 
+      ? Number(filterTier) 
+      : (team.some(m => m.level === 1) ? 2 : 1);
+    setMemberLevel(defaultTier);
     setMemberOrder(team.length + 1);
     setImageUrl("");
     setSelectedFile(null);
@@ -135,25 +149,39 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
     }
   };
 
-  const uploadToR2 = async (file: File): Promise<string> => {
-    const res = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}&contentType=${encodeURIComponent(file.type)}&prefix=team`);
-    if (!res.ok) {
-      throw new Error("Failed to get upload signature");
-    }
-    const { uploadUrl, publicUrl } = await res.json();
-
-    const uploadRes = await fetch(uploadUrl, {
-      method: "PUT",
-      headers: {
-        "Content-Type": file.type,
-      },
-      body: file,
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
     });
+  };
 
-    if (!uploadRes.ok) {
-      throw new Error("Failed to upload image to storage");
+  const uploadToR2 = async (file: File): Promise<string> => {
+    try {
+      const res = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}&contentType=${encodeURIComponent(file.type)}&prefix=team`);
+      if (!res.ok) {
+        throw new Error("Failed to get upload signature");
+      }
+      const { uploadUrl, publicUrl } = await res.json();
+
+      const uploadRes = await fetch(uploadUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": file.type,
+        },
+        body: file,
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error("Failed to upload image to storage");
+      }
+      return publicUrl;
+    } catch (err) {
+      console.warn("Storage upload unconfigured or failed, using local base64 format:", err);
+      return await fileToBase64(file);
     }
-    return publicUrl;
   };
 
   // 4. Team Member Form Submit
@@ -293,20 +321,28 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
     toast.success("Team member removed.");
   };
 
+  const displayedMembers = filterTier === "ALL" 
+    ? team 
+    : team.filter((m) => m.level === filterTier);
+
   // 6. Custom sorting handlers
   const handleMove = (index: number, direction: "up" | "down") => {
+    const listToUse = filterTier === "ALL" ? team : displayedMembers;
     const targetIndex = direction === "up" ? index - 1 : index + 1;
-    if (targetIndex < 0 || targetIndex >= team.length) return;
+    if (targetIndex < 0 || targetIndex >= listToUse.length) return;
 
-    const originalOrder = team[index].order;
-    const swapOrder = team[targetIndex].order;
+    const currentMember = listToUse[index];
+    const targetMember = listToUse[targetIndex];
+
+    const currentTeamIdx = team.findIndex(m => m.id === currentMember.id);
+    const targetTeamIdx = team.findIndex(m => m.id === targetMember.id);
+
+    const originalOrder = team[currentTeamIdx].order;
+    const swapOrder = team[targetTeamIdx].order;
 
     const list = [...team];
-    const itemAtIdx = { ...list[index], order: swapOrder };
-    const itemAtTargetIdx = { ...list[targetIndex], order: originalOrder };
-
-    list[index] = itemAtTargetIdx;
-    list[targetIndex] = itemAtIdx;
+    list[currentTeamIdx] = { ...list[currentTeamIdx], order: swapOrder };
+    list[targetTeamIdx] = { ...list[targetTeamIdx], order: originalOrder };
 
     const updatedList = list.map((m, idx) => ({ ...m, order: idx }));
     setTeam(updatedList);
@@ -333,11 +369,17 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
   };
 
   const handleOrderCommit = (currentIndex: number, targetIndex: number) => {
-    if (targetIndex < 0 || targetIndex >= team.length || currentIndex === targetIndex) return;
+    const listToUse = filterTier === "ALL" ? team : displayedMembers;
+    if (targetIndex < 0 || targetIndex >= listToUse.length || currentIndex === targetIndex) return;
+
+    const currentMember = listToUse[currentIndex];
+    const currentTeamIdx = team.findIndex(m => m.id === currentMember.id);
+    const targetMember = listToUse[targetIndex];
+    const targetTeamIdx = team.findIndex(m => m.id === targetMember.id);
 
     const list = [...team];
-    const [item] = list.splice(currentIndex, 1);
-    list.splice(targetIndex, 0, item);
+    const [item] = list.splice(currentTeamIdx, 1);
+    list.splice(targetTeamIdx, 0, item);
 
     const updatedList = list.map((m, idx) => ({ ...m, order: idx }));
     setTeam(updatedList);
@@ -465,23 +507,91 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
         {/* Right Column: Leadership Team Table (7/12 width) */}
         <div className="lg:col-span-7 space-y-6 bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <h2 className="font-heading text-sm font-semibold text-slate-900">
-              Leadership Team Roster
-            </h2>
+            <div>
+              <h2 className="font-heading text-sm font-semibold text-slate-900">
+                Leadership Team Roster
+              </h2>
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                Organize staff into hierarchy tiers: Chairman (1), Board Members (2), CEO (3), and department tiers.
+              </p>
+            </div>
             <button
               onClick={handleOpenAdd}
-              className="rounded-lg bg-primary hover:bg-primary-hover px-3 py-1.5 text-[10px] font-semibold text-white transition-colors flex items-center gap-1 cursor-pointer"
+              className="rounded-lg bg-primary hover:bg-primary-hover px-3 py-1.5 text-[10px] font-semibold text-white transition-colors flex items-center gap-1 cursor-pointer shrink-0"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Add Member</span>
             </button>
           </div>
 
-          {team.length === 0 ? (
+          {/* Hierarchy Category Filter Tabs */}
+          <div className="flex flex-wrap items-center gap-1.5 pb-2 border-b border-slate-100">
+            {[
+              { id: "ALL", label: "All Staff", count: team.length },
+              { id: 1, label: "Chairman", count: team.filter(m => m.level === 1).length },
+              { id: 2, label: "Board Members", count: team.filter(m => m.level === 2).length },
+              { id: 3, label: "CEO", count: team.filter(m => m.level === 3).length },
+              { id: 4, label: "Senior Leadership", count: team.filter(m => m.level === 4).length },
+              { id: 5, label: "Specialists", count: team.filter(m => m.level === 5).length },
+            ].map((tab) => {
+              const isActive = filterTier === tab.id;
+              return (
+                <button
+                  key={tab.id.toString()}
+                  type="button"
+                  onClick={() => setFilterTier(tab.id as number | "ALL")}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    isActive
+                      ? "bg-slate-900 text-white shadow-xs"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200/80"
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                      isActive ? "bg-white/20 text-white" : "bg-white text-slate-500 border border-slate-200"
+                    }`}
+                  >
+                    {tab.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {filterTier === 1 && (
+            <div className="rounded-lg bg-purple-50/80 border border-purple-200 p-3 text-xs text-purple-900 flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 text-purple-600 mt-0.5 shrink-0" />
+              <div>
+                <p className="font-semibold">Chairman Level (Highest Organization Tier)</p>
+                <p className="text-[11px] text-purple-700 mt-0.5">
+                  {team.some(m => m.level === 1)
+                    ? "The Chairman sits centered at the very top of the About Us page. Use the action buttons to edit photo/details or replace/remove."
+                    : "No Chairman is currently configured. Click \"Add Member\" above to add the Chairman."}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {filterTier === 2 && (
+            <div className="rounded-lg bg-sky-50/80 border border-sky-200 p-3 text-xs text-sky-900 flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 text-sky-600 mt-0.5 shrink-0" />
+              <div>
+                <p className="font-semibold">Board Members (Governing Board)</p>
+                <p className="text-[11px] text-sky-700 mt-0.5">
+                  Board Members appear directly below the Chairman and directly above the CEO in a clean responsive row/grid. You can add multiple Board Members and arrange their display order.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {displayedMembers.length === 0 ? (
             <div className="text-center py-12 border border-dashed border-slate-200 rounded-xl bg-slate-50/50">
               <Users className="h-8 w-8 text-slate-300 mx-auto" />
-              <h3 className="text-xs font-semibold text-slate-700 mt-2">No team members</h3>
-              <p className="text-[10px] text-slate-400 mt-0.5">Click &quot;Add Member&quot; to populate your directory.</p>
+              <h3 className="text-xs font-semibold text-slate-700 mt-2">
+                {filterTier === "ALL" ? "No team members" : "No members in this tier"}
+              </h3>
+              <p className="text-[10px] text-slate-400 mt-0.5">Click &quot;Add Member&quot; to populate this tier.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -504,16 +614,17 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     <SortableContext
-                      items={team.map((m) => m.id)}
+                      items={displayedMembers.map((m) => m.id)}
                       strategy={verticalListSortingStrategy}
                     >
-                      {team.map((member, index) => (
+                      {displayedMembers.map((member, index) => (
                         <SortableRow
                           key={member.id}
                           member={member}
                           index={index}
                           isPending={isPending}
                           team={team}
+                          displayedMembers={displayedMembers}
                           handleMove={handleMove}
                           handleOrderCommit={handleOrderCommit}
                           handleOpenEdit={handleOpenEdit}
@@ -565,7 +676,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                   value={memberName}
                   onChange={(e) => setMemberName(e.target.value)}
                   className="w-full text-xs p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body"
-                  placeholder="e.g. Ir. Dr. Ahmad Nizar"
+                  placeholder={TIER_CONFIG[memberLevel]?.nameHint || "e.g. Ir. Dr. Ahmad Nizar"}
                   required
                 />
               </div>
@@ -580,7 +691,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                   value={memberRole}
                   onChange={(e) => setMemberRole(e.target.value)}
                   className="w-full text-xs p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body"
-                  placeholder="e.g. CEO-Designate"
+                  placeholder={TIER_CONFIG[memberLevel]?.roleHint || "e.g. Chief Executive Officer"}
                   required
                 />
               </div>
@@ -593,15 +704,17 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                 <select
                   value={memberLevel}
                   onChange={(e) => setMemberLevel(parseInt(e.target.value) || 1)}
-                  className="w-full text-xs p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body bg-white"
+                  className="w-full text-xs p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body bg-white font-medium text-slate-800"
                 >
-                  <option value={1}>Level 1: Executive Leadership (Top Leader / C-Suite)</option>
-                  <option value={2}>Level 2: Senior Leadership (Heads of Department)</option>
-                  <option value={3}>Level 3: Operational Leaders & Specialists</option>
-                  <option value={4}>Level 4: Additional Support & Associates</option>
+                  <option value={1}>Level 1: Chairman (Highest Organization Tier)</option>
+                  <option value={2}>Level 2: Board Member (Governing Board of Directors)</option>
+                  <option value={3}>Level 3: CEO (Executive Leadership)</option>
+                  <option value={4}>Level 4: Senior Leadership & Operations</option>
+                  <option value={5}>Level 5: Program Specialists & Development</option>
+                  <option value={6}>Level 6: Operational Support & Associates</option>
                 </select>
-                <p className="text-[10px] text-slate-400">
-                  Lower numbers appear higher in the organization chart (Level 1 sits at the very top).
+                <p className="text-[10px] text-slate-400 leading-tight">
+                  Display order on About Us: Level 1 (Chairman) → Level 2 (Board Members) → Level 3 (CEO) → Department Teams.
                 </p>
               </div>
 
@@ -640,10 +753,24 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
               </div>
 
               {/* File Upload / Image Picker */}
-              <div className="space-y-1">
-                <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
-                  Portrait Photo
-                </label>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
+                    Portrait Photo
+                  </label>
+                  {imageUrl && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImageUrl("");
+                        setSelectedFile(null);
+                      }}
+                      className="text-[10px] font-medium text-red-500 hover:text-red-700 transition-colors cursor-pointer"
+                    >
+                      Remove Photo
+                    </button>
+                  )}
+                </div>
                 
                 <div className="flex items-center gap-3">
                   <div className="h-16 w-12 relative rounded-lg bg-gradient-to-b from-brand-light-start to-brand-light-end border border-primary/5 flex items-center justify-center overflow-hidden shrink-0">
@@ -662,7 +789,7 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                     )}
                   </div>
                   
-                  <div className="flex-1">
+                  <div className="flex-1 space-y-1.5">
                     <input
                       type="file"
                       ref={fileInputRef}
@@ -676,14 +803,29 @@ export default function ManageAboutClient({ initialSettings, initialTeam }: Mana
                       className="rounded-lg border border-slate-250 bg-white hover:bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer w-full justify-center"
                     >
                       <Upload className="h-4 w-4 text-slate-500" />
-                      <span>{selectedFile ? "Change Image" : "Upload Portrait"}</span>
+                      <span>{selectedFile ? "Change Image File" : imageUrl ? "Replace Photo" : "Upload Portrait"}</span>
                     </button>
                     {selectedFile && (
-                      <span className="text-[10px] text-slate-400 block truncate mt-1 text-center font-medium">
+                      <span className="text-[10px] text-slate-400 block truncate text-center font-medium">
                         {selectedFile.name}
                       </span>
                     )}
                   </div>
+                </div>
+
+                <div className="pt-1">
+                  <input
+                    type="text"
+                    value={imageUrl.startsWith("data:") ? "(Uploaded local file)" : imageUrl}
+                    onChange={(e) => {
+                      if (!e.target.value.startsWith("(Uploaded local file)")) {
+                        setImageUrl(e.target.value);
+                        setSelectedFile(null);
+                      }
+                    }}
+                    className="w-full text-[11px] p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-primary font-body text-slate-600"
+                    placeholder="Or enter Image URL/path (e.g. /images/team/chairman.jpg)"
+                  />
                 </div>
               </div>
 
@@ -756,12 +898,12 @@ function OrderInput({
   );
 }
 
-// Draggable Sortable Row Component
 function SortableRow({
   member,
   index,
   isPending,
   team,
+  displayedMembers,
   handleMove,
   handleOrderCommit,
   handleOpenEdit,
@@ -771,6 +913,7 @@ function SortableRow({
   index: number;
   isPending: boolean;
   team: TeamMember[];
+  displayedMembers: TeamMember[];
   handleMove: (index: number, direction: "up" | "down") => void;
   handleOrderCommit: (currentIndex: number, targetIndex: number) => void;
   handleOpenEdit: (member: TeamMember) => void;
@@ -790,6 +933,11 @@ function SortableRow({
     transition,
     opacity: isDragging ? 0.5 : undefined,
     backgroundColor: isDragging ? "#f8fafc" : undefined,
+  };
+
+  const tierMeta = TIER_CONFIG[member.level] || {
+    label: `Level ${member.level || 1}`,
+    badge: "bg-slate-100 text-slate-600 border-slate-200",
   };
 
   return (
@@ -838,15 +986,9 @@ function SortableRow({
       {/* Hierarchy Level Badge */}
       <td className="py-3 px-3 text-center">
         <span
-          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide ${
-            member.level === 1
-              ? "bg-amber-50 text-amber-700 border border-amber-200/80"
-              : member.level === 2
-              ? "bg-primary/10 text-primary border border-primary/20"
-              : "bg-slate-100 text-slate-600 border border-slate-200"
-          }`}
+          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide border ${tierMeta.badge}`}
         >
-          Level {member.level || 1}
+          {tierMeta.label}
         </span>
       </td>
 
@@ -870,7 +1012,7 @@ function SortableRow({
             </button>
             <button
               onClick={() => handleMove(index, "down")}
-              disabled={index === team.length - 1 || isPending}
+              disabled={index === displayedMembers.length - 1 || isPending}
               className="p-0.5 rounded bg-slate-50 hover:bg-slate-150 border border-slate-200 text-slate-500 disabled:opacity-30 disabled:hover:bg-slate-50 cursor-pointer"
               title="Move Down"
             >
